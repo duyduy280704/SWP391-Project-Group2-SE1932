@@ -149,4 +149,8 @@ public class TeacherDAO extends DBContext{
             System.out.println("add:" + e.getMessage());
         }
     }
+
+    public Teachers checkLogin(String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

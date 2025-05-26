@@ -149,5 +149,9 @@ public class StudentDAO extends DBContext{
             System.out.println("add:" + e.getMessage());
         }
     }
+
+    public Students checkLogin(String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }
