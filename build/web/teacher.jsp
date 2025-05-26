@@ -1,12 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <title>ECOURSES - Online Courses HTML Template</title>
+    <title>ECOURSES - Online Courses JSP Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="Free JSP Templates" name="keywords">
+    <meta content="Free JSP Templates" name="description">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -24,14 +24,13 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
-
 <body>
     <!-- Topbar Start -->
     <div class="container-fluid d-none d-lg-block">
         <div class="row align-items-center py-4 px-xl-5">
             <div class="col-lg-3">
                 <a href="" class="text-decoration-none">
-                    <h1 class="m-0"><span class="text-primary">E</span>COURSES</h1>
+                    <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                 </a>
             </div>
             <div class="col-lg-3 text-right">
@@ -64,7 +63,6 @@
         </div>
     </div>
     <!-- Topbar End -->
-
 
     <!-- Navbar Start -->
     <div class="container-fluid">
@@ -101,18 +99,18 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav py-0">
-                            <a href="index.html" class="nav-item nav-link">Home</a>
-                            <a href="about.html" class="nav-item nav-link">About</a>
-                            <a href="course.html" class="nav-item nav-link">Courses</a>
-                            <a href="teacher.html" class="nav-item nav-link active">Teachers</a>
+                            <a href="index.jsp" class="nav-item nav-link">Home</a>
+                            <a href="about.jsp" class="nav-item nav-link">About</a>
+                            <a href="course.jsp" class="nav-item nav-link">Courses</a>
+                            <a href="teacher.jsp" class="nav-item nav-link active">Teachers</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="blog.html" class="dropdown-item">Blog List</a>
-                                    <a href="single.html" class="dropdown-item">Blog Detail</a>
+                                    <a href="blog.jsp" class="dropdown-item">Blog List</a>
+                                    <a href="single.jsp" class="dropdown-item">Blog Detail</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="contact.jsp" class="nav-item nav-link">Contact</a>
                         </div>
                         <a class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>
                     </div>
@@ -122,14 +120,13 @@
     </div>
     <!-- Navbar End -->
 
-
     <!-- Header Start -->
     <div class="container-fluid page-header" style="margin-bottom: 90px;">
         <div class="container">
             <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
                 <h3 class="display-4 text-white text-uppercase">Teachers</h3>
                 <div class="d-inline-flex text-white">
-                    <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                    <p class="m-0 text-uppercase"><a class="text-white" href="index.jsp">Home</a></p>
                     <i class="fa fa-angle-double-right pt-1 px-3"></i>
                     <p class="m-0 text-uppercase">Teachers</p>
                 </div>
@@ -137,7 +134,6 @@
         </div>
     </div>
     <!-- Header End -->
-
 
     <!-- Team Start -->
     <div class="container-fluid py-5">
@@ -232,7 +228,7 @@
                         <div class="team-img position-relative">
                             <img class="img-fluid" src="img/team-2.jpg" alt="">
                             <div class="team-social">
-                                <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-twitter"></i></a>
+                                <a class="btn btn-outline-light btn-square mx-1" href="#"><iorky"></i></a>
                                 <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
                                 <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-linkedin-in"></i></a>
                             </div>
@@ -280,7 +276,6 @@
     </div>
     <!-- Team End -->
 
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
         <div class="row pt-5">
@@ -315,9 +310,9 @@
                 <p>Rebum labore lorem dolores kasd est, et ipsum amet et at kasd, ipsum sea tempor magna tempor. Accu kasd sed ea duo ipsum. Dolor duo eirmod sea justo no lorem est diam</p>
                 <div class="w-100">
                     <div class="input-group">
-                        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address">
+                        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address" id="newsletter-email">
                         <div class="input-group-append">
-                            <button class="btn btn-primary px-4">Sign Up</button>
+                            <button class="btn btn-primary px-4" onclick="submitNewsletter()">Sign Up</button>
                         </div>
                     </div>
                 </div>
@@ -327,7 +322,7 @@
     <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
         <div class="row">
             <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
-                <p class="m-0 text-white">&copy; <a href="#">Domain Name</a>. All Rights Reserved. Designed by <a href="https://htmlcodex.com">HTML Codex</a>
+                <p class="m-0 text-white">© <a href="#">Domain Name</a>. All Rights Reserved. Designed by <a href="https://htmlcodex.com">HTML Codex</a>
                 </p>
             </div>
             <div class="col-lg-6 text-center text-md-right">
@@ -350,10 +345,8 @@
     </div>
     <!-- Footer End -->
 
-
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -367,6 +360,15 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-</body>
 
+    <!-- Form Submission Script -->
+    <script>
+        function submitNewsletter() {
+            var email = document.getElementById('newsletter-email').value;
+            // Add logic to handle newsletter submission
+            console.log('Newsletter subscribed:', { email: email });
+            // Example: window.location.href = 'newsletter?email=' + encodeURIComponent(email);
+        }
+    </script>
+</body>
 </html>

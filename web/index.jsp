@@ -1,12 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <title>ECOURSES - Online Courses HTML Template</title>
+    <title>ECOURSES - Online Courses JSP Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="Free JSP Templates" name="keywords">
+    <meta content="Free JSP Templates" name="description">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -24,7 +24,6 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
-
 <body>
     <!-- Topbar Start -->
     <div class="container-fluid d-none d-lg-block">
@@ -39,7 +38,7 @@
                     <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                     <div class="text-left">
                         <h6 class="font-weight-semi-bold mb-1">Our Office</h6>
-                        <small>123 Street, New York, USA</small>
+                        <small>Hòa Lạc, Hà Nội, Việt Nam</small>
                     </div>
                 </div>
             </div>
@@ -57,14 +56,13 @@
                     <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                     <div class="text-left">
                         <h6 class="font-weight-semi-bold mb-1">Call Us</h6>
-                        <small>+012 345 6789</small>
+                        <small>+842 345 6789</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Topbar End -->
-
 
     <!-- Navbar Start -->
     <div class="container-fluid">
@@ -74,7 +72,7 @@
                     <h5 class="text-primary m-0"><i class="fa fa-book-open mr-2"></i>Subjects</h5>
                     <i class="fa fa-angle-down text-primary"></i>
                 </a>
-                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 9;">
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 9())">
                     <div class="navbar-nav w-100">
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-toggle="dropdown">Web Design <i class="fa fa-angle-down float-right mt-1"></i></a>
@@ -101,18 +99,18 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a href="about.html" class="nav-item nav-link">About</a>
-                            <a href="course.html" class="nav-item nav-link">Courses</a>
-                            <a href="teacher.html" class="nav-item nav-link">Teachers</a>
+                            <a href="index.jsp" class="nav-item nav-link active">Home</a>
+                            <a href="about.jsp" class="nav-item nav-link">About</a>
+                            <a href="course.jsp" class="nav-item nav-link">Courses</a>
+                            <a href="teacher.jsp" class="nav-item nav-link">Teachers</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="blog.html" class="dropdown-item">Blog List</a>
-                                    <a href="single.html" class="dropdown-item">Blog Detail</a>
+                                    <a href="blog.jsp" class="dropdown-item">Blog List</a>
+                                    <a href="single.jsp" class="dropdown-item">Blog Detail</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="contact.jsp" class="nav-item nav-link">Contact</a>
                         </div>
                         <a class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>
                     </div>
@@ -121,7 +119,6 @@
         </div>
     </div>
     <!-- Navbar End -->
-
 
     <!-- Carousel Start -->
     <div class="container-fluid p-0 pb-5 mb-5">
@@ -167,7 +164,6 @@
     </div>
     <!-- Carousel End -->
 
-
     <!-- About Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
@@ -187,92 +183,6 @@
         </div>
     </div>
     <!-- About End -->
-
-
-    <!-- Category Start -->
-    <div class="container-fluid py-5">
-        <div class="container pt-5 pb-3">
-            <div class="text-center mb-5">
-                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Subjects</h5>
-                <h1>Explore Top Subjects</h1>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-1.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Web Design</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-2.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Development</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-3.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Game Design</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-4.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Apps Design</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-5.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Marketing</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-6.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Research</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-7.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">Content Writing</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="img/cat-8.jpg" alt="">
-                        <a class="cat-overlay text-white text-decoration-none" href="">
-                            <h4 class="text-white font-weight-medium">SEO</h4>
-                            <span>100 Courses</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Category Start -->
 
 
     <!-- Courses Start -->
@@ -396,7 +306,6 @@
     </div>
     <!-- Courses End -->
 
-
     <!-- Registration Start -->
     <div class="container-fluid bg-registration py-5" style="margin: 90px 0;">
         <div class="container py-5">
@@ -421,25 +330,25 @@
                             <h1 class="m-0">Sign Up Now</h1>
                         </div>
                         <div class="card-body rounded-bottom bg-primary p-5">
-                            <form>
+                            <div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control border-0 p-4" placeholder="Your name" required="required" />
+                                    <input type="text" class="form-control border-0 p-4" placeholder="Your name" required="required" id="name"/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control border-0 p-4" placeholder="Your email" required="required" />
+                                    <input type="email" class="form-control border-0 p-4" placeholder="Your email" required="required" id="email"/>
                                 </div>
                                 <div class="form-group">
-                                    <select class="custom-select border-0 px-4" style="height: 47px;">
+                                    <select class="custom-select border-0 px-4" style="height: 47px;" id="course">
                                         <option selected>Select a course</option>
                                         <option value="1">Course 1</option>
-                                        <option value="2">Course 1</option>
-                                        <option value="3">Course 1</option>
+                                        <option value="2">Course 2</option>
+                                        <option value="3">Course 3</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <button class="btn btn-dark btn-block border-0 py-3" type="submit">Sign Up Now</button>
+                                    <button class="btn btn-dark btn-block border-0 py-3" onclick="submitForm()">Sign Up Now</button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -447,7 +356,6 @@
         </div>
     </div>
     <!-- Registration End -->
-
 
     <!-- Team Start -->
     <div class="container-fluid py-5">
@@ -526,7 +434,6 @@
     </div>
     <!-- Team End -->
 
-
     <!-- Testimonial Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
@@ -564,7 +471,6 @@
         </div>
     </div>
     <!-- Testimonial End -->
-
 
     <!-- Blog Start -->
     <div class="container-fluid py-5">
@@ -606,7 +512,6 @@
     </div>
     <!-- Blog End -->
 
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
         <div class="row pt-5">
@@ -641,9 +546,9 @@
                 <p>Rebum labore lorem dolores kasd est, et ipsum amet et at kasd, ipsum sea tempor magna tempor. Accu kasd sed ea duo ipsum. Dolor duo eirmod sea justo no lorem est diam</p>
                 <div class="w-100">
                     <div class="input-group">
-                        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address">
+                        <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address" id="newsletter-email">
                         <div class="input-group-append">
-                            <button class="btn btn-primary px-4">Sign Up</button>
+                            <button class="btn btn-primary px-4" onclick="submitNewsletter()">Sign Up</button>
                         </div>
                     </div>
                 </div>
@@ -653,7 +558,7 @@
     <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
         <div class="row">
             <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
-                <p class="m-0 text-white">&copy; <a href="#">Domain Name</a>. All Rights Reserved. Designed by <a href="https://htmlcodex.com">HTML Codex</a>
+                <p class="m-0 text-white">© <a href="#">Domain Name</a>. All Rights Reserved. Designed by <a href="https://htmlcodex.com">HTML Codex</a>
                 </p>
             </div>
             <div class="col-lg-6 text-center text-md-right">
@@ -676,10 +581,8 @@
     </div>
     <!-- Footer End -->
 
-
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -693,6 +596,24 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-</body>
 
+    <!-- Form Submission Script -->
+    <script>
+        function submitForm() {
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var course = document.getElementById('course').value;
+            // Add logic to handle form submission, e.g., send data to a servlet
+            console.log('Form submitted:', { name: name, email: email, course: course });
+            // Example: window.location.href = 'signup?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email) + '&course=' + encodeURIComponent(course);
+        }
+
+        function submitNewsletter() {
+            var email = document.getElementById('newsletter-email').value;
+            // Add logic to handle newsletter submission
+            console.log('Newsletter subscribed:', { email: email });
+            // Example: window.location.href = 'newsletter?email=' + encodeURIComponent(email);
+        }
+    </script>
+</body>
 </html>

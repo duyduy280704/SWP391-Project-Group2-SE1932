@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/PRJ_SRC/ProjectEdu_Swp/ProjectEdu_Swp/web/listStaff.jsp</file>
-            <file>file:/C:/PRJ_SRC/ProjectEdu_Swp/ProjectEdu_Swp/web/listTeacher.jsp</file>
-            <file>file:/C:/PRJ_SRC/ProjectEdu_Swp/ProjectEdu_Swp/web/courseStaff.jsp</file>
-            <file>file:/C:/PRJ_SRC/ProjectEdu_Swp/ProjectEdu_Swp/web/listStudent.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/models/StudentDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/StudentController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/models/CourseDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/models/StaffDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/models/TeacherDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/dal/TestDBConnection.java</file>
         </group>
     </open-files>
 </project-private>

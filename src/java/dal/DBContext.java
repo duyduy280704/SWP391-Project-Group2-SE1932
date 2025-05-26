@@ -27,7 +27,7 @@ public class DBContext {
         try {
             String user = "sa";
             String pass = "123";
-            String url = "jdbc:sqlserver://DESKTOP-S72VG9I\\SQLEXPRESS:1433;databaseName=BIGDREAM";
+            String url = "jdbc:sqlserver://Dwight\\ET_DIII:1433;databaseName=BIGDREAM;TrustServerCertificate=true";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException | SQLException ex) {
@@ -35,10 +35,17 @@ public class DBContext {
         }
     }
     public static void main(String[] args) {
-        if((new DBContext().connection!=null)){
-            System.out.println("Connect success");
+        try {
+            DBContext db = new DBContext();
+            Connection conn = db.connection;
+            if (conn != null) {
+                System.out.println("Kết nối CSDL thành công!");
+            } else {
+                System.out.println("Kết nối thất bại!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else System.out.println("Connect fail");
     }
 }
 
