@@ -9,34 +9,21 @@ package models;
  * @author Quang
  */
 public class Teachers {
-    String id, name, account, password, exp, email, sdt, pic, address, role;
+    String id,password,fullname,birthDate,gender,expertise,roleId,picture,email;
 
     public Teachers() {
     }
 
-    public Teachers(String id, String name, String account, String password, String exp, String email, String sdt, String pic, String address, String role) {
+    public Teachers(String id, String password, String fullname, String birthDate, String gender, String expertise, String roleId, String picture, String email) {
         this.id = id;
-        this.name = name;
-        this.account = account;
         this.password = password;
-        this.exp = exp;
+        this.fullname = fullname;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.expertise = expertise;
+        this.roleId = roleId;
+        this.picture = picture;
         this.email = email;
-        this.sdt = sdt;
-        this.pic = pic;
-        this.address = address;
-        this.role = role;
-    }
-
-    public Teachers(String id, String name, String account, String password, String exp, String email, String sdt, String pic, String address) {
-        this.id = id;
-        this.name = name;
-        this.account = account;
-        this.password = password;
-        this.exp = exp;
-        this.email = email;
-        this.sdt = sdt;
-        this.pic = pic;
-        this.address = address;
     }
 
     public String getId() {
@@ -47,22 +34,6 @@ public class Teachers {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -71,12 +42,52 @@ public class Teachers {
         this.password = password;
     }
 
-    public String getExp() {
-        return exp;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setExp(String exp) {
-        this.exp = exp;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getExpertise() {
+        return expertise;
+    }
+
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public String getEmail() {
@@ -87,37 +98,5 @@ public class Teachers {
         this.email = email;
     }
 
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-    
     
 }

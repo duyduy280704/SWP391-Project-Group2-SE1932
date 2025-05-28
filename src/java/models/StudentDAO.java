@@ -14,144 +14,32 @@ public class StudentDAO extends DBContext{
     PreparedStatement stm; 
     ResultSet rs; 
     
-    public ArrayList<Students> getStudents() {
-
-        ArrayList<Students> data = new ArrayList<>();
-        try {
-            String strSQL = "select * from Students s join Roles r on s.id_role = r.id";
-            stm = connection.prepareStatement(strSQL);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                String id = String.valueOf(rs.getInt(1));
-                String name = rs.getString(2);
-                String account = rs.getString(3);
-                String password = rs.getString(4);
-                String email = rs.getString(5);
-                String sdt = rs.getString(6);
-                String pic = rs.getString(7);
-                String address = rs.getString(8);
-                String school = rs.getString(9);
-                String role = rs.getString(12);
-                
-
-                Students p = new Students(id, name, account, password, email, sdt, pic, address, school, role);
-                data.add(p);
-            }
-        } catch (Exception e) {
-            System.out.println("getStudents" + e.getMessage());
-
-        }
-        return data;
-    }
     
-    public Students getStudentById(String id) {
-        try {
-            String strSQL = "select * from Students where id=?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, id);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-
-                String name = rs.getString(2);
-                String account = rs.getString(3);
-                String password = rs.getString(4);
-                String email = rs.getString(5);
-                String sdt = rs.getString(6);
-                String pic = rs.getString(7);
-                String address = rs.getString(8);
-                String school = rs.getString(9);
-                String role = rs.getString(10);
-
-                Students p = new Students(id, name, account, password, email, sdt, pic, address, school, role);
-                return p;
-            }
-        } catch (Exception e) {
-            System.out.println("getStudents" + e.getMessage());
-
+    public Students checkLogin(String email, String password) {
+        try{
+           String strSQL="select id,password,fullname,email,birthDate,gener,address,roleId"
+                   + " from Student"
+                   + " where email =? and password=?";
+                   stm=connection.prepareStatement(strSQL);
+                   stm.setString(1, email);
+                   stm.setString(2, password);
+                   rs=stm.executeQuery();
+            while(rs.next()){
+                   String id=String.valueOf(rs.getString("id"));
+                   String pwd = rs.getString("password");
+                String fullName = rs.getString("fullname");
+                String emailFromDB = rs.getString("email");
+                String birthDate = rs.getString("birthDate"); 
+                String gender = rs.getString("gender");
+                String address = rs.getString("address");
+                String roleId = String.valueOf(rs.getInt("roleId"));
+                Students student = new Students(id, pwd, fullName, emailFromDB, birthDate, gender, address, roleId);
+                return student;
+            }                   
+        }catch(Exception e){
+            System.out.println("checklogin" +e.getMessage());
         }
-        return null;
-    }
-
-    public void update(Students s) {
-        try {
-            String strSQL = "update Students set username=?,account=?,password=?,email=?,sdt=?,picture=?,address=?,school=? where id=?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, s.name);
-            stm.setString(2, s.account);
-            stm.setString(3, s.password);
-            stm.setString(4, s.email);
-            stm.setString(5, s.sdt);
-            stm.setString(6, s.pic);
-            stm.setString(7, s.address);
-            stm.setString(8, s.school);
-            stm.setInt(9, Integer.parseInt(s.id));
-            
-            stm.execute();
-        } catch (Exception e) {
-            System.out.println("update:" + e.getMessage());
-        }
-    }
-
-    public void add(Students s) {
-    try {
-        // Kiểm tra nếu account đã tồn tại
-        if (isAccountExist(s.account)) {
-            System.out.println("Tài khoản '" + s.account + "' đã tồn tại. Không thể thêm mới.");
-            return; // Không thêm dữ liệu nếu account đã tồn tại
-        }
-
-        String strSQL = "INSERT INTO Students(username, account, password, email, sdt, picture, address, school, id_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        stm = connection.prepareStatement(strSQL);
-        stm.setString(1, s.name);
-        stm.setString(2, s.account);
-        stm.setString(3, s.password);
-        stm.setString(4, s.email);
-        stm.setString(5, s.sdt);
-        stm.setString(6, s.pic);
-        stm.setString(7, s.address);
-        stm.setString(8, s.school);
-        stm.setInt(9, Integer.parseInt(s.role));
-        stm.executeUpdate(); // dùng executeUpdate thay vì execute
-        System.out.println("Thêm học sinh thành công!");
-
-    } catch (Exception e) {
-        System.out.println("add: " + e.getMessage());
-    }
-}
-    
-    public boolean isAccountExist(String account) {
-
-        try {
-            String strSQL = "SELECT COUNT(*) FROM Students WHERE account = ?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, account);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                System.out.println("Check account: " + account + " - Kết quả: " + count);
-                return count > 0;
-            }
-        } catch (SQLException e) {
-            System.out.println("Lỗi SQL khi kiểm tra account: " + e.getMessage());
-        }
-        return false;
-    }
-
-    public void delete(String id) {
-     try {
-            String strSQL = "delete from Students where id=?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, id);
-
-            stm.execute();
-
-        } catch (Exception e) {
-            System.out.println("add:" + e.getMessage());
-        }
-    }
-
-    public Students checkLogin(String username, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return null; 
     }
     
 }
