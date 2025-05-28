@@ -4,6 +4,7 @@
     Author     : Quang
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +31,132 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <style>
+            /* Định dạng container div của bảng nhập liệu */
+            div.table-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 30px;
+            }
+
+            /* Định dạng bảng nhập liệu */
+            div.table-container table {
+                width: 100%;
+                max-width: 800px;
+                border-collapse: separate;
+                border-spacing: 0;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                font-family: 'Poppins', sans-serif;
+            }
+
+            /* Định dạng các ô trong bảng */
+            div.table-container table td {
+                padding: 15px;
+                font-size: 16px;
+                color: #333;
+                vertical-align: middle;
+            }
+
+            /* Định dạng các ô chứa nhãn */
+            div.table-container table td:first-child {
+                font-weight: 600;
+                width: 20%;
+                background-color: #f8f9fa;
+                border-right: 1px solid #dee2e6;
+            }
+
+            /* Định dạng các ô input */
+            div.table-container table input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                font-size: 14px;
+                box-sizing: border-box;
+                transition: border-color 0.3s ease;
+            }
+
+            div.table-container table input[type="text"]:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+            }
+
+            /* Định dạng các nút */
+            div.table-container table input[type="submit"] {
+                padding: 10px 25px;
+                margin: 0 10px;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            div.table-container table input[name="add"] {
+                background-color: #007bff;
+                color: white;
+            }
+
+            div.table-container table input[name="add"]:hover {
+                background-color: #0056b3;
+            }
+
+            div.table-container table input[name="update"] {
+                background-color: #28a745;
+                color: white;
+            }
+
+            div.table-container table input[name="update"]:hover {
+                background-color: #218838;
+            }
+
+            /* Định dạng hàng chứa nút */
+            div.table-container table tr:last-child td {
+                text-align: center;
+                padding: 20px;
+            }
+
+            /* Responsive design cho màn hình nhỏ */
+            @media (max-width: 768px) {
+                div.table-container table {
+                    width: 100%;
+                }
+
+                div.table-container table td {
+                    display: block;
+                    width: 100%;
+                    box-sizing: border-box;
+                    border: none;
+                    padding: 10px 15px;
+                }
+
+                div.table-container table td:first-child {
+                    background-color: transparent;
+                    font-weight: normal;
+                    padding-bottom: 5px;
+                }
+
+                div.table-container table input[type="text"] {
+                    margin-bottom: 15px;
+                }
+
+                div.table-container table tr:last-child td {
+                    display: flex;
+                    justify-content: center;
+                    gap: 10px;
+                }
+            }
+            .success {
+                color: green;
+            }
+            .error {
+                color: red;
+            }
+        </style>
     </head>
 
     <body>
@@ -125,49 +252,104 @@
                 </div>
             </div>
         </div>
-        
-            <!-- Header Start -->
-    <div class="container-fluid page-header" style="margin-bottom: -70px;">
-        <div class="container">
-            <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                <h3 class="display-4 text-white text-uppercase">Courses</h3>
-                <div class="d-inline-flex text-white">
-                    <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
-                    <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                    <p class="m-0 text-uppercase">Courses</p>
+
+        <!-- Header Start -->
+        <div class="container-fluid page-header" style="margin-bottom: -70px;">
+            <div class="container">
+                <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+                    <h3 class="display-4 text-white text-uppercase">Courses</h3>
+                    <div class="d-inline-flex text-white">
+                        <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                        <p class="m-0 text-uppercase">Courses</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Header End -->
-
+        <!-- Header End -->
+<!-- quang - nhân viên quản lý khóa học -->
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Courses</h5>
-                    <h1>Courses Management</h1>
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Khóa Học</h5>
+                    <h1>Quản Lý Khóa Học</h1>
                 </div>
+
+                <div class="table-container">
+                    <form action="coursestaff" method="post">
+                        <table>
+                            <tr>
+                                <td>Tên khóa học:</td>
+                                <td><input type="text" name="name" value="${p.getName()}"></td>
+                                <td>Học phí:</td>
+                                <td><input type="text" name="fee" value="${p.getFee()}"></td>
+                            </tr>
+                            <tr>
+                                <td>Tên thể loại:</td>
+                                <td>
+                                    <select name="type">
+                                        <option value="0">Tất cả thể loại</option>
+                                        <c:forEach items= "${data1}" var="c">
+                                            <option value="${c.getId()}"
+                                                    <c:if test="${p.getType()==c.getId()}">
+                                                        selected 
+                                                    </c:if>
+                                                    > ${c.getName()}</option>
+
+                                        </c:forEach>
+                                    </select>
+                                </td>
+                                <td>Link ảnh:</td>
+                                <td><input type="text" name="image" value="${p.getImage()}"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Miêu tả:</td>
+                                <td><input type="text" name="des" value="${p.getDescription()}"></td>
+                                <td><input type="hidden" name="id" value="${p.getId()}"></td>
+
+                            </tr>
+                            <tr>
+                                <td ">
+                                    <input type="submit" name="add" value="Thêm">
+                                    <input type="submit" name="update" value="Sửa">
+                                </td>
+                            </tr>
+                            <tr>
+                                <c:if test="${not empty message}">
+                                <p class="${success ? 'success' : 'error'}">${message}</p>
+                            </c:if>
+                            </tr>
+                        </table>
+                </div>
+                </form>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-1.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
+                    <c:forEach items="${data}" var="item">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="rounded overflow-hidden mb-2">
+                                <div style="position: relative; padding-top: 75%; overflow: hidden;">
+                                    <img src="${item.image}" alt="Teacher Picture" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/images/default-image.jpg';">
                                 </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
+                                <div class="bg-secondary p-4">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <small class="m-0"><i><h6>${item.id}</h6></i></small>
+                                        <small class="m-0"><i><h6>${item.type}</h6></i></small>
+                                    </div>
+                                    <h2>${item.name}</h2>
+                                    <h5>${item.description}</h5>
+
+                                    <div class="border-top mt-4 pt-4">
+                                        <div class="d-flex justify-content-between">
+                                            <a href="coursestaff?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
+                                            <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete">🗑️ Xóa</a>
+
+                                            <h6 class="m-0">${item.fee}VND</h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
+                    </c:forEach>
                 </div>
             </div>
         </div>

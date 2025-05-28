@@ -79,6 +79,12 @@
             form table td {
                 padding: 8px;
             }
+            .success {
+                color: green;
+            }
+            .error {
+                color: red;
+            }
         </style>
     </head>
 
@@ -196,14 +202,12 @@
         </div>
         <!-- Header End -->
 
-
-
+ <!-- quang - quản lý giáo viên -->
         <!-- Contact Start -->
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Admin Dashboard</h5>
-                    <h1>Users Management</h1>
+                    <h1>Quản Lý Người Dùng</h1>
                 </div>
 
             </div>
@@ -216,47 +220,47 @@
                     </tr>
                 </thead>
             </table>
+            <div class="text-center mb-5">
+                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Danh sách Giáo viên</h5>
+
+            </div>
 
             <!-- Form nhập liệu -->
             <form action="teacher" method="post">
                 <!-- input fields table -->
                 <table>
                     <tr>
-                        <td>ID: </td>
-                        <td><input type="text" name="id" value="${s.getId()}"></td>
-                        <td>Name: </td>
+                        <td></td>
+                        <td><input type="hidden" name="id" value="${s.getId()}"></td>
+                        <td>Họ và tên: </td>
                         <td><input type="text" name="name" value="${s.getName()}"></td>
-                        <td>Account: </td>
-                        <td><input type="text" name="account" value="${s.getAccount()}"></td>
-                        <td>Password: </td>
+                        <td>Email: </td>
+                        <td><input type="text" name="email" value="${s.getEmail()}"></td>
+                        <td>Mật khẩu: </td>
                         <td><input type="text" name="password" value="${s.getPassword()}"></td>
                     </tr>
                     <tr>
-                        <td>Expertise: </td>
+                        <td>Ngày sinh: </td>
+                        <td><input type="text" name="birthdate" value="${s.getBirthdate()}"></td>
+                        <td>Giới tính: </td>
+                        <td><input type="text" name="gender" value="${s.getGender()}"></td>
+                        <td>Kinh nghiệm: </td>
                         <td><input type="text" name="exp" value="${s.getExp()}"></td>
-                        <td>Email: </td>
-                        <td><input type="text" name="email" value="${s.getEmail()}"></td>
-                        <td>Number Phone: </td>
-                        <td><input type="text" name="sdt" value="${s.getSdt()}"></td>
-                        <td>Image: </td>
+                        <td>Ảnh: </td>
                         <td><input type="text" name="pic" value="${s.getPic()}"></td>
 
                     </tr>
+
                     <tr>
-                        <td>Address: </td>
-                        <td><input type="text" name="address" value="${s.getAddress()}"></td>
-                        <td> </td>
                         <td></td>
-                        <td>Role: </td>
-                        <td><input type="text" name="role" value="Teacher"></td>
-                        <td></td>
-                        <td></td>
+                        <td><input type="submit" name="add" value="Thêm"></td>
+                        <td><input type="submit" name="update" value="Sửa"></td>
+
                     </tr>
                     <tr>
-                        <td></td>
-                        <td><input type="submit" name="add" value="ADD"></td>
-                        <td><input type="submit" name="update" value="UPDATE"></td>
-                        <td><input type="submit" name="delete" value="DELETE"></td>
+                        <c:if test="${not empty message}">
+                        <p class="${success ? 'success' : 'error'}">${message}</p>
+                    </c:if>
                     </tr>
                 </table>
             </form>
@@ -266,30 +270,33 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Account</th>
-                        <th>Password</th>
-                        <th>Expertise</th>
+                        <th>Họ và tên</th>
                         <th>Email</th>
-                        <th>Number Phone</th>
-                        <th>Image</th>
-                        <th>Address</th>
-                        <th>Role</th>   
+                        <th>Mật khẩu</th>
+                        <th>Ngày sinh</th>
+                        <th>Giới tính</th>
+                        <th>Kinh nghiệm</th>
+                        <th>Ảnh</th>
+                        <th>Vai trò</th>
+                        <th>Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${data}" var="item">
                         <tr>
-                            <td><a href="teacher?id=${item.getId()}&mode=1">${item.getId()}</a></td>
-                            <td>${item.getName()}</td>
-                            <td>${item.getAccount()}</td>
-                            <td>${item.getPassword()}</td>
-                            <td>${item.getExp()}</td>
-                            <td>${item.getEmail()}</td>
-                            <td>${item.getSdt()}</td>
-                            <td><img width="100" src="${item.getPic()}"></td> 
-                            <td>${item.getAddress()}</td>
-                            <td>${item.getRole()}</td>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.email}</td>
+                            <td>${item.password}</td>
+                            <td>${item.birthdate}</td>
+                            <td>${item.gender}</td>
+                            <td>${item.exp}</td>
+                            <td><img src="${item.pic}" alt="Teacher Picture" style="max-width: 100px; max-height: 100px;"></td>
+                            <td>${item.role}</td>
+                            <td>
+                                <a href="teacher?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
+                                <a href="teacher?id=${item.id}&mode=2" class="btn btn-delete">🗑️ Xóa</a>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>

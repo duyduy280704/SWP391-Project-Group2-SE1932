@@ -72,7 +72,7 @@
                     <h5 class="text-primary m-0"><i class="fa fa-book-open mr-2"></i>Subjects</h5>
                     <i class="fa fa-angle-down text-primary"></i>
                 </a>
-                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 9())">
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 9">
                     <div class="navbar-nav w-100">
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-toggle="dropdown">Web Design <i class="fa fa-angle-down float-right mt-1"></i></a>

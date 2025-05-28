@@ -7,38 +7,34 @@ package models;
 /**
  *
  * @author Quang
- */
+ *///quang - quản lý học sinh
 public class Students {
-    String id, name, account, password, email, sdt, pic, address, school, role;
+    String id, name, email, password, brithdate, gender, address, role;
 
     public Students() {
     }
 
-    public Students(String id, String name, String account, String password, String email, String sdt, String pic, String address, String school, String role) {
+    public Students(String id, String name, String email, String password, String brithdate, String gender, String address, String role) {
         this.id = id;
         this.name = name;
-        this.account = account;
-        this.password = password;
         this.email = email;
-        this.sdt = sdt;
-        this.pic = pic;
+        this.password = password;
+        this.brithdate = brithdate;
+        this.gender = gender;
         this.address = address;
-        this.school = school;
         this.role = role;
     }
 
-    public Students(String id, String name, String account, String password, String email, String sdt, String pic, String address, String school) {
+    public Students(String id, String name, String email, String password, String brithdate, String gender, String address) {
         this.id = id;
         this.name = name;
-        this.account = account;
-        this.password = password;
         this.email = email;
-        this.sdt = sdt;
-        this.pic = pic;
+        this.password = password;
+        this.brithdate = brithdate;
+        this.gender = gender;
         this.address = address;
-        this.school = school;
     }
-    
+
     
     
 
@@ -58,12 +54,12 @@ public class Students {
         this.name = name;
     }
 
-    public String getAccount() {
-        return account;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -74,28 +70,20 @@ public class Students {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getBrithdate() {
+        return brithdate;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBrithdate(String brithdate) {
+        this.brithdate = brithdate;
     }
 
-    public String getSdt() {
-        return sdt;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getAddress() {
@@ -106,14 +94,6 @@ public class Students {
         this.address = address;
     }
 
-    public String getSchool() {
-        return school;
-    }
-
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
     public String getRole() {
         return role;
     }
@@ -121,6 +101,9 @@ public class Students {
     public void setRole(String role) {
         this.role = role;
     }
+
+    
+    
     
     
     

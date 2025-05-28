@@ -11,7 +11,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.ResultMessage;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
@@ -56,6 +60,7 @@ public class TeacherController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    // quang -  quản lý giáo viên
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         TeacherDAO sd = new TeacherDAO();
@@ -66,6 +71,18 @@ public class TeacherController extends HttpServlet {
             Teachers s = sd.getTeacherById(id);
             request.setAttribute("s", s);
         }
+        
+        if (request.getParameter("mode") != null && request.getParameter("mode").equals("2")) {
+            
+            String id = request.getParameter("id");
+            if (id != null && !id.isEmpty()) {
+                sd.delete(id);
+                request.setAttribute("message", "Xóa giáo viên thành công!");
+            } else {
+                request.setAttribute("error", "ID không hợp lệ!");
+            }
+        }
+       
 
         ArrayList<Teachers> data = sd.getTeachers();
 
@@ -84,33 +101,44 @@ public class TeacherController extends HttpServlet {
     throws ServletException, IOException {
         String id =request.getParameter("id");
         String name =request.getParameter("name");
-        String account =request.getParameter("account");
-        String password =request.getParameter("password");
-        String exp =request.getParameter("exp");
         String email =request.getParameter("email");
-        String sdt =request.getParameter("sdt");
+        String password =request.getParameter("password");
+        String birthdate =request.getParameter("birthdate");
+        String gender =request.getParameter("gender");
+        String exp =request.getParameter("exp");
         String pic =request.getParameter("pic");
-        String address =request.getParameter("address");
-        String role ="4";
+        String role ="2";
         
-        Teachers s = new Teachers(id, name, account, password, exp, email, sdt, pic, address, role);
-        Teachers u = new Teachers(id, name, account, password, exp, email, sdt, pic, address);
+        ResultMessage result = null;
+        
+        Teachers s = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role);
+        Teachers u = new Teachers(id, name, email, password, birthdate, gender, exp, pic);
         TeacherDAO sd = new TeacherDAO();
         
-        if(request.getParameter("update")!=null){
-            sd.update(u);
+        try {
+
+            if (request.getParameter("update") != null) {
+                // Cập nhật học sinh
+                result = sd.update(u);
+            } else if (request.getParameter("add") != null) {
+                // Thêm học sinh
+                result = sd.add(s);
+            } else {
+                result = new ResultMessage(false, "Hành động không hợp lệ!");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, e);
+            result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
         
-        if(request.getParameter("add")!=null){
-            sd.add(s);
-        }
+         
         
-        if(request.getParameter("delete")!=null){
-            sd.delete(s.getId());
-        }
         
         ArrayList<Teachers> data = sd.getTeachers();
-        
+        request.setAttribute("message", result.getMessage());
+        request.setAttribute("success", result.isSuccess());
         request.setAttribute("data", data);
         request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
     }
