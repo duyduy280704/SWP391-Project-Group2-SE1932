@@ -102,7 +102,7 @@
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
                             <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                                <c:out value="${applicationScope.setting.address}" default="Địa chỉ chưa cập nhật" />
                             </p>
                         </div>
                     </div>

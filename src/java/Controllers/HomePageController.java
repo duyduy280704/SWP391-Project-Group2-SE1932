@@ -43,17 +43,21 @@ public class HomePageController extends HttpServlet {
     private AboutDAO dao2 = new AboutDAO();
     private FeedBackDAO dao1 = new FeedBackDAO();
     private TeacherDAO dao = new TeacherDAO();
+    private BlogDAO blogDAO = new BlogDAO();
+
     public void init() {
         Information setting = daoI.getSetting();
         getServletContext().setAttribute("setting", setting);
         List<TypeCourse> typeList = courseDAO.getType();
         getServletContext().setAttribute("typeList", typeList);
         List<About> list = dao2.getAllAbouts();
-        getServletContext().setAttribute("aboutList", list);       
+        getServletContext().setAttribute("aboutList", list);
         ArrayList<FeedBack> feedbackList = dao1.getFeedbacks();
         getServletContext().setAttribute("feedbackList", feedbackList);
         List<Teachers> teacherlist = dao.getTeachers();
         getServletContext().setAttribute("teacherlist", teacherlist);
+        List<Blog> bloglist = blogDAO.getLatestBlogs();
+        getServletContext().setAttribute("bloglist", bloglist);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -67,11 +71,9 @@ public class HomePageController extends HttpServlet {
         FeedBackDAO dao1 = new FeedBackDAO();
         ArrayList<FeedBack> feedbackList = dao1.getFeedbacks();
         request.setAttribute("feedbackList", feedbackList);
-        BlogDAO blogDAO = new BlogDAO();
         List<Blog> blogList = blogDAO.getLatest3Blogs();
         request.setAttribute("blogList", blogList);
-        
-      
+
         ArrayList<Banner> slides = daoI.getSlides();
         request.setAttribute("slides", slides);
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);

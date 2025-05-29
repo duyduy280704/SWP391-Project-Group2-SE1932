@@ -43,7 +43,7 @@
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
                             <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                                <c:out value="${applicationScope.setting.address}" default="Địa chỉ chưa cập nhật" />
                             </p>
                         </div>
                     </div>
@@ -117,11 +117,11 @@
         <div class="container-fluid page-header" style="margin-bottom: -70px;">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Admin Dashboard</h3>
+                    <h3 class="display-4 text-white text-uppercase">Admin</h3>
                     <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                        <p class="m-0 text-uppercase"><a class="text-white" href="">Trang Chủ</a></p>
                         <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Admin Dashboard</p>
+                        <p class="m-0 text-uppercase">Admin</p>
                     </div>
 
                 </div>

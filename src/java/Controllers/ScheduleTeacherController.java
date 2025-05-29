@@ -10,12 +10,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import models.ScheduleTeacherDAO;
 import models.ScheduleDAO;
 import models.ScheduleTeacher;
 import models.Schedules;
+import models.Teachers;
 
 /**
  *
@@ -65,9 +67,17 @@ public class ScheduleTeacherController extends HttpServlet {
             throws ServletException, IOException {
 
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
-        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(5);
+         HttpSession session = request.getSession();
+        Teachers te = (Teachers) session.getAttribute("account");
+        if (te == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        String teachedId = te.getId();
+        int id = Integer.parseInt(teachedId);
+        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(id);
         for (ScheduleTeacher s : scheduleTeacher) {
-            s.computeDayOfWeek(); // Tính thứ từ ngày
+            s.computeDayOfWeek(); 
         }
         request.setAttribute("scheduleTeacher", scheduleTeacher);
         request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);

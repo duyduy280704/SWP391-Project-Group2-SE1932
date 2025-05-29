@@ -12,7 +12,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>ECOURSES - Online Courses HTML Template</title>
+        <title>BIGDREAM</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free HTML Templates" name="keywords">
         <meta content="Free HTML Templates" name="description">
@@ -246,11 +246,11 @@
         <div class="container-fluid page-header" style="margin-bottom: -70px;">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Courses</h3>
+                    <h3 class="display-4 text-white text-uppercase">Khóa Học</h3>
                     <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                        <p class="m-0 text-uppercase"><a class="text-white" href="">Trang Chủ</a></p>
                         <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Courses</p>
+                        <p class="m-0 text-uppercase">Khóa Học</p>
                     </div>
                 </div>
             </div>
@@ -289,7 +289,7 @@
                                     </select>
                                 </td>
                                 <td>Link ảnh:</td>
-                                <td><input type="text" name="image" value="${p.getImage()}"></td>
+                                <td><input type="text" name="image" value="${p.getPicture()}"></td>
                             </tr>
 
                             <tr>
@@ -317,7 +317,7 @@
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="rounded overflow-hidden mb-2">
                                 <div style="position: relative; padding-top: 75%; overflow: hidden;">
-                                    <img src="${item.image}" alt="Teacher Picture" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/images/default-image.jpg';">
+                                    <img src="${item.picture}" alt="Teacher Picture" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/images/default-image.jpg';">
                                 </div>
                                 <div class="bg-secondary p-4">
                                     <div class="d-flex justify-content-between mb-3">

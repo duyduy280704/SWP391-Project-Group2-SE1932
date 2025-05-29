@@ -57,12 +57,12 @@ public class ScheduleDAO extends DBContext {
             System.out.println("Lỗi getAllSchedules: " + e.getMessage());
         } 
 
-        System.out.println("Tìm thấy " + data.size() + " lịch học."); // Log ra để kiểm tra
+        System.out.println("Tìm thấy " + data.size() + " lịch học."); 
         return data;
     }
 
     public static void main(String[] args) {
-        ScheduleDAO dao = new ScheduleDAO(); // giả sử bạn có DAO đúng
+        ScheduleDAO dao = new ScheduleDAO(); 
         ArrayList<Schedules> courseList = dao.getSchedules();
 
         if (courseList.isEmpty()) {
@@ -110,7 +110,7 @@ public class ScheduleDAO extends DBContext {
             System.out.println("Lỗi getAllSchedules: " + e.getMessage());
         }
 
-        System.out.println("Tìm thấy " + data.size() + " lịch học."); // Log ra để kiểm tra
+        System.out.println("Tìm thấy " + data.size() + " lịch học."); 
         return data;
     }
 

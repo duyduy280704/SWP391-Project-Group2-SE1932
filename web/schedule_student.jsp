@@ -64,7 +64,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Ngày trong tuần</th>
+                        <th>Thứ</th>
                         <th>Ngày</th>
                         <th>Lớp</th>
                         <th>Bắt đầu</th>

@@ -40,6 +40,10 @@
         <servlet-name>ScheduleTeacherController</servlet-name>
         <servlet-class>Controllers.ScheduleTeacherController</servlet-class>
     </servlet>
+        <servlet>
+        <servlet-name>ScheduleStudentController</servlet-name>
+        <servlet-class>Controllers.ScheduleStudentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -74,10 +78,14 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ScheduleController</servlet-name>
-        <url-pattern>/Schedule</url-pattern>
+        <url-pattern>/schedule</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ScheduleTeacherController</servlet-name>
         <url-pattern>/scheduleTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScheduleStudentController</servlet-name>
+        <url-pattern>/scheduleStudent</url-pattern>
     </servlet-mapping>
 </web-app>
