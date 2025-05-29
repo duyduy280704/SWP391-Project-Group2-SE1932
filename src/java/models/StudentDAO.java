@@ -17,7 +17,7 @@ public class StudentDAO extends DBContext{
     
     public Students checkLogin(String email, String password) {
         try{
-           String strSQL="select id,password,fullname,email,birthDate,gener,address,roleId"
+           String strSQL="select id,password,full_name,email,birth_date,gender,address,Role_id"
                    + " from Student"
                    + " where email =? and password=?";
                    stm=connection.prepareStatement(strSQL);
@@ -27,12 +27,12 @@ public class StudentDAO extends DBContext{
             while(rs.next()){
                    String id=String.valueOf(rs.getString("id"));
                    String pwd = rs.getString("password");
-                String fullName = rs.getString("fullname");
+                String fullName = rs.getString("full_name");
                 String emailFromDB = rs.getString("email");
-                String birthDate = rs.getString("birthDate"); 
+                String birthDate = rs.getString("birth_date"); 
                 String gender = rs.getString("gender");
                 String address = rs.getString("address");
-                String roleId = String.valueOf(rs.getInt("roleId"));
+                String roleId = String.valueOf(rs.getInt("Role_id"));
                 Students student = new Students(id, pwd, fullName, emailFromDB, birthDate, gender, address, roleId);
                 return student;
             }                   

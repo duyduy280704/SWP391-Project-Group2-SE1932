@@ -1,29 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author HP
- */
 public class AdminStaffs {
-    String id,fullname,email,age,gender,password,roleID;
 
-    public AdminStaffs() {
-    }
+    private String id;
+    private String fullName;
+    private String email;
+    private String birthDate;
+    private String gender;
+    private String password;
+    private String roleId;
 
-    public AdminStaffs(String id, String fullname, String email, String age, String gender, String password, String roleID) {
+    public AdminStaffs(String id, String fullName, String email, String birthDate, String gender, String password, String roleId) {
         this.id = id;
-        this.fullname = fullname;
+        this.fullName = fullName;
         this.email = email;
-        this.age = age;
+        this.birthDate = birthDate;
         this.gender = gender;
         this.password = password;
-        this.roleID = roleID;
+        this.roleId = roleId;
     }
 
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -32,12 +29,12 @@ public class AdminStaffs {
         this.id = id;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -48,12 +45,12 @@ public class AdminStaffs {
         this.email = email;
     }
 
-    public String getAge() {
-        return age;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getGender() {
@@ -72,12 +69,11 @@ public class AdminStaffs {
         this.password = password;
     }
 
-    public String getRoleID() {
-        return roleID;
-    }
+    public String getRoleId() {
+        return roleId;
+    } // Sửa thành getRoleId
 
-    public void setRoleID(String roleID) {
-        this.roleID = roleID;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
-    
 }

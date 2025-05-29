@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Quên Mật Khẩu</title>
+    <title>Đặt Lại Mật Khẩu</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,7 +35,7 @@
             margin-bottom: 0.5rem;
             color: #555;
         }
-        input[type="email"] {
+        input[type="password"] {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
@@ -43,7 +43,7 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
-        input[type="email"]:focus {
+        input[type="password"]:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
@@ -71,15 +71,23 @@
 </head>
 <body>
     <div class="container">
-        <h2>Quên Mật Khẩu</h2>
-        <form method="post" action="ForgotPasswordServlet">
+        <h2>Đặt Lại Mật Khẩu</h2>
+        <form action="ResetPasswordServlet" method="post">
+            <input type="hidden" name="email" value="${email}">
+            <input type="hidden" name="table" value="${table}">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="newPassword">Mật khẩu mới:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
             </div>
-            <input type="submit" value="Tiếp tục">
+            <div class="form-group">
+                <label for="confirmPassword">Nhập lại mật khẩu:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <input type="submit" value="Đổi mật khẩu">
         </form>
-        <p class="error-message">${message}</p>
+        <c:if test="${not empty message}">
+            <p class="error-message">${message}</p>
+        </c:if>
     </div>
 </body>
 </html>

@@ -4,28 +4,31 @@
  */
 package models;
 
-/**
- *
- * @author Quang
- */
 public class Teachers {
-    String id,password,fullname,birthDate,gender,expertise,roleId,picture,email;
 
-    public Teachers() {
-    }
+    private String id;
+    private String password;
+    private String fullName;
+    private String email;
+    private String birthDate;
+    private String gender;
+    private String expertise;
+    private String picture;
+    private String roleId;
 
-    public Teachers(String id, String password, String fullname, String birthDate, String gender, String expertise, String roleId, String picture, String email) {
+    public Teachers(String id, String password, String fullName, String email, String birthDate, String gender, String expertise, String picture, String roleId) {
         this.id = id;
         this.password = password;
-        this.fullname = fullname;
+        this.fullName = fullName;
+        this.email = email;
         this.birthDate = birthDate;
         this.gender = gender;
         this.expertise = expertise;
-        this.roleId = roleId;
         this.picture = picture;
-        this.email = email;
+        this.roleId = roleId;
     }
 
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -42,12 +45,20 @@ public class Teachers {
         this.password = password;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getBirthDate() {
@@ -74,14 +85,6 @@ public class Teachers {
         this.expertise = expertise;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
     public String getPicture() {
         return picture;
     }
@@ -90,13 +93,11 @@ public class Teachers {
         this.picture = picture;
     }
 
-    public String getEmail() {
-        return email;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
-
-    
 }

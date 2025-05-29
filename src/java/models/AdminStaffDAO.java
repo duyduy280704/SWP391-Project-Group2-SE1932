@@ -18,22 +18,21 @@ public class AdminStaffDAO extends DBContext {
      ResultSet rs;
      public AdminStaffs checkLogin(String email,String password){
          try{
-             String strSQL="SELECT * FROM Admin_staff WHERE email = ? AND password = ?";
+             String strSQL="SELECT id, full_name, email,birth_date,gender, password,  role_id FROM Admin_staff WHERE email = ? AND password = ?";
              stm=connection.prepareStatement(strSQL);
              stm.setString(1, email);
              stm.setString(2, password);
              rs=stm.executeQuery();
              while(rs.next()){
-                 String id = String.valueOf(rs.getInt("id"));
-            String fullName = rs.getString("fullName");
-            String em = rs.getString("email");
-            String age = String.valueOf(rs.getInt("age"));
-            String gender = rs.getString("gender");
-            String pass = rs.getString("password");
-            String roleId = String.valueOf(rs.getInt("roleId"));
-
-            AdminStaffs a = new AdminStaffs(id, fullName, em, age, gender, pass, roleId);
-            return a;
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String em = rs.getString("email");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String pass = rs.getString("password");
+                String roleId = String.valueOf(rs.getInt("role_id"));
+                AdminStaffs a = new AdminStaffs(id, fullName, em, birthDate, gender, pass, roleId);
+                return a;
                  
              }
              
