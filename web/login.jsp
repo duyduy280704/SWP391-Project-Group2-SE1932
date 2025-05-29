@@ -95,11 +95,11 @@
         <form action="${pageContext.request.contextPath}/login" method="post">
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" id="email" value="${email}"  name="email" required>
+                <input type="text" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Mật khẩu:</label>
-                <input type="password" id="password" name="password" value="${password}" autocomplete="new-password" required>
+                <input type="password" id="password" name="password" autocomplete="new-password" required>
             </div>
             <div class="forgot-password">
                 <a href="forgot-password.jsp">Quên mật khẩu?</a>

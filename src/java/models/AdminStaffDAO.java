@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 public class AdminStaffDAO extends DBContext {
      PreparedStatement stm;
      ResultSet rs;
+     //Huyền-checklogin của adminstaff
      public AdminStaffs checkLogin(String email,String password){
          try{
              String strSQL="SELECT id, full_name, email,birth_date,gender, password,  role_id FROM Admin_staff WHERE email = ? AND password = ?";

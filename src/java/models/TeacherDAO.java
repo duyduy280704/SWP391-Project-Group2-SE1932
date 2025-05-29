@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class TeacherDAO extends DBContext {
     PreparedStatement stm;
     ResultSet rs;
-
+//Huyền-checklogin của teacher
     public Teachers checkLogin(String email, String password) {
         try {
             String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id " +
