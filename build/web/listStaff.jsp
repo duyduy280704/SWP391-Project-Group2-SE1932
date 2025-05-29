@@ -93,15 +93,17 @@
             <div class="row align-items-center py-4 px-xl-5">
                 <div class="col-lg-3">
                     <a href="" class="text-decoration-none">
-                        <h1 class="m-0"><span class="text-primary">E</span>COURSES</h1>
+                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                     </a>
                 </div>
                 <div class="col-lg-3 text-right">
                     <div class="d-inline-flex align-items-center">
                         <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                         <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Our Office</h6>
-                            <small>123 Street, New York, USA</small>
+                            <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
+                            <p>
+                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -109,8 +111,10 @@
                     <div class="d-inline-flex align-items-center">
                         <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
                         <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Email Us</h6>
-                            <small>info@example.com</small>
+                            <h6 class="font-weight-semi-bold mb-1">Email</h6>
+                            <p>
+                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -118,8 +122,12 @@
                     <div class="d-inline-flex align-items-center">
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Call Us</h6>
-                            <small>+012 345 6789</small>
+                            <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
+
+                            <p>
+                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                            </p>
+
                         </div>
                     </div>
                 </div>
@@ -131,52 +139,32 @@
         <!-- Navbar Start -->
         <div class="container-fluid">
             <div class="row border-top px-xl-5">
-                <div class="col-lg-3 d-none d-lg-block">
-                    <a class="d-flex align-items-center justify-content-between bg-secondary w-100 text-decoration-none" data-toggle="collapse" href="#navbar-vertical" style="height: 67px; padding: 0 30px;">
-                        <h5 class="text-primary m-0"><i class="fa fa-book-open mr-2"></i>Subjects</h5>
-                        <i class="fa fa-angle-down text-primary"></i>
-                    </a>
-                    <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 9;">
-                        <div class="navbar-nav w-100">
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link" data-toggle="dropdown">Web Design <i class="fa fa-angle-down float-right mt-1"></i></a>
-                                <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                    <a href="" class="dropdown-item">HTML</a>
-                                    <a href="" class="dropdown-item">CSS</a>
-                                    <a href="" class="dropdown-item">jQuery</a>
-                                </div>
-                            </div>
-                            <a href="" class="nav-item nav-link">Apps Design</a>
-                            <a href="" class="nav-item nav-link">Marketing</a>
-                            <a href="" class="nav-item nav-link">Research</a>
-                            <a href="" class="nav-item nav-link">SEO</a>
-                        </div>
-                    </nav>
-                </div>
-                <div class="col-lg-9">
-                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                        <a href="" class="text-decoration-none d-block d-lg-none">
-                            <h1 class="m-0"><span class="text-primary">E</span>COURSES</h1>
+                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
+                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
+                        <!-- Logo cho mobile -->
+                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
+                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                         </a>
+
+                        <!-- Nút toggle cho mobile -->
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                            <div class="navbar-nav py-0">
-                                <a href="index.html" class="nav-item nav-link">Home</a>
-                                <a href="about.html" class="nav-item nav-link">About</a>
-                                <a href="course.html" class="nav-item nav-link">Courses</a>
-                                <a href="teacher.html" class="nav-item nav-link">Teachers</a>
-                                <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        <a href="blog.html" class="dropdown-item">Blog List</a>
-                                        <a href="single.html" class="dropdown-item">Blog Detail</a>
-                                    </div>
+
+                        <!-- Menu + Nút hành động -->
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <!-- Menu căn giữa -->
+                                <div class="navbar-nav mx-auto">
+                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
+                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
+                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
-                                <a href="adminDashboard.jsp" class="nav-item nav-link active">Users Management</a>
+                                <!-- Nút hành động về phía phải -->
+                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
-                            <a class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>
                         </div>
                     </nav>
                 </div>
@@ -184,16 +172,15 @@
         </div>
         <!-- Navbar End -->
 
-
         <!-- Header Start -->
         <div class="container-fluid page-header" style="margin-bottom: -70px;">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Admin Dashboard</h3>
+                    <h3 class="display-4 text-white text-uppercase">Quản lý</h3>
                     <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                        <p class="m-0 text-uppercase"><a class="text-white" href="">Trang chủ</a></p>
                         <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Admin Dashboard</p>
+                        <p class="m-0 text-uppercase">Quản lý</p>
                     </div>
 
                 </div>
@@ -256,8 +243,8 @@
 
                     <tr>
                         <td></td>
-                        <td><input type="submit" name="add" value="ADD"></td>
-                        <td><input type="submit" name="update" value="UPDATE"></td>
+                        <td><input type="submit" name="add" value="Thêm"></td>
+                        <td><input type="submit" name="update" value="Sửa"></td>
                         <td></td>
                         <td><input type="hidden" name="id" value="${s.getId()}"></td>
                     </tr>
@@ -308,30 +295,74 @@
 
 
         <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-white py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
-            <div class="row pt-5">
-                <div class="col-lg-7 col-md-12">
-                    <div class="row">
-                        <div class="col-md-6 mb-5">
-                            <h5 class="text-primary text-uppercase mb-4" style="letter-spacing: 5px;">Get In Touch</h5>
-                            <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
-                            <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-                            <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
-                            <div class="d-flex justify-content-start mt-4">
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a class="btn btn-outline-light btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
+        <footer class="bg-dark text-white pt-5 pb-4">
+            <div class="container text-md-left">
+                <div class="row text-md-left">
 
+                    <!-- Liên hệ -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
+                        <p><i class="fa fa-map-marker-alt mr-2"></i> 
+                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-phone-alt mr-2"></i> 
+                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-envelope mr-2"></i> 
+                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                        </p>
+                        <div class="mt-3">
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.instagramLink != null ? setting.instagramLink : '#'}">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Khoá học -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
+                        <ul class="list-unstyled">
+                            <c:forEach var="t" items="${applicationScope.typeList}">
+                                <li>
+                                    <a href="#" class="text-white">
+                                        <i class="fa fa-angle-right mr-2"></i> ${t.name}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+
+                    <!-- Thông tin thêm -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
+                        <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <hr class="mb-4">
 
-        <!-- Footer End -->
+                <!-- Bản quyền -->
+                <div class="row align-items-center">
+                    <div class="col-md-7 col-lg-8">
+                        <p class="text-white">
+                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
+                        </p>
+                    </div>
+                    <div class="col-md-5 col-lg-4">
+                        <div class="text-right">
+                            <a class="text-white" href="${setting.policyLink != null ? setting.policyLink : '#'}">Chính sách</a> |
+                            <a class="text-white" href="${setting.termsLink != null ? setting.termsLink : '#'}">Điều khoản</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
 
         <!-- Back to Top -->
