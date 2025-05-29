@@ -118,7 +118,7 @@
                         </option>
                     </c:forEach>
                 </select>
-                
+
                 <label>Giáo viên:</label>
                 <select name="teacher">
                     <option value="0">Chọn giáo viên</option>
@@ -138,13 +138,20 @@
                 <label>Giờ kết thúc:</label>
                 <input type="time" name="endTime" placeholder="-- : --">
 
+
                 <label>Phòng học:</label>
                 <input type="text" name="room">
 
 
+                <% String err = (String) request.getAttribute("err"); %>
+                <% if (err != null) { %>
+                <div style="color:red"><%= err %></div>
+                <% } %>
+
+
                 <div class="buttons">
                     <button type="submit" class="save" name="add">Lưu</button>
-                    <button type="button" class="cancel">Hủy</button>
+                    <button type="button" class="cancel" onclick="window.location.href = 'schedule'">Hủy</button>
                 </div>
             </form>
         </div>

@@ -1,11 +1,10 @@
-// ScheduleTeacher.java
 package models;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class ScheduleTeacher {
+public class ScheduleStudent {
 
     private String id;
     private String day;
@@ -16,74 +15,17 @@ public class ScheduleTeacher {
     private String specificDay;
     private String dayVN;
 
-    public ScheduleTeacher() {
+    public ScheduleStudent() {
     }
 
-    public ScheduleTeacher(String id, String day, String nameClass, String startTime, String endTime, String room) {
+    public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room) {
         this.id = id;
         this.day = day;
         this.nameClass = nameClass;
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        computeDayOfWeek(); // Tính thứ khi khởi tạo
-    }
-
-    public String getSpecificDay() {
-        return specificDay;
-    }
-
-    public String getDayVN() {
-        return dayVN;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-        computeDayOfWeek(); // Gọi lại mỗi khi setDay
-    }
-
-    public String getNameClass() {
-        return nameClass;
-    }
-
-    public void setNameClass(String nameClass) {
-        this.nameClass = nameClass;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
+        computeDayOfWeek();
     }
 
     public void computeDayOfWeek() {
@@ -118,5 +60,63 @@ public class ScheduleTeacher {
             this.specificDay = "UNKNOWN";
             this.dayVN = "Không xác định";
         }
+    }
+
+    // Getter & Setter
+    public String getId() {
+        return id;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public String getNameClass() {
+        return nameClass;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public String getSpecificDay() {
+        return specificDay;
+    }
+
+    public String getDayVN() {
+        return dayVN;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+        computeDayOfWeek();
+    }
+
+    public void setNameClass(String nameClass) {
+        this.nameClass = nameClass;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

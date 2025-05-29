@@ -21,6 +21,8 @@ import models.Schedules;
  *
  * @author Admin
  */
+
+// Thuy- thời khóa biểu của sinh viên 
 public class ScheduleTeacherController extends HttpServlet {
 
     /**
@@ -61,11 +63,12 @@ public class ScheduleTeacherController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
 
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
         List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(5);
-
+        for (ScheduleTeacher s : scheduleTeacher) {
+            s.computeDayOfWeek(); // Tính thứ từ ngày
+        }
         request.setAttribute("scheduleTeacher", scheduleTeacher);
         request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
 

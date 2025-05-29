@@ -108,20 +108,20 @@
             <h2>Sửa thời khóa biểu</h2>
 
             <form action="schedule" method="post">
-                
+
                 <input type="hidden" name="scheduleId" value="${s.getId()}">
 
-                
+
                 <label for="className">Tên lớp:</label>               
                 <select name="classname">
                     <option value="0">Chọn lớp</option>
                     <c:forEach items="${data1}" var="c">
-                          <option value="${c.getId_class()}" <c:if test="${s.getNameClass() eq c.getId_class()}">selected</c:if>> 
+                        <option value="${c.getId_class()}" <c:if test="${s.getNameClass() eq c.getId_class()}">selected</c:if>> 
                             ${c.name_class}
                         </option>
                     </c:forEach>
                 </select>
-                
+
                 <label>Giáo viên:</label>
                 <select name="teacher">
                     <option value="0">Chọn giáo viên</option>
@@ -144,9 +144,22 @@
                 <label>Phòng học:</label>
                 <input type="text" name="room"  placeholder="${s.getRoom()}">
 
+
+                <c:if test="${not empty err}">
+                    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+                        ${err}
+                    </div>
+                </c:if>
+
+                <c:if test="${not empty msg}">
+                    <div style="color: green; font-weight: bold; margin-bottom: 10px;">
+                        ${msg}
+                    </div>
+                </c:if>
+
                 <div class="buttons">
                     <button type="submit" class="save" name="update"  >Lưu</button>
-                    <button type="button" class="cancel" >Hủy</button>
+                    <button type="button" class="cancel" onclick="window.location.href = 'schedule'">Hủy</button>
                 </div>
             </form>
         </div>

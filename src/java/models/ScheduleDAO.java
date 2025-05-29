@@ -15,6 +15,8 @@ import java.util.List;
  *
  * @author Admin
  */
+
+// Thuy-Thêm, sửa, xóa thời khóa biểu của admin 
 public class ScheduleDAO extends DBContext {
 
     PreparedStatement stm;
