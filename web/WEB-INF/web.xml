@@ -16,6 +16,18 @@
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controllers.StaffController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ScheduleListServlet</servlet-name>
+        <servlet-class>Controllers.ScheduleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Schedule_studentController</servlet-name>
+        <servlet-class>Controllers.Schedule_studentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ScheduleTeacherController</servlet-name>
+        <servlet-class>Controllers.ScheduleTeacherController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -31,5 +43,17 @@
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/staff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScheduleListServlet</servlet-name>
+        <url-pattern>/schedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Schedule_studentController</servlet-name>
+        <url-pattern>/schedule_student</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScheduleTeacherController</servlet-name>
+        <url-pattern>/scheduleTeacher</url-pattern>
     </servlet-mapping>
 </web-app>
