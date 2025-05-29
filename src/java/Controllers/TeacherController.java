@@ -63,11 +63,10 @@ public class TeacherController extends HttpServlet {
         if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
             //tìm Product tương ứng cùng với code truyền sang
             String id = request.getParameter("id");
-            Teachers s = sd.getTeacherById(id);
-            request.setAttribute("s", s);
+
         }
 
-        ArrayList<Teachers> data = sd.getTeachers();
+        ArrayList<Teachers> data = sd.get4Teachers();
 
         request.setAttribute("data", data);
         request.getRequestDispatcher("listTeacher.jsp").forward(request, response);    } 
@@ -93,35 +92,6 @@ public class TeacherController extends HttpServlet {
         String address =request.getParameter("address");
         String role ="4";
         
-        Teachers s = new Teachers(id, name, account, password, exp, email, sdt, pic, address, role);
-        Teachers u = new Teachers(id, name, account, password, exp, email, sdt, pic, address);
-        TeacherDAO sd = new TeacherDAO();
-        
-        if(request.getParameter("update")!=null){
-            sd.update(u);
-        }
-        
-        if(request.getParameter("add")!=null){
-            sd.add(s);
-        }
-        
-        if(request.getParameter("delete")!=null){
-            sd.delete(s.getId());
-        }
-        
-        ArrayList<Teachers> data = sd.getTeachers();
-        
-        request.setAttribute("data", data);
-        request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
+
     }
-
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

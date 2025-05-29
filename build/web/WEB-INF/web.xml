@@ -16,6 +16,10 @@
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controllers.StaffController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HomePageController</servlet-name>
+        <servlet-class>Controllers.HomePageController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -31,5 +35,9 @@
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/staff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomePageController</servlet-name>
+        <url-pattern>/HomePage</url-pattern>
     </servlet-mapping>
 </web-app>

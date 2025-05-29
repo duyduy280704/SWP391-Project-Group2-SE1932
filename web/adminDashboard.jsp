@@ -200,28 +200,74 @@
 
 
         <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-white py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
-            <div class="row pt-5">
-                <div class="col-lg-7 col-md-12">
-                    <div class="row">
-                        <div class="col-md-6 mb-5">
-                            <h5 class="text-primary text-uppercase mb-4" style="letter-spacing: 5px;">Get In Touch</h5>
-                            <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
-                            <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-                            <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
-                            <div class="d-flex justify-content-start mt-4">
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a class="btn btn-outline-light btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
+             <footer class="bg-dark text-white pt-5 pb-4">
+            <div class="container text-md-left">
+                <div class="row text-md-left">
 
+                    <!-- Liên hệ -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
+                        <p><i class="fa fa-map-marker-alt mr-2"></i> 
+                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-phone-alt mr-2"></i> 
+                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-envelope mr-2"></i> 
+                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                        </p>
+                        <div class="mt-3">
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.instagramLink != null ? setting.instagramLink : '#'}">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Khoá học -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
+                        <ul class="list-unstyled">
+                            <c:forEach var="t" items="${typeList}">
+                                <li>
+                                    <a href="#" class="text-white">
+                                        <i class="fa fa-angle-right mr-2"></i> ${t.name}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+
+                    <!-- Thông tin thêm -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
+                        <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
                     </div>
                 </div>
 
+                <hr class="mb-4">
+
+                <!-- Bản quyền -->
+                <div class="row align-items-center">
+                    <div class="col-md-7 col-lg-8">
+                        <p class="text-white">
+                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
+                        </p>
+                    </div>
+                    <div class="col-md-5 col-lg-4">
+                        <div class="text-right">
+                            <a class="text-white" href="${setting.policyLink != null ? setting.policyLink : '#'}">Chính sách</a> |
+                            <a class="text-white" href="${setting.termsLink != null ? setting.termsLink : '#'}">Điều khoản</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </footer>
 
         <!-- Footer End -->
 
