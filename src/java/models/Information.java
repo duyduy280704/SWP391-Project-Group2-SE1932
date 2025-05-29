@@ -8,6 +8,7 @@ package models;
  *
  * @author Dwight
  */
+//Dương_Homepage
 public class Information {
     private String address, phone, email;
     private String facebookLink, instagramLink, youtubeLink;

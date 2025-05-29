@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -10,7 +11,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.ResultMessage;
 import models.StudentDAO;
 import models.Students;
 
@@ -56,15 +61,27 @@ public class StudentController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    // quang - quản lý học sinh
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         StudentDAO sd = new StudentDAO();
-        
+
         if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
             //tìm Product tương ứng cùng với code truyền sang
             String id = request.getParameter("id");
             Students s = sd.getStudentById(id);
             request.setAttribute("s", s);
+        }
+
+        if (request.getParameter("mode") != null && request.getParameter("mode").equals("2")) {
+
+            String id = request.getParameter("id");
+            if (id != null && !id.isEmpty()) {
+                sd.delete(id);
+                request.setAttribute("message", "Xóa học sinh thành công!");
+            } else {
+                request.setAttribute("error", "ID không hợp lệ!");
+            }
         }
 
         ArrayList<Students> data = sd.getStudents();
@@ -84,35 +101,44 @@ public class StudentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id =request.getParameter("id");
-        String name =request.getParameter("name");
-        String account =request.getParameter("account");
-        String password =request.getParameter("password");
-        String email =request.getParameter("email");
-        String sdt =request.getParameter("sdt");
-        String pic =request.getParameter("pic");
-        String address =request.getParameter("address");
-        String school =request.getParameter("school");
-        String role ="3";
-        
-        Students s = new Students(id, name, account, password, email, sdt, pic, address, school, role);
-        Students u = new Students(id, name, account, password, email, sdt, pic, address, school);
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String birthdate = request.getParameter("birthdate");
+        String gender = request.getParameter("gender");
+        String address = request.getParameter("address");
+        String role = "1";
+
+        ResultMessage result = null;
+
+        Students s = new Students(id, name, email, password, birthdate, gender, address, role);
+        Students u = new Students(id, name, email, password, birthdate, gender, address);
+
         StudentDAO sd = new StudentDAO();
-        
-        if(request.getParameter("update")!=null){
-            sd.update(u);
+
+        try {
+
+            if (request.getParameter("update") != null) {
+                // Cập nhật học sinh
+                result = sd.update(u);
+            } else if (request.getParameter("add") != null) {
+                // Thêm học sinh
+                result = sd.add(s);
+            } else {
+                result = new ResultMessage(false, "Hành động không hợp lệ!");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, e);
+            result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
-        
-        if(request.getParameter("add")!=null){
-            sd.add(s);
-        }
-        
-        if(request.getParameter("delete")!=null){
-            sd.delete(s.getId());
-        }
-        
+
         ArrayList<Students> data = sd.getStudents();
-        
+        // Lưu thông báo vào request để truyền sang JSP
+        request.setAttribute("message", result.getMessage());
+        request.setAttribute("success", result.isSuccess());
         request.setAttribute("data", data);
         request.getRequestDispatcher("listStudent.jsp").forward(request, response);
     }

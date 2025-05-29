@@ -8,6 +8,7 @@ package models;
  *
  * @author Dwight
  */
+//Dương_Homepage
 public class Blog {
     private int id;
     private String title;

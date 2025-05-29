@@ -7,32 +7,21 @@ package models;
 /**
  *
  * @author Quang
- */
+ *///quang - quản lý nhân viên
 public class Staff {
-    String id, name, account, password, email, sdt, address, role;
+    String id, name, email, password, birthdate, gender, role;
 
     public Staff() {
     }
 
-    public Staff(String id, String name, String account, String password, String email, String sdt, String address, String role) {
+    public Staff(String id, String name, String email, String password, String birthdate, String gender, String role) {
         this.id = id;
         this.name = name;
-        this.account = account;
-        this.password = password;
         this.email = email;
-        this.sdt = sdt;
-        this.address = address;
+        this.password = password;
+        this.birthdate = birthdate;
+        this.gender = gender;
         this.role = role;
-    }
-
-    public Staff(String id, String name, String account, String password, String email, String sdt, String address) {
-        this.id = id;
-        this.name = name;
-        this.account = account;
-        this.password = password;
-        this.email = email;
-        this.sdt = sdt;
-        this.address = address;
     }
 
     public String getId() {
@@ -51,12 +40,12 @@ public class Staff {
         this.name = name;
     }
 
-    public String getAccount() {
-        return account;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -67,28 +56,20 @@ public class Staff {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
-    public String getSdt() {
-        return sdt;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getRole() {
@@ -98,6 +79,8 @@ public class Staff {
     public void setRole(String role) {
         this.role = role;
     }
+
+    
     
     
 }

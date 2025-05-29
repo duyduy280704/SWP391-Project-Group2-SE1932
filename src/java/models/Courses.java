@@ -26,7 +26,13 @@ public class Courses {
         this.id = id;
         this.name = name;
     }
-
+    public Courses(String name, String type, String description, String fee, String picture) {
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.fee = fee;
+        this.picture = picture;
+    }
 
     public String getId() {
         return id;

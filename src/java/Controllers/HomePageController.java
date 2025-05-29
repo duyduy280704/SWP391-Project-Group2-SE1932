@@ -35,6 +35,7 @@ import models.TypeCourse;
  *
  * @author Dwight
  */
+//Dương_homapage
 public class HomePageController extends HttpServlet {
 
     private CourseDAO courseDAO = new CourseDAO();
@@ -59,7 +60,7 @@ public class HomePageController extends HttpServlet {
             throws ServletException, IOException {
         List<Courses> course6 = courseDAO.get6Courses();
         request.setAttribute("courseList", course6);
-        List<Courses> courses = courseDAO.getCourses();
+        List<Courses> courses = courseDAO.getAllCourses();
         request.setAttribute("courses", courses);
         List<Teachers> teacherList = dao.get4Teachers();
         request.setAttribute("teacherList", teacherList);
@@ -70,9 +71,7 @@ public class HomePageController extends HttpServlet {
         List<Blog> blogList = blogDAO.getLatest3Blogs();
         request.setAttribute("blogList", blogList);
         
-       
-        List<TypeCourse> listc = courseDAO.getAllWithCourses();
-        request.setAttribute("typelist", listc);
+      
         ArrayList<Banner> slides = daoI.getSlides();
         request.setAttribute("slides", slides);
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);

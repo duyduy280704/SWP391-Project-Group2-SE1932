@@ -2,6 +2,19 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/courseStaff.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/TypeCourse.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listStaff.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listTeacher.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/changePassword.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/forgot-password.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/ForgotPasswordServlet.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/CourseDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listStudent.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/HomePage.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/adminDashboard.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/CourseStaffController.java</file>
+        </group>
     </open-files>
 </project-private>

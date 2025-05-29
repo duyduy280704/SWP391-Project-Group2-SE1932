@@ -1,3 +1,4 @@
+<!-- Dương_homepage -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -78,7 +79,7 @@
         <!-- Navbar Start -->
         <div class="container-fluid">
             <div class="row border-top px-xl-5">
-                <div class="col-lg-9">
+                <div class="col-lg-9 mx-auto"> 
                     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
                         <!-- Logo cho mobile -->
                         <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
@@ -89,24 +90,21 @@
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
+                        
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <div class="d-flex justify-content-between align-items-center w-100">
 
-                        <!-- Menu -->
-                        <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
-                            <!-- Menu căn giữa -->
-                            <div class="navbar-nav mx-auto">
-                                <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
-                                <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
-                                <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                            </div>
+                                <div class="navbar-nav mx-auto">
+                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
+                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
+                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+                                </div>
 
-                            <!-- Nút hành động về phía phải -->
-                            <div class="ml-auto">
-                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block" href="#">Tham Gia Ngay</a>
+                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
                         </div>
-
                     </nav>
                 </div>
             </div>
@@ -290,14 +288,14 @@
                         <div class="col-md-6 col-lg-3 text-center team mb-4">
                             <div class="team-item rounded overflow-hidden mb-2">
                                 <div class="team-img position-relative">
-                                    <img class="card-img-top w-100" src="${t.picture}" alt="image" style="height: 200px; object-fit: cover;">
+                                    <img class="card-img-top w-100" src="${t.pic}" alt="image" style="height: 200px; object-fit: cover;">
                                     <div class="team-social">
                                         <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
                                     </div>
                                 </div>
                                 <div class="bg-secondary p-4">
-                                    <h5>${t.fullName}</h5>
-                                    <p class="m-0">${t.expertise}</p>
+                                    <h5>${t.name}</h5>
+                                    <p class="m-0">${t.exp}</p>
                                 </div>
                             </div>
                         </div>

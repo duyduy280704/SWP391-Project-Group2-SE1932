@@ -1,3 +1,4 @@
+<!-- Dương_homepage -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -78,7 +79,7 @@
         <!-- Navbar Start -->
         <div class="container-fluid">
             <div class="row border-top px-xl-5">
-                <div class="col-lg-9">
+                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
                     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
                         <!-- Logo cho mobile -->
                         <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
@@ -90,23 +91,21 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
 
-                        <!-- Menu -->
-                        <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
-                            <!-- Menu căn giữa -->
-                            <div class="navbar-nav mx-auto">
-                                <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
-                                <a href="about.jsp" class="nav-item nav-link active">Giới Thiệu</a>
-                                <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
-                                <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                            </div>
-
-                            <!-- Nút hành động về phía phải -->
-                            <div class="ml-auto">
-                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block" href="#">Tham Gia Ngay</a>
+                        <!-- Menu + Nút hành động -->
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <!-- Menu căn giữa -->
+                                <div class="navbar-nav mx-auto">
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
+                                    <a href="about.jsp" class="nav-item nav-link active">Giới Thiệu</a>
+                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
+                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+                                </div>
+                                <!-- Nút hành động về phía phải -->
+                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
                         </div>
-
                     </nav>
                 </div>
             </div>

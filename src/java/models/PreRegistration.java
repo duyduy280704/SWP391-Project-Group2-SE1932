@@ -10,7 +10,7 @@ import java.sql.Date;
  *
  * @author Dwight
  */
-
+//Dương_Homepage
     public class PreRegistration {
     private int id;
     private String full_name;

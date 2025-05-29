@@ -10,22 +10,23 @@ import java.util.List;
  *
  * @author Dwight
  */
+//Dương_Homepage
 public class TypeCourse {
 
-    private int id;
+    private String id;
     private String name;
     private List<Courses> course;
 
     public TypeCourse() {
     }
 
-    public TypeCourse(int id, String name, List<Courses> course) {
+    public TypeCourse(String id, String name, List<Courses> course) {
         this.id = id;
         this.name = name;
         this.course = course;
     }
 
-    public TypeCourse(int id, String name) {
+    public TypeCourse(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -38,11 +39,11 @@ public class TypeCourse {
         this.course = course;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
