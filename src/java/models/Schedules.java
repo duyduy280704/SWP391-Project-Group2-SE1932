@@ -4,6 +4,9 @@
  */
 package models;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Admin
@@ -88,7 +91,15 @@ public class Schedules {
         this.room = room;
     }
 
-    
+    public Date getDate(){
+        try {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.parse(this.day);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+    }
 
     
     

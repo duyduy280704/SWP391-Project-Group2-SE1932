@@ -66,7 +66,8 @@ public class CourseDAO extends DBContext {
                     + "    c.fee\n, "
                     + "    c.image\n"
                     + "FROM Course c\n"
-                    + "JOIN type_course t ON c.type_id = t.id";
+                    + "JOIN type_course t ON c.type_id = t.id"
+                    ;
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {

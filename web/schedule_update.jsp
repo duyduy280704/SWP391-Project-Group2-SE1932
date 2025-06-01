@@ -1,8 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <meta charset="UTF-8">
         <title>Sửa Thời Khóa Biểu</title>
         <style>
@@ -133,16 +138,18 @@
                 </select>
 
                 <label for="date">Ngày học:</label>
-                <input type="date" id="date" name="date" value="${s.getDay()}" >
+                <input type="date" id="date" name="date" value="${s.getDay()}">
 
                 <label>Giờ bắt đầu:</label>
-                <input type="time" name="startTime"  value="${s.getStartTime()}">
+                <input type="time" name="startTime" value="${fn:substring(s.getStartTime(), 0, 5)}">
 
                 <label>Giờ kết thúc:</label>
-                <input type="time" name="endTime" value="${s.getEndTime()}">
+
+                <input type="time" name="endTime" value="${fn:substring(s.getEndTime(), 0, 5)}">
+
 
                 <label>Phòng học:</label>
-                <input type="text" name="room"  placeholder="${s.getRoom()}">
+                <input type="text" name="room"  value="${s.getRoom()}">
 
 
                 <c:if test="${not empty err}">
@@ -164,4 +171,5 @@
             </form>
         </div>
     </body>
+
 </html>

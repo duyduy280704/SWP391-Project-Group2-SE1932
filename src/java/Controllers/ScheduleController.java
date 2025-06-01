@@ -9,7 +9,8 @@ import models.CategoriesTeacher;
 import models.Categories_class;
 import models.ScheduleDAO;
 import models.Schedules;
-// Thuy-Thêm, sửa, xóa thời khóa biểu của admin 
+// Thuy-Thêm, sửa, xóa thời khóa biểu của staff 
+
 public class ScheduleController extends HttpServlet {
 
     @Override
@@ -34,6 +35,7 @@ public class ScheduleController extends HttpServlet {
             if (mode.equals("2")) {
                 Schedules s = dao.getSchedulesById(id);
                 request.setAttribute("s", s);
+                System.out.println(id);
                 ArrayList<Categories_class> data1 = dao.getCategories_class();
                 request.setAttribute("data1", data1);
 
@@ -47,6 +49,25 @@ public class ScheduleController extends HttpServlet {
                 dao.delete(id);
                 request.setAttribute("msg", "Đã xóa lịch học thành công.");
                 schedule = dao.getSchedules();
+            } else if (mode.equals("filter")) {
+                String date = request.getParameter("date");
+                schedule = new ArrayList<>();
+
+                System.out.println("Lọc với date: " + date);
+
+                if (date == null || date.trim().isEmpty()) {
+                    request.setAttribute("err", "Vui lòng chọn ngày học.");
+                    schedule = dao.getSchedules();
+                } else {
+                    List<Schedules> dateSchedules = dao.filterSchedulesByDate(date);
+                    schedule.addAll(dateSchedules);
+
+                    if (schedule.isEmpty()) {
+                        request.setAttribute("err", "Không tìm thấy lịch học phù hợp với bộ lọc.");
+                    } else {
+                        request.setAttribute("msg", "Đã lọc lịch học thành công.");
+                    }
+                }
             }
         }
 
@@ -78,24 +99,40 @@ public class ScheduleController extends HttpServlet {
                     || day == null || day.isEmpty()
                     || teacherID == null || teacherID.isEmpty()
                     || room == null || room.isEmpty()) {
-                
+
                 request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để sửa lịch học.");
                 request.setAttribute("s", s);
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
                 request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
                 return;
-                
+
             } else if (startTime.compareTo(endTime) >= 0) {
                 request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
                 request.setAttribute("s", s);
                 request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
                 return;
+            } else if (dao.isScheduleExist(s, true)) { // Kiểm tra lịch trùng khi sửa
+                request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
+                request.setAttribute("s", s);
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
+                request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
+                return;
+
             } else {
-                
+
                 dao.update(s);
                 request.setAttribute("msg", "Đã sửa lịch học thành công.");
                 schedule = dao.getSchedules();
             }
-            
+
         } else if (request.getParameter("add") != null) {
             if (classID == null || classID.isEmpty()
                     || startTime == null || startTime.isEmpty()
@@ -106,25 +143,46 @@ public class ScheduleController extends HttpServlet {
 
                 request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để thêm lịch học.");
                 request.setAttribute("s", s);
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
                 request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                 return;
 
             } else if (startTime.compareTo(endTime) >= 0) {
                 request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
                 request.setAttribute("s", s);
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
                 request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                 return;
-                
+
+            } else if (dao.isScheduleExist(s, false)) { // Kiểm tra lịch trùng khi thêm
+                request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
+                request.setAttribute("s", s);
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
+                request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                return;
+
             } else {
                 dao.add(s);
                 request.setAttribute("msg", "Đã tạo lịch học thành công.");
                 schedule = dao.getSchedules();
             }
-            
+
         } else if (request.getParameter("search") != null) {
             if (keyword == null || keyword.trim().isEmpty()) {
                 request.setAttribute("err", "Vui lòng nhập từ khóa tìm kiếm.");
-                schedule = dao.getSchedules(); 
+                schedule = dao.getSchedules();
             } else {
                 schedule = dao.getScheduleByName(keyword);
                 if (schedule == null || schedule.isEmpty()) {

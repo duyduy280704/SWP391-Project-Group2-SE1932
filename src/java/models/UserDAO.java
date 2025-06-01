@@ -25,6 +25,7 @@ public class UserDAO extends DBContext {
     }
 
     public void updatePassword(String tableName, String email, String newPassword) throws SQLException {
+        
         String sql = "UPDATE " + tableName + " SET password = ? WHERE email = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, newPassword);

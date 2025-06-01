@@ -43,7 +43,7 @@ public class ScheduleTeacherDAO extends DBContext {
     // Test main
     public static void main(String[] args) {
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
-        int teacherId = 5; // Thay ID giáo viên phù hợp
+        int teacherId = 5; 
         List<ScheduleTeacher> list = dao.getScheduleTeacher(teacherId);
 
         if (list.isEmpty()) {

@@ -15,7 +15,6 @@ import java.util.List;
  *
  * @author Admin
  */
-
 // Thuy-Thêm, sửa, xóa thời khóa biểu của admin 
 public class ScheduleDAO extends DBContext {
 
@@ -26,14 +25,15 @@ public class ScheduleDAO extends DBContext {
         ArrayList<Schedules> data = new ArrayList<>();
 
         try {
-            String strSQL = "SELECT \n"
-                    + "    *\n"
+            String strSQL = "SELECT s.*,            \n"
+                    + "    c.name,         \n"
+                    + "    t.full_name       \n"
                     + "FROM \n"
                     + "    schedule AS s\n"
                     + "JOIN \n"
                     + "    Class AS c ON s.id_class = c.id\n"
                     + "JOIN \n"
-                    + "    TeacherApplications AS t ON s.id_teacher = t.id;";
+                    + "    Teacher AS t ON s.id_teacher = t.id;";
 
             stm = connection.prepareStatement(strSQL);
 
@@ -42,12 +42,12 @@ public class ScheduleDAO extends DBContext {
             while (rs.next()) {
 
                 String id = String.valueOf(rs.getInt(1));
-                String nameClass = rs.getString(9);
+                String nameClass = rs.getString(8);
 
                 String start = rs.getString(4);
                 String end = rs.getString(5);
                 String day = rs.getString(6);
-                String nameTeacher = rs.getString(13);
+                String nameTeacher = rs.getString(9);
                 String room = rs.getString(7);
                 Schedules s = new Schedules(id, nameClass, start, end, day, nameTeacher, room);
                 data.add(s);
@@ -55,14 +55,14 @@ public class ScheduleDAO extends DBContext {
 
         } catch (SQLException e) {
             System.out.println("Lỗi getAllSchedules: " + e.getMessage());
-        } 
+        }
 
-        System.out.println("Tìm thấy " + data.size() + " lịch học."); 
+        System.out.println("Tìm thấy " + data.size() + " lịch học.");
         return data;
     }
 
     public static void main(String[] args) {
-        ScheduleDAO dao = new ScheduleDAO(); 
+        ScheduleDAO dao = new ScheduleDAO();
         ArrayList<Schedules> courseList = dao.getSchedules();
 
         if (courseList.isEmpty()) {
@@ -86,7 +86,7 @@ public class ScheduleDAO extends DBContext {
                     + "JOIN \n"
                     + "    Class c ON s.id_class = c.id\n"
                     + "JOIN \n"
-                    + "    TeacherApplications t ON s.id_teacher = t.id\n"
+                    + "    Teacher t ON s.id_teacher = t.id\n"
                     + "	WHERE c.name like ?";
 
             stm = connection.prepareStatement(strSQL);
@@ -110,7 +110,7 @@ public class ScheduleDAO extends DBContext {
             System.out.println("Lỗi getAllSchedules: " + e.getMessage());
         }
 
-        System.out.println("Tìm thấy " + data.size() + " lịch học."); 
+        System.out.println("Tìm thấy " + data.size() + " lịch học.");
         return data;
     }
 
@@ -135,20 +135,8 @@ public class ScheduleDAO extends DBContext {
 
         } catch (SQLException e) {
             System.out.println("Lỗi getAllSchedules: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stm != null) {
-                    stm.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Lỗi đóng tài nguyên: " + e.getMessage());
-            }
         }
         return s;
-
     }
 
     public void delete(String id) {
@@ -253,8 +241,61 @@ public class ScheduleDAO extends DBContext {
         }
     }
 
-   
+    public ArrayList<Schedules> filterSchedulesByDate(String date) {
+        ArrayList<Schedules> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT s.id, s.id_class, s.id_teacher, s.start_time, s.end_time, s.day, s.room, c.name AS class_name, t.full_name AS teacher_name "
+                    + "FROM schedule AS s "
+                    + "JOIN Class AS c ON s.id_class = c.id "
+                    + "JOIN Teacher AS t ON s.id_teacher = t.id "
+                    + "WHERE s.day = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, date);
+            rs = stm.executeQuery();
 
-    
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String nameClass = rs.getString("class_name");
+                String start = rs.getString("start_time");
+                String end = rs.getString("end_time");
+                String day = rs.getString("day");
+                String nameTeacher = rs.getString("teacher_name");
+                String room = rs.getString("room");
+                Schedules s = new Schedules(id, nameClass, start, end, day, nameTeacher, room);
+                data.add(s);
+            }
+            System.out.println("Lọc date " + date + ": Tìm thấy " + data.size() + " lịch học.");
+        } catch (SQLException e) {
+            System.out.println("Lỗi filterSchedulesByDate: " + e.getMessage());
+        }
+        return data;
+    }
 
+    public boolean isScheduleExist(Schedules s, boolean isUpdate) {
+        try {
+            String strSQL = "SELECT COUNT(*) FROM schedule WHERE id_class = ? AND start_time = ? AND end_time = ? AND day = ? AND id_teacher = ? AND room = ?";
+            if (isUpdate) {
+                strSQL += " AND id != ?";
+            }
+
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, s.getNameClass());
+            stm.setString(2, s.getStartTime());
+            stm.setString(3, s.getEndTime());
+            stm.setString(4, s.getDay());
+            stm.setString(5, s.getTeacher());
+            stm.setString(6, s.getRoom());
+            if (isUpdate) {
+                stm.setString(7, s.getId());
+            }
+
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu tìm thấy lịch trùng
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi isScheduleExist: " + e.getMessage());
+        }
+        return false;
+    }
 }

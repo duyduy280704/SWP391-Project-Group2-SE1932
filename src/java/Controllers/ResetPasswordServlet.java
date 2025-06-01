@@ -76,6 +76,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String newPassword = request.getParameter("newPassword");
     String confirmPassword = request.getParameter("confirmPassword");
 
+       
     
     if (!newPassword.equals(confirmPassword)) {
         request.setAttribute("message", "Mật khẩu không khớp. Vui lòng thử lại.");
