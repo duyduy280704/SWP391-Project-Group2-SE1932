@@ -17,7 +17,7 @@ public class ScheduleTeacherDAO extends DBContext {
             String strSQL = "SELECT s.id, s.day, c.name AS className, s.start_time, s.end_time, s.room " +
                             "FROM schedule AS s " +
                             "JOIN Class AS c ON s.id_class = c.id " +
-                            "JOIN TeacherApplications AS t ON s.id_teacher = t.id " +
+                            "JOIN Teacher AS t ON s.id_teacher = t.id " +
                             "WHERE s.id_teacher = ?";
             stm = connection.prepareStatement(strSQL);
             stm.setInt(1, teacherId);
