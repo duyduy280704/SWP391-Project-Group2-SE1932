@@ -14,10 +14,7 @@ import java.sql.SQLException;
 import java.util.Random;
 import models.UserDAO;
 
-/**
- * Servlet xử lý yêu cầu quên mật khẩu: kiểm tra email, tạo mã OTP,
- * lưu vào session, và hiển thị cho người dùng.
- *///
+
 //Huyền-Quên mật khẩu
 public class ForgotPasswordServlet extends HttpServlet {
   
@@ -36,15 +33,20 @@ public class ForgotPasswordServlet extends HttpServlet {
         String email = request.getParameter("email");
         UserDAO dao = new UserDAO();
         String table = dao.checkExistEmail(email);
-        
+        if(email==null){
+            request.setAttribute("message", "Bạn phải nhập email.");
+            request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+            return;
+        }
         if (table != null) {
-            // Email tồn tại → chuyển sang bước nhập mật khẩu mới
+ 
             request.setAttribute("email", email);
             request.setAttribute("table", table);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
         } else {
-            request.setAttribute("message", "Không tìm thấy email trong hẹ thống.");
+            request.setAttribute("message", "Không tìm thấy email trong hệ thống.");
             request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
+            return;
         }
     }
 
