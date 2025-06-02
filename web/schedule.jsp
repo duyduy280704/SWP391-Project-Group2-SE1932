@@ -20,6 +20,9 @@
         <!-- Libraries Stylesheet -->
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
@@ -95,7 +98,7 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                flex-wrap: wrap; /* Đảm bảo xuống dòng nếu chật */
+                flex-wrap: wrap;
             }
 
             .message {
@@ -364,36 +367,33 @@
                     width: 100%;
                 }
             }
-            /* Thu nhỏ kích thước tổng thể của hộp thoại */
+
             .swal2-popup {
-                width: 300px !important; /* Chiều rộng nhỏ hơn, mặc định thường là 500px */
-                padding: 15px !important; /* Giảm padding */
-                font-size: 14px !important; /* Giảm cỡ chữ tổng thể */
+                width: 300px !important;
+                padding: 15px !important;
+                font-size: 14px !important;
             }
 
-            /* Thu nhỏ tiêu đề */
             .swal2-title {
-                font-size: 18px !important; /* Cỡ chữ tiêu đề nhỏ hơn */
-                margin: 5px 0 !important; /* Giảm khoảng cách */
+                font-size: 18px !important;
+                margin: 5px 0 !important;
             }
 
-            /* Thu nhỏ nội dung (text) */
             .swal2-content {
-                font-size: 14px !important; /* Cỡ chữ nội dung nhỏ hơn */
+                font-size: 14px !important;
             }
 
-            /* Thu nhỏ nút */
             .swal2-confirm, .swal2-cancel {
-                font-size: 12px !important; /* Cỡ chữ nút nhỏ hơn */
-                padding: 5px 15px !important; /* Giảm padding của nút */
-                margin: 5px !important; /* Giảm khoảng cách giữa các nút */
+                font-size: 12px !important;
+                padding: 5px 15px !important;
+                margin: 5px !important;
             }
 
-            /* Thu nhỏ icon */
             .swal2-icon {
-                width: 50px !important; /* Kích thước icon nhỏ hơn */
+                width: 50px !important;
                 height: 50px !important;
             }
+
             .filter-form .reset-btn {
                 padding: 10px 20px;
                 background: linear-gradient(135deg, #9ca3af, #6b7280);
@@ -480,7 +480,6 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
                                 </div>
-
                             </div>
                         </div>
                     </nav>
@@ -491,7 +490,6 @@
 
         <div class="container1">
             <h1>Thời Khóa Biểu</h1>
-
 
             <form action="schedule" method="get" class="filter-form">
                 <input type="hidden" name="mode" value="filter">
@@ -507,13 +505,11 @@
 
             <div class="top-bar">
                 <div class="search-group">
-
                     <div class="form-container">
                         <form action="schedule" method="post" class="search-form">
                             <input type="text" name="keyword" placeholder="Tìm kiếm lớp ...">
                             <button class="search-btn" type="submit" name="search">🔍 Tìm kiếm</button>
                         </form>
-
 
                         <c:if test="${not empty err}">
                             <div class="message error">${err}</div>
@@ -522,9 +518,6 @@
                             <div class="message success">${msg}</div>
                         </c:if>
                     </div>
-
-
-
                 </div>
                 <a href="schedule?mode=1" class="create-btn">+ Tạo mới thời khóa biểu</a>
             </div>
@@ -543,12 +536,9 @@
                     </tr>
                 </thead>
                 <tbody>
-
-
                     <c:forEach items="${schedule}" var="schedule" varStatus="loop">
                         <tr> 
                             <td>${loop.index + 1}</td>
-
                             <td>${schedule.getNameClass()}</td>
                             <td>${fn:substring(schedule.getStartTime(), 0, 5)}</td>
                             <td>${fn:substring(schedule.getEndTime(), 0, 5)}</td>
@@ -558,10 +548,8 @@
                             <td class="row-actions">
                                 <a href="schedule?id=${schedule.getId()}&mode=2" class="action-btn edit">✎</a>
                                 <a href="schedule?id=${schedule.getId()}&mode=3" class="action-btn delete"
-                                   onclick="showDeleteConfirmation(${schedule.getId()});
-                                           return false;">🗑</a>
+                                   onclick="showDeleteConfirmation(${schedule.getId()}); return false;">🗑</a>
                             </td>
-
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -645,5 +633,26 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
+
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Custom Script -->
+        <script>
+            function showDeleteConfirmation(id) {
+                Swal.fire({
+                    title: 'Xác nhận xóa',
+                    text: 'Bạn có chắc chắn muốn xóa lịch học này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác Nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'schedule?id=' + id + '&mode=3';
+                    }
+                });
+            }
+        </script>
     </body>
 </html>

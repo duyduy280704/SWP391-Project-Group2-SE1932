@@ -63,32 +63,10 @@ public class TeacherController extends HttpServlet {
     // quang -  quản lý giáo viên
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        TeacherDAO sd = new TeacherDAO();
-        
-        if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
-            //tìm Product tương ứng cùng với code truyền sang
-            String id = request.getParameter("id");
-            Teachers s = sd.getTeacherById(id);
-            request.setAttribute("s", s);
-        }
-        
-        if (request.getParameter("mode") != null && request.getParameter("mode").equals("2")) {
-            
-            String id = request.getParameter("id");
-            if (id != null && !id.isEmpty()) {
-                sd.delete(id);
-                request.setAttribute("message", "Xóa giáo viên thành công!");
-            } else {
-                request.setAttribute("error", "ID không hợp lệ!");
-            }
-        }
+       
        
 
-        ArrayList<Teachers> data = sd.getTeachers();
-
-        request.setAttribute("data", data);
-        request.getRequestDispatcher("listTeacher.jsp").forward(request, response);    } 
-
+    }
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
@@ -99,48 +77,7 @@ public class TeacherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String id =request.getParameter("id");
-        String name =request.getParameter("name");
-        String email =request.getParameter("email");
-        String password =request.getParameter("password");
-        String birthdate =request.getParameter("birthdate");
-        String gender =request.getParameter("gender");
-        String exp =request.getParameter("exp");
-        String pic =request.getParameter("pic");
-        String role ="2";
         
-        ResultMessage result = null;
-        
-        Teachers s = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role);
-        Teachers u = new Teachers(id, name, email, password, birthdate, gender, exp, pic);
-        TeacherDAO sd = new TeacherDAO();
-        
-        try {
-
-            if (request.getParameter("update") != null) {
-                // Cập nhật học sinh
-                result = sd.update(u);
-            } else if (request.getParameter("add") != null) {
-                // Thêm học sinh
-                result = sd.add(s);
-            } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, e);
-            result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
-        }
-        
-         
-        
-        
-        ArrayList<Teachers> data = sd.getTeachers();
-        request.setAttribute("message", result.getMessage());
-        request.setAttribute("success", result.isSuccess());
-        request.setAttribute("data", data);
-        request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
     }
 
     /** 

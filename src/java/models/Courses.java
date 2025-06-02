@@ -9,29 +9,22 @@ package models;
  * @author Quang
  */
 public class Courses {
-    String id, name, type, description, fee, picture;
+    String id, name, type, description, fee, level, sale;
+    
+    byte[] image;
 
     public Courses() {
     }
 
-    public Courses(String id, String name, String type, String description, String fee, String picture) {
+    public Courses(String id, String name, String type, String description, String fee, byte[] image, String level, String sale) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.description = description;
         this.fee = fee;
-        this.picture = picture;
-    }
-    public Courses(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-    public Courses(String name, String type, String description, String fee, String picture) {
-        this.name = name;
-        this.type = type;
-        this.description = description;
-        this.fee = fee;
-        this.picture = picture;
+        this.image = image;
+        this.level = level;
+        this.sale = sale;
     }
 
     public String getId() {
@@ -74,12 +67,28 @@ public class Courses {
         this.fee = fee;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getLevel() {
+        return level;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getSale() {
+        return sale;
+    }
+
+    public void setSale(String sale) {
+        this.sale = sale;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
     
     

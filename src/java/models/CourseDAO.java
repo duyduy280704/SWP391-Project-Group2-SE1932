@@ -26,15 +26,19 @@ public class CourseDAO extends DBContext {
 
         ArrayList<Courses> data = new ArrayList<>();
         try {
-            String strSQL = "SELECT \n"
-                    + "    c.id, \n"
-                    + "    c.name, \n"
-                    + "    t.name AS type_name, \n"
-                    + "    c.description, \n"
-                    + "    c.fee\n, "
-                    + "    c.image\n"
-                    + "FROM Course c\n"
-                    + "JOIN type_course t ON c.type_id = t.id";
+            String strSQL = """
+                            SELECT
+                                c.id, 
+                                c.name, 
+                                t.name AS type_name, 
+                                c.description, 
+                                c.fee,
+                                c.image,
+                                c.level,
+                                c.sale
+                            FROM Course c
+                            JOIN type_course t ON c.type_id = t.id
+                            """;
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -43,9 +47,11 @@ public class CourseDAO extends DBContext {
                 String type = rs.getString(3);
                 String description = rs.getString(4);
                 String fee = rs.getString(5);
-                String picture = rs.getString(6);
+                byte[] image = rs.getBytes(6);
+                String level = rs.getString(7);
+                String sale = rs.getString(8);
 
-                Courses p = new Courses(id, name, type, description, fee, picture);
+                Courses p = new Courses(id, name, type, description, fee, image, level, sale);
                 data.add(p);
             }
         } catch (Exception e) {
@@ -60,6 +66,7 @@ public class CourseDAO extends DBContext {
         ArrayList<Courses> data = new ArrayList<>();
         try {
             String strSQL = """
+                            
                             SELECT TOP 6 
                                 c.id, 
                                 c.name, 
@@ -67,12 +74,15 @@ public class CourseDAO extends DBContext {
                                 c.description, 
                                 c.fee, 
                                 c.image,
+                                c.level,
+                                c.sale,
                                 COUNT(r.course_id) AS num_registrations
                             FROM Course c
                             JOIN type_course t ON c.type_id = t.id
                             LEFT JOIN regisition r ON c.id = r.course_id
-                            GROUP BY c.id, c.name, t.name, c.description, c.fee, c.image
+                            GROUP BY c.id, c.name, t.name, c.description, c.fee, c.image, c.level, c.sale
                             ORDER BY COUNT(r.course_id) DESC
+                            
                             """;
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
@@ -82,9 +92,11 @@ public class CourseDAO extends DBContext {
                 String type = rs.getString(3);
                 String description = rs.getString(4);
                 String fee = rs.getString(5);
-                String picture = rs.getString(6);
+                byte[] image = rs.getBytes(6);
+                String level = rs.getString(7);
+                String sale = rs.getString(8);
 
-                Courses p = new Courses(id, name, type, description, fee, picture);
+                Courses p = new Courses(id, name, type, description, fee, image, level, sale);
                 data.add(p);
             }
         } catch (Exception e) {
@@ -470,7 +482,7 @@ public class CourseDAO extends DBContext {
             return 0;
         }
     }
-    
+
     public List<Map<String, Object>> getRoleCounts() throws SQLException {
         List<Map<String, Object>> roleCounts = new ArrayList<>();
         try {

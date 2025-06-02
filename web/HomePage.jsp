@@ -90,7 +90,7 @@
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        
+
                         <div class="collapse navbar-collapse" id="navbarCollapse">
                             <div class="d-flex justify-content-between align-items-center w-100">
 
@@ -174,12 +174,19 @@
                     <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Khóa Học</h5>
                     <h1>Một số khóa học của chúng tôi</h1>
                 </div>
-
+                <form action="coursestaff" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <c:forEach var="c" items="${courseList}">
                         <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
                             <div class="card shadow-sm border-0 w-100">
-                                <img class="card-img-top w-100" src="${c.picture}" alt="Course image" style="height: 200px; object-fit: cover;">
+                                <c:choose>
+                                    <c:when test="${not empty c.image}">
+                                        <img src="image?id=${c.id}" alt="Course Picture" style="max-width: 400px; max-height: 300px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>No Image</span>
+                                    </c:otherwise>
+                                </c:choose>
                                 <div class="card-body bg-white">
                                     <div class="d-flex justify-content-between mb-2 text-muted small">
                                         <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
@@ -197,6 +204,7 @@
                     </c:forEach>
                     <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
                 </div>
+                    </form>
             </div>
         </div>
 

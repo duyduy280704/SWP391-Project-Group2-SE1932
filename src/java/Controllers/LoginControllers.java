@@ -51,7 +51,7 @@ public class LoginControllers extends HttpServlet {
                 session.setAttribute("account", staff);
                 System.out.println("AdminStaff RoleId: " + staff.getRoleId());
                 if ("4".equalsIgnoreCase(staff.getRoleId())) {
-                    request.getRequestDispatcher("admin.jsp").forward(request, response);
+                    request.getRequestDispatcher("adminhome").forward(request, response);
                 } else if ("3".equalsIgnoreCase(staff.getRoleId())) {
                     request.getRequestDispatcher("staff.jsp").forward(request, response);
                 }

@@ -1,155 +1,48 @@
 <%-- 
     Document   : courseStaff
-    Created on : May 24, 2025, 12:06:36 PM
+    Created on : Jun 1, 2025, 12:45:10 AM
     Author     : Quang
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
-        <meta charset="utf-8">
-        <title>BIGDREAM</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="Free HTML Templates" name="keywords">
-        <meta content="Free HTML Templates" name="description">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Tables - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-        <!-- Favicon -->
-        <link href="img/favicon.ico" rel="icon">
 
-        <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
-
-        <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-        <!-- Libraries Stylesheet -->
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
         <style>
-            /* Định dạng container div của bảng nhập liệu */
-            div.table-container {
-                display: flex;
-                justify-content: center;
-                margin-top: 30px;
-            }
-
-            /* Định dạng bảng nhập liệu */
-            div.table-container table {
+            .course-list-table {
+                border-collapse: collapse;
                 width: 100%;
-                max-width: 800px;
-                border-collapse: separate;
-                border-spacing: 0;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                font-family: 'Poppins', sans-serif;
             }
-
-            /* Định dạng các ô trong bảng */
-            div.table-container table td {
-                padding: 15px;
-                font-size: 16px;
-                color: #333;
-                vertical-align: middle;
+            .course-list-table th, .course-list-table td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
             }
-
-            /* Định dạng các ô chứa nhãn */
-            div.table-container table td:first-child {
-                font-weight: 600;
-                width: 20%;
-                background-color: #f8f9fa;
-                border-right: 1px solid #dee2e6;
+            .course-list-table th {
+                background-color: #f2f2f2;
             }
-
-            /* Định dạng các ô input */
-            div.table-container table input[type="text"] {
+            form input[type="text"] {
                 width: 100%;
-                padding: 10px;
-                border: 1px solid #ced4da;
-                border-radius: 4px;
-                font-size: 14px;
+                padding: 6px;
                 box-sizing: border-box;
-                transition: border-color 0.3s ease;
             }
 
-            div.table-container table input[type="text"]:focus {
-                outline: none;
-                border-color: #007bff;
-                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-            }
-
-            /* Định dạng các nút */
-            div.table-container table input[type="submit"] {
-                padding: 10px 25px;
-                margin: 0 10px;
-                border: none;
-                border-radius: 4px;
-                font-size: 14px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-            div.table-container table input[name="add"] {
-                background-color: #007bff;
-                color: white;
-            }
-
-            div.table-container table input[name="add"]:hover {
-                background-color: #0056b3;
-            }
-
-            div.table-container table input[name="update"] {
-                background-color: #28a745;
-                color: white;
-            }
-
-            div.table-container table input[name="update"]:hover {
-                background-color: #218838;
-            }
-
-            /* Định dạng hàng chứa nút */
-            div.table-container table tr:last-child td {
-                text-align: center;
-                padding: 20px;
-            }
-
-            /* Responsive design cho màn hình nhỏ */
-            @media (max-width: 768px) {
-                div.table-container table {
-                    width: 100%;
-                }
-
-                div.table-container table td {
-                    display: block;
-                    width: 100%;
-                    box-sizing: border-box;
-                    border: none;
-                    padding: 10px 15px;
-                }
-
-                div.table-container table td:first-child {
-                    background-color: transparent;
-                    font-weight: normal;
-                    padding-bottom: 5px;
-                }
-
-                div.table-container table input[type="text"] {
-                    margin-bottom: 15px;
-                }
-
-                div.table-container table tr:last-child td {
-                    display: flex;
-                    justify-content: center;
-                    gap: 10px;
-                }
+            form input[type="submit"] {
+                padding: 6px 12px;
+                margin-right: 5px;
             }
             .success {
                 color: green;
@@ -159,284 +52,249 @@
             }
         </style>
     </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">BIG DREAM</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 
-    <body>
-        <!-- Topbar Start -->
-        <div class="container-fluid d-none d-lg-block">
-            <div class="row align-items-center py-4 px-xl-5">
-                <div class="col-lg-3">
-                    <a href="" class="text-decoration-none">
-                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                    </a>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
-                            <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                            </p>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
+
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading"></div>
+                            <a class="nav-link" href="AdminHome.jsp">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Trang Chủ
+                            </a>
+
+
+
+
+                            <div class="sb-sidenav-menu-heading"></div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Biểu Đồ
+                            </a>
+                            <a class="nav-link" href="coursestaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản Lý Khóa học
+                            </a>
+
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Email</h6>
-                            <p>
-                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-phone text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
 
-                            <p>
-                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                            </p>
-
-                        </div>
-                    </div>
-                </div>
+                </nav>
             </div>
-        </div>
-        <!-- Topbar End -->
-        <!-- Navbar Start -->
-        <div class="container-fluid">
-            <div class="row border-top px-xl-5">
-                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
-                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
-                        <!-- Logo cho mobile -->
-                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
-                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                        </a>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Bảng Điều Khiển</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Nhân Viên</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form action="coursestaff" method="post" enctype="multipart/form-data">
 
-                        <!-- Nút toggle cho mobile -->
-                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                                    <table>
+                                        <tr>
 
-                        <!-- Menu + Nút hành động -->
-                        <div class="collapse navbar-collapse" id="navbarCollapse">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <!-- Menu căn giữa -->
-                                <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
-                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
-                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                                </div>
-                                <!-- Nút hành động về phía phải -->
-                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
+                                            <td>Tên khóa học: </td>
+                                            <td><input type="text" name="name" value="${p.getName()}"></td>
+                                            <td>Thể loại: </td>
+                                            <td><select name="type">
+                                                    <option value="0">Tất cả thể loại</option>
+                                                    <c:forEach items= "${data1}" var="c">
+                                                        <option value="${c.getId()}"
+                                                                <c:if test="${p.getType()==c.getId()}">
+                                                                    selected 
+                                                                </c:if>
+                                                                > ${c.getName()}</option>
+
+                                                    </c:forEach>
+                                                </select></td>
+                                            <td>Giá: </td>
+                                            <td><input type="text" name="fee" value="${p.getFee()}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mức độ: </td>
+                                            <td>
+                                                <select name="level">
+                                                    <option value="Cơ bản" ${p.getLevel() == 'Cơ bản' ? 'selected' : ''}>Cơ bản</option>
+                                                    <option value="Trung cấp" ${p.getLevel() == 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
+                                                    <option value="Nâng cao" ${p.getLevel() == 'Nâng cao' ? 'selected' : ''}>Nâng cao</option>
+                                                </select>
+                                            </td>
+                                            <td>Giảm giá: </td>
+                                            <td><input type="text" name="sale" value="${p.getSale()}"></td>
+                                            <td>Ảnh: </td>
+                                            <td><input type="file" name="image" value="${p.getImage()}">
+
+                                                <c:if test="${not empty p.id and not empty p.image}">
+                                                    <div style="margin-top: 10px;">
+                                                        <img src="image?id=${p.id}" alt="Current Course Image" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                    </div>
+                                                </c:if>
+                                            </td>
+
+
+
+                                        </tr>
+                                        <tr>
+                                            <td>Mô tả: </td>
+                                            <td><textarea name="description" id="description" cols="60" rows="5" >${p.getDescription()}</textarea></td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><input type="submit" name="add" value="Thêm"></td>
+                                            <td><input type="submit" name="update" value="Lưu"></td>
+
+                                            <td><input type="hidden" name="id" value="${p.getId()}"></td>
+
+                                        </tr>
+                                        <tr>
+                                            <c:if test="${not empty message}">
+                                            <p class="${success ? 'success' : 'error'}">${message}</p>
+                                        </c:if>
+                                        </tr>
+                                    </table>
+                                </form>
                             </div>
                         </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
 
-        <!-- Header Start -->
-        <div class="container-fluid page-header" style="margin-bottom: -70px;">
-            <div class="container">
-                <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Khóa Học</h3>
-                    <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="">Trang Chủ</a></p>
-                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Khóa Học</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Header End -->
-        <!-- quang - nhân viên quản lý khóa học -->
-        <div class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Khóa Học</h5>
-                    <h1>Quản Lý Khóa Học</h1>
-                </div>
 
-                <div class="table-container">
-                    <form action="coursestaff" method="post">
-                        <table>
-                            <tr>
-                                <td>Tên khóa học:</td>
-                                <td><input type="text" name="name" value="${p.getName()}"></td>
-                                <td>Học phí:</td>
-                                <td><input type="text" name="fee" value="${p.getFee()}"></td>
-                            </tr>
-                            <tr>
-                                <td>Tên thể loại:</td>
-                                <td>
-                                    <select name="type">
-                                        <option value="0">Tất cả thể loại</option>
-                                        <c:forEach items= "${data1}" var="c">
-                                            <option value="${c.getId()}"
-                                                    <c:if test="${p.getType()==c.getId()}">
-                                                        selected 
-                                                    </c:if>
-                                                    > ${c.getName()}</option>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Danh Sách Khóa học
+                            </div>
+                            <div class="card-body">
+                                <table class="course-list-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên khóa học</th>
+                                            <th>Thể loại</th>
+                                            <th>Mô tả</th>
+                                            <th>giá</th>
+                                            <th>Ảnh</th>
+                                            <th>Mức độ</th>
+                                            <th>Giảm giá</th>
+                                            <th>Chức năng</th>
 
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <c:forEach items="${data}" var="item">
+                                            <tr>
+                                                <td>${item.getId()}</td>
+                                                <td>${item.getName()}</td>
+                                                <td>${item.getType()}</td>
+                                                <td>${item.getDescription()}</td>
+                                                <td>${item.getFee()}</td>
+
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${not empty item.image}">
+                                                            <img src="image?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>No Image</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td>${item.getLevel()}</td>
+                                                <td>${item.getSale()} %</td>
+                                                <td>
+                                                    <a href="coursestaff?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
+                                                    <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete" 
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a>
+                                                </td>
+
+                                            </tr>
                                         </c:forEach>
-                                    </select>
-                                </td>
-                                <td>Link ảnh:</td>
-                                <td><input type="text" name="image" value="${p.getPicture()}"></td>
-                            </tr>
 
-                            <tr>
-                                <td>Mô tả:</td>
-                                <td><input type="text" name="des" value="${p.getDescription()}"></td>
-                                <td><input type="hidden" name="id" value="${p.getId()}"></td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="submit" name="add" value="Thêm">
-                                    <input type="submit" name="update" value="Sửa">
-                                </td>
-                            </tr>
-                            <tr>
-                                <c:if test="${not empty message}">
-                                <p class="${success ? 'success' : 'error'}">${message}</p>
-                            </c:if>
-                            </tr>
-                        </table>
-                </div>
-                </form>
-                <div class="row">
-                    <c:forEach items="${data}" var="item">
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="rounded overflow-hidden mb-2">
-                                <div style="position: relative; padding-top: 75%; overflow: hidden;">
-                                    <img src="${item.picture}" alt="Teacher Picture" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/images/default-image.jpg';">
-                                </div>
-                                <div class="bg-secondary p-4">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <small class="m-0"><i><h6>${item.id}</h6></i></small>
-                                        <small class="m-0"><i><h6>${item.type}</h6></i></small>
-                                    </div>
-                                    <h2>${item.name}</h2>
-                                    <h5>${item.description}</h5>
-
-                                    <div class="border-top mt-4 pt-4">
-                                        <div class="d-flex justify-content-between">
-                                            <a href="coursestaff?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
-                                            <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete">🗑️ Xóa</a>
-
-                                            <h6 class="m-0">${item.fee}VND</h5>
-                                        </div>
-                                    </div>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </c:forEach>
-                </div>
+                    </div>
+                </main>
+
             </div>
         </div>
-        <!-- Courses End -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+        <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+        <script>
+                                                           document.addEventListener('DOMContentLoaded', function () {
+                                                               // Initialize DataTables
+                                                               const dataTable = document.getElementById('datatablesSimple');
+                                                               if (dataTable) {
+                                                                   new simpleDatatables.DataTable(dataTable);
+                                                                   console.log('DataTables initialized for datatablesSimple');
+                                                               } else {
+                                                                   console.error('DataTable element not found');
+                                                               }
 
+                                                               // Initialize CKEditor
+                                                               const descriptionTextarea = document.getElementById('description');
+                                                               if (descriptionTextarea && typeof CKEDITOR !== 'undefined') {
+                                                                   // Destroy existing CKEditor instance if it exists
+                                                                   if (CKEDITOR.instances.description) {
+                                                                       CKEDITOR.instances.description.destroy(true);
+                                                                   }
 
+                                                                   // Initialize CKEditor
+                                                                   CKEDITOR.replace('description', {
+                                                                       height: 200,
+                                                                       toolbar: [
+                                                                           {name: 'basic', items: ['Bold', 'Italic', 'Underline', 'Link', 'Unlink', 'NumberedList', 'BulletedList']},
+                                                                           {name: 'paragraph', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight']},
+                                                                           {name: 'styles', items: ['Font', 'FontSize']},
+                                                                           {name: 'colors', items: ['TextColor', 'BGColor']}
+                                                                       ]
+                                                                   });
 
-
-
-        <!-- Footer Start -->
-        <footer class="bg-dark text-white pt-5 pb-4">
-            <div class="container text-md-left">
-                <div class="row text-md-left">
-
-                    <!-- Liên hệ -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
-                        <p><i class="fa fa-map-marker-alt mr-2"></i> 
-                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                        </p>
-                        <p><i class="fa fa-phone-alt mr-2"></i> 
-                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                        </p>
-                        <p><i class="fa fa-envelope mr-2"></i> 
-                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                        </p>
-                        <div class="mt-3">
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.instagramLink != null ? setting.instagramLink : '#'}">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Khoá học -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
-                        <ul class="list-unstyled">
-                            <c:forEach var="t" items="${applicationScope.typeList}">
-                                <li>
-                                    <a href="#" class="text-white">
-                                        <i class="fa fa-angle-right mr-2"></i> ${t.name}
-                                    </a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </div>
-
-                    <!-- Thông tin thêm -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
-                        <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
-                    </div>
-                </div>
-
-                <hr class="mb-4">
-
-                <!-- Bản quyền -->
-                <div class="row align-items-center">
-                    <div class="col-md-7 col-lg-8">
-                        <p class="text-white">
-                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
-                        </p>
-                    </div>
-                    <div class="col-md-5 col-lg-4">
-                        <div class="text-right">
-                            <a class="text-white" href="${setting.policyLink != null ? setting.policyLink : '#'}">Chính sách</a> |
-                            <a class="text-white" href="${setting.termsLink != null ? setting.termsLink : '#'}">Điều khoản</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <!-- Footer End -->
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-        <!-- Contact Javascript File -->
-        <script src="mail/jqBootstrapValidation.min.js"></script>
-        <script src="mail/contact.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+                                                                   // Set description value safely
+                                                                   const descriptionValue = '${p.description != null ? fn:escapeXml(p.description) : ''}';
+                                                                   CKEDITOR.instances.description.setData(descriptionValue);
+                                                                   console.log('CKEditor initialized with description:', descriptionValue);
+                                                               } else {
+                                                                   console.error('CKEditor not loaded or textarea not found.');
+                                                                   if (!descriptionTextarea) {
+                                                                       console.error('Textarea with id "description" not found.');
+                                                                   }
+                                                                   if (typeof CKEDITOR === 'undefined') {
+                                                                       console.error('CKEDITOR object is undefined. Verify ckeditor.js is loaded.');
+                                                                   }
+                                                               }
+                                                           });
+        </script>
     </body>
-
 </html>
+
