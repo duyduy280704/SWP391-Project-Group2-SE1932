@@ -7,21 +7,24 @@ package models;
 import dal.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Quang
  */
 public class CourseDAO extends DBContext {
-    
+
     PreparedStatement stm;
     ResultSet rs;
 
     public ArrayList<Courses> getCourses() {
         ArrayList<Courses> data = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(
-                "SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level, c.sale " +
-                "FROM Course c JOIN type_course t ON c.type_id = t.id")) {
+                "SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level, c.sale "
+                + "FROM Course c JOIN type_course t ON c.type_id = t.id")) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 String id = String.valueOf(rs.getInt("id"));
@@ -41,8 +44,6 @@ public class CourseDAO extends DBContext {
         return data;
     }
 
-   
-    
     public Courses getCoursesById(String id) {
         try {
             String strSQL = "select * from Course where id=?";
@@ -171,7 +172,7 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
-    
+
     private boolean isCourseNameExistForOther(String name, int excludeId) throws SQLException {
         if (connection == null) {
             throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
@@ -305,7 +306,7 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
     }
-    
+
     public byte[] getCourseImageById(String courseId) throws SQLException {
         if (courseId == null || courseId.isEmpty()) {
             return null;
@@ -324,5 +325,88 @@ public class CourseDAO extends DBContext {
             throw e;
         }
         return null;
+    }
+
+    public ArrayList<TypeCourseCount> getCourseCountByType() {
+        ArrayList<TypeCourseCount> list = new ArrayList<>();
+        String sql = "SELECT t.name AS type_name, COUNT(c.id) AS course_count "
+                + "FROM Course c JOIN type_course t ON c.type_id = t.id "
+                + "GROUP BY t.name";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                String typeName = rs.getString("type_name");
+                int count = rs.getInt("course_count");
+                list.add(new TypeCourseCount(typeName, count));
+            }
+        } catch (SQLException e) {
+            System.err.println("getCourseCountByType: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public int getStudentCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Student";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public int getTeacherCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Teacher";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public int getAdminStaffCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Admin_staff";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+    
+    public List<Map<String, Object>> getRoleCounts() throws SQLException {
+        List<Map<String, Object>> roleCounts = new ArrayList<>();
+        try {
+            // Đếm số lượng từ các bảng
+            int studentCount = getStudentCount();
+            int teacherCount = getTeacherCount();
+            int adminStaffCount = getAdminStaffCount();
+
+            // Thêm vào danh sách
+            Map<String, Object> studentMap = new HashMap<>();
+            studentMap.put("role", "Students");
+            studentMap.put("count", studentCount);
+            roleCounts.add(studentMap);
+
+            Map<String, Object> teacherMap = new HashMap<>();
+            teacherMap.put("role", "Teachers");
+            teacherMap.put("count", teacherCount);
+            roleCounts.add(teacherMap);
+
+            Map<String, Object> adminMap = new HashMap<>();
+            adminMap.put("role", "Admin Staff");
+            adminMap.put("count", adminStaffCount);
+            roleCounts.add(adminMap);
+
+            return roleCounts;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
