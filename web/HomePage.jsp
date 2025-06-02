@@ -195,6 +195,7 @@
                             </div>
                         </div>
                     </c:forEach>
+                    <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
                 </div>
             </div>
         </div>
@@ -300,6 +301,7 @@
                             </div>
                         </div>
                     </c:forEach>
+                    <a href="teacher.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
                 </div>
             </div>
         </div>

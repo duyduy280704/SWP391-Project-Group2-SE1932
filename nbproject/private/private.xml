@@ -3,38 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/StaffController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listTeacher.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/ScheduleTeacherController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/schedule_student.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/schedule_teacher.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/TypeCourse.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/ScheduleController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/ScheduleStudentDAO.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/ForgotPasswordServlet.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/CourseDAO.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/login.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/schedule_add.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/about.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/LoginControllers.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/adminDashboard.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/student.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/schedule_update.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/courseStaff.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listStaff.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/course.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/admin.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/HomePageController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/CourseStaffController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/Schedules.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/changePassword.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/forgot-password.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/schedule.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/listStudent.jsp</file>
             <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/web/HomePage.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/Controllers/ScheduleStudentController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/project/src/java/models/ScheduleDAO.java</file>
         </group>
     </open-files>
 </project-private>
