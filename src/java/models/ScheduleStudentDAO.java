@@ -56,25 +56,5 @@ public class ScheduleStudentDAO extends DBContext {
         return data;
     }
 
-    public static void main(String[] args) {
-        ScheduleStudentDAO dao = new ScheduleStudentDAO();
-        int studentId = 4;
-        List<ScheduleStudent> list = dao.getScheduleStudent(studentId);
-
-        if (list.isEmpty()) {
-            System.out.println("Không có thời khóa biểu.");
-        } else {
-            for (ScheduleStudent s : list) {
-                System.out.println("ID: " + s.getId());
-                System.out.println("Ngày: " + s.getDay());
-                System.out.println("Thứ (EN): " + s.getSpecificDay());
-                System.out.println("Thứ (VN): " + s.getDayVN());
-                System.out.println("Lớp: " + s.getNameClass());
-                System.out.println("Bắt đầu: " + s.getStartTime());
-                System.out.println("Kết thúc: " + s.getEndTime());
-                System.out.println("Phòng: " + s.getRoom());
-                System.out.println("---------------------------");
-            }
-        }
-    }
+    
 }

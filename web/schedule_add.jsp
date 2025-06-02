@@ -140,7 +140,7 @@
 
 
                 <label>Phòng học:</label>
-                <input type="text" name="room">
+                <input type="text" name="room" >
 
 
                 <% String err = (String) request.getAttribute("err"); %>
