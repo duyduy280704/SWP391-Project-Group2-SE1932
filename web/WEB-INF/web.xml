@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>StudentController</servlet-name>
+        <servlet-class>Controllers.StudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherController</servlet-name>
+        <servlet-class>Controllers.TeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StaffController</servlet-name>
+        <servlet-class>Controllers.StaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CourseStaffController</servlet-name>
+        <servlet-class>Controllers.CourseStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageController</servlet-name>
+        <servlet-class>Controllers.ImageController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentController</servlet-name>
+        <url-pattern>/student</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherController</servlet-name>
+        <url-pattern>/teacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffController</servlet-name>
+        <url-pattern>/staff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseStaffController</servlet-name>
+        <url-pattern>/coursestaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageController</servlet-name>
+        <url-pattern>/image</url-pattern>
+    </servlet-mapping>
+</web-app>
