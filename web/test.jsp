@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -44,7 +43,7 @@
                 color: var(--text-color);
             }
 
-            .container1 {
+            .container {
                 max-width: 1280px;
                 margin: 40px auto;
                 padding: 32px;
@@ -54,7 +53,7 @@
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
 
-            .container1:hover {
+            .container:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
             }

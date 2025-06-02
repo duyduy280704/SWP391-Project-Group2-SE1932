@@ -80,7 +80,7 @@ public class TeacherDAO extends DBContext {
 
         ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String strSQL = "select * from Teacher s join Role r on s.role_id = r.id";
+            String strSQL = "select * from Teacher s join Role r on s.role_id = r.id join type_course t on s.id_type_course = t.id";
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -92,13 +92,35 @@ public class TeacherDAO extends DBContext {
                 String gender = rs.getString(6);
                 String exp = rs.getString(7);
                 String pic = rs.getString(8);
-                String role = rs.getString(11);
+                String role = rs.getString(13);
+                String course = rs.getString(15);
+                String years = String.valueOf(rs.getInt(11));
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years);
                 data.add(p);
             }
         } catch (Exception e) {
             System.out.println("getTeachers" + e.getMessage());
+
+        }
+        return data;
+    }
+
+    public ArrayList<TypeCourse> getCourseType() {
+        ArrayList<TypeCourse> data = new ArrayList<>();
+        try {
+            String strSQL = "select * from type_course";
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String code = String.valueOf(rs.getInt(1));
+                String name = rs.getString(2);
+
+                TypeCourse c = new TypeCourse(code, name);
+                data.add(c);
+            }
+        } catch (Exception e) {
+            System.out.println("getCourseType" + e.getMessage());
 
         }
         return data;
@@ -120,8 +142,10 @@ public class TeacherDAO extends DBContext {
                 String exp = rs.getString(7);
                 String pic = rs.getString(8);
                 String role = rs.getString(9);
+                String course = rs.getString(10);
+                String years = String.valueOf(rs.getInt(11));
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years);
                 return p;
             }
         } catch (Exception e) {
@@ -160,6 +184,21 @@ public class TeacherDAO extends DBContext {
         if (s.exp == null || s.exp.isEmpty()) {
             return new ResultMessage(false, "Kinh nghiệm không được để trống.");
         }
+
+        if (s.pic == null || s.pic.isEmpty()) {
+            return new ResultMessage(false, "Hình ảnh giáo viên không được để trống.");
+        }
+        if (s.course == null || s.course.isEmpty()) {
+            return new ResultMessage(false, "Loại khóa học không được để trống.");
+        }
+        if (s.year == null || s.year.isEmpty()) {
+            return new ResultMessage(false, "Số năm kinh nghiệm không được để trống.");
+        }
+        try {
+            Integer.parseInt(s.year);
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
+        }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
@@ -173,19 +212,21 @@ public class TeacherDAO extends DBContext {
         }
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, Picture = ? WHERE id = ?")) {
+                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, picture = ?, id_type_course=?, years_of_experience=? WHERE id = ?")) {
             // Kiểm tra email trùng với giáo viên khác (ngoại trừ chính nó)
             if (isEmailExistForOther(s.email, teacherId)) {
                 return new ResultMessage(false, "Email '" + s.email + "' đã được sử dụng bởi giáo viên khác.");
             }
-            stm.setString(1, s.password); // Nên mã hóa mật khẩu
+            stm.setString(1, s.password);
             stm.setString(2, s.name);
             stm.setString(3, s.email);
             stm.setString(4, s.birthdate);
             stm.setString(5, s.gender);
             stm.setString(6, s.exp);
-            stm.setString(7, s.pic != null ? s.pic : ""); // Xử lý Picture null
-            stm.setInt(8, teacherId);
+            stm.setString(7, s.pic);
+            stm.setString(8, s.course);
+            stm.setString(9, s.year);
+            stm.setInt(10, teacherId);
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected > 0) {
                 return new ResultMessage(true, "Cập nhật giáo viên thành công!");
@@ -240,6 +281,17 @@ public class TeacherDAO extends DBContext {
         if (s.exp == null || s.exp.isEmpty()) {
             return new ResultMessage(false, "Kinh nghiệm không được để trống.");
         }
+        if (s.course == null || s.course.isEmpty()) {
+            return new ResultMessage(false, "Loại khóa học không được để trống.");
+        }
+        if (s.year == null || s.year.isEmpty()) {
+            return new ResultMessage(false, "Số năm kinh nghiệm không được để trống.");
+        }
+        try {
+            Integer.parseInt(s.year);
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
+        }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
@@ -252,18 +304,20 @@ public class TeacherDAO extends DBContext {
         }
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, Picture, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, picture, role_id, id_type_course, years_of_experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)")) {
             if (isAccountExist(s.email)) {
                 return new ResultMessage(false, "Tài khoản '" + s.email + "' đã tồn tại.");
             }
             stm.setString(1, s.name);
             stm.setString(2, s.email);
-            stm.setString(3, s.password); // Nên mã hóa mật khẩu
+            stm.setString(3, s.password);
             stm.setString(4, s.exp);
             stm.setString(5, s.birthdate);
             stm.setString(6, s.gender);
             stm.setString(7, s.pic);
             stm.setInt(8, roleId);
+            stm.setString(9, s.course);
+            stm.setString(10, s.year);
             int rowsAffected = stm.executeUpdate();
             return new ResultMessage(true, "Thêm giáo viên thành công!");
         } catch (SQLException e) {

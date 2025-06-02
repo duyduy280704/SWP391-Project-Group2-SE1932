@@ -40,9 +40,17 @@
         <servlet-name>ScheduleTeacherController</servlet-name>
         <servlet-class>Controllers.ScheduleTeacherController</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>ScheduleStudentController</servlet-name>
         <servlet-class>Controllers.ScheduleStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageController</servlet-name>
+        <servlet-class>Controllers.ImageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminHomeController</servlet-name>
+        <servlet-class>Controllers.AdminHomeController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
@@ -87,5 +95,13 @@
     <servlet-mapping>
         <servlet-name>ScheduleStudentController</servlet-name>
         <url-pattern>/scheduleStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageController</servlet-name>
+        <url-pattern>/image</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminHomeController</servlet-name>
+        <url-pattern>/adminhome</url-pattern>
     </servlet-mapping>
 </web-app>

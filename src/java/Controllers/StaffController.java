@@ -11,10 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.ResultMessage;
 import models.Staff;
 import models.StaffDAO;
@@ -58,7 +55,6 @@ public class StaffController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    // quang - quản lý nhân viên
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffDAO sd = new StaffDAO();
