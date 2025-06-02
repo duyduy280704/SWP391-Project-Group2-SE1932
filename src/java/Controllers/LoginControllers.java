@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import models.AdminStaffDAO;
 import models.AdminStaffs;
 import models.StudentDAO;
@@ -16,83 +17,83 @@ import models.Teachers;
 
 public class LoginControllers extends HttpServlet {
 
-    private final String LOGIN_PAGE = "login.jsp";
-    private final String STAFF_PAGE = "staff.jsp";
-    private final String ADMIN_PAGE = "admin.jsp";
-    private final String TEACHER_PAGE = "teacherPage.jsp";
-    private final String STUDENT_PAGE = "student.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        
         response.setCharacterEncoding("UTF-8");
-        String url = LOGIN_PAGE;
+        response.setContentType("text/plain;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
+            String message = "";
 
-            System.out.println("Email: " + email + ", Password: " + password);
-
-            request.setAttribute("email", email);
-            request.setAttribute("password", password);
-
-            if (email == null || password == null || email.trim().isEmpty() || password.trim().isEmpty()) {
-                request.setAttribute("accountLoginError", "Vui lòng nhập email và mật khẩu!");
-                request.getRequestDispatcher(url).forward(request, response);
+            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+                message += "Vui lòng nhập email và mật khẩu!";
+                request.setAttribute("message", message);
+                request.setAttribute("email", email); 
+                request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+          
+            AdminStaffDAO a = new AdminStaffDAO();
+            AdminStaffs staff = a.checkLogin(email, password);
 
-            AdminStaffDAO adminStaffDao = new AdminStaffDAO();
-            AdminStaffs adminStaff = adminStaffDao.checkLogin(email, password);
+            StudentDAO s = new StudentDAO();
+            Students student = s.checkLogin(email, password);
 
-            StudentDAO studentDao = new StudentDAO();
-            Students student = studentDao.checkLogin(email, password);
+            TeacherDAO t = new TeacherDAO();
+            Teachers teacher = t.checkLogin(email, password);
 
-            TeacherDAO teacherDao = new TeacherDAO();
-            Teachers teacher = teacherDao.checkLogin(email, password);
-
-            if (adminStaff != null) {
+            if (staff != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("account", adminStaff);
-                System.out.println("AdminStaff RoleId: " + adminStaff.getRoleId());
-                if ("4".equalsIgnoreCase(adminStaff.getRoleId())) {
-                    url = ADMIN_PAGE;
-                } else if ("3".equalsIgnoreCase(adminStaff.getRoleId())) {
-                    url = STAFF_PAGE;
+                session.setAttribute("account", staff);
+                System.out.println("AdminStaff RoleId: " + staff.getRoleId());
+                if ("4".equalsIgnoreCase(staff.getRoleId())) {
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
+                } else if ("3".equalsIgnoreCase(staff.getRoleId())) {
+                    request.getRequestDispatcher("staff.jsp").forward(request, response);
                 }
-                request.setAttribute("successMessage", "Đăng nhập thành công!");
+                message += "Đăng nhập thành công!";
+                request.setAttribute("message", message);
             } else if (student != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("account", student);
                 System.out.println("Student RoleId: " + student.getRole());
                 if ("1".equalsIgnoreCase(student.getRole())) {
-                    url = STUDENT_PAGE;
+                    request.getRequestDispatcher("student.jsp").forward(request, response);
+                    return;
                 }
-                request.setAttribute("successMessage", "Đăng nhập thành công!");
+                message += "Đăng nhập thành công!";
+                request.setAttribute("message", message);
             } else if (teacher != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("account", teacher);
                 System.out.println("Teacher RoleId: " + teacher.getRole());
                 if ("2".equalsIgnoreCase(teacher.getRole())) {
-                    url = TEACHER_PAGE;
+                    request.getRequestDispatcher("teacherPage.jsp").forward(request, response);
+                    return;
                 }
-                request.setAttribute("successMessage", "Đăng nhập thành công!");
+                message += "Đăng nhập thành công!";
+                request.setAttribute("message", message);
             } else {
-                request.setAttribute("accountLoginError", "Email hoặc mật khẩu không đúng!");
+                message += "Email hoặc mật khẩu không đúng!";
+                request.setAttribute("message", message);
+                return;
             }
-            System.out.println("Redirecting to: " + url);
+
         } catch (Exception e) {
-            log("Unexpected error: " + e.getMessage(), e);
-            request.setAttribute("accountLoginError", "Lỗi hệ thống: " + e.getMessage());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-        }
+             e.printStackTrace();
+            request.setAttribute("message", "Đã xảy ra lỗi hệ thống: " + e.getMessage());
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher(LOGIN_PAGE).forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     @Override

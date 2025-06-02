@@ -171,7 +171,7 @@
                     <form method="post" action="ForgotPasswordServlet">
                         <div class="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required class="form-control">
+                            <input type="email" id="email" name="email"  class="form-control">
                         </div>
                         <input type="submit" value="Tiếp tục" class="btn btn-primary btn-block mt-3">
                     </form>

@@ -1,3 +1,5 @@
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -10,6 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import models.UserDAO;
+
 import models.UserDAO;
 
 /**
@@ -36,7 +40,7 @@ public class ResetPasswordServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ResetPasswordServlet</title>");            
+            out.println("<title>Servlet ResetPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ResetPasswordServlet at " + request.getContextPath() + "</h1>");
@@ -68,37 +72,67 @@ public class ResetPasswordServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String email = request.getParameter("email");
-    String table = request.getParameter("table");
-    String newPassword = request.getParameter("newPassword");
-    String confirmPassword = request.getParameter("confirmPassword");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String table = request.getParameter("table");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String message = "";
 
-    
-    if (!newPassword.equals(confirmPassword)) {
-        request.setAttribute("message", "Mật khẩu không khớp. Vui lòng thử lại.");
-        request.setAttribute("email", email); 
-        request.setAttribute("table", table);
-        request.getRequestDispatcher("changePassword.jsp").forward(request, response);
-        return;
+        if (newPassword.isBlank()) {
+            message += "Bạn phải mật khẩu và xác nhận mật khẩu.";
+            request.setAttribute("email", email);
+            request.setAttribute("table", table);
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+        if (confirmPassword.isBlank()) {
+            message += "Bạn phải điền mật khẩu và xác nhận mật khẩu.";
+            request.setAttribute("email", email);
+            request.setAttribute("table", table);
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+        
+
+        if (newPassword.length() <= 6 || !newPassword.matches(".*[a-z]*")
+                || !newPassword.matches(".*[A-Z]*") || !newPassword.matches(".*\\d.*")|| !newPassword.matches(".*[^a-zA-Z0-9].*")) {
+            message += "Mật khẩu phải trên 6 kí tự,có ít nhất 1 chữ thường,1 chữ in hoa, 1 số và 1 ký hiệu đặc biệt";
+            request.setAttribute("email", email);
+            request.setAttribute("table", table);
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            message += "Mật khẩu chưa khớp.Vui lòng nhập lại";
+            request.setAttribute("email", email);
+            request.setAttribute("table", table);
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+
+        UserDAO dao = new UserDAO();
+        try {
+            dao.updatePassword(table, email, newPassword);
+            message += "Đổi mật khẩu thành công. Mời bạn đăng nhập.";
+            request.setAttribute("email", email);
+            request.setAttribute("table", table);
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Có lỗi xảy ra khi cập nhật mật khẩu: " + e.getMessage());
+
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+        }
+
     }
-
-    UserDAO dao = new UserDAO();
-    try {
-        dao.updatePassword(table, email, newPassword);
-        request.setAttribute("message", "Đổi mật khẩu thành công. Mời bạn đăng nhập.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("message", "Có lỗi xảy ra khi cập nhật mật khẩu: " + e.getMessage());
-        request.setAttribute("email", email); 
-        request.setAttribute("table", table);
-        request.getRequestDispatcher("changePassword.jsp").forward(request, response);
-    }
-}
-
-
 
 }

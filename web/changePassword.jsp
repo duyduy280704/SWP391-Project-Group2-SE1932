@@ -171,18 +171,17 @@
 
                     <div class="form-group">
                         <label for="newPassword">Mật khẩu mới:</label>
-                        <input type="password" id="newPassword" name="newPassword" required>
+                        <input type="password" id="newPassword" name="newPassword" >
                     </div>
                     <div class="form-group">
                         <label for="confirmPassword">Nhập lại mật khẩu:</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword" >
                     </div>
                     <input type="submit" value="Đổi mật khẩu">
+                    
                 </form>
-
-                <c:if test="${not empty message}">
-                    <p class="${messageType eq 'success' ? 'success-message' : 'error-message'}">${message}</p>
-                </c:if>
+                    <p class="error-message text-center mt-3 text-danger">${message}</p>
+                
             </div>
         </section>
 

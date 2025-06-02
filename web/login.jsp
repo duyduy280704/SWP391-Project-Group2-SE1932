@@ -186,23 +186,19 @@
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="text" id="email" name="email" required>
+                    <input type="text" id="email" name="email"  value="${email}" >
                 </div>
                 <div class="form-group">
                     <label for="password">Mật khẩu:</label>
-                    <input type="password" id="password" name="password" autocomplete="new-password" required>
+                    <input type="password" id="password" name="password" autocomplete="new-password" >
                 </div>
                 <div class="forgot-password">
                     <a href="forgot-password.jsp">Quên mật khẩu?</a>
                 </div>
                 <input type="submit" value="Đăng nhập">
-                <% if (request.getAttribute("accountLoginError") != null) { %>
-                    <p class="error-message"><%= request.getAttribute("accountLoginError") %></p>
-                <% } %>
-                <% if (request.getAttribute("successMessage") != null) { %>
-                    <p class="success-message"><%= request.getAttribute("successMessage") %></p>
-                <% } %>
+              
             </form>
+            <p class="error-message text-center mt-3 text-danger">${message}</p>
         </div>
     </div>
     <!-- Login Form End -->
