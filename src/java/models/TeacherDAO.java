@@ -17,9 +17,11 @@ public class TeacherDAO extends DBContext {
     public ArrayList<Teachers> get4Teachers() {
         ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String strSQL = "SELECT TOP 4 t.id, t.full_name, t.password, t.email, t.birth_date, "
+            String strSQL = "SELECT TOP 4 t.id, t.full_name, t.password, t.email, t.birth_date, t.years_of_experience, "
                     + "t.gender, t.Expertise, t.picture, r.name AS role_name "
-                    + "FROM Teacher t JOIN role r ON t.role_id = r.id";
+                    + "FROM Teacher t JOIN role r ON t.role_id = r.id "
+                    + "ORDER BY t.years_of_experience DESC"
+                    ;
 
             PreparedStatement stm = connection.prepareStatement(strSQL);
             ResultSet rs = stm.executeQuery();

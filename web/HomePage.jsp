@@ -324,7 +324,7 @@
                                 <div class="text-center">
                                     <i class="fa fa-3x fa-quote-left text-primary mb-4"></i>
                                     <h4 class="font-weight-normal mb-4">${f.feedbackText}</h4>
-                                    <img class="img-fluid mx-auto mb-3" src="img/user-default.jpg" alt="">
+                                    <img class="img-fluid mx-auto mb-3" src="img/testimonial-${f.id}.jpg" alt="">
                                     <h5 class="m-0">${f.studentName}</h5>
                                     <span>${f.feedbackDate}</span>
                                 </div>

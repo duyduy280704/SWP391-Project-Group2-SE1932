@@ -58,15 +58,21 @@ public class CourseDAO extends DBContext {
 
         ArrayList<Courses> data = new ArrayList<>();
         try {
-            String strSQL = "SELECT TOP 6 \n"
-                    + "    c.id, \n"
-                    + "    c.name, \n"
-                    + "    t.name AS type_name, \n"
-                    + "    c.description, \n"
-                    + "    c.fee\n, "
-                    + "    c.image\n"
-                    + "FROM Course c\n"
-                    + "JOIN type_course t ON c.type_id = t.id";
+            String strSQL = """
+                            SELECT TOP 6 
+                                c.id, 
+                                c.name, 
+                                t.name AS type_name, 
+                                c.description, 
+                                c.fee, 
+                                c.image,
+                                COUNT(r.course_id) AS num_registrations
+                            FROM Course c
+                            JOIN type_course t ON c.type_id = t.id
+                            LEFT JOIN regisition r ON c.id = r.course_id
+                            GROUP BY c.id, c.name, t.name, c.description, c.fee, c.image
+                            ORDER BY COUNT(r.course_id) DESC
+                            """;
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {
