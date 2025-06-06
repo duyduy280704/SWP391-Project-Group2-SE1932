@@ -1,13 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Thời Khóa Biểu</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+
         <style>
             :root {
                 --primary-color: #1e3a8a;
@@ -29,7 +47,7 @@
                 color: var(--text-color);
             }
 
-            .container {
+            .container1 {
                 max-width: 1280px;
                 margin: 40px auto;
                 padding: 32px;
@@ -39,7 +57,7 @@
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
 
-            .container:hover {
+            .container1:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
             }
@@ -80,7 +98,7 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                flex-wrap: wrap; /* Đảm bảo xuống dòng nếu chật */
+                flex-wrap: wrap;
             }
 
             .message {
@@ -302,7 +320,7 @@
             }
 
             @media (max-width: 768px) {
-                .container {
+                .container1 {
                     margin: 20px;
                     padding: 20px;
                 }
@@ -349,36 +367,33 @@
                     width: 100%;
                 }
             }
-            /* Thu nhỏ kích thước tổng thể của hộp thoại */
+
             .swal2-popup {
-                width: 300px !important; /* Chiều rộng nhỏ hơn, mặc định thường là 500px */
-                padding: 15px !important; /* Giảm padding */
-                font-size: 14px !important; /* Giảm cỡ chữ tổng thể */
+                width: 300px !important;
+                padding: 15px !important;
+                font-size: 14px !important;
             }
 
-            /* Thu nhỏ tiêu đề */
             .swal2-title {
-                font-size: 18px !important; /* Cỡ chữ tiêu đề nhỏ hơn */
-                margin: 5px 0 !important; /* Giảm khoảng cách */
+                font-size: 18px !important;
+                margin: 5px 0 !important;
             }
 
-            /* Thu nhỏ nội dung (text) */
             .swal2-content {
-                font-size: 14px !important; /* Cỡ chữ nội dung nhỏ hơn */
+                font-size: 14px !important;
             }
 
-            /* Thu nhỏ nút */
             .swal2-confirm, .swal2-cancel {
-                font-size: 12px !important; /* Cỡ chữ nút nhỏ hơn */
-                padding: 5px 15px !important; /* Giảm padding của nút */
-                margin: 5px !important; /* Giảm khoảng cách giữa các nút */
+                font-size: 12px !important;
+                padding: 5px 15px !important;
+                margin: 5px !important;
             }
 
-            /* Thu nhỏ icon */
             .swal2-icon {
-                width: 50px !important; /* Kích thước icon nhỏ hơn */
+                width: 50px !important;
                 height: 50px !important;
             }
+
             .filter-form .reset-btn {
                 padding: 10px 20px;
                 background: linear-gradient(135deg, #9ca3af, #6b7280);
@@ -402,27 +417,79 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             }
         </style>
-        <script>
-            function showDeleteConfirmation(id) {
-                Swal.fire({
-                    title: 'Xác nhận xóa',
-                    text: 'Bạn có chắc chắn muốn xóa lịch học này không?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Hủy'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'schedule?id=' + id + '&mode=3';
-                    }
-                });
-            }
-        </script>
     </head>
     <body>
-        <div class="container">
-            <h1>Thời Khóa Biểu</h1>
+        <!-- Topbar Start -->
+        <div class="container-fluid d-none d-lg-block">
+            <div class="row align-items-center py-4 px-xl-5">
+                <div class="col-lg-3">
+                    <a href="HomePage" class="text-decoration-none">
+                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
+                    </a>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
+                            <p>
+                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Email</h6>
+                            <p>
+                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-phone text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
+                            <p>
+                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Topbar End -->
 
+        <!-- Navbar Start -->
+        <div class="container-fluid">
+            <div class="row border-top px-xl-5">
+                <div class="col-lg-9 mx-auto">
+                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
+                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
+                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="navbar-nav mx-auto">
+                                    <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar End -->
+
+        <div class="container1">
+            <h1>Thời Khóa Biểu</h1>
 
             <form action="schedule" method="get" class="filter-form">
                 <input type="hidden" name="mode" value="filter">
@@ -438,13 +505,11 @@
 
             <div class="top-bar">
                 <div class="search-group">
-
                     <div class="form-container">
                         <form action="schedule" method="post" class="search-form">
                             <input type="text" name="keyword" placeholder="Tìm kiếm lớp ...">
                             <button class="search-btn" type="submit" name="search">🔍 Tìm kiếm</button>
                         </form>
-
 
                         <c:if test="${not empty err}">
                             <div class="message error">${err}</div>
@@ -453,9 +518,6 @@
                             <div class="message success">${msg}</div>
                         </c:if>
                     </div>
-
-
-
                 </div>
                 <a href="schedule?mode=1" class="create-btn">+ Tạo mới thời khóa biểu</a>
             </div>
@@ -474,12 +536,9 @@
                     </tr>
                 </thead>
                 <tbody>
-
-
                     <c:forEach items="${schedule}" var="schedule" varStatus="loop">
                         <tr> 
                             <td>${loop.index + 1}</td>
-
                             <td>${schedule.getNameClass()}</td>
                             <td>${fn:substring(schedule.getStartTime(), 0, 5)}</td>
                             <td>${fn:substring(schedule.getEndTime(), 0, 5)}</td>
@@ -489,14 +548,111 @@
                             <td class="row-actions">
                                 <a href="schedule?id=${schedule.getId()}&mode=2" class="action-btn edit">✎</a>
                                 <a href="schedule?id=${schedule.getId()}&mode=3" class="action-btn delete"
-                                   onclick="showDeleteConfirmation(${schedule.getId()});
-                                           return false;">🗑</a>
+                                   onclick="showDeleteConfirmation(${schedule.getId()}); return false;">🗑</a>
                             </td>
-
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
         </div>
+
+        <!-- Footer Start -->
+        <footer class="bg-dark text-white pt-5 pb-4">
+            <div class="container text-md-left">
+                <div class="row text-md-left">
+                    <!-- Liên hệ -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
+                        <p><i class="fa fa-map-marker-alt mr-2"></i> 
+                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-phone-alt mr-2"></i> 
+                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                        </p>
+                        <p><i class="fa fa-envelope mr-2"></i> 
+                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                        </p>
+                        <div class="mt-3">
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.instagramLink != null ? setting.instagramLink : '#'}">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Khoá học -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
+                        <ul class="list-unstyled">
+                            <c:forEach var="t" items="${applicationScope.typeList}">
+                                <li>
+                                    <a href="#" class="text-white">
+                                        <i class="fa fa-angle-right mr-2"></i> ${t.name}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                    <!-- Thông tin thêm -->
+                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
+                        <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
+                    </div>
+                </div>
+                <hr class="mb-4">
+                <!-- Bản quyền -->
+                <div class="row align-items-center">
+                    <div class="col-md-7 col-lg-8">
+                        <p class="text-white">
+                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
+                        </p>
+                    </div>
+                    <div class="col-md-5 col-lg-4">
+                        <div class="text-right">
+                            <a class="text-white" href="${setting.policyLink != null ? setting.policyLink : '#'}">Chính sách</a> |
+                            <a class="text-white" href="${setting.termsLink != null ? setting.termsLink : '#'}">Điều khoản</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="mail/jqBootstrapValidation.min.js"></script>
+        <script src="mail/contact.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Custom Script -->
+        <script>
+            function showDeleteConfirmation(id) {
+                Swal.fire({
+                    title: 'Xác nhận xóa',
+                    text: 'Bạn có chắc chắn muốn xóa lịch học này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác Nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'schedule?id=' + id + '&mode=3';
+                    }
+                });
+            }
+        </script>
     </body>
 </html>

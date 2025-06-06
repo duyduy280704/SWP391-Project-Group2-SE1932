@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduleStudent {
-
     private String id;
     private String day;
     private String nameClass;
@@ -16,6 +15,7 @@ public class ScheduleStudent {
     private String dayVN;
 
     public ScheduleStudent() {
+        this.dayVN = "Không xác định"; // Giá trị mặc định
     }
 
     public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room) {
@@ -25,78 +25,63 @@ public class ScheduleStudent {
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
+        this.dayVN = "Không xác định"; // Giá trị mặc định
         computeDayOfWeek();
     }
 
     public void computeDayOfWeek() {
         try {
-            LocalDate date = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-            this.specificDay = dayOfWeek.toString();
-            switch (dayOfWeek) {
-                case MONDAY:
-                    this.dayVN = "Thứ 2";
-                    break;
-                case TUESDAY:
-                    this.dayVN = "Thứ 3";
-                    break;
-                case WEDNESDAY:
-                    this.dayVN = "Thứ 4";
-                    break;
-                case THURSDAY:
-                    this.dayVN = "Thứ 5";
-                    break;
-                case FRIDAY:
-                    this.dayVN = "Thứ 6";
-                    break;
-                case SATURDAY:
-                    this.dayVN = "Thứ 7";
-                    break;
-                case SUNDAY:
-                    this.dayVN = "Chủ nhật";
-                    break;
+            if (day != null && day.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                LocalDate date = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                DayOfWeek dayOfWeek = date.getDayOfWeek();
+                this.specificDay = dayOfWeek.toString();
+                switch (dayOfWeek) {
+                    case MONDAY:
+                        this.dayVN = "Thứ 2";
+                        break;
+                    case TUESDAY:
+                        this.dayVN = "Thứ 3";
+                        break;
+                    case WEDNESDAY:
+                        this.dayVN = "Thứ 4";
+                        break;
+                    case THURSDAY:
+                        this.dayVN = "Thứ 5";
+                        break;
+                    case FRIDAY:
+                        this.dayVN = "Thứ 6";
+                        break;
+                    case SATURDAY:
+                        this.dayVN = "Thứ 7";
+                        break;
+                    case SUNDAY:
+                        this.dayVN = "Chủ nhật";
+                        break;
+                    default:
+                        this.dayVN = "Không xác định";
+                }
+            } else {
+                this.specificDay = "UNKNOWN";
+                this.dayVN = "Không xác định";
             }
         } catch (Exception e) {
             this.specificDay = "UNKNOWN";
             this.dayVN = "Không xác định";
+            System.out.println("Error in computeDayOfWeek: " + e.getMessage());
         }
     }
 
-    // Getter & Setter
+    // Getter và Setter
     public String getId() {
         return id;
     }
 
-    public String getDay() {
-        return day;
-    }
-
-    public String getNameClass() {
-        return nameClass;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public String getSpecificDay() {
-        return specificDay;
-    }
-
-    public String getDayVN() {
-        return dayVN;
-    }
-
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDay() {
+        return day;
     }
 
     public void setDay(String day) {
@@ -104,19 +89,51 @@ public class ScheduleStudent {
         computeDayOfWeek();
     }
 
+    public String getNameClass() {
+        return nameClass;
+    }
+
     public void setNameClass(String nameClass) {
         this.nameClass = nameClass;
+    }
+
+    public String getStartTime() {
+        return startTime;
     }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
+    public String getEndTime() {
+        return endTime;
+    }
+
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
+    public String getRoom() {
+        return room;
+    }
+
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getSpecificDay() {
+        return specificDay;
+    }
+
+    public void setSpecificDay(String specificDay) {
+        this.specificDay = specificDay;
+    }
+
+    public String getDayVN() {
+        return dayVN;
+    }
+
+    public void setDayVN(String dayVN) {
+        this.dayVN = dayVN;
     }
 }

@@ -1,4 +1,3 @@
-// ScheduleTeacher.java
 package models;
 
 import java.time.DayOfWeek;
@@ -6,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduleTeacher {
-
     private String id;
     private String day;
     private String nameClass;
@@ -17,6 +15,7 @@ public class ScheduleTeacher {
     private String dayVN;
 
     public ScheduleTeacher() {
+        this.dayVN = "Không xác định"; // Giá trị mặc định
     }
 
     public ScheduleTeacher(String id, String day, String nameClass, String startTime, String endTime, String room) {
@@ -26,17 +25,53 @@ public class ScheduleTeacher {
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        computeDayOfWeek(); // Tính thứ khi khởi tạo
+        this.dayVN = "Không xác định"; // Giá trị mặc định
+        computeDayOfWeek();
     }
 
-    public String getSpecificDay() {
-        return specificDay;
+    public void computeDayOfWeek() {
+        try {
+            if (day != null && day.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                LocalDate date = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                DayOfWeek dayOfWeek = date.getDayOfWeek();
+                this.specificDay = dayOfWeek.toString();
+                switch (dayOfWeek) {
+                    case MONDAY:
+                        this.dayVN = "Thứ 2";
+                        break;
+                    case TUESDAY:
+                        this.dayVN = "Thứ 3";
+                        break;
+                    case WEDNESDAY:
+                        this.dayVN = "Thứ 4";
+                        break;
+                    case THURSDAY:
+                        this.dayVN = "Thứ 5";
+                        break;
+                    case FRIDAY:
+                        this.dayVN = "Thứ 6";
+                        break;
+                    case SATURDAY:
+                        this.dayVN = "Thứ 7";
+                        break;
+                    case SUNDAY:
+                        this.dayVN = "Chủ nhật";
+                        break;
+                    default:
+                        this.dayVN = "Không xác định";
+                }
+            } else {
+                this.specificDay = "UNKNOWN";
+                this.dayVN = "Không xác định";
+            }
+        } catch (Exception e) {
+            this.specificDay = "UNKNOWN";
+            this.dayVN = "Không xác định";
+            System.out.println("Error in computeDayOfWeek: " + e.getMessage());
+        }
     }
 
-    public String getDayVN() {
-        return dayVN;
-    }
-
+    // Getter và Setter
     public String getId() {
         return id;
     }
@@ -51,7 +86,7 @@ public class ScheduleTeacher {
 
     public void setDay(String day) {
         this.day = day;
-        computeDayOfWeek(); // Gọi lại mỗi khi setDay
+        computeDayOfWeek();
     }
 
     public String getNameClass() {
@@ -86,37 +121,19 @@ public class ScheduleTeacher {
         this.room = room;
     }
 
-    public void computeDayOfWeek() {
-        try {
-            LocalDate date = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-            this.specificDay = dayOfWeek.toString();
-            switch (dayOfWeek) {
-                case MONDAY:
-                    this.dayVN = "Thứ 2";
-                    break;
-                case TUESDAY:
-                    this.dayVN = "Thứ 3";
-                    break;
-                case WEDNESDAY:
-                    this.dayVN = "Thứ 4";
-                    break;
-                case THURSDAY:
-                    this.dayVN = "Thứ 5";
-                    break;
-                case FRIDAY:
-                    this.dayVN = "Thứ 6";
-                    break;
-                case SATURDAY:
-                    this.dayVN = "Thứ 7";
-                    break;
-                case SUNDAY:
-                    this.dayVN = "Chủ nhật";
-                    break;
-            }
-        } catch (Exception e) {
-            this.specificDay = "UNKNOWN";
-            this.dayVN = "Không xác định";
-        }
+    public String getSpecificDay() {
+        return specificDay;
+    }
+
+    public void setSpecificDay(String specificDay) {
+        this.specificDay = specificDay;
+    }
+
+    public String getDayVN() {
+        return dayVN;
+    }
+
+    public void setDayVN(String dayVN) {
+        this.dayVN = dayVN;
     }
 }

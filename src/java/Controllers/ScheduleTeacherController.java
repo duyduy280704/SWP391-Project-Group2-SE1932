@@ -1,7 +1,3 @@
-/*
- * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
 import jakarta.servlet.ServletException;
@@ -12,17 +8,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import models.ScheduleTeacherDAO;
 import models.ScheduleTeacher;
+import models.ScheduleTeacherDAO;
 import models.Teachers;
 import models.ScheduleWeek;
 
 public class ScheduleTeacherController extends HttpServlet {
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,14 +32,15 @@ public class ScheduleTeacherController extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
-        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(id);
 
-        // Xử lý năm và tuần được chọn
+        // Get selected year and week
         String selectedYear = request.getParameter("year");
         String selectedWeek = request.getParameter("week");
-        LocalDate baseDate;
         int year;
+        LocalDate baseDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Handle year
         if (selectedYear != null && !selectedYear.isEmpty()) {
             try {
                 year = Integer.parseInt(selectedYear);
@@ -59,67 +51,29 @@ public class ScheduleTeacherController extends HttpServlet {
             year = LocalDate.now().getYear();
         }
 
-        // Tìm ngày sớm nhất trong dữ liệu
-        LocalDate minDate = null;
-        if (!scheduleTeacher.isEmpty()) {
-            for (ScheduleTeacher s : scheduleTeacher) {
-                LocalDate date = LocalDate.parse(s.getDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                if (minDate == null || date.isBefore(minDate)) {
-                    minDate = date;
-                }
-            }
-        } else {
-            minDate = LocalDate.now();
-        }
-        LocalDate startOfFirstWeek = minDate.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
-        LocalDate endOfTenthWeek = startOfFirstWeek.plusWeeks(9);
-
+        // Handle week
         if (selectedWeek != null && !selectedWeek.isEmpty()) {
             try {
-                baseDate = LocalDate.parse(selectedWeek, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                baseDate = LocalDate.parse(selectedWeek, formatter);
             } catch (Exception e) {
-                baseDate = startOfFirstWeek;
+                baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
             }
         } else {
-            baseDate = startOfFirstWeek;
+            baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         }
 
-        // Tính tuần cơ sở trong chu kỳ 10 tuần
-        long weeksSinceStart = java.time.temporal.ChronoUnit.WEEKS.between(startOfFirstWeek, baseDate);
-        long cycleWeek = weeksSinceStart % 10; // Lấy tuần trong chu kỳ 10 tuần
-        LocalDate cycleBaseDate = startOfFirstWeek.plusWeeks(cycleWeek);
+        // Fetch schedule for the selected week
+        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
+        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(id, baseDate.format(formatter));
 
-        // Chỉ điều chỉnh lịch nếu tuần được chọn nằm trong 10 tuần đầu tiên
-        List<ScheduleTeacher> adjustedSchedule = new ArrayList<>();
-        if (baseDate.isBefore(startOfFirstWeek) || baseDate.isAfter(endOfTenthWeek)) {
-            // Nếu tuần được chọn ngoài phạm vi 10 tuần, trả về danh sách rỗng
-            adjustedSchedule = new ArrayList<>();
-        } else {
-            for (ScheduleTeacher s : scheduleTeacher) {
-                LocalDate originalDate = LocalDate.parse(s.getDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                java.time.DayOfWeek dayOfWeek = originalDate.getDayOfWeek();
-                LocalDate newDate = baseDate.with(java.time.temporal.TemporalAdjusters.nextOrSame(dayOfWeek)).withYear(year);
-                ScheduleTeacher adjusted = new ScheduleTeacher(
-                    s.getId(),
-                    newDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                    s.getNameClass(),
-                    s.getStartTime(),
-                    s.getEndTime(),
-                    s.getRoom()
-                );
-                adjusted.computeDayOfWeek();
-                adjustedSchedule.add(adjusted);
-            }
-        }
-
-        // Tạo danh sách năm (hiện tại và ±2 năm)
+        // Create list of years (±2 years from current year)
         List<Integer> years = new ArrayList<>();
         int currentYear = LocalDate.now().getYear();
         for (int i = currentYear - 2; i <= currentYear + 2; i++) {
             years.add(i);
         }
 
-        // Tạo danh sách 52 tuần cho năm được chọn
+        // Create list of 52 weeks for the selected year
         List<ScheduleWeek> weeks = new ArrayList<>();
         DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -130,19 +84,21 @@ public class ScheduleTeacherController extends HttpServlet {
             if (weekStart.getYear() == year) {
                 LocalDate weekEnd = weekStart.plusDays(6);
                 weeks.add(new ScheduleWeek(
-                    weekStart.format(fullFormatter),
-                    weekEnd.format(fullFormatter),
-                    weekStart.format(displayFormatter),
-                    weekEnd.format(displayFormatter),
-                    i + 1
+                        weekStart.format(fullFormatter),
+                        weekEnd.format(fullFormatter),
+                        weekStart.format(displayFormatter),
+                        weekEnd.format(displayFormatter),
+                        i + 1
                 ));
             }
         }
 
+        // List of weekdays in Vietnamese
         List<String> weekDays = Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật");
 
+        // Set request attributes
         request.setAttribute("weekDays", weekDays);
-        request.setAttribute("scheduleTeacher", adjustedSchedule);
+        request.setAttribute("scheduleTeacher", scheduleTeacher);
         request.setAttribute("weeks", weeks);
         request.setAttribute("years", years);
         request.setAttribute("selectedWeek", baseDate.format(fullFormatter));
@@ -153,7 +109,7 @@ public class ScheduleTeacherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Gọi doGet để xử lý POST tương tự
+        doGet(request, response);
     }
 
     @Override

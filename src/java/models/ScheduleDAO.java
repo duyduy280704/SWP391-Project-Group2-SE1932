@@ -8,7 +8,9 @@ import dal.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -225,21 +227,31 @@ public class ScheduleDAO extends DBContext {
         }
     }
 
-    public void add(Schedules s) {
-        try {
-            String strSQL = "insert into schedule(id_class, start_time,end_time,day,id_teacher, room) values(?,?,?,?,?,?)";
-            stm = connection.prepareStatement(strSQL);
+public void add(Schedules s) {
+    try {
+        String sql = "INSERT INTO schedule(id_class, start_time, end_time, day, id_teacher, room) VALUES (?, ?, ?, ?, ?, ?)";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(sdf.parse(s.getDay()));
+
+        for (int i = 0; i < 10; i++) {
+            stm = connection.prepareStatement(sql);
             stm.setString(1, s.getNameClass());
             stm.setString(2, s.getStartTime());
             stm.setString(3, s.getEndTime());
-            stm.setString(4, s.getDay());
+            String newDay = sdf.format(cal.getTime());   
+            stm.setString(4, newDay);
             stm.setString(5, s.getTeacher());
             stm.setString(6, s.getRoom());
+
             stm.execute();
-        } catch (Exception e) {
-            System.out.println("add: " + e.getMessage());
+            cal.add(Calendar.DAY_OF_MONTH, 7);
         }
+    } catch (Exception e) {
+        System.out.println("add: " + e.getMessage());
     }
+}
 
     public ArrayList<Schedules> filterSchedulesByDate(String date) {
         ArrayList<Schedules> data = new ArrayList<>();

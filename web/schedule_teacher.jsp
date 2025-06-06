@@ -20,7 +20,6 @@
                 min-height: 100vh;
                 color: #333;
             }
-
             h2 {
                 text-align: center;
                 color: #2c3e50;
@@ -29,7 +28,6 @@
                 font-weight: 700;
                 letter-spacing: 1px;
             }
-
             .table-container {
                 width: 100%;
                 max-width: 1000px;
@@ -38,14 +36,12 @@
                 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
                 padding: 20px 25px;
             }
-
             .selector-container {
                 display: flex;
                 justify-content: center;
                 gap: 20px;
                 margin-bottom: 20px;
             }
-
             .selector-container select {
                 padding: 10px;
                 font-size: 16px;
@@ -56,11 +52,9 @@
                 outline: none;
                 transition: border-color 0.3s ease;
             }
-
             .selector-container select:focus {
                 border-color: #3498db;
             }
-
             table {
                 width: 100%;
                 border-collapse: separate;
@@ -69,7 +63,6 @@
                 overflow: hidden;
                 box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             }
-
             th, td {
                 padding: 14px 18px;
                 text-align: center;
@@ -77,7 +70,6 @@
                 color: #444;
                 border-bottom: 1px solid #e1e5ea;
             }
-
             th {
                 background-color: #3498db;
                 color: #fff;
@@ -85,23 +77,26 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
             }
-
             tbody tr:hover {
                 background-color: #f1f8ff;
                 cursor: default;
                 transition: background-color 0.3s ease;
             }
-
             tbody tr:last-child td {
                 border-bottom: none;
             }
-
             .error-message {
                 color: #e74c3c;
                 text-align: center;
                 margin: 20px 0;
                 font-size: 18px;
                 font-weight: 600;
+            }
+            .debug-info {
+                color: #555;
+                text-align: center;
+                margin: 10px 0;
+                font-size: 14px;
             }
         </style>
     </head>
@@ -124,6 +119,9 @@
                     </select>
                 </form>
             </div>
+            <div class="debug-info">
+                Tuần được chọn: ${selectedWeek} | Số lịch: ${fn:length(scheduleTeacher)}
+            </div>
             <c:if test="${empty scheduleTeacher}">
                 <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
             </c:if>
@@ -143,14 +141,14 @@
                         <c:forEach var="day" items="${weekDays}">
                             <c:set var="hasSchedule" value="false" />
                             <c:forEach var="s" items="${scheduleTeacher}">
-                                <c:if test="${s.dayVN == day}">
+                                <c:if test="${not empty s.dayVN and s.dayVN == day}">
                                     <c:set var="hasSchedule" value="true" />
                                 </c:if>
                             </c:forEach>
                             <c:choose>
                                 <c:when test="${hasSchedule}">
                                     <c:forEach var="s" items="${scheduleTeacher}">
-                                        <c:if test="${s.dayVN == day}">
+                                        <c:if test="${not empty s.dayVN and s.dayVN == day}">
                                             <tr>
                                                 <td>${s.dayVN}</td>
                                                 <td>
