@@ -56,5 +56,48 @@ public class ScheduleStudentDAO extends DBContext {
         return data;
     }
 
+    public List<ScheduleStudent> getTop3UpcomingSchedulesByStudentId(int studentId) {
+    List<ScheduleStudent> list = new ArrayList<>();
+    String sql = """
+        SELECT TOP 3
+            s.id,
+            s.day,
+            c.name AS class_name,
+            t.full_name AS teacher_name,
+            s.start_time,
+            s.end_time,
+            s.room
+        FROM schedule s
+        JOIN class c ON s.id_class = c.id
+        JOIN teacher t ON s.id_teacher = t.id
+        JOIN attendance a ON a.id_class = c.id
+        WHERE a.id_student = ?
+          AND TRY_CAST(s.day AS DATE) >= CAST(GETDATE() AS DATE)
+        ORDER BY TRY_CAST(s.day AS DATE), s.start_time
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, studentId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                ScheduleStudent s = new ScheduleStudent(
+                    String.valueOf(rs.getInt("id")),
+                    rs.getString("day"),
+                    rs.getString("class_name"),
+                    rs.getString("start_time"),
+                    rs.getString("end_time"),
+                    rs.getString("room"),
+                    rs.getString("teacher_name")
+                        
+                );
+                list.add(s);
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi getTop3UpcomingSchedulesByStudentId: " + e.getMessage());
+    }
+
+    return list;
+}
     
 }

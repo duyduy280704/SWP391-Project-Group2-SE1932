@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -101,6 +102,22 @@
                     left: 230px;
                 }
             }
+            .img-container {
+                position: relative;
+                width: 100%;
+                padding-top: 66.66%; /* Tỷ lệ 3:2 (chiều ngang:chiều cao) */
+                overflow: hidden;
+                background-color: #f8f8f8;
+            }
+
+            .course-img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Cắt ảnh đều và không bị méo */
+            }
         </style>
     </head>
     <body>
@@ -110,13 +127,9 @@
         </button>
 
         <!-- Topbar Start -->
-        <div class="container-fluid d-none d-lg-block">
-            <div class="row align-items-center py-4 px-xl-5">
-                <div class="col-lg-3">
-                    <a href="" class="text-decoration-none">
-                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                    </a>
-                </div>
+        <div class="container-fluid d-none d-lg-block ">
+            <div class="row align-items-center py-4 px-xl-5 justify-content-end">
+                <div></div>
                 <div class="col-lg-3 text-right">
                     <div class="d-inline-flex align-items-center">
                         <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
@@ -156,9 +169,9 @@
 
         <!-- Navbar Start -->
         <div class="sidebar" id="sidebar">
-            <div class="logo d-lg-block d-none">
-                <a href="HomePage" class="text-decoration-none">
-                    <h1><span class="text-primary">BIG</span>DREAM</h1>
+            <div class="col-lg-3">
+                <a href="" class="text-decoration-none">
+                    <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                 </a>
             </div>
             <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
@@ -171,131 +184,128 @@
 
         <!-- Main Content -->
         <div class="main-content" id="main-content">
-            <!-- Carousel Start -->
-            <div class="container-fluid p-0 pb-5 mb-5">
-                <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <c:forEach var="slide" items="${slides}" varStatus="status">
-                            <li data-target="#header-carousel" data-slide-to="${status.index}" class="${status.index == 0 ? 'active' : ''}"></li>
-                        </c:forEach>
-                    </ol>
-                    <div class="carousel-inner">
-                        <c:forEach var="slide" items="${slides}" varStatus="status">
-                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}" style="min-height: 300px;">
-                                <img src="${slide.imageUrl}" 
-                                     style="width: 1366px; height: 768px; object-fit: cover; object-position: center center;" 
-                                     alt="${slide.title}">
-                                <div class="carousel-caption d-flex align-items-center justify-content-center">
-                                    <div class="p-5" style="width: 100%; max-width: 900px;">
-                                        <h5 class="text-white text-uppercase mb-md-3">Khóa học tốt nhất</h5>
-                                        <h1 class="display-3 text-white mb-md-4">${slide.title}</h1>
-                                        <a href="#" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </div>
-            </div>
-            <!-- Carousel End -->
 
-            <!-- About Start -->
-            <div class="container-fluid py-5">
-                <div class="container py-5">
-                    <div class="row align-items-center">
-                        <c:forEach var="a" items="${aboutList}" varStatus="loop">
-                            <c:if test="${loop.first}">
-                                <div class="col-lg-5">
-                                    <img class="img-fluid rounded mb-4 mb-lg-0" src="${a.image}" alt="About Image">
-                                </div>
-                                <div class="col-lg-7">
-                                    <div class="text-left mb-4">
-                                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Giới Thiệu</h5>
-                                        <h1>${a.title}</h1>
-                                    </div>
-                                    <p>${a.content}</p>
-                                    <a href="about.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
-                                </div>
-                            </c:if>
+            <div class="mb-4">
+                <h2>
+                    Xin chào, ${name} 👋
+                </h2>
+                <p>Chúc bạn một ngày học tập hiệu quả tại BigDream!</p>
+            </div>
+
+            <h5 class="section-title">🕒 Lịch học sắp tới</h5>
+            <div class="table-responsive mb-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Giờ</th>
+                            <th>Lớp</th>
+                            <th>Giáo viên</th>
+                            <th>Phòng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="s" items="${schedules}">
+                            <tr>
+                                <td>${s.dayVN}, ${fn:substring(s.day, 8, 10)}/${fn:substring(s.day, 5, 7)}/${fn:substring(s.day, 0, 4)}</td>
+                                <td>${s.startTimeFormatted}‑${s.endTimeFormatted}</td>
+                                <td>${s.nameClass}</td>
+                                <td>${s.teacherName}</td>
+                                <td>${s.room}</td>
+                            </tr>
                         </c:forEach>
-                    </div>
+                    </tbody>
+                </table>
+                <div class="col-12 mt-3">
+                    <a href="scheduleStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
                 </div>
             </div>
-            <!-- About End -->
+
 
             <!-- Courses Start -->
             <div class="container-fluid py-5 bg-light">
                 <div class="container py-5">
-                    <div class="text-center mb-5">
-                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Khóa Học</h5>
-                        <h1>Một số khóa học của chúng tôi</h1>
-                    </div>
+                    <h5 class="section-title mt-5">🔥 Khóa học được Giảm giá cao</h5>
+                    <hr>
                     <form action="coursestaff" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <c:forEach var="c" items="${courseList}">
                                 <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                                    <div class="card shadow-sm border-0 w-100">
-                                        <c:choose>
-                                            <c:when test="${not empty c.image}">
-                                                <img src="image?id=${c.id}" alt="Course Picture" style="max-width: 400px; max-height: 300px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span>No Image</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <div class="card-body bg-white">
+                                    <div class="card shadow-sm border-0 w-100 d-flex flex-column">
+
+
+                                        <div class="img-container">
+                                            <c:choose>
+                                                <c:when test="${not empty c.image}">
+                                                    <img src="image?id=${c.id}" class="course-img" alt="Course Picture"
+                                                         onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="images/no-image.png" class="course-img" alt="No Image">
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+
+
+                                        <div class="card-body bg-white flex-grow-1 d-flex flex-column">
                                             <div class="d-flex justify-content-between mb-2 text-muted small">
                                                 <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
-                                                <span><i class="far fa-clock text-primary mr-1"></i>1h 30m</span>
                                             </div>
                                             <h5 class="card-title">${c.name}</h5>
-                                            <p class="card-text text-body" style="min-height: 72px;">${c.description}</p>
+                                            <p class="card-text text-body flex-grow-1" style="min-height: 72px;">${c.description}</p>
                                         </div>
+
+
                                         <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                            <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>
                                             <span class="text-primary font-weight-bold">${c.fee} đ</span>
                                         </div>
                                     </div>
                                 </div>
                             </c:forEach>
-                            <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
+
+                            <div class="col-12 mt-3">
+                                <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
+
+
             <!-- Courses End -->
 
+            <div class="p-3 bg-light rounded shadow-sm">
+                <h5><i class="fas fa-calendar-alt text-primary me-2"></i> Sự kiện sắp tới</h5>
+                <hr>
+                <c:forEach var="e" items="${eventList}">
+                    <div class="bg-white p-2 my-2 rounded border">
+                        <strong>${e.title}</strong> - 
+                        ${e.startDate}
+                    </div>
+                </c:forEach>
+            </div>
 
-            <!-- Team Start -->
-            <div class="container-fluid py-5">
-                <div class="container pt-5 pb-3">
-                    <div class="text-center mb-5">
-                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Giáo Viên</h5>
-                        <h1>Một số thầy cô của trung tâm</h1>
-                    </div>
-                    <div class="row">
-                        <c:forEach var="t" items="${teacherList}">
-                            <div class="col-md-6 col-lg-3 text-center team mb-4">
-                                <div class="team-item rounded overflow-hidden mb-2">
-                                    <div class="team-img position-relative">
-                                        <img class="card-img-top w-100" src="${t.pic}" alt="image" style="height: 200px; object-fit: cover;">
-                                        <div class="team-social">
-                                            <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="bg-secondary p-4">
-                                        <h5>${t.name}</h5>
-                                        <p class="m-0">${t.exp}</p>
-                                    </div>
-                                </div>
+            <div class="container pt-5 pb-3">
+                <div class="text-center mb-5">
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
+                    <h1>Các tin gần đây</h1>
+                </div>
+                <div class="row pb-3">
+                    <c:forEach var="n" items="${blogList}">
+                        <div class="col-lg-4 mb-4">
+                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                <img class="img-fluid" src="${n.picture}" alt="">
+                                <a class="blog-overlay text-decoration-none" href="#">
+                                    <h5 class="text-white mb-3">${n.title}</h5>
+                                    <p class="text-primary m-0">
+                                        ${fn:substring(n.publishDate, 0, 10)}
+                                    </p>
+                                </a>
                             </div>
-                        </c:forEach>
-                        <a href="teacher.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
-                    </div>
+                        </div>
+                    </c:forEach>
                 </div>
             </div>
-            <!-- Team End -->
-
             <!-- Testimonial Start -->
             <div class="container-fluid py-5">
                 <div class="container py-5">
@@ -323,27 +333,7 @@
             <!-- Testimonial End -->
 
             <!-- Blog Start -->
-            <div class="container pt-5 pb-3">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                    <h1>Các tin gần đây</h1>
-                </div>
-                <div class="row pb-3">
-                    <c:forEach var="n" items="${blogList}">
-                        <div class="col-lg-4 mb-4">
-                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                <img class="img-fluid" src="${n.picture}" alt="">
-                                <a class="blog-overlay text-decoration-none" href="#">
-                                    <h5 class="text-white mb-3">${n.title}</h5>
-                                    <p class="text-primary m-0">
-                                        ${fn:substring(n.publishDate, 0, 10)}
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
+
             <!-- Blog End -->
 
             <!-- Footer Start -->
@@ -432,11 +422,11 @@
                 const sidebar = document.getElementById('sidebar');
                 const mainContent = document.getElementById('main-content');
                 const toggleBtn = document.querySelector('.toggle-btn');
-                
+
                 sidebar.classList.toggle('hidden');
                 mainContent.classList.toggle('full');
                 toggleBtn.classList.toggle('hidden');
-                
+
                 // Change icon based on sidebar state
                 const icon = toggleBtn.querySelector('i');
                 if (sidebar.classList.contains('hidden')) {

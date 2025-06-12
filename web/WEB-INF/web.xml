@@ -52,6 +52,10 @@
         <servlet-name>AdminHomeController</servlet-name>
         <servlet-class>Controllers.AdminHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentHomeController</servlet-name>
+        <servlet-class>Controllers.StudentHomeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -103,5 +107,9 @@
     <servlet-mapping>
         <servlet-name>AdminHomeController</servlet-name>
         <url-pattern>/adminhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentHomeController</servlet-name>
+        <url-pattern>/StudentHome</url-pattern>
     </servlet-mapping>
 </web-app>

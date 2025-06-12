@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import models.AdminStaffDAO;
 import models.AdminStaffs;
+import models.Information;
+import models.InformationDAO;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
@@ -19,7 +21,7 @@ public class LoginControllers extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -32,11 +34,14 @@ public class LoginControllers extends HttpServlet {
             if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
                 message += "Vui lòng nhập email và mật khẩu!";
                 request.setAttribute("message", message);
-                request.setAttribute("email", email); 
+                request.setAttribute("email", email);
+                InformationDAO daoI = new InformationDAO();
+                Information setting = daoI.getSetting();
+                getServletContext().setAttribute("setting", setting);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-          
+
             AdminStaffDAO a = new AdminStaffDAO();
             AdminStaffs staff = a.checkLogin(email, password);
 
@@ -62,7 +67,7 @@ public class LoginControllers extends HttpServlet {
                 session.setAttribute("account", student);
                 System.out.println("Student RoleId: " + student.getRole());
                 if ("1".equalsIgnoreCase(student.getRole())) {
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
+                    request.getRequestDispatcher("StudentHome.jsp").forward(request, response);
                     return;
                 }
                 message += "Đăng nhập thành công!";
@@ -84,10 +89,10 @@ public class LoginControllers extends HttpServlet {
             }
 
         } catch (Exception e) {
-             e.printStackTrace();
+            e.printStackTrace();
             request.setAttribute("message", "Đã xảy ra lỗi hệ thống: " + e.getMessage());
             request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
+        }
     }
 
     @Override
