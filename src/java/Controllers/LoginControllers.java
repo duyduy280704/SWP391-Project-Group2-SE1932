@@ -67,7 +67,7 @@ public class LoginControllers extends HttpServlet {
                 session.setAttribute("account", student);
                 System.out.println("Student RoleId: " + student.getRole());
                 if ("1".equalsIgnoreCase(student.getRole())) {
-                    request.getRequestDispatcher("StudentHome.jsp").forward(request, response);
+                    request.getRequestDispatcher("StudentHome").forward(request, response);
                     return;
                 }
                 message += "Đăng nhập thành công!";

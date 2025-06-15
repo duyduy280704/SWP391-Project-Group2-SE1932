@@ -513,4 +513,67 @@ public class CourseDAO extends DBContext {
             throw e;
         }
     }
+
+
+    public ArrayList<Courses> searchCourses(String search, String type, String minPrice, String maxPrice, boolean saleOnly) {
+        ArrayList<Courses> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("""
+            SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level, c.sale
+            FROM Course c
+            JOIN type_course t ON c.type_id = t.id
+            WHERE 1=1
+        """);
+
+        ArrayList<Object> params = new ArrayList<>();
+
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND c.name LIKE ?");
+            params.add("%" + search.trim() + "%");
+        }
+
+        if (type != null && !type.trim().isEmpty()) {
+            sql.append(" AND t.name = ?");
+            params.add(type);
+        }
+
+        if (minPrice != null && !minPrice.trim().isEmpty()) {
+            sql.append(" AND CAST(c.fee AS FLOAT) >= ?");
+            params.add(Double.parseDouble(minPrice));
+        }
+
+        if (maxPrice != null && !maxPrice.trim().isEmpty()) {
+            sql.append(" AND CAST(c.fee AS FLOAT) <= ?");
+            params.add(Double.parseDouble(maxPrice));
+        }
+
+        if (saleOnly) {
+            sql.append(" AND c.sale > 0");
+        }
+
+        try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                stm.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Courses c = new Courses(
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getString("type_name"),
+                            rs.getString("description"),
+                            rs.getString("fee"),
+                            rs.getBytes("image"),
+                            rs.getString("level"),
+                            rs.getString("sale")
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("searchCourses: " + e.getMessage());
+        }
+
+        return list;
+    }
 }

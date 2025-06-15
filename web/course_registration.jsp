@@ -115,117 +115,146 @@
         <div class="container-fluid page-header" style="margin-bottom: 90px;">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Khóa Học</h3>
-                    <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="HomePage">Trang Chủ</a></p>
-                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Khóa Học</p>
-                    </div>
+                    <h3 class="display-4 text-white text-uppercase">Chi Tiết Khóa Học</h3>
+
                 </div>
             </div>
         </div>
         <!-- Header End -->
 
-
-        <div class="container px-4">
-            <form method="get" action="Course" class="mb-4">
-                <!-- Dòng 1: Tìm kiếm -->
-                <div class="row mb-3">
-                    <div class="col-md-6 offset-md-3">
-                        <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
-                    </div>
+        <div class="container py-5">
+            <div class="row">
+                <!-- Ảnh -->
+                <div class="col-md-6 mb-4">
+                    <c:choose>
+                        <c:when test="${not empty course.image}">
+                            <img src="image?id=${course.id}" class="img-fluid rounded shadow"
+                                 alt="Course Image"
+                                 style="width: 100%; height: 400px; object-fit: cover;"
+                                 onerror="this.src='images/no-image.png';">
+                        </c:when>
+                        <c:otherwise>
+                            <img src="images/no-image.png" class="img-fluid rounded shadow"
+                                 alt="No Image"
+                                 style="width: 100%; height: 400px; object-fit: cover;">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
-                <!-- Dòng 2: Bộ lọc -->
-                <div class="row g-2 justify-content-center">
-                    <div class="col-md-2">
-                        <select name="type" class="form-control">
-                            <option value="">Tất cả loại</option>
-                            <c:forEach var="t" items="${typeList}">
-                                <option value="${t.name}" ${t.name == param.type ? 'selected' : ''}>${t.name}</option>
-                            </c:forEach>
-                        </select>
+                <!-- Thông tin -->
+                <div class="col-md-6">
+                    <h2 class="text-dark font-weight-bold">${course.name}</h2>
+                    <p class="text-muted mb-2"><strong>Loại:</strong> ${course.type}</p>
+                    <p class="text-muted mb-2"><strong>Cấp độ:</strong> ${course.level}</p>
+
+                    <hr>
+
+                    <!-- Học phí -->
+                    <div class="mb-3">
+                        <c:choose>
+                            <c:when test="${course.sale + 0.0 > 0}">
+                                <span class="text-muted mr-2"><del>${course.fee} đ</del></span>
+                                <span class="text-danger h5 font-weight-bold">
+                                    ${ (course.fee + 0.0) - ((course.fee + 0.0) * (course.sale + 0.0) / 100) } đ
+                                </span>
+                                <span class="badge badge-success ml-2">${course.sale}% giảm</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="text-primary h5 font-weight-bold">${course.fee} đ</span>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <div class="col-md-2">
-                        <input name="minPrice" type="number" step="0.01" class="form-control" placeholder="Giá từ" value="${param.minPrice}">
-                    </div>
-                    <div class="col-md-2">
-                        <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" name="saleOnly" id="saleOnly" ${param.saleOnly == 'on' ? 'checked' : ''}>
-                            <label class="form-check-label" for="saleOnly">Sale</label>
+
+                    <!-- Mô tả -->
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold mb-2">Mô tả khóa học</h5>
+                        <div class="text-justify " style="white-space: pre-wrap;">
+                            ${course.description}
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex gap-2">
-                        <button class="btn btn-primary w-100">Lọc</button>
-                        <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
-                    </div>
+
+                    <!-- Nút đăng ký -->
+                    <button type="button" class="btn btn-primary btn-block" onclick="toggleRegisterForm()">Đăng ký khóa học</button>
                 </div>
-            </form>
-        </div>
-
-
-
-
-
-        <hr>
-
-        <!-- Display Courses -->
-        <div class="container-fluid py-4 bg-light">
-            <div class="container py-4">
-                <form action="coursestaff" method="post" enctype="multipart/form-data">
-                    <div class="row justify-content-center">
-                        <c:forEach var="c" items="${courseList}">
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
-                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
-
-                                    
-                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
-                                        <c:choose>
-                                            <c:when test="${not empty c.image}">
-                                                <img src="image?id=${c.id}" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="Course Picture"
-                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img src="images/no-image.png" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="No Image">
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </a>
-
-                                  
-                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
-                                        <div class="text-muted small mb-1">
-                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
-                                        </div>
-                                        <h6 class="card-title text-dark font-weight-bold mb-1 text-truncate">${c.name}</h6>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
-                                            ${c.description}
-                                        </p>
-                                    </div>
-
-                                    
-                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
-                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </form>
             </div>
         </div>
 
 
-        <!-- Courses End -->
+        <!-- Form đăng ký ẩn -->
+        <!-- FORM ẨN – hiển thị khi bấm “Đăng ký” -->
+        <div id="register-form" style="display:none; margin-top:15px;">
+            <!-- Thêm lớp 'card' + 'shadow-sm' để có viền và đổ bóng nhẹ  -->
+            <div class="card shadow-sm mx-auto" style="max-width:480px;">   <!-- căn giữa, giới hạn rộng -->
+                <div class="card-body p-4">                                <!-- padding đều 1rem -->
+                    <form action="registercourse" method="post">
+                        <input type="hidden" name="id" value="${course.id}">
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-semibold">Họ và tên</label>
+                            <input type="text" name="fullname" class="form-control" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-semibold">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input type="checkbox" class="form-check-input" id="agree" required>
+                            <label class="form-check-label" for="agree">
+                                Tôi đồng ý với
+                                <a href="#" data-toggle="modal" data-target="#termsModal">điều khoản</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block">
+                            Xác nhận đăng ký
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
+        <!-- Modal Điều khoản -->
+        <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsModalLabel">Điều khoản và Cam kết</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>1. Cam kết học viên:</strong></p>
+                        <ul>
+                            <li>Tham gia đầy đủ và đúng giờ các buổi học.</li>
+                            <li>Không gây rối hoặc làm ảnh hưởng đến lớp học.</li>
+                            <li>Tuân thủ các quy định của trung tâm.</li>
+                        </ul>
+
+                        <p><strong>2. Hoàn phí và hủy đăng ký:</strong></p>
+                        <ul>
+                            <li>Không hoàn lại học phí sau khi đã bắt đầu khóa học.</li>
+                            <li>Nếu hủy trước ngày khai giảng, hoàn lại 80% học phí.</li>
+                        </ul>
+
+                        <p><strong>3. Quyền lợi học viên:</strong></p>
+                        <ul>
+                            <li>Được cung cấp tài liệu học miễn phí.</li>
+                            <li>Được hỗ trợ kỹ thuật và tư vấn trong suốt khóa học.</li>
+                        </ul>
+
+                        <p class="text-muted mt-3">Mọi thắc mắc xin liên hệ: <strong>0123 456 789</strong> hoặc email: <strong>support@trungtam.com</strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Footer Start -->
@@ -316,6 +345,21 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>
+                        function toggleRegisterForm() {
+                            var form = document.getElementById('register-form');
+                            if (form.style.display === "none") {
+                                form.style.display = "block";
+                            } else {
+                                form.style.display = "none";
+                            }
+                        }
+
+                        function showContract() {
+                            alert("Hiển thị popup điều khoản ở đây hoặc mở modal.");
+                            // Hoặc dùng Bootstrap modal nếu có sẵn
+                        }
+        </script>
     </body>
 
 </html>

@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/HomePageController.java</file>
             <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/web/HomePage.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/LoginControllers.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/StudentHomeController.java</file>
             <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
             <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/CourseStaffController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/src/java/Controllers/AdminHomeController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/SWP391-Project-Group2-SE1932/web/StudentHome.jsp</file>
         </group>
     </open-files>
 </project-private>

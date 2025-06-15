@@ -56,6 +56,14 @@
         <servlet-name>StudentHomeController</servlet-name>
         <servlet-class>Controllers.StudentHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegistrationCourseController</servlet-name>
+        <servlet-class>Controllers.RegistrationCourseController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CourseController</servlet-name>
+        <servlet-class>Controllers.CourseController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -111,5 +119,13 @@
     <servlet-mapping>
         <servlet-name>StudentHomeController</servlet-name>
         <url-pattern>/StudentHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistrationCourseController</servlet-name>
+        <url-pattern>/RegistrationCourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseController</servlet-name>
+        <url-pattern>/Course</url-pattern>
     </servlet-mapping>
 </web-app>

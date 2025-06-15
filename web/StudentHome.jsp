@@ -105,7 +105,7 @@
             .img-container {
                 position: relative;
                 width: 100%;
-                padding-top: 66.66%; /* Tỷ lệ 3:2 (chiều ngang:chiều cao) */
+                padding-top: 66.66%;
                 overflow: hidden;
                 background-color: #f8f8f8;
             }
@@ -116,7 +116,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* Cắt ảnh đều và không bị méo */
+                object-fit: cover; 
             }
         </style>
     </head>
