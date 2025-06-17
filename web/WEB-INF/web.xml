@@ -24,6 +24,10 @@
         <servlet-name>AdminHomeController</servlet-name>
         <servlet-class>Controllers.AdminHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SettingController</servlet-name>
+        <servlet-class>Controllers.SettingController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -47,5 +51,9 @@
     <servlet-mapping>
         <servlet-name>AdminHomeController</servlet-name>
         <url-pattern>/adminhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/setting</url-pattern>
     </servlet-mapping>
 </web-app>

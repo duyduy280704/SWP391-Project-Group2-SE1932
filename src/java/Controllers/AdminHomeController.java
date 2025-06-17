@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import models.ChartDAO;
 import models.CourseDAO;
+import models.Revenue;
 import models.TypeCourseCount;
 
 /**
@@ -59,12 +61,25 @@ public class AdminHomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CourseDAO dao = new CourseDAO();
+        ChartDAO dao = new ChartDAO();
         try {
+            int student = dao.getStudentCount();
+            int teacher = dao.getTeacherCount();
+            int staff = dao.getAdminStaffCount();
+            int course = dao.getCourseCount();
+            List<Revenue> revenueData = dao.getMonthlyRevenue();
+
+        
+        
             List<TypeCourseCount> chartData = dao.getCourseCountByType();
             List<Map<String, Object>> roleCounts = dao.getRoleCounts();
+            request.setAttribute("revenueData", revenueData);
             request.setAttribute("chartData", chartData);
             request.setAttribute("roleCounts", roleCounts);
+            request.setAttribute("student", student);
+            request.setAttribute("teacher", teacher);
+            request.setAttribute("staff", staff);
+            request.setAttribute("course", course);
             request.getRequestDispatcher("AdminHome.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException(e);

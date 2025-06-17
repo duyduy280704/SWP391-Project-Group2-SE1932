@@ -132,8 +132,8 @@
 
                                                     </c:forEach>
                                                 </select></td>
-                                            <td>Giá: </td>
-                                            <td><input type="text" name="fee" value="${p.getFee()}"></td>
+                                            <td>Giá (VND): </td>
+                                            <td><input type="text" name="fee" value="${p.getFee()}"> </td>
                                         </tr>
                                         <tr>
                                             <td>Mức độ: </td>
@@ -213,7 +213,7 @@
                                                 <td>${item.getName()}</td>
                                                 <td>${item.getType()}</td>
                                                 <td>${item.getDescription()}</td>
-                                                <td>${item.getFee()}</td>
+                                                <td>${item.getFee()} VND</td>
 
                                                 <td>
                                                     <c:choose>
