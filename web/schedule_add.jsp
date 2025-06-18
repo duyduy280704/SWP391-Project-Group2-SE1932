@@ -106,7 +106,7 @@
     <body>
         <div class="form-container">
             <h2>Tạo thời khóa biểu</h2>
-            <form action="schedule" method="post">
+            <form action="listClassSchedule" method="post">
 
 
                 <label for="className">Tên lớp:</label>               
@@ -151,7 +151,7 @@
 
                 <div class="buttons">
                     <button type="submit" class="save" name="add">Lưu</button>
-                    <button type="button" class="cancel" onclick="window.location.href = 'schedule'">Hủy</button>
+                    <button type="button" class="cancel" onclick="window.location.href = 'listClassSchedule'">Hủy</button>
                 </div>
             </form>
         </div>

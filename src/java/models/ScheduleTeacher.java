@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduleTeacher {
+
     private String id;
     private String day;
+    private String classId;
     private String nameClass;
     private String startTime;
     private String endTime;
@@ -15,17 +17,17 @@ public class ScheduleTeacher {
     private String dayVN;
 
     public ScheduleTeacher() {
-        this.dayVN = "Không xác định"; // Giá trị mặc định
+        this.dayVN = "Không xác định";
     }
 
-    public ScheduleTeacher(String id, String day, String nameClass, String startTime, String endTime, String room) {
+    public ScheduleTeacher(String id, String day, String classId, String nameClass, String startTime, String endTime, String room) {
         this.id = id;
         this.day = day;
+        this.classId = classId;
         this.nameClass = nameClass;
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        this.dayVN = "Không xác định"; // Giá trị mặc định
         computeDayOfWeek();
     }
 
@@ -71,7 +73,7 @@ public class ScheduleTeacher {
         }
     }
 
-    // Getter và Setter
+    // Getters & Setters
     public String getId() {
         return id;
     }
@@ -87,6 +89,14 @@ public class ScheduleTeacher {
     public void setDay(String day) {
         this.day = day;
         computeDayOfWeek();
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public String getNameClass() {

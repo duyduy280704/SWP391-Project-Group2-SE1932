@@ -135,6 +135,7 @@
                             <th>Bắt đầu</th>
                             <th>Kết thúc</th>
                             <th>Phòng học</th>
+                            <th>Điểm danh</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,6 +160,20 @@
                                                 <td>${fn:substring(s.startTime, 0, 5)}</td>
                                                 <td>${fn:substring(s.endTime, 0, 5)}</td>
                                                 <td>${s.room}</td>
+                                                <td>
+                                                    <form action="scheduleTeacher" method="get">
+                                                        <input type="hidden" name="action" value="attendance" />
+                                                        <input type="hidden" name="scheduleId" value="${s.id}" />
+                                                        <input type="hidden" name="classId" value="${s.classId}" />
+                                                        <input type="hidden" name="className" value="${s.nameClass}" />
+                                                        <input type="hidden" name="day" value="${s.day}" />
+                                                        <button type="submit">Điểm danh</button>
+                                                    </form>
+
+
+
+                                                </td>
+
                                             </tr>
                                         </c:if>
                                     </c:forEach>
