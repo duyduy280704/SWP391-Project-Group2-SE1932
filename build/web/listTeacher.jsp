@@ -133,7 +133,7 @@
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form action="teacher" method="post">
+                                <form action="teacher" method="post" enctype="multipart/form-data">
                                     <!-- input fields table -->
                                     <table>
                                         <tr>
@@ -157,7 +157,10 @@
                                             <td>Kinh nghiệm: </td>
                                             <td><input type="text" name="exp" value="${s.getExp()}"></td>
                                             <td>Ảnh: </td>
-                                            <td><input type="text" name="pic" value="${s.getPic()}"></td>
+                                            <td>
+                                                <input type="file" name="pic" value="${p.getPic()}">
+
+                                            </td>
                                             <td>Chuyên môn: </td>
                                             <td>
                                                 <select name="course">
@@ -178,7 +181,8 @@
                                         <tr>
                                             <td>Năm kinh nghiệm: </td>
                                             <td><input type="text" name="years" value="${s.getYear()}"></td>
-
+                                            <td>Số điện thoại:</td>
+                                            <td><input type="text" name="phone" value="${s.getPhone()}"></td>
                                             <td><input type="hidden" name="id" value="${s.getId()}"></td>
                                             <td><input type="submit" name="add" value="Thêm"></td>
                                             <td><input type="submit" name="update" value="Lưu"></td>
@@ -211,7 +215,7 @@
                                             <th>Ảnh</th>
                                             <th>Chuyên môn</th>
                                             <th>Năm kinh nghiệm</th>
-                                            <th>Vai trò</th>
+                                            <th>Số điện thoại</th>
                                             <th>Chức năng</th>
                                         </tr>
                                     </thead>
@@ -227,10 +231,20 @@
                                                 <td>${item.birthdate}</td>
                                                 <td>${item.gender}</td>
                                                 <td>${item.exp}</td>
-                                                <td><img src="${item.pic}" alt="Teacher Picture" style="max-width: 100px; max-height: 100px;"></td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${not empty item.pic}">
+                                                            <img src="picteacher?id=${item.id}" alt="Teacher Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>No Image</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                                 <td>${item.course}</td>
                                                 <td>${item.year}</td>
-                                                <td>${item.role}</td>
+                                                <td>${item.phone}</td>
+                                                
                                                 <td>
                                                     <a href="teacher?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="teacher?id=${item.id}&mode=2" class="btn btn-delete"

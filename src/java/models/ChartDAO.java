@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  *
  * @author Quang
  */
-public class ChartDAO extends DBContext{
-    
-    
+public class ChartDAO extends DBContext {
+// đếm khóa học theo kiểu khóa học
     public ArrayList<TypeCourseCount> getCourseCountByType() {
         ArrayList<TypeCourseCount> list = new ArrayList<>();
         String sql = "SELECT t.name AS type_name, COUNT(c.id) AS course_count "
@@ -35,7 +35,7 @@ public class ChartDAO extends DBContext{
         }
         return list;
     }
-    
+// đếm số khóa học
     public int getCourseCount() throws SQLException {
         String sql = "SELECT COUNT(*) AS CourseCount FROM Course";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -46,7 +46,7 @@ public class ChartDAO extends DBContext{
             return 0;
         }
     }
-
+// đếm số học sinh
     public int getStudentCount() throws SQLException {
         String sql = "SELECT COUNT(*) FROM Student";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -57,7 +57,7 @@ public class ChartDAO extends DBContext{
             return 0;
         }
     }
-
+// đếm số giáo viên
     public int getTeacherCount() throws SQLException {
         String sql = "SELECT COUNT(*) FROM Teacher";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -68,7 +68,7 @@ public class ChartDAO extends DBContext{
             return 0;
         }
     }
-
+// đếm số nhân viên
     public int getAdminStaffCount() throws SQLException {
         String sql = "SELECT COUNT(*) FROM Admin_staff";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class ChartDAO extends DBContext{
             return 0;
         }
     }
-    
+// số liệu biểu đồ người dung theo từng vai trò
     public List<Map<String, Object>> getRoleCounts() throws SQLException {
         List<Map<String, Object>> roleCounts = new ArrayList<>();
         try {
@@ -110,13 +110,16 @@ public class ChartDAO extends DBContext{
             throw e;
         }
     }
-    
+// tổng doanh thu theo từng tháng
     public List<Revenue> getMonthlyRevenue() {
         List<Revenue> revenueList = new ArrayList<>();
-        String sql = "SELECT DATEPART(year, p.date) AS year, DATEPART(month, p.date) AS month, SUM(c.fee - c.sale) AS revenue " +
-                     "FROM [BIGDREAM].[dbo].[payment] p " +
-                     "JOIN [BIGDREAM].[dbo].[Course] c ON p.id_course = c.id " +
-                     "GROUP BY DATEPART(year, p.date), DATEPART(month, p.date)";
+        String sql = """
+                     SELECT DATEPART(year, p.date) AS year, DATEPART(month, p.date) AS month, SUM(c.fee - c.sale) AS revenue 
+                        FROM payment p 
+                        JOIN Course c ON p.id_course = c.id 
+                     	where p.status = N'Hoàn tất'
+                        GROUP BY DATEPART(year, p.date), DATEPART(month, p.date)
+                     """;
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -131,7 +134,7 @@ public class ChartDAO extends DBContext{
         } catch (SQLException e) {
             System.err.println("getMonthlyRevenue: " + e.getMessage());
         }
-        
+
         return revenueList;
     }
 }

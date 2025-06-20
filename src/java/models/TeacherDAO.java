@@ -18,6 +18,7 @@ public class TeacherDAO extends DBContext {
     ResultSet rs;
 
     //Quang
+    // lấy toàn bộ danh sách giáo viên
     public ArrayList<Teachers> getTeachers() {
 
         ArrayList<Teachers> data = new ArrayList<>();
@@ -33,12 +34,13 @@ public class TeacherDAO extends DBContext {
                 String birthdate = rs.getString(5);
                 String gender = rs.getString(6);
                 String exp = rs.getString(7);
-                String pic = rs.getString(8);
-                String role = rs.getString(13);
-                String course = rs.getString(15);
+                byte[] pic = rs.getBytes(8);
+                String role = rs.getString(14);
+                String course = rs.getString(16);
                 String years = String.valueOf(rs.getInt(11));
+                String phone = rs.getString(12);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
                 data.add(p);
             }
         } catch (Exception e) {
@@ -47,6 +49,7 @@ public class TeacherDAO extends DBContext {
         }
         return data;
     }
+// lấy kiểu khóa học
 
     public ArrayList<TypeCourse> getCourseType() {
         ArrayList<TypeCourse> data = new ArrayList<>();
@@ -82,12 +85,13 @@ public class TeacherDAO extends DBContext {
                 String birthdate = rs.getString(5);
                 String gender = rs.getString(6);
                 String exp = rs.getString(7);
-                String pic = rs.getString(8);
+                byte[] pic = rs.getBytes(8);
                 String role = rs.getString(9);
                 String course = rs.getString(10);
                 String years = String.valueOf(rs.getInt(11));
+                String phone = rs.getString(12);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
                 return p;
             }
         } catch (Exception e) {
@@ -96,6 +100,7 @@ public class TeacherDAO extends DBContext {
         }
         return null;
     }
+    // Sửa thông tin giáo viên
 
     public ResultMessage update(Teachers s) {
         // Kiểm tra đầu vào
@@ -126,10 +131,6 @@ public class TeacherDAO extends DBContext {
         if (s.exp == null || s.exp.isEmpty()) {
             return new ResultMessage(false, "Kinh nghiệm không được để trống.");
         }
-
-        if (s.pic == null || s.pic.isEmpty()) {
-            return new ResultMessage(false, "Hình ảnh giáo viên không được để trống.");
-        }
         if (s.course == null || s.course.isEmpty()) {
             return new ResultMessage(false, "Loại khóa học không được để trống.");
         }
@@ -140,6 +141,12 @@ public class TeacherDAO extends DBContext {
             Integer.parseInt(s.year);
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
+        }
+        if (s.phone == null || s.phone.isEmpty()) {
+            return new ResultMessage(false, "Số điện thoại không được để trống.");
+        }
+        if (!s.phone.matches("^\\+?[0-9]{10,11}$")) {
+            return new ResultMessage(false, "Định dạng số điện thoại không hợp lệ: " + s.phone);
         }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
@@ -154,10 +161,14 @@ public class TeacherDAO extends DBContext {
         }
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, picture = ?, id_type_course=?, years_of_experience=? WHERE id = ?")) {
+                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, picture = ?, id_type_course = ?, years_of_experience = ?, phone = ? WHERE id = ?")) {
             // Kiểm tra email trùng với giáo viên khác (ngoại trừ chính nó)
             if (isEmailExistForOther(s.email, teacherId)) {
                 return new ResultMessage(false, "Email '" + s.email + "' đã được sử dụng bởi giáo viên khác.");
+            }
+            // Kiểm tra số điện thoại trùng với giáo viên khác (ngoại trừ chính nó)
+            if (isPhoneExistForOther(s.phone, teacherId)) {
+                return new ResultMessage(false, "Số điện thoại '" + s.phone + "' đã được sử dụng bởi giáo viên khác.");
             }
             stm.setString(1, s.password);
             stm.setString(2, s.name);
@@ -165,10 +176,15 @@ public class TeacherDAO extends DBContext {
             stm.setString(4, s.birthdate);
             stm.setString(5, s.gender);
             stm.setString(6, s.exp);
-            stm.setString(7, s.pic);
+            if (s.pic != null) {
+                stm.setBytes(7, s.pic);
+            } else {
+                stm.setNull(7, Types.BLOB);
+            }
             stm.setString(8, s.course);
             stm.setString(9, s.year);
-            stm.setInt(10, teacherId);
+            stm.setString(10, s.phone);
+            stm.setInt(11, teacherId);
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected > 0) {
                 return new ResultMessage(true, "Cập nhật giáo viên thành công!");
@@ -204,6 +220,30 @@ public class TeacherDAO extends DBContext {
         return false;
     }
 
+    // Kiểm tra số điện thoại đã tồn tại cho giáo viên khác chưa
+    private boolean isPhoneExistForOther(String phone, int excludeId) throws SQLException {
+        if (connection == null) {
+            throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
+        }
+        try (PreparedStatement stm = connection.prepareStatement(
+                "SELECT COUNT(*) FROM Teacher WHERE phone = ? AND id != ?")) {
+            stm.setString(1, phone);
+            stm.setInt(2, excludeId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    System.out.println("Kiểm tra số điện thoại: " + phone + " (ngoại trừ ID: " + excludeId + ") - Kết quả: " + count);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong isPhoneExistForOther: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+        return false;
+    }
+
+    // Thêm giáo viên
     public ResultMessage add(Teachers s) throws SQLException {
         if (s == null || s.email == null || s.email.isEmpty()) {
             return new ResultMessage(false, "Email không được để trống.");
@@ -234,6 +274,12 @@ public class TeacherDAO extends DBContext {
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
         }
+        if (s.phone == null || s.phone.isEmpty()) {
+            return new ResultMessage(false, "Số điện thoại không được để trống.");
+        }
+        if (!s.phone.matches("^\\+?[0-9]{10,11}$")) {
+            return new ResultMessage(false, "Định dạng số điện thoại không hợp lệ: " + s.phone);
+        }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
@@ -246,9 +292,12 @@ public class TeacherDAO extends DBContext {
         }
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, picture, role_id, id_type_course, years_of_experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)")) {
+                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, picture, role_id, id_type_course, years_of_experience, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             if (isAccountExist(s.email)) {
                 return new ResultMessage(false, "Tài khoản '" + s.email + "' đã tồn tại.");
+            }
+            if (isPhoneExist(s.phone)) {
+                return new ResultMessage(false, "Số điện thoại '" + s.phone + "' đã tồn tại.");
             }
             stm.setString(1, s.name);
             stm.setString(2, s.email);
@@ -256,10 +305,15 @@ public class TeacherDAO extends DBContext {
             stm.setString(4, s.exp);
             stm.setString(5, s.birthdate);
             stm.setString(6, s.gender);
-            stm.setString(7, s.pic);
+            if (s.pic != null) {
+                stm.setBytes(7, s.pic);
+            } else {
+                stm.setNull(7, Types.BLOB);
+            }
             stm.setInt(8, roleId);
             stm.setString(9, s.course);
             stm.setString(10, s.year);
+            stm.setString(11, s.phone);
             int rowsAffected = stm.executeUpdate();
             return new ResultMessage(true, "Thêm giáo viên thành công!");
         } catch (SQLException e) {
@@ -268,6 +322,7 @@ public class TeacherDAO extends DBContext {
         }
     }
 
+    // Kiểm tra email đã tồn tại chưa
     public boolean isAccountExist(String email) throws SQLException {
         if (connection == null) {
             throw new SQLException("Database connection is not initialized.");
@@ -288,6 +343,29 @@ public class TeacherDAO extends DBContext {
         return false;
     }
 
+    // Kiểm tra số điện thoại đã tồn tại chưa
+    private boolean isPhoneExist(String phone) throws SQLException {
+        if (connection == null) {
+            throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
+        }
+        try (PreparedStatement stm = connection.prepareStatement(
+                "SELECT COUNT(*) FROM Teacher WHERE phone = ?")) {
+            stm.setString(1, phone);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    System.out.println("Kiểm tra số điện thoại: " + phone + " - Kết quả: " + count);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong isPhoneExist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+        return false;
+    }
+// xóa thông tin giáo viên
+
     public ResultMessage delete(String id) {
         try (PreparedStatement stm = connection.prepareStatement("DELETE FROM Teacher WHERE id = ?")) {
             stm.setInt(1, Integer.parseInt(id));
@@ -303,5 +381,27 @@ public class TeacherDAO extends DBContext {
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
+    }
+
+    // lấy ảnh giáo viên theo id
+    public byte[] getPicById(String teacherId) throws SQLException {
+        if (teacherId == null || teacherId.isEmpty()) {
+            return null;
+        }
+        try (PreparedStatement stm = connection.prepareStatement("SELECT picture FROM Teacher WHERE id = ?")) {
+            stm.setInt(1, Integer.parseInt(teacherId));
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBytes("picture");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong getPicById: " + e.getMessage());
+            throw e;
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid teacher ID: " + teacherId);
+            throw e;
+        }
+        return null;
     }
 }

@@ -7,9 +7,7 @@ package models;
 import dal.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  *
@@ -19,11 +17,11 @@ public class CourseDAO extends DBContext {
 
     PreparedStatement stm;
     ResultSet rs;
-
+//lấy toàn bộ khóa học
     public ArrayList<Courses> getCourses() {
         ArrayList<Courses> data = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(
-                "SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level, c.sale "
+                "SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level "
                 + "FROM Course c JOIN type_course t ON c.type_id = t.id")) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -34,8 +32,8 @@ public class CourseDAO extends DBContext {
                 String fee = String.valueOf(rs.getDouble("fee"));
                 byte[] image = rs.getBytes("image");
                 String level = rs.getString("level");
-                String sale = String.valueOf(rs.getDouble("sale"));
-                Courses p = new Courses(id, name, type, description, fee, image, level, sale);
+                
+                Courses p = new Courses(id, name, type, description, fee, image, level);
                 data.add(p);
             }
         } catch (SQLException e) {
@@ -43,7 +41,7 @@ public class CourseDAO extends DBContext {
         }
         return data;
     }
-
+// lấy khóa học bằng id
     public Courses getCoursesById(String id) {
         try {
             String strSQL = "select * from Course where id=?";
@@ -58,8 +56,8 @@ public class CourseDAO extends DBContext {
                 String fee = rs.getString(5);
                 byte[] image = rs.getBytes(6);
                 String level = rs.getString(7);
-                String sale = rs.getString(8);
-                Courses p = new Courses(id, name, type, description, fee, image, level, sale);
+                
+                Courses p = new Courses(id, name, type, description, fee, image, level);
                 return p;
             }
         } catch (Exception e) {
@@ -68,7 +66,7 @@ public class CourseDAO extends DBContext {
         }
         return null;
     }
-
+// lấy kiểu khóa học
     public ArrayList<TypeCourse> getCourseType() {
         ArrayList<TypeCourse> data = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement("SELECT * FROM type_course")) {
@@ -84,7 +82,7 @@ public class CourseDAO extends DBContext {
         }
         return data;
     }
-
+// sửa khóa học
     public ResultMessage update(Courses s) {
         if (s == null) {
             return new ResultMessage(false, "Dữ liệu khóa học không hợp lệ.");
@@ -107,9 +105,7 @@ public class CourseDAO extends DBContext {
         if (s.level == null || s.level.isEmpty()) {
             return new ResultMessage(false, "Cấp độ khóa học không được để trống.");
         }
-        if (s.sale == null || s.sale.isEmpty()) {
-            return new ResultMessage(false, "Giá trị khuyến mãi không được để trống.");
-        }
+        
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
@@ -138,18 +134,10 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "Phí khóa học phải là một số hợp lệ: " + s.fee);
         }
 
-        double sale;
-        try {
-            sale = Double.parseDouble(s.sale);
-            if (sale < 0 || sale > 100) {
-                return new ResultMessage(false, "Giá trị khuyến mãi phải nằm trong khoảng từ 0 đến 100: " + s.sale);
-            }
-        } catch (NumberFormatException e) {
-            return new ResultMessage(false, "Giá trị khuyến mãi phải là một số hợp lệ: " + s.sale);
-        }
+        
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "UPDATE Course SET name = ?, type_id = ?, description = ?, fee = ?, image = ?, level = ?, sale = ? WHERE id = ?")) {
+                "UPDATE Course SET name = ?, type_id = ?, description = ?, fee = ?, image = ?, level = ? WHERE id = ?")) {
             if (isCourseNameExistForOther(s.name, courseId)) {
                 return new ResultMessage(false, "Tên khóa học '" + s.name + "' đã được sử dụng bởi khóa học khác.");
             }
@@ -163,7 +151,6 @@ public class CourseDAO extends DBContext {
                 stm.setNull(5, Types.BLOB);
             }
             stm.setString(6, s.level);
-            stm.setDouble(7, sale);
             stm.setInt(8, courseId);
             int rowsAffected = stm.executeUpdate();
             return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Cập nhật khóa học thành công!" : "Không tìm thấy khóa học với ID: " + s.id);
@@ -172,7 +159,7 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
-
+// check tên khóa học trùng nhau
     private boolean isCourseNameExistForOther(String name, int excludeId) throws SQLException {
         if (connection == null) {
             throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
@@ -194,7 +181,7 @@ public class CourseDAO extends DBContext {
         }
         return false;
     }
-
+// thêm khóa học
     public ResultMessage add(Courses p) {
         if (p == null) {
             return new ResultMessage(false, "Dữ liệu khóa học không hợp lệ.");
@@ -214,9 +201,7 @@ public class CourseDAO extends DBContext {
         if (p.level == null || p.level.isEmpty()) {
             return new ResultMessage(false, "Cấp độ khóa học không được để trống.");
         }
-        if (p.sale == null || p.sale.isEmpty()) {
-            return new ResultMessage(false, "Giá trị khuyến mãi không được để trống.");
-        }
+        
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
@@ -238,18 +223,10 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "Phí khóa học phải là một số hợp lệ: " + p.fee);
         }
 
-        double sale;
-        try {
-            sale = Double.parseDouble(p.sale);
-            if (sale < 0 || sale > 100) {
-                return new ResultMessage(false, "Giá trị khuyến mãi phải nằm trong khoảng từ 0 đến 100: " + p.sale);
-            }
-        } catch (NumberFormatException e) {
-            return new ResultMessage(false, "Giá trị khuyến mãi phải là một số hợp lệ: " + p.sale);
-        }
+        
 
         try (PreparedStatement stm = connection.prepareStatement(
-                "INSERT INTO Course (name, type_id, description, fee, image, level, sale) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO Course (name, type_id, description, fee, image, level) VALUES (?, ?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS)) {
             if (isCourseExist(p.name)) {
                 return new ResultMessage(false, "Khóa học với tên '" + p.name + "' đã tồn tại.");
@@ -264,7 +241,6 @@ public class CourseDAO extends DBContext {
                 stm.setNull(5, Types.BLOB);
             }
             stm.setString(6, p.level);
-            stm.setDouble(7, sale);
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected > 0) {
                 ResultSet rs = stm.getGeneratedKeys();
@@ -280,7 +256,7 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
-
+// check tên khóa học trùng nhau
     public boolean isCourseExist(String name) throws SQLException {
         try (PreparedStatement stm = connection.prepareStatement("SELECT COUNT(*) FROM Course WHERE name = ?")) {
             stm.setString(1, name);
@@ -293,7 +269,7 @@ public class CourseDAO extends DBContext {
         }
         return false;
     }
-
+// xóa khóa học
     public ResultMessage delete(String id) {
         try (PreparedStatement stm = connection.prepareStatement("DELETE FROM Course WHERE id = ?")) {
             stm.setInt(1, Integer.parseInt(id));
@@ -306,7 +282,7 @@ public class CourseDAO extends DBContext {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
     }
-
+// lấy ảnh của khóa học theo id
     public byte[] getCourseImageById(String courseId) throws SQLException {
         if (courseId == null || courseId.isEmpty()) {
             return null;

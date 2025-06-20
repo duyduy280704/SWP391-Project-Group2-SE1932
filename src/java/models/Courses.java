@@ -9,14 +9,14 @@ package models;
  * @author Quang
  */
 public class Courses {
-    String id, name, type, description, fee, level, sale;
+    String id, name, type, description, fee, level;
     
     byte[] image;
 
     public Courses() {
     }
 
-    public Courses(String id, String name, String type, String description, String fee, byte[] image, String level, String sale) {
+    public Courses(String id, String name, String type, String description, String fee, byte[] image, String level) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -24,7 +24,7 @@ public class Courses {
         this.fee = fee;
         this.image = image;
         this.level = level;
-        this.sale = sale;
+        
     }
 
     public String getId() {
@@ -75,13 +75,7 @@ public class Courses {
         this.level = level;
     }
 
-    public String getSale() {
-        return sale;
-    }
-
-    public void setSale(String sale) {
-        this.sale = sale;
-    }
+    
 
     public byte[] getImage() {
         return image;

@@ -144,8 +144,7 @@
                                                     <option value="Nâng cao" ${p.getLevel() == 'Nâng cao' ? 'selected' : ''}>Nâng cao</option>
                                                 </select>
                                             </td>
-                                            <td>Giảm giá: </td>
-                                            <td><input type="text" name="sale" value="${p.getSale()}"></td>
+                                            
                                             <td>Ảnh: </td>
                                             <td><input type="file" name="image" value="${p.getImage()}">
 
@@ -200,7 +199,6 @@
                                             <th>giá</th>
                                             <th>Ảnh</th>
                                             <th>Mức độ</th>
-                                            <th>Giảm giá</th>
                                             <th>Chức năng</th>
 
                                         </tr>
@@ -226,7 +224,6 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>${item.getLevel()}</td>
-                                                <td>${item.getSale()} %</td>
                                                 <td>
                                                     <a href="coursestaff?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete" 

@@ -134,7 +134,7 @@
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form action="student" method="post">
+                                <form action="student" method="post" enctype="multipart/form-data">
 
                                     <table>
                                         <tr>
@@ -145,12 +145,10 @@
                                             <td><input type="text" name="email" value="${s.getEmail()}"></td>
                                             <td>Mật khẩu: </td>
                                             <td><input type="text" name="password" value="${s.getPassword()}"></td>
-                                        </tr>
-                                        <tr>
                                             <td>Ngày sinh: </td>
                                             <td><input type="text" name="birthdate" value="${s.getBrithdate()}"></td>
-                                            <td>Địa chỉ: </td>
-                                            <td><input type="text" name="address" value="${s.getAddress()}"></td>
+                                        </tr>
+                                        <tr>
                                             <td>Giới tính: </td>
                                             <td>
                                                 <select name="gender">
@@ -158,6 +156,17 @@
                                                     <option value="Nữ" ${s.getGender().equals("Nữ") ? "selected" : ""}>Nữ</option>
                                                 </select>
                                             </td>
+                                            
+                                            <td>Ảnh: </td>
+                                            <td>
+                                                <input type="file" name="pic" value="${s.getPic()}">
+
+                                                
+                                            </td>
+                                            <td>Địa chỉ: </td>
+                                            <td><input type="text" name="address" value="${s.getAddress()}"></td>
+                                            <td>Số điện thoại:</td>
+                                            <td><input type="text" name="phone" value="${s.getPhone()}"></td>
                                         </tr>
 
                                         <tr>
@@ -191,8 +200,9 @@
                                             <th>Mật khẩu</th>
                                             <th>Ngày sinh</th>
                                             <th>Giới tính</th>
+                                            <th>Ảnh</th>
                                             <th>Địa chỉ</th>
-                                            <th>Vai trò</th>
+                                            <th>Số điện thoại</th>
                                             <th>Chức năng</th>
                                         </tr>
                                     </thead>
@@ -206,8 +216,19 @@
                                                 <td>${item.getPassword()}</td>
                                                 <td>${item.getBrithdate()}</td>
                                                 <td>${item.getGender()}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${not empty item.pic}">
+                                                            <img src="picstudent?id=${item.id}" alt="Student Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>No Image</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                                 <td>${item.getAddress()}</td>
-                                                <td>${item.getRole()}</td>
+                                                <td>${item.getPhone()}</td>
+                                                
                                                 <td>
                                                     <a href="student?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="student?id=${item.id}&mode=2" class="btn btn-delete"

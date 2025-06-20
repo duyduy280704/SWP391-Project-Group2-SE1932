@@ -9,12 +9,15 @@ package models;
  * @author Quang
  */
 public class Teachers {
-    String id, name, email, password, birthdate, gender, exp, pic, role, course, year;
+    String id, name, email, password, birthdate, gender, exp, role, course, year, phone;
+    
+        byte[] pic;
+
 
     public Teachers() {
     }
 
-    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, String pic, String role, String course, String year) {
+    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, byte[] pic, String role, String course, String year, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -26,6 +29,7 @@ public class Teachers {
         this.role = role;
         this.course = course;
         this.year = year;
+        this.phone = phone;
     }
 
     public String getId() {
@@ -84,13 +88,15 @@ public class Teachers {
         this.exp = exp;
     }
 
-    public String getPic() {
+    public byte[] getPic() {
         return pic;
     }
 
-    public void setPic(String pic) {
+    public void setPic(byte[] pic) {
         this.pic = pic;
     }
+
+    
 
     public String getRole() {
         return role;
@@ -114,6 +120,14 @@ public class Teachers {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
     
     

@@ -11,7 +11,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.ResultMessage;
 import models.Staff;
 import models.StaffDAO;
@@ -99,10 +102,11 @@ public class StaffController extends HttpServlet {
         String birthdate =request.getParameter("birthdate");
         String gender =request.getParameter("gender");
         String role =request.getParameter("role");
+        String phone =request.getParameter("phone");
         
         ResultMessage result = null;
         StaffDAO sd = new StaffDAO();
-        Staff s = new Staff(id, name, email, password, birthdate, gender, role);
+        Staff s = new Staff(id, name, email, password, birthdate, gender, role, phone);
         
         try {
 
@@ -117,12 +121,15 @@ public class StaffController extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         ArrayList<Staff> data = sd.getStaff();
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
         request.setAttribute("data", data);
+        request.setAttribute("s", s);
         request.getRequestDispatcher("listStaff.jsp").forward(request, response);
     }
 

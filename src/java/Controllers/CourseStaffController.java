@@ -24,6 +24,7 @@ import models.TypeCourse;
 /**
  *
  * @author Quang
+ * Quản lý khóa học (crud)
  */
 @MultipartConfig
 public class CourseStaffController extends HttpServlet {
@@ -101,7 +102,7 @@ public class CourseStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        
 
         String id = request.getParameter("id");
         String name = request.getParameter("name");
@@ -109,7 +110,6 @@ public class CourseStaffController extends HttpServlet {
         String description = request.getParameter("description");
         String fee = request.getParameter("fee");
         String level = request.getParameter("level");
-        String sale = request.getParameter("sale");
 
         // Handle file upload
         Part filePart = request.getPart("image");
@@ -142,7 +142,7 @@ public class CourseStaffController extends HttpServlet {
         ResultMessage result = null;
         CourseDAO cd = new CourseDAO();
 
-        Courses p = new Courses(id, name, type, description, fee, imageBytes, level, sale);
+        Courses p = new Courses(id, name, type, description, fee, imageBytes, level);
         try {
             
             if (request.getParameter("update") != null) {

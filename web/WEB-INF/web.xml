@@ -28,6 +28,14 @@
         <servlet-name>SettingController</servlet-name>
         <servlet-class>Controllers.SettingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PicTeacherController</servlet-name>
+        <servlet-class>Controllers.PicTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PicStudentController</servlet-name>
+        <servlet-class>Controllers.PicStudentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -55,5 +63,13 @@
     <servlet-mapping>
         <servlet-name>SettingController</servlet-name>
         <url-pattern>/setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PicTeacherController</servlet-name>
+        <url-pattern>/picteacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PicStudentController</servlet-name>
+        <url-pattern>/picstudent</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -7,9 +7,13 @@ package Controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -23,6 +27,7 @@ import models.TypeCourse;
  *
  * @author Quang
  */
+@MultipartConfig
 public class TeacherController extends HttpServlet {
 
     /**
@@ -102,49 +107,101 @@ public class TeacherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id =request.getParameter("id");
-        String name =request.getParameter("name");
-        String email =request.getParameter("email");
-        String password =request.getParameter("password");
-        String birthdate =request.getParameter("birthdate");
-        String gender =request.getParameter("gender");
-        String exp =request.getParameter("exp");
-        String pic =request.getParameter("pic");
-        String course =request.getParameter("course");
-        String years =request.getParameter("years");
-        String role ="2";
-        
-        ResultMessage result = null;
-        
-        Teachers s = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years);
-        
-        TeacherDAO sd = new TeacherDAO();
-        
-        try {
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String birthdate = request.getParameter("birthdate");
+        String gender = request.getParameter("gender");
+        String exp = request.getParameter("exp");
+        String course = request.getParameter("course");
+        String years = request.getParameter("years");
+        String phone = request.getParameter("phone");
+        String role = "2"; // Mặc định role là giáo viên
 
+        // Handle file upload
+        byte[] imageBytes = null;
+        Part filePart = request.getPart("pic");
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = filePart.getSubmittedFileName();
+            if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")) {
+                request.setAttribute("message", "Chỉ hỗ trợ file JPG hoặc PNG!");
+                request.setAttribute("success", false);
+                ArrayList<Teachers> data = new TeacherDAO().getTeachers();
+                ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
+                request.setAttribute("data", data);
+                request.setAttribute("data1", data1);
+                request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
+                return;
+            }
+            if (filePart.getSize() > 5 * 1024 * 1024) { // 5MB limit
+                request.setAttribute("message", "File quá lớn! Tối đa 5MB.");
+                request.setAttribute("success", false);
+                ArrayList<Teachers> data = new TeacherDAO().getTeachers();
+                ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
+                request.setAttribute("data", data);
+                request.setAttribute("data1", data1);
+                request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
+                return;
+            }
+            try (InputStream fileContent = filePart.getInputStream(); ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+                byte[] data = new byte[8192]; // Buffer lớn hơn để tối ưu
+                int bytesRead;
+                while ((bytesRead = fileContent.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
+                imageBytes = buffer.toByteArray();
+            }
+        }
+
+        // Kiểm tra dữ liệu đầu vào
+        if (name == null || name.trim().isEmpty()) {
+            request.setAttribute("message", "Tên giáo viên không được để trống!");
+            request.setAttribute("success", false);
+            ArrayList<Teachers> data = new TeacherDAO().getTeachers();
+            ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
+            request.setAttribute("data", data);
+            request.setAttribute("data1", data1);
+            request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
+            return;
+        }
+        if (email == null || email.trim().isEmpty()) {
+            request.setAttribute("message", "Email không được để trống!");
+            request.setAttribute("success", false);
+            ArrayList<Teachers> data = new TeacherDAO().getTeachers();
+            ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
+            request.setAttribute("data", data);
+            request.setAttribute("data1", data1);
+            request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
+            return;
+        }
+
+        ResultMessage result = null;
+        TeacherDAO teacherDAO = new TeacherDAO();
+        Teachers teacher = new Teachers(id, name, email, password, birthdate, gender, exp, imageBytes, role, course, years, phone);
+
+        try {
             if (request.getParameter("update") != null) {
-                // Cập nhật học sinh
-                result = sd.update(s);
+                result = teacherDAO.update(teacher);
             } else if (request.getParameter("add") != null) {
-                // Thêm học sinh
-                result = sd.add(s);
+                result = teacherDAO.add(teacher);
             } else {
                 result = new ResultMessage(false, "Hành động không hợp lệ!");
             }
         } catch (SQLException e) {
-            Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TeacherController.class.getName()).log(Level.SEVERE, null, e);
             result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
-        
-         
-        
-        
-        ArrayList<Teachers> data = sd.getTeachers();
+
+        ArrayList<Teachers> data = teacherDAO.getTeachers();
+        ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
+        request.setAttribute("data", data);
+        request.setAttribute("data1", data1);
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("data", data);
+        request.setAttribute("s", teacher);
         request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
     }
 

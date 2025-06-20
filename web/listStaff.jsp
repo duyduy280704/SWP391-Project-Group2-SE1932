@@ -144,10 +144,11 @@
                                             <td><input type="text" name="email" value="${s.getEmail()}"></td>
                                             <td>Mật khẩu: </td>
                                             <td><input type="text" name="password" value="${s.getPassword()}"></td>
-                                        </tr>
-                                        <tr>
                                             <td>Ngày sinh: </td>
                                             <td><input type="text" name="birthdate" value="${s.getBirthdate()}"></td>
+                                        </tr>
+                                        <tr>
+                                            
                                             <td>Giới tính: </td>
                                             <td>
                                                 <select name="gender">
@@ -163,6 +164,8 @@
                                                     <option value="3" ${s.getRole() == 3 ? 'selected' : ''}>Nhân viên</option>
                                                 </select>
                                             </td>
+                                            <td>Số điện thoại: </td>
+                                            <td><input type="text" name="phone" value="${s.getPhone()}"></td>
 
                                         </tr>
 
@@ -198,6 +201,7 @@
                                             <th>Ngày sinh</th>
                                             <th>Giới tính</th>
                                             <th>Vai trò</th>
+                                            <th>Số điện thoại</th>
                                             <th>Chức năng</th>   
                                         </tr>
                                     </thead>
@@ -212,6 +216,7 @@
                                                 <td>${item.birthdate}</td>
                                                 <td>${item.gender}</td>
                                                 <td>${item.role}</td>
+                                                <td>${item.phone}</td>
 
                                                 <td>
                                                     <a href="staff?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
