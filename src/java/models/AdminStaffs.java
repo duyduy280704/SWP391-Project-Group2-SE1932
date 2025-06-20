@@ -9,8 +9,12 @@ public class AdminStaffs {
     private String gender;
     private String password;
     private String roleId;
+    private String phone;
 
-    public AdminStaffs(String id, String fullName, String email, String birthDate, String gender, String password, String roleId) {
+    public AdminStaffs() {
+    }
+
+    public AdminStaffs(String id, String fullName, String email, String birthDate, String gender, String password, String roleId, String phone) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -18,9 +22,9 @@ public class AdminStaffs {
         this.gender = gender;
         this.password = password;
         this.roleId = roleId;
+        this.phone = phone;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -71,9 +75,19 @@ public class AdminStaffs {
 
     public String getRoleId() {
         return roleId;
-    } // Sửa thành getRoleId
+    }
 
     public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+   
 }

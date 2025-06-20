@@ -6,88 +6,89 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
 import models.AdminStaffDAO;
 import models.AdminStaffs;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
 import models.Teachers;
-//Huyền-Đăng Nhập
 
 public class LoginControllers extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/plain;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
+        response.setContentType("text/html;charset=UTF-8");
         try {
-            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
             String password = request.getParameter("password");
             String message = "";
 
-            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-                message += "Vui lòng nhập email và mật khẩu!";
+            // Kiểm tra đầu vào
+            if (phone == null || phone.trim().isEmpty()) {
+                message = "Vui lòng nhập số điện thoại!";
                 request.setAttribute("message", message);
-                request.setAttribute("email", email); 
+                request.setAttribute("phone", phone);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-          
-            AdminStaffDAO a = new AdminStaffDAO();
-            AdminStaffs staff = a.checkLogin(email, password);
-
-            StudentDAO s = new StudentDAO();
-            Students student = s.checkLogin(email, password);
-
-            TeacherDAO t = new TeacherDAO();
-            Teachers teacher = t.checkLogin(email, password);
-
-            if (staff != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("account", staff);
-                System.out.println("AdminStaff RoleId: " + staff.getRoleId());
-                if ("4".equalsIgnoreCase(staff.getRoleId())) {
-                    request.getRequestDispatcher("adminhome").forward(request, response);
-                } else if ("3".equalsIgnoreCase(staff.getRoleId())) {
-                    request.getRequestDispatcher("staff.jsp").forward(request, response);
-                }
-                message += "Đăng nhập thành công!";
+            if (!phone.matches("\\d{10,11}")) {
+                message = "Số điện thoại phải có 10-11 số!";
                 request.setAttribute("message", message);
-            } else if (student != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("account", student);
-                System.out.println("Student RoleId: " + student.getRole());
-                if ("1".equalsIgnoreCase(student.getRole())) {
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
-                    return;
-                }
-                message += "Đăng nhập thành công!";
+                request.setAttribute("phone", phone);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            if (password == null || password.trim().isEmpty()) {
+                message = "Vui lòng nhập mật khẩu!";
                 request.setAttribute("message", message);
-            } else if (teacher != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("account", teacher);
-                System.out.println("Teacher RoleId: " + teacher.getRole());
-                if ("2".equalsIgnoreCase(teacher.getRole())) {
-                    request.getRequestDispatcher("teacherPage.jsp").forward(request, response);
-                    return;
-                }
-                message += "Đăng nhập thành công!";
-                request.setAttribute("message", message);
-            } else {
-                message += "Email hoặc mật khẩu không đúng!";
-                request.setAttribute("message", message);
+                request.setAttribute("phone", phone);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
+            // Kiểm tra đăng nhập
+            AdminStaffDAO a = new AdminStaffDAO();
+            AdminStaffs staff = a.checkLogin(phone, password);
+
+            StudentDAO s = new StudentDAO();
+            Students student = s.checkLogin(phone, password);
+
+            TeacherDAO t = new TeacherDAO();
+            Teachers teacher = t.checkLogin(phone, password);
+
+            HttpSession session = request.getSession();
+            if (staff != null) {
+                session.setAttribute("account", staff);
+                System.out.println("AdminStaff RoleId: " + staff.getRoleId());
+                if ("4".equals(staff.getRoleId())) {
+                    response.sendRedirect("adminhome");
+                } else if ("3".equals(staff.getRoleId())) {
+                    response.sendRedirect("staff.jsp");
+                }
+                return;
+            } else if (student != null) {
+                session.setAttribute("account", student);
+                System.out.println("Student RoleId: " + student.getRole());
+                response.sendRedirect("student.jsp");
+                return;
+            } else if (teacher != null) {
+                session.setAttribute("account", teacher);
+                System.out.println("Teacher RoleId: " + teacher.getRole());
+                response.sendRedirect("TeacherHome.jsp");
+                return;
+            } else {
+                message = "Số điện thoại hoặc mật khẩu không đúng!";
+                request.setAttribute("message", message);
+                request.setAttribute("phone", phone);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
         } catch (Exception e) {
-             e.printStackTrace();
+            e.printStackTrace();
             request.setAttribute("message", "Đã xảy ra lỗi hệ thống: " + e.getMessage());
+            request.setAttribute("phone", request.getParameter("phone"));
             request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
+        }
     }
 
     @Override

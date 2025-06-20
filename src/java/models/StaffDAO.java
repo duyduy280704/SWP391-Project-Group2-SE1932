@@ -32,8 +32,8 @@ public class StaffDAO extends DBContext {
                 String birthdate = rs.getString(4);
                 String gender = rs.getString(5);
                 String role = rs.getString(9);
-
-                Staff p = new Staff(id, name, email, password, birthdate, gender, role);
+                String phones=rs.getString(8);
+                Staff p = new Staff(id, name, email, password, birthdate, gender, role,phones);
                 data.add(p);
             }
         } catch (Exception e) {
@@ -57,8 +57,8 @@ public class StaffDAO extends DBContext {
                 String birthdate = rs.getString(4);
                 String gender = rs.getString(5);
                 String role = rs.getString(7);
-
-                Staff p = new Staff(id, name, email, password, birthdate, gender, role);
+                String phones=rs.getString(8);
+                Staff p = new Staff(id, name, email, password, birthdate, gender, role,phones);
                 return p;
             }
         } catch (Exception e) {

@@ -9,34 +9,23 @@ package models;
  * @author Quang
  *///quang - quản lý học sinh
 public class Students {
-    String id, name, email, password, brithdate, gender, address, role;
+    String id, name, email, password, birthdate, gender, address, role,phone, pic;
 
     public Students() {
     }
 
-    public Students(String id, String name, String email, String password, String brithdate, String gender, String address, String role) {
+    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role, String phone, String pic) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.brithdate = brithdate;
+        this.birthdate = birthdate;
         this.gender = gender;
         this.address = address;
         this.role = role;
+        this.phone = phone;
+        this.pic = pic;
     }
-
-    public Students(String id, String name, String email, String password, String brithdate, String gender, String address) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.brithdate = brithdate;
-        this.gender = gender;
-        this.address = address;
-    }
-
-    
-    
 
     public String getId() {
         return id;
@@ -70,12 +59,12 @@ public class Students {
         this.password = password;
     }
 
-    public String getBrithdate() {
-        return brithdate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBrithdate(String brithdate) {
-        this.brithdate = brithdate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getGender() {
@@ -102,9 +91,22 @@ public class Students {
         this.role = role;
     }
 
-    
-    
-    
-    
-    
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+   
+   
 }

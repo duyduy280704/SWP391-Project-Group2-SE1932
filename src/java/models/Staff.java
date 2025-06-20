@@ -9,12 +9,12 @@ package models;
  * @author Quang
  *///quang - quản lý nhân viên
 public class Staff {
-    String id, name, email, password, birthdate, gender, role;
+    String id, name, email, password, birthdate, gender, role,phone;
 
     public Staff() {
     }
 
-    public Staff(String id, String name, String email, String password, String birthdate, String gender, String role) {
+    public Staff(String id, String name, String email, String password, String birthdate, String gender, String role, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -22,6 +22,7 @@ public class Staff {
         this.birthdate = birthdate;
         this.gender = gender;
         this.role = role;
+        this.phone = phone;
     }
 
     public String getId() {
@@ -80,7 +81,13 @@ public class Staff {
         this.role = role;
     }
 
-    
-    
-    
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+  
 }

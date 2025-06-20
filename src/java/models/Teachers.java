@@ -1,20 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author Quang
- *///quang - quản lý giáo viên
 public class Teachers {
-    String id, name, email, password, birthdate, gender, exp, pic, role;
+
+    String id, name, email, password, birthdate, gender, exp, pic, role,idtypecourse,yearofcourse,phone;
 
     public Teachers() {
     }
 
-    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, String pic, String role) {
+    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, String pic, String role, String idtypecourse, String yearofcourse, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -24,17 +17,9 @@ public class Teachers {
         this.exp = exp;
         this.pic = pic;
         this.role = role;
-    }
-
-    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, String pic) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.birthdate = birthdate;
-        this.gender = gender;
-        this.exp = exp;
-        this.pic = pic;
+        this.idtypecourse = idtypecourse;
+        this.yearofcourse = yearofcourse;
+        this.phone = phone;
     }
 
     public String getId() {
@@ -109,11 +94,31 @@ public class Teachers {
         this.role = role;
     }
 
-    
+    public String getIdtypecourse() {
+        return idtypecourse;
+    }
 
-    
+    public void setIdtypecourse(String idtypecourse) {
+        this.idtypecourse = idtypecourse;
+    }
 
-    
-    
+    public String getYearofcourse() {
+        return yearofcourse;
+    }
+
+    public void setYearofcourse(String yearofcourse) {
+        this.yearofcourse = yearofcourse;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     
 }
+
+   

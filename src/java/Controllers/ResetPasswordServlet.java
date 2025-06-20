@@ -75,7 +75,7 @@ public class ResetPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         String table = request.getParameter("table");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
@@ -83,7 +83,7 @@ public class ResetPasswordServlet extends HttpServlet {
 
         if (newPassword.isBlank()) {
             message += "Bạn phải mật khẩu và xác nhận mật khẩu.";
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.setAttribute("message", message);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
@@ -91,7 +91,7 @@ public class ResetPasswordServlet extends HttpServlet {
         }
         if (confirmPassword.isBlank()) {
             message += "Bạn phải điền mật khẩu và xác nhận mật khẩu.";
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.setAttribute("message", message);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
@@ -102,7 +102,7 @@ public class ResetPasswordServlet extends HttpServlet {
         if (newPassword.length() <= 6 || !newPassword.matches(".*[a-z]*")
                 || !newPassword.matches(".*[A-Z]*") || !newPassword.matches(".*\\d.*")|| !newPassword.matches(".*[^a-zA-Z0-9].*")) {
             message += "Mật khẩu phải trên 6 kí tự,có ít nhất 1 chữ thường,1 chữ in hoa, 1 số và 1 ký hiệu đặc biệt";
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.setAttribute("message", message);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
@@ -111,7 +111,7 @@ public class ResetPasswordServlet extends HttpServlet {
 
         if (!newPassword.equals(confirmPassword)) {
             message += "Mật khẩu chưa khớp.Vui lòng nhập lại";
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.setAttribute("message", message);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
@@ -120,9 +120,9 @@ public class ResetPasswordServlet extends HttpServlet {
 
         UserDAO dao = new UserDAO();
         try {
-            dao.updatePassword(table, email, newPassword);
+            dao.updatePassword(table, phone, newPassword);
             message += "Đổi mật khẩu thành công. Mời bạn đăng nhập.";
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.setAttribute("message", message);
             request.getRequestDispatcher("login.jsp").forward(request, response);

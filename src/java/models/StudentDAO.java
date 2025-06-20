@@ -30,10 +30,12 @@ public class StudentDAO extends DBContext{
                 String email = rs.getString(4);
                 String brithdate = rs.getString(5);
                 String gender = rs.getString(6);
-                String address = rs.getString(7);
-                String role = rs.getString(10);
-
-                Students p = new Students(id, name, email, password, brithdate, gender, address, role);
+                String address = rs.getString(8);
+                String role = rs.getString(11);
+                String phones=rs.getString(10);
+                String pic=rs.getString(7);
+                
+                Students p = new Students(id, name, email, password, brithdate, gender, address, role,phones,pic);
                 data.add(p);
             }
         } catch (Exception e) {
@@ -46,13 +48,13 @@ public class StudentDAO extends DBContext{
 
     //Huyền- checklogin của student
     
-    public Students checkLogin(String email, String password) {
+    public Students checkLogin(String phone, String password) {
         try{
-           String strSQL="select id,password,full_name,email,birth_date,gender,address,Role_id"
+           String strSQL="select id,password,full_name,email,birth_date,gender,picture,address,Role_id,phone"
                    + " from Student"
-                   + " where email =? and password=?";
+                   + " where phone =? and password=?";
                    stm=connection.prepareStatement(strSQL);
-                   stm.setString(1, email);
+                   stm.setString(1, phone);
                    stm.setString(2, password);
                    rs=stm.executeQuery();
             while(rs.next()){
@@ -64,7 +66,9 @@ public class StudentDAO extends DBContext{
                 String gender = rs.getString("gender");
                 String address = rs.getString("address");
                 String roleId = String.valueOf(rs.getInt("Role_id"));
-                Students student = new Students(id, pwd, fullName, emailFromDB, birthDate, gender, address, roleId);
+                String phones=rs.getString("phone");
+                 String pic=rs.getString("picture");
+                Students student = new Students(id, fullName, emailFromDB, pwd, birthDate, gender, address, roleId,phones,pic);
                 return student;
             }                   
         }catch(Exception e){
@@ -85,10 +89,11 @@ public class StudentDAO extends DBContext{
                 String email = rs.getString(4);
                 String brithdate = rs.getString(5);
                 String gender = rs.getString(6);
-                String address = rs.getString(7);
-                String role = rs.getString(8);
-
-                Students p = new Students(id, name, email, password, brithdate, gender, address, role);
+                String address = rs.getString(8);
+                String role = rs.getString(9);
+                String phones=rs.getString(10);
+                 String pic=rs.getString(7);
+                Students p = new Students(id, name, email, password, brithdate, gender, address, role,phones,pic);
                 return p;
             }
         } catch (Exception e) {
@@ -116,8 +121,8 @@ public class StudentDAO extends DBContext{
         if (!s.email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             return new ResultMessage(false, "Định dạng email không hợp lệ: " + s.email);
         }
-        if (s.brithdate != null && !s.brithdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.brithdate);
+        if (s.birthdate != null && !s.birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.birthdate);
         }
         if (s.gender != null && !s.gender.matches("Nam|Nữ")) {
             return new ResultMessage(false, "Giới tính không hợp lệ (phải là 'Nam' hoặc 'Nữ'): " + s.gender);
@@ -149,7 +154,7 @@ public class StudentDAO extends DBContext{
             stm.setString(1, s.password); // Nên mã hóa mật khẩu
             stm.setString(2, s.name);
             stm.setString(3, s.email);
-            stm.setString(4, s.brithdate); // Sửa lỗi chính tả từ brithdate
+            stm.setString(4, s.birthdate); // Sửa lỗi chính tả từ brithdate
             stm.setString(5, s.gender);
             stm.setString(6, s.address);
             stm.setInt(7, studentId);
@@ -196,8 +201,8 @@ public class StudentDAO extends DBContext{
         if (!s.email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             return new ResultMessage(false, "Định dạng email không hợp lệ: " + s.email);
         }
-        if (s.brithdate != null && !s.brithdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.brithdate);
+        if (s.birthdate != null && !s.birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.birthdate);
         }
         if (s.gender != null && !s.gender.matches("Nam|Nữ")) {
             return new ResultMessage(false, "Giới tính không hợp lệ (phải là 'Nam' hoặc 'Nữ'): " + s.gender);
@@ -224,7 +229,7 @@ public class StudentDAO extends DBContext{
             stm.setString(1, s.name);
             stm.setString(2, s.email);
             stm.setString(3, s.password); // Nên mã hóa mật khẩu
-            stm.setString(4, s.brithdate); // Sửa lỗi chính tả
+            stm.setString(4, s.birthdate); // Sửa lỗi chính tả
             stm.setString(5, s.gender);
             stm.setString(6, s.address);
             stm.setInt(7, roleId);

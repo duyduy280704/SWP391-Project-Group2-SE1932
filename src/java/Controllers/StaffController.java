@@ -99,10 +99,10 @@ public class StaffController extends HttpServlet {
         String birthdate =request.getParameter("birthdate");
         String gender =request.getParameter("gender");
         String role =request.getParameter("role");
-        
+        String phone=request.getParameter("phone");
         ResultMessage result = null;
         StaffDAO sd = new StaffDAO();
-        Staff s = new Staff(id, name, email, password, birthdate, gender, role);
+        Staff s = new Staff(id, name, email, password, birthdate, gender, role,phone);
         
         try {
 

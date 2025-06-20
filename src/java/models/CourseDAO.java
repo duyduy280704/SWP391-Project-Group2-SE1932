@@ -173,7 +173,7 @@ public class CourseDAO extends DBContext {
         return null;
     }
 
-    public ArrayList<TypeCourse> getCourseType() {
+    public ArrayList<TypeCourse> getCourseType()  {
         ArrayList<TypeCourse> data = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement("SELECT * FROM type_course")) {
             ResultSet rs = stm.executeQuery();

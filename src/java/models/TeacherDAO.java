@@ -36,8 +36,11 @@ public class TeacherDAO extends DBContext {
                 String expertise = rs.getString("Expertise");
                 String picture = rs.getString("picture");
                 String role = rs.getString("role_name");
+                String idcourse=rs.getString("id_type_course");
+                String yearexp=rs.getString("years_of_experience");
+                String phones=rs.getString("phone");
 
-                Teachers t = new Teachers(id, fullName, email, password, birthDate, gender, expertise, picture, role);
+                Teachers t =new Teachers(id, fullName,  password,email, birthDate, gender,  expertise, picture, role, idcourse, yearexp,phones);
                 data.add(t);
             }
         } catch (SQLException e) {
@@ -47,13 +50,13 @@ public class TeacherDAO extends DBContext {
     }
 
     //Huyền-checklogin của teacher
-    public Teachers checkLogin(String email, String password) {
+    public Teachers checkLogin(String phone, String password) {
         try {
-            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id "
+            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id,id_type_course,years_of_experience,phone "
                     + "FROM Teacher "
-                    + "WHERE email = ? AND password = ?";
+                    + "WHERE phone = ? AND password = ?";
             stm = connection.prepareStatement(strSQL);
-            stm.setString(1, email);
+            stm.setString(1, phone);
             stm.setString(2, password);
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -65,8 +68,11 @@ public class TeacherDAO extends DBContext {
                 String gender = rs.getString("gender");
                 String expertise = rs.getString("Expertise");
                 String picture = rs.getString("picture");
-                String roleId = String.valueOf(rs.getInt("role_id"));
-                Teachers teacher = new Teachers(id, pwd, fullName, emailFromDB, birthDate, gender, expertise, picture, roleId);
+                String roleId = String.valueOf(rs.getInt("role_id")); 
+                String idcourse=rs.getString("id_type_course");
+                String yearexp=rs.getString("years_of_experience");
+                String phones=rs.getString("phone");
+                Teachers teacher = new Teachers(id, fullName, emailFromDB, pwd, birthDate, gender, expertise, picture, roleId,idcourse, yearexp,phones);
                 return teacher;
             }
         } catch (Exception e) {
@@ -93,9 +99,10 @@ public class TeacherDAO extends DBContext {
                 String exp = rs.getString(7);
                 String pic = rs.getString(8);
                 String role = rs.getString(13);
-               
-
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role);
+                String idcourse=rs.getString(10);
+                String yearexp=rs.getString(11);
+                String phones=rs.getString(12);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role,idcourse,yearexp,phones);
                 data.add(p);
             }
         } catch (Exception e) {

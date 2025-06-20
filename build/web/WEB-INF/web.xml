@@ -52,6 +52,21 @@
         <servlet-name>AdminHomeController</servlet-name>
         <servlet-class>Controllers.AdminHomeController</servlet-class>
     </servlet>
+    <!-- Xóa đoạn này nếu dùng @WebServlet("/profile") -->
+    <!--
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>Controllers.ProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/ProfileController</url-pattern>
+    </servlet-mapping>
+    -->
+<!--    <servlet>
+        <servlet-name>TeacherRegistrationController</servlet-name>
+        <servlet-class>Controllers.TeacherRegistrationController</servlet-class>
+    </servlet>-->
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -104,4 +119,8 @@
         <servlet-name>AdminHomeController</servlet-name>
         <url-pattern>/adminhome</url-pattern>
     </servlet-mapping>
+<!--    <servlet-mapping>
+        <servlet-name>TeacherRegistrationController</servlet-name>
+        <url-pattern>/registerTeacher</url-pattern>
+    </servlet-mapping>-->
 </web-app>

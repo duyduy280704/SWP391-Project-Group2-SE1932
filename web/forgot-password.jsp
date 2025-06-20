@@ -170,8 +170,8 @@
                     <h2 class="text-center mb-4">Quên Mật Khẩu</h2>
                     <form method="post" action="ForgotPasswordServlet">
                         <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email"  class="form-control">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="phone" id="phone" name="phone"  class="form-control">
                         </div>
                         <input type="submit" value="Tiếp tục" class="btn btn-primary btn-block mt-3">
                     </form>

@@ -104,12 +104,14 @@ public class StudentController extends HttpServlet {
         String birthdate = request.getParameter("birthdate");
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
+         String phone=request.getParameter("phone");
+         String pic=request.getParameter("picture");
         String role = "1";
 
         ResultMessage result = null;
 
-        Students s = new Students(id, name, email, password, birthdate, gender, address, role);
-        Students u = new Students(id, name, email, password, birthdate, gender, address);
+        Students s = new Students(id, name, email, password, birthdate, gender, address, role, phone, pic);
+        Students u = new Students(id, name, email, password, birthdate, gender, address, role, phone, pic);
 
         StudentDAO sd = new StudentDAO();
 

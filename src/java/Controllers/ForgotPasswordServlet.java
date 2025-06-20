@@ -30,21 +30,21 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         UserDAO dao = new UserDAO();
-        String table = dao.checkExistEmail(email);
-        if(email==null){
-            request.setAttribute("message", "Bạn phải nhập email.");
+        String table = dao.checkExistPhone(phone);
+        if(phone==null){
+            request.setAttribute("message", "Bạn phải nhập số điện thoại.");
             request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
             return;
         }
         if (table != null) {
  
-            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
             request.setAttribute("table", table);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
         } else {
-            request.setAttribute("message", "Không tìm thấy email trong hệ thống.");
+            request.setAttribute("message", "Không tìm thấy số điện thoại trong hệ thống.");
             request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
             return;
         }
