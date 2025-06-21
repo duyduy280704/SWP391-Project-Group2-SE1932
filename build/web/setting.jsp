@@ -4,6 +4,7 @@
     Author     : Quang
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -206,10 +207,14 @@
                     <div class="container-fluid px-4">
 
                         <h1 class="mt-4">Bảng Điều Khiển</h1>
+                        <div><c:if test="${not empty message}">
+                                <p class="${success ? 'success' : 'error'}">${message}</p>
+                            </c:if></div>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Quản Lý</li>
                         </ol>
                         <form action="setting" method="post">
+                            <h4>Thông tin liên hệ</h4>
                             <table>
                                 <tr>
                                     <td>Địa chỉ</td>
@@ -245,11 +250,141 @@
                                     <td></td>
                                     <td><input type="submit" name="update" value="Lưu Thông Tin"></td>
                                     <td></td>
-                                    <td><c:if test="${not empty message}">
-                                    <p class="${success ? 'success' : 'error'}">${message}</p>
-                                </c:if></td>
+                                    <td></td>
                                 </tr>
 
+                            </table>
+                        </form>
+
+                        <form action="setabout" method="post" enctype="multipart/form-data">
+                            <h4>Thông tin về trung tâm</h4>  
+                            <table>
+                                <tr>
+                                    <td>
+
+                                        <table>
+                                            <input type="text" name="id" value="${p.getId()}" hidden="">
+                                            <tr>
+                                                <td>Tiêu đề</td>
+                                                <td><input type="text" name="tieude1" value="${p.getTitle()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nội dung</td>
+                                                <td><textarea name="description" id="description" cols="100" rows="5" >${p.getContent()}</textarea></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ảnh</td>
+                                                <td><input type="file" name="anh1" ></td>
+                                            </tr>
+                                            <tr>
+
+                                                <td><input type="submit" name="add1" value="Thêm"></td>
+                                                <td><input type="submit" name="update1" value="Lưu"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <td>Tiêu đề</td>
+                                                    <td>Nội dung</td>
+                                                    <td>Ảnh</td>
+                                                    <td>Chức năng</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${dataAbout}" var="item">
+                                                    <tr>
+                                                        <td>${item.getTitle()}</td>
+                                                        <td>${item.getContent()}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${not empty item.image}">
+                                                                    <img src="imageabout?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span>No Image</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td><a href="setabout?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
+                                                            <a href="setabout?id=${item.id}&mode=2" class="btn btn-delete" 
+                                                               onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a></td>
+                                                    </tr>
+                                                </c:forEach>
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+                        <h4>Thông tin hiển thị</h4>
+                        <form action="setbanner" method="post" enctype="multipart/form-data">
+                            <table>
+                                <tr>
+                                    <td>
+
+                                        <table>
+                                            <input type="text" name="id2" value="${s.getId()}" hidden="">
+                                            <tr>
+                                                <td>Tiêu đề</td>
+                                                <td><input type="text" name="tieude2" value="${s.getTitle()}"></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Ảnh</td>
+                                                <td><input type="file" name="anh2" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="submit" name="add2" value="Thêm"></td>
+                                                <td><input type="submit" name="update2" value="Lưu"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr>
+
+                                                    <td>Tiêu đề</td>
+                                                    <td>Ảnh</td>
+                                                    <td>Chức năng</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${dataBanner}" var="item">
+                                                    <tr>
+
+                                                        <td>${item.getTitle()}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${not empty item.image}">
+                                                                    <img src="imagebanner?id2=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span>No Image</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td><a href="setbanner?id2=${item.getId()}&mode=3" class="btn btn-edit">✏️ Sửa</a>
+                                                            <a href="setbanner?id2=${item.id}&mode=4" class="btn btn-delete" 
+                                                               onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a></td>
+                                                    </tr>
+                                                </c:forEach>
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
                             </table>
                         </form>
                     </div>

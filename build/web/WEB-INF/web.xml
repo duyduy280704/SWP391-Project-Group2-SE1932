@@ -36,6 +36,26 @@
         <servlet-name>PicStudentController</servlet-name>
         <servlet-class>Controllers.PicStudentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StaffHomeController</servlet-name>
+        <servlet-class>Controllers.StaffHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetAboutController</servlet-name>
+        <servlet-class>Controllers.SetAboutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageAboutController</servlet-name>
+        <servlet-class>Controllers.ImageAboutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetBannerController</servlet-name>
+        <servlet-class>Controllers.SetBannerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageBannerController</servlet-name>
+        <servlet-class>Controllers.ImageBannerController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -71,5 +91,25 @@
     <servlet-mapping>
         <servlet-name>PicStudentController</servlet-name>
         <url-pattern>/picstudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffHomeController</servlet-name>
+        <url-pattern>/staffhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetAboutController</servlet-name>
+        <url-pattern>/setabout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageAboutController</servlet-name>
+        <url-pattern>/imageabout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetBannerController</servlet-name>
+        <url-pattern>/setbanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageBannerController</servlet-name>
+        <url-pattern>/imagebanner</url-pattern>
     </servlet-mapping>
 </web-app>

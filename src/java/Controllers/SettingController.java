@@ -11,8 +11,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import models.ResultMessage;
+import models.SetAbout;
+import models.SetBanner;
 import models.Setting;
 import models.SettingDAO;
 
@@ -61,8 +63,12 @@ public class SettingController extends HttpServlet {
         SettingDAO sd = new SettingDAO();
         
         Setting data = sd.getSetting();
+        ArrayList<SetAbout> dataAbout = sd.getSetAbout();
+        ArrayList<SetBanner> dataBanner = sd.getSetBanner();
         
         request.setAttribute("data", data);
+        request.setAttribute("dataAbout", dataAbout);
+        request.setAttribute("dataBanner", dataBanner);
         request.getRequestDispatcher("setting.jsp").forward(request, response);
     } 
 
@@ -108,6 +114,8 @@ public class SettingController extends HttpServlet {
         request.setAttribute("data", data);
         request.getRequestDispatcher("setting.jsp").forward(request, response);
     }
+    
+    
 
     /** 
      * Returns a short description of the servlet.

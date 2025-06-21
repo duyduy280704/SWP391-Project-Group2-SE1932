@@ -19,6 +19,31 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <style>
+            .dashboard-table {
+                width: 100%;
+                table-layout: fixed; 
+                border-collapse: collapse;
+            }
+
+            
+
+            .card-body {
+                padding: 20px;
+                height: 100%;
+            }
+
+            #courseCountChart {
+                width: 100% !important;
+                height: auto !important; 
+                max-height: 400px; 
+            }
+
+            @media (max-width: 768px) {
+                .dashboard-table td {
+                    width: 100%; 
+                    display: block; 
+                }
+            }
             #courseCountChart, #roleCountChart, #revenueChart {
                 border: 1px solid red;
                 min-height: 300px;
@@ -54,17 +79,16 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <a class="nav-link" href="adminhome">
+                            <a class="nav-link" href="staffhome">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Trang Chủ
                             </a>
 
 
 
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link" href="coursestaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý khóa học
-
                             </a>
 
 
@@ -144,9 +168,10 @@
                             </div>
                         </div>
 
-                        <table>
+                        <table class="dashboard-table">
                             <tr>
-                                <td><!-- CARD HIỂN THỊ BIỂU ĐỒ KHÓA HỌC -->
+                                <td>
+                                    <!-- CARD HIỂN THỊ BIỂU ĐỒ KHÓA HỌC -->
                                     <div class="card mb-4">
                                         <div class="card-header">
                                             <i class="fas fa-chart-bar me-1"></i>
@@ -157,18 +182,36 @@
                                                 id="courseCountChart"
                                                 data-labels="<c:forEach var='item' items='${chartData}' varStatus='status'>${status.index >= 0 ? ',' : ''}${item.typeName}</c:forEach>"
                                                 data-values="<c:forEach var='item' items='${chartData}' varStatus='status'>${status.index >= 0 ? ',' : ''}${item.count}</c:forEach>"
-                                                width="100%" height="40">
-                                            </canvas>
+                                                    width="100%" height="40">
+                                                </canvas>
+                                            </div>
                                         </div>
-                                    </div></td>
-                                <td>Bình Luận đánh giá mới nhất</td>
+                                    </td>
+                                    <td>
+                                        <h4>Bình Luận đánh giá mới nhất</h4>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Khóa học</th>
+                                                    <th>Học sinh</th>
+                                                    <th>Nội dung</th>
+                                                    <th>Ngày</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach items="${data}" var="item">
+                                                <tr>
+                                                    <td>${item.course}</td>
+                                                    <td>${item.student}</td>
+                                                    <td>${item.text}</td>
+                                                    <td>${item.date}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </td>
                             </tr>
                         </table>
-
-
-
-
-
 
                     </div>
                 </main>
@@ -180,45 +223,42 @@
                 <script src="assets/demo/chart-area-demo.js"></script>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                    // Biểu đồ khóa học
-                    const courseCanvas = document.getElementById("courseCountChart");
-                            if (courseCanvas) {
-                    let labels = (courseCanvas.getAttribute("data-labels") || '').split(',').map(l => l.trim());
-                            let values = (courseCanvas.getAttribute("data-values") || '').split(',').map(v => Math.round(Number(v.trim()) || 0));
-                            if (labels.length > 0 && values.length > 0) {
-                    new Chart(courseCanvas, {
-                    type: 'bar',
-                            data: {
-                            labels: labels,
+                        const courseCanvas = document.getElementById("courseCountChart");
+                        if (!courseCanvas) {
+                            console.error('Canvas element with id "courseCountChart" not found.');
+                            return;
+                        }
+                        let labels = (courseCanvas.getAttribute("data-labels") || '').split(',').map(l => l.trim());
+                        let values = (courseCanvas.getAttribute("data-values") || '').split(',').map(v => Math.round(Number(v.trim()) || 0));
+                        if (labels.length > 0 && values.length > 0 && labels.length === values.length) {
+                            new Chart(courseCanvas, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
                                     datasets: [{
-                                    label: 'Số khóa học',
+                                            label: 'Số khóa học',
                                             backgroundColor: 'rgba(75, 192, 192, 0.6)',
                                             borderColor: 'rgba(75, 192, 192, 1)',
                                             borderWidth: 1,
                                             data: values
-                                    }]
-                            },
-                            options: {
-                            scales: {
-                            y: {beginAtZero: true, min: 0, ticks: {stepSize: 1, callback: v => Number.isInteger(v) ? v : null}},
-                                    x: {title: {display: true, text: 'Loại khóa học'}}
-                            },
+                                        }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {beginAtZero: true, min: 0, ticks: {stepSize: 1, callback: v => Number.isInteger(v) ? v : null}},
+                                        x: {title: {display: true, text: 'Loại khóa học'}}
+                                    },
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     layout: {
-                                    padding: {
-                                    left: 10,
-                                            right: 10,
-                                            top: 10,
-                                            bottom: 10
+                                        padding: {left: 10, right: 10, top: 10, bottom: 10}
                                     }
-                                    }
-                            }
+                                }
+                            });
+                        } else {
+                            console.error('Invalid chart data:', {labels, values});
+                        }
                     });
-                    }
-                    }
-
-
                 </script>
             </div>
         </div>

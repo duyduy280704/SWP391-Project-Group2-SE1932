@@ -49,7 +49,7 @@ public class SettingDAO extends DBContext {
     public ResultMessage update(Setting s) {
 
         if (s == null) {
-            return new ResultMessage(false, "Dữ liệu học sinh không hợp lệ.");
+            return new ResultMessage(false, "Dữ liệu không hợp lệ.");
         }
 
         if (s.address == null || s.address.trim().isEmpty()) {
@@ -62,10 +62,8 @@ public class SettingDAO extends DBContext {
             return new ResultMessage(false, "Số điện thoại không được để trống.");
         }
 
-        
-        String phonePattern = "^\\+?\\d+$";
-        if (!s.phone.trim().matches(phonePattern)) {
-            return new ResultMessage(false, "Số điện thoại chỉ được chứa các chữ số hoặc bắt đầu bằng dấu + theo sau là các chữ số.");
+        if (!s.phone.matches("^\\+?[0-9]{10,11}$")) {
+            return new ResultMessage(false, "Định dạng số điện thoại không hợp lệ: " + s.phone);
         }
 
         int Id = 1;
@@ -94,5 +92,251 @@ public class SettingDAO extends DBContext {
             System.err.println("Lỗi SQL trong update: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
+    }
+
+    public ArrayList<SetAbout> getSetAbout() {
+
+        ArrayList<SetAbout> data = new ArrayList<>();
+        try {
+            String strSQL = "  select * from about ";
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String title = rs.getString(2);
+                String content = rs.getString(3);
+                byte[] image = rs.getBytes(4);
+
+                SetAbout p = new SetAbout(id, title, content, image);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudents" + e.getMessage());
+
+        }
+        return data;
+    }
+
+    public SetAbout getSetAboutById(String id) {
+        try {
+            String strSQL = "select * from about where id=?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                String title = rs.getString(2);
+                String content = rs.getString(3);
+                byte[] image = rs.getBytes(4);
+
+                SetAbout p = new SetAbout(id, title, content, image);
+                return p;
+            }
+        } catch (Exception e) {
+            System.out.println("getCoursesById" + e.getMessage());
+
+        }
+        return null;
+    }
+    
+    public ResultMessage addAbout(SetAbout about) throws SQLException {
+        if (about == null || about.getTitle() == null || about.getTitle().trim().isEmpty()) {
+            return new ResultMessage(false, "Tiêu đề không được để trống.");
+        }
+
+        try (PreparedStatement stm = connection.prepareStatement(
+                "INSERT INTO about (title, content, image) VALUES (?, ?, ?)")) {
+            stm.setString(1, about.getTitle());
+            stm.setString(2, about.getContent());
+            stm.setBytes(3, about.getImage());
+
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected > 0) {
+                return new ResultMessage(true, "Thêm thông tin về trung tâm thành công!");
+            } else {
+                return new ResultMessage(false, "Không thể thêm thông tin về trung tâm.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong addAbout: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+    }
+
+    public ResultMessage updateAbout(SetAbout about) throws SQLException {
+        if (about == null || about.getTitle() == null || about.getTitle().trim().isEmpty()) {
+            return new ResultMessage(false, "Tiêu đề không được để trống.");
+        }
+
+        try (PreparedStatement stm = connection.prepareStatement(
+                "UPDATE about SET title = ?, content = ?, image = ? WHERE id = ?")) {
+            stm.setString(1, about.getTitle());
+            stm.setString(2, about.getContent());
+            stm.setBytes(3, about.getImage());
+            stm.setString(4, about.getId());
+
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected > 0) {
+                return new ResultMessage(true, "Thêm thông tin về trung tâm thành công!");
+            } else {
+                return new ResultMessage(false, "Không thể thêm thông tin về trung tâm.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong addAbout: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+    }
+    
+    public ResultMessage deleteAbout(String id) {
+        try (PreparedStatement stm = connection.prepareStatement("DELETE FROM about WHERE id = ?")) {
+            stm.setInt(1, Integer.parseInt(id));
+            int rowsAffected = stm.executeUpdate();
+            return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Xóa  thành công!" : "Không tìm thấy khóa học với ID: " + id);
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong delete: " + e.getMessage());
+            return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "ID không hợp lệ: " + id);
+        }
+    }
+
+    public byte[] getAboutImageById(String aboutId) throws SQLException {
+        if (aboutId == null || aboutId.isEmpty()) {
+            return null;
+        }
+        try (PreparedStatement stm = connection.prepareStatement("SELECT image FROM about WHERE id = ?")) {
+            stm.setInt(1, Integer.parseInt(aboutId));
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("image");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong getAboutIdImageById: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid aboutId : " + aboutId);
+            throw e;
+        }
+        return null;
+    }
+
+    public ArrayList<SetBanner> getSetBanner() {
+
+        ArrayList<SetBanner> data = new ArrayList<>();
+        try {
+            String strSQL = "  select * from carousel ";
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String title = rs.getString(2);
+                byte[] image = rs.getBytes(3);
+
+                SetBanner p = new SetBanner(id, title, image);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudents" + e.getMessage());
+
+        }
+        return data;
+    }
+    
+    public SetBanner getSetBannerById(String id) {
+        try {
+            String strSQL = "select * from carousel where id=?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                String title = rs.getString(2);
+                byte[] image = rs.getBytes(3);
+
+                SetBanner p = new SetBanner(id, title, image);
+                return p;
+            }
+        } catch (Exception e) {
+            System.out.println("getCoursesById" + e.getMessage());
+
+        }
+        return null;
+    }
+    
+    public ResultMessage addBanner(SetBanner banner) throws SQLException {
+        if (banner == null || banner.getTitle() == null || banner.getTitle().trim().isEmpty()) {
+            return new ResultMessage(false, "Tiêu đề không được để trống.");
+        }
+
+        try (PreparedStatement stm = connection.prepareStatement(
+                "INSERT INTO carousel (title, image) VALUES (?, ?)")) {
+            stm.setString(1, banner.getTitle());
+            stm.setBytes(2, banner.getImage());
+
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected > 0) {
+                return new ResultMessage(true, "Thêm thông tin về trung tâm thành công!");
+            } else {
+                return new ResultMessage(false, "Không thể thêm thông tin về trung tâm.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong addAbout: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+    }
+
+    public ResultMessage updateBanner(SetBanner banner) throws SQLException {
+        if (banner == null || banner.getTitle() == null || banner.getTitle().trim().isEmpty()) {
+            return new ResultMessage(false, "Tiêu đề không được để trống.");
+        }
+
+        try (PreparedStatement stm = connection.prepareStatement(
+                "UPDATE carousel SET title = ?, image = ? WHERE id = ?")) {
+            stm.setString(1, banner.getTitle());
+            stm.setBytes(2, banner.getImage());
+            stm.setString(3, banner.getId());
+
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected > 0) {
+                return new ResultMessage(true, "Thêm thông tin về trung tâm thành công!");
+            } else {
+                return new ResultMessage(false, "Không thể thêm thông tin về trung tâm.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong addAbout: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        }
+    }
+    
+    public ResultMessage deleteBanner(String id) {
+        try (PreparedStatement stm = connection.prepareStatement("DELETE FROM carousel WHERE id = ?")) {
+            stm.setInt(1, Integer.parseInt(id));
+            int rowsAffected = stm.executeUpdate();
+            return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Xóa  thành công!" : "Không tìm thấy khóa học với ID: " + id);
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong delete: " + e.getMessage());
+            return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "ID không hợp lệ: " + id);
+        }
+    }
+
+    public byte[] getBannerImageById(String bannerId) throws SQLException {
+        if (bannerId == null || bannerId.isEmpty()) {
+            return null;
+        }
+        try (PreparedStatement stm = connection.prepareStatement("SELECT image FROM carousel WHERE id = ?")) {
+            stm.setInt(1, Integer.parseInt(bannerId));
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("image");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi SQL trong getBannerImageById: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw e;
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid bannerId : " + bannerId);
+            throw e;
+        }
+        return null;
     }
 }
