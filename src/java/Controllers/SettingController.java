@@ -22,6 +22,7 @@ import models.SettingDAO;
 /**
  *
  * @author Quang
+ * Quản lý setting thông tin liên hệ - header, footer (crud)
  */
 public class SettingController extends HttpServlet {
    

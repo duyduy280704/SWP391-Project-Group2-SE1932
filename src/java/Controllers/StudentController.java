@@ -112,6 +112,7 @@ public class StudentController extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String role = "1"; // Mặc định role là học sinh
+        String nameSearch = request.getParameter("nameSearch");
 
         // Handle file upload
         byte[] imageBytes = null;
@@ -144,35 +145,18 @@ public class StudentController extends HttpServlet {
             }
         }
 
-        // Kiểm tra dữ liệu đầu vào
-        if (name == null || name.trim().isEmpty()) {
-            request.setAttribute("message", "Tên học sinh không được để trống!");
-            request.setAttribute("success", false);
-            ArrayList<Students> data = new StudentDAO().getStudents();
-            request.setAttribute("data", data);
-            request.getRequestDispatcher("listStudent.jsp").forward(request, response);
-            return;
-        }
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("message", "Email không được để trống!");
-            request.setAttribute("success", false);
-            ArrayList<Students> data = new StudentDAO().getStudents();
-            request.setAttribute("data", data);
-            request.getRequestDispatcher("listStudent.jsp").forward(request, response);
-            return;
-        }
-        if (address == null || address.trim().isEmpty()) {
-            request.setAttribute("message", "Địa chỉ không được để trống!");
-            request.setAttribute("success", false);
-            ArrayList<Students> data = new StudentDAO().getStudents();
-            request.setAttribute("data", data);
-            request.getRequestDispatcher("listStudent.jsp").forward(request, response);
-            return;
-        }
-
         ResultMessage result = null;
         StudentDAO studentDAO = new StudentDAO();
         Students student = new Students(id, name, email, password, birthdate, gender, imageBytes, address, role, phone);
+
+        ArrayList<Students> data;
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = studentDAO.getStudentByName(nameSearch); // Use nameSearch instead of name
+            request.setAttribute("nameSearch", nameSearch); // Pass the search term back to JSP for display
+        } else {
+            data = studentDAO.getStudents(); // Load all students if no search or empty search
+        }
+        request.setAttribute("data", data);
 
         try {
             if (request.getParameter("update") != null) {
@@ -180,7 +164,7 @@ public class StudentController extends HttpServlet {
             } else if (request.getParameter("add") != null) {
                 result = studentDAO.add(student);
             } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
+                result = new ResultMessage(true, "Đã tìm học sinh");
             }
         } catch (SQLException e) {
             result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
@@ -188,8 +172,6 @@ public class StudentController extends HttpServlet {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
 
-        ArrayList<Students> data = studentDAO.getStudents();
-        request.setAttribute("data", data);
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
         request.setAttribute("s", student);

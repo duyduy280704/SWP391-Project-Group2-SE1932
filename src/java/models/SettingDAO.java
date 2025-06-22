@@ -11,12 +11,13 @@ import java.util.ArrayList;
 /**
  *
  * @author Quang
+ * lấy dữ liệu cho màn hình setting
  */
 public class SettingDAO extends DBContext {
 
     PreparedStatement stm;
     ResultSet rs;
-
+// lấy thông tin liên hệ của trung tâm (headder, footer)
     public Setting getSetting() {
 
         Setting p = null;
@@ -45,7 +46,7 @@ public class SettingDAO extends DBContext {
         }
         return p;
     }
-
+// sửa thông tin liên hệ của trung tâm (headder, footer)
     public ResultMessage update(Setting s) {
 
         if (s == null) {
@@ -93,7 +94,7 @@ public class SettingDAO extends DBContext {
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
-
+// lấy thông tin trung tâm (about)
     public ArrayList<SetAbout> getSetAbout() {
 
         ArrayList<SetAbout> data = new ArrayList<>();
@@ -116,7 +117,7 @@ public class SettingDAO extends DBContext {
         }
         return data;
     }
-
+// lấy thông tin trung tâm bằng id (about)
     public SetAbout getSetAboutById(String id) {
         try {
             String strSQL = "select * from about where id=?";
@@ -138,7 +139,7 @@ public class SettingDAO extends DBContext {
         }
         return null;
     }
-    
+    // add thêm thông tin trung tâm (about)
     public ResultMessage addAbout(SetAbout about) throws SQLException {
         if (about == null || about.getTitle() == null || about.getTitle().trim().isEmpty()) {
             return new ResultMessage(false, "Tiêu đề không được để trống.");
@@ -161,7 +162,7 @@ public class SettingDAO extends DBContext {
             throw e;
         }
     }
-
+// sửa thông tin trung tâm (about)
     public ResultMessage updateAbout(SetAbout about) throws SQLException {
         if (about == null || about.getTitle() == null || about.getTitle().trim().isEmpty()) {
             return new ResultMessage(false, "Tiêu đề không được để trống.");
@@ -185,7 +186,7 @@ public class SettingDAO extends DBContext {
             throw e;
         }
     }
-    
+    // xóa thông tin trung tâm (about)
     public ResultMessage deleteAbout(String id) {
         try (PreparedStatement stm = connection.prepareStatement("DELETE FROM about WHERE id = ?")) {
             stm.setInt(1, Integer.parseInt(id));
@@ -198,7 +199,7 @@ public class SettingDAO extends DBContext {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
     }
-
+// lấy ảnh thông tin trung tâm  theo id (about)
     public byte[] getAboutImageById(String aboutId) throws SQLException {
         if (aboutId == null || aboutId.isEmpty()) {
             return null;
@@ -218,7 +219,7 @@ public class SettingDAO extends DBContext {
         }
         return null;
     }
-
+// lấy thông tin hiển thị - banner
     public ArrayList<SetBanner> getSetBanner() {
 
         ArrayList<SetBanner> data = new ArrayList<>();
@@ -240,7 +241,7 @@ public class SettingDAO extends DBContext {
         }
         return data;
     }
-    
+    // lấy thông tin hiển thị theo id - banner
     public SetBanner getSetBannerById(String id) {
         try {
             String strSQL = "select * from carousel where id=?";
@@ -261,7 +262,7 @@ public class SettingDAO extends DBContext {
         }
         return null;
     }
-    
+    // add thêm thông tin hiển thị - banner
     public ResultMessage addBanner(SetBanner banner) throws SQLException {
         if (banner == null || banner.getTitle() == null || banner.getTitle().trim().isEmpty()) {
             return new ResultMessage(false, "Tiêu đề không được để trống.");
@@ -283,7 +284,7 @@ public class SettingDAO extends DBContext {
             throw e;
         }
     }
-
+// sửa thông tin hiển thị - banner
     public ResultMessage updateBanner(SetBanner banner) throws SQLException {
         if (banner == null || banner.getTitle() == null || banner.getTitle().trim().isEmpty()) {
             return new ResultMessage(false, "Tiêu đề không được để trống.");
@@ -306,7 +307,7 @@ public class SettingDAO extends DBContext {
             throw e;
         }
     }
-    
+    // xóa thông tin hiển thị - banner
     public ResultMessage deleteBanner(String id) {
         try (PreparedStatement stm = connection.prepareStatement("DELETE FROM carousel WHERE id = ?")) {
             stm.setInt(1, Integer.parseInt(id));
@@ -319,7 +320,7 @@ public class SettingDAO extends DBContext {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
     }
-
+// lấy thông tin hiển thị (ảnh theo id) - banner
     public byte[] getBannerImageById(String bannerId) throws SQLException {
         if (bannerId == null || bannerId.isEmpty()) {
             return null;

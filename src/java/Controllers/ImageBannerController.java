@@ -17,6 +17,7 @@ import models.SettingDAO;
 /**
  *
  * @author Quang
+ * Quản lý setting thông tin hiển thị (ảnh)
  */
 public class ImageBannerController extends HttpServlet {
    

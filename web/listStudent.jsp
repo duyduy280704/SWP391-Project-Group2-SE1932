@@ -114,11 +114,11 @@
                                 Thông báo
 
                             </a>
-                            
+
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Cài đặt thông tin
-                                
+
                             </a>
                         </div>
                     </div>
@@ -132,6 +132,21 @@
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Quản Lý</li>
                         </ol>
+
+                        <form action="student" method="post" enctype="multipart/form-data" >
+                            <div>
+                                <input type="text" name="nameSearch" placeholder="Tìm kiếm học sinh...">
+
+                                <button type="submit" name="search">Tìm kiếm</button> 
+                            </div>
+
+                        </form>
+
+
+
+
+
+
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="student" method="post" enctype="multipart/form-data">
@@ -156,12 +171,12 @@
                                                     <option value="Nữ" ${s.getGender().equals("Nữ") ? "selected" : ""}>Nữ</option>
                                                 </select>
                                             </td>
-                                            
+
                                             <td>Ảnh: </td>
                                             <td>
                                                 <input type="file" name="pic" value="${s.getPic()}">
 
-                                                
+
                                             </td>
                                             <td>Địa chỉ: </td>
                                             <td><input type="text" name="address" value="${s.getAddress()}"></td>
@@ -228,7 +243,7 @@
                                                 </td>
                                                 <td>${item.getAddress()}</td>
                                                 <td>${item.getPhone()}</td>
-                                                
+
                                                 <td>
                                                     <a href="student?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="student?id=${item.id}&mode=2" class="btn btn-delete"

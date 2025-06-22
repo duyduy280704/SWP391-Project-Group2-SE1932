@@ -18,6 +18,7 @@ import models.SettingDAO;
 /**
  *
  * @author Quang
+ * Quản lý setting thông tin trung tâm (ảnh)
  */
 public class ImageAboutController extends HttpServlet {
    

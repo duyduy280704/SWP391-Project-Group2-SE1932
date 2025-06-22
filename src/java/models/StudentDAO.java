@@ -349,4 +349,33 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
+   // tìm kiếm học sinh theo tên 
+    public ArrayList<Students> getStudentByName(String name1) {
+        ArrayList<Students> data = new ArrayList<>();
+        try {
+            String strSQL = "  SELECT * FROM Student WHERE full_name LIKE ? ";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, "%" + name1 + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(3);
+                String password = rs.getString(2);
+                String email = rs.getString(4);
+                String brithdate = rs.getString(5);
+                String gender = rs.getString(6);
+                byte[] pic = rs.getBytes(7);
+                String address = rs.getString(8);
+                String role = rs.getString(9);
+                String phone = rs.getString(10);
+
+                Students p = new Students(id, name, email, password, brithdate, gender, pic, address, role, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getProducts" + e.getMessage());
+
+        }
+        return data;
+    }
 }

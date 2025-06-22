@@ -25,6 +25,7 @@ import models.SettingDAO;
 /**
  *
  * @author Quang
+ * Quản lý setting thông tin hiển thị - banner (crud)
  */
 @MultipartConfig
 

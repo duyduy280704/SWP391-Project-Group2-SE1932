@@ -28,6 +28,7 @@ import models.SettingDAO;
 /**
  *
  * @author Quang
+ * Quản lý setting thông tin trung tâm - about (crud)
  */
 @MultipartConfig
 public class SetAboutController extends HttpServlet {

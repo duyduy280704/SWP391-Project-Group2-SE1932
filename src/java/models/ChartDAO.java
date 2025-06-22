@@ -114,7 +114,7 @@ public class ChartDAO extends DBContext {
     public List<Revenue> getMonthlyRevenue() {
         List<Revenue> revenueList = new ArrayList<>();
         String sql = """
-                     SELECT DATEPART(year, p.date) AS year, DATEPART(month, p.date) AS month, SUM(c.fee - c.sale) AS revenue 
+                     SELECT DATEPART(year, p.date) AS year, DATEPART(month, p.date) AS month, SUM(c.fee ) AS revenue 
                         FROM payment p 
                         JOIN Course c ON p.id_course = c.id 
                      	where p.status = N'Hoàn tất'
