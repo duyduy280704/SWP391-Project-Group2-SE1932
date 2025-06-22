@@ -1,3 +1,4 @@
+// Thuy_ thời khóa biểu của giáo viên 
 package models;
 
 import java.time.DayOfWeek;
@@ -15,7 +16,7 @@ public class ScheduleTeacher {
     private String room;
     private String specificDay;
     private String dayVN;
-
+    private boolean attendanceTaken;
     public ScheduleTeacher() {
         this.dayVN = "Không xác định";
     }
@@ -73,7 +74,7 @@ public class ScheduleTeacher {
         }
     }
 
-    // Getters & Setters
+    
     public String getId() {
         return id;
     }
@@ -146,4 +147,14 @@ public class ScheduleTeacher {
     public void setDayVN(String dayVN) {
         this.dayVN = dayVN;
     }
+
+    public boolean isAttendanceTaken() {
+        return attendanceTaken;
+    }
+
+    public void setAttendanceTaken(boolean attendanceTaken) {
+        this.attendanceTaken = attendanceTaken;
+    }
+    
+    
 }

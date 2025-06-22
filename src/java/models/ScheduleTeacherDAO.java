@@ -1,3 +1,4 @@
+// Thuy_ thời khóa biểu của giáo viên 
 package models;
 
 import dal.DBContext;
@@ -9,8 +10,8 @@ import java.util.List;
 
 public class ScheduleTeacherDAO extends DBContext {
 
-    // Lấy lịch học của giáo viên theo khoảng ngày
-    public List<ScheduleTeacher> getScheduleTeacher(int teacherId, String startDate) {
+    // Lấy thời khóa biểu  của giáo viên
+  public List<ScheduleTeacher> getScheduleTeacher(int teacherId, String startDate) {
     List<ScheduleTeacher> schedules = new ArrayList<>();
     try {
         LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -37,6 +38,18 @@ public class ScheduleTeacherDAO extends DBContext {
                 rs.getString("end_time"),
                 rs.getString("room")
             );
+
+            // Kiểm tra đã điểm danh chưa( hiện màu ) 
+            String sqlCheck = "SELECT COUNT(*) FROM attendance WHERE id_class = ? AND date = ?";
+            try (PreparedStatement checkStm = connection.prepareStatement(sqlCheck)) {
+                checkStm.setString(1, st.getClassId());
+                checkStm.setString(2, st.getDay());
+                ResultSet checkRs = checkStm.executeQuery();
+                if (checkRs.next()) {
+                    st.setAttendanceTaken(checkRs.getInt(1) > 0);
+                }
+            }
+
             schedules.add(st);
         }
     } catch (Exception e) {
@@ -47,38 +60,37 @@ public class ScheduleTeacherDAO extends DBContext {
 
 
 
+
     // Lấy danh sách học sinh theo scheduleId
     public List<Students> getStudentsByScheduleId(String scheduleId) {
-        List<Students> students = new ArrayList<>();
-        String sql = "SELECT s.id, s.full_name, s.email, s.birth_date, s.gender " +
-                     "FROM student s " +
-                     "JOIN class_student cs ON s.id = cs.student_id " +
-                     "JOIN class c ON cs.class_id = c.id " +
-                     "JOIN schedule sc ON sc.id_class = c.id " +
-                     "WHERE sc.id = ?";
+    List<Students> students = new ArrayList<>();
+    String sql = "SELECT s.id, s.full_name, s.email, s.birth_date, s.gender " +
+                 "FROM student s " +
+                 "JOIN class_student cs ON s.id = cs.student_id " +
+                 "WHERE cs.class_id = (SELECT id_class FROM schedule WHERE id = ?)";
 
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, scheduleId);
-            ResultSet rs = stm.executeQuery();
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, scheduleId);
+        ResultSet rs = stm.executeQuery();
 
-            while (rs.next()) {
-                Students student = new Students(
-                        rs.getString("id"),
-                        rs.getString("full_name"),
-                        rs.getString("email"),
-                        "", // password
-                        rs.getString("birth_date"),
-                        rs.getString("gender"),
-                        "", // address
-                        "student"
-                );
-                students.add(student);
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi getStudentsByScheduleId: " + e.getMessage());
+        while (rs.next()) {
+            Students student = new Students(
+                    rs.getString("id"),
+                    rs.getString("full_name"),
+                    rs.getString("email"),
+                    "", // password
+                    rs.getString("birth_date"),
+                    rs.getString("gender"),
+                    "", // address
+                    "student"
+            );
+            students.add(student);
         }
-        return students;
+    } catch (SQLException e) {
+        System.err.println("Lỗi getStudentsByScheduleId: " + e.getMessage());
     }
+    return students;
+}
 
     // Lưu điểm danh
     public void saveAttendance(String scheduleId, List<StudentAttendance> list, String date) {

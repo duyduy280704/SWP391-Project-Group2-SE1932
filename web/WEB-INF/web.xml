@@ -52,6 +52,14 @@
         <servlet-name>ScheduleByClassController</servlet-name>
         <servlet-class>Controllers.ScheduleByClassController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackController</servlet-name>
+        <servlet-class>Controllers.FeedbackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassStudentController</servlet-name>
+        <servlet-class>Controllers.ClassStudentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -103,5 +111,13 @@
     <servlet-mapping>
         <servlet-name>ScheduleByClassController</servlet-name>
         <url-pattern>/scheduleByClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackController</servlet-name>
+        <url-pattern>/feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassStudentController</servlet-name>
+        <url-pattern>/classStudent</url-pattern>
     </servlet-mapping>
 </web-app>

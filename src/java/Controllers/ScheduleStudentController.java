@@ -12,7 +12,7 @@ import models.ScheduleStudent;
 import models.ScheduleStudentDAO;
 import models.Students;
 import models.ScheduleWeek;
-
+// Thuy_ in thời khóa biểu học sinh, tuần , năm 
 public class ScheduleStudentController extends HttpServlet {
 
     @Override
@@ -33,14 +33,14 @@ public class ScheduleStudentController extends HttpServlet {
             return;
         }
 
-        // Get selected year and week
+        
         String selectedYear = request.getParameter("year");
         String selectedWeek = request.getParameter("week");
         int year;
         LocalDate baseDate;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // Handle year
+        
         if (selectedYear != null && !selectedYear.isEmpty()) {
             try {
                 year = Integer.parseInt(selectedYear);
@@ -51,7 +51,7 @@ public class ScheduleStudentController extends HttpServlet {
             year = LocalDate.now().getYear();
         }
 
-        // Handle week
+       
         if (selectedWeek != null && !selectedWeek.isEmpty()) {
             try {
                 baseDate = LocalDate.parse(selectedWeek, formatter);
@@ -62,18 +62,18 @@ public class ScheduleStudentController extends HttpServlet {
             baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         }
 
-        // Fetch schedule
+        
         ScheduleStudentDAO dao = new ScheduleStudentDAO();
         List<ScheduleStudent> scheduleStudent = dao.getScheduleStudent(id, baseDate.format(formatter));
 
-        // Create list of years (±2 years from current year)
+        // tạo hai năm trước sau
         List<Integer> years = new ArrayList<>();
         int currentYear = LocalDate.now().getYear();
         for (int i = currentYear - 2; i <= currentYear + 2; i++) {
             years.add(i);
         }
 
-        // Create list of 52 weeks for the selected year
+        // tạo tuần 
         List<ScheduleWeek> weeks = new ArrayList<>();
         DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -93,7 +93,6 @@ public class ScheduleStudentController extends HttpServlet {
             }
         }
 
-        // List of weekdays in Vietnamese
         List<String> weekDays = Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật");
 
         // Set request attributes

@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  *
- * @author Admin
+ * @author Thuy
  */
 
 public class Schedules {

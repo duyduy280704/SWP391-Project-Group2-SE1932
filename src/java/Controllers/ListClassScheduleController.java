@@ -17,7 +17,7 @@ import models.CategoriesTeacher;
 import models.Categories_class;
 import models.ScheduleDAO;
 import models.Schedules;
-
+// Mai Thuy _ Danh sách lớp có thời khóa biểu, có thể sửa xóa, tạo
 public class ListClassScheduleController extends HttpServlet {
 
     ScheduleDAO dao = new ScheduleDAO();
@@ -53,7 +53,7 @@ public class ListClassScheduleController extends HttpServlet {
         if ("search".equals(action)) {
             String keyword = request.getParameter("search");
             List<Categories_class> classList = (keyword != null && !keyword.trim().isEmpty())
-                    ? dao.searchClassesWithSchedule(keyword)
+                    ? dao.searchClass(keyword)
                     : dao.getClassesHaveSchedule();
 
             request.setAttribute("classList", classList);
@@ -104,7 +104,7 @@ public class ListClassScheduleController extends HttpServlet {
                 request.setAttribute("s", s);
                 request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
                 return;
-            } else if (dao.isScheduleExist(s, true)) { // Kiểm tra lịch trùng khi sửa
+            } else if (dao.isScheduleExist(s, true)) { // chưa kiểm tra nếu trùng một ít giờ thì sao 
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
                 request.setAttribute("s", s);
                 ArrayList<Categories_class> data1 = dao.getCategories_class();
@@ -155,8 +155,8 @@ public class ListClassScheduleController extends HttpServlet {
         request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
         return;
 
-    } else {
-        // Ckeck ngày quá khứ k dc tạo
+    }
+    else {  
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate inputDate = LocalDate.parse(day, formatter);

@@ -1,3 +1,4 @@
+// Thuy_ thời khóa biểu của hocj sinh 
 package models;
 
 import java.time.DayOfWeek;
@@ -5,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduleStudent {
+
     private String id;
     private String day;
     private String nameClass;
@@ -13,9 +15,10 @@ public class ScheduleStudent {
     private String room;
     private String specificDay;
     private String dayVN;
+    private String attendanceStatus;
 
     public ScheduleStudent() {
-        this.dayVN = "Không xác định"; // Giá trị mặc định
+        this.dayVN = "Không xác định"; 
     }
 
     public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room) {
@@ -25,7 +28,7 @@ public class ScheduleStudent {
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        this.dayVN = "Không xác định"; // Giá trị mặc định
+        this.dayVN = "Không xác định"; 
         computeDayOfWeek();
     }
 
@@ -135,5 +138,13 @@ public class ScheduleStudent {
 
     public void setDayVN(String dayVN) {
         this.dayVN = dayVN;
+    }
+
+    public String getAttendanceStatus() {
+        return attendanceStatus;
+    }
+
+    public void setAttendanceStatus(String attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
     }
 }
