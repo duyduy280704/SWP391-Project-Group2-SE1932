@@ -103,10 +103,25 @@ public class StaffController extends HttpServlet {
         String gender =request.getParameter("gender");
         String role =request.getParameter("role");
         String phone =request.getParameter("phone");
+        String nameSearch = request.getParameter("nameSearch");
+        String genderFilter = request.getParameter("genderFilter");
+        
         
         ResultMessage result = null;
         StaffDAO sd = new StaffDAO();
         Staff s = new Staff(id, name, email, password, birthdate, gender, role, phone);
+        
+        ArrayList<Staff> data;
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = sd.getStaffByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = sd.getStaffsByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = sd.getStaff();
+        }
+        request.setAttribute("data", data);
         
         try {
 
@@ -117,7 +132,7 @@ public class StaffController extends HttpServlet {
                 // Thêm học sinh
                 result = sd.add(s);
             } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
+                result = new ResultMessage(true, "Đã tìm nhân viên");
             }
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
@@ -125,10 +140,9 @@ public class StaffController extends HttpServlet {
             Logger.getLogger(StaffController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        ArrayList<Staff> data = sd.getStaff();
+        
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("data", data);
         request.setAttribute("s", s);
         request.getRequestDispatcher("listStaff.jsp").forward(request, response);
     }

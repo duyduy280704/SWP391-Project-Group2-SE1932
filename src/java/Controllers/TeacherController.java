@@ -118,6 +118,8 @@ public class TeacherController extends HttpServlet {
         String years = request.getParameter("years");
         String phone = request.getParameter("phone");
         String role = "2"; // Mặc định role là giáo viên
+        String nameSearch = request.getParameter("nameSearch");
+        String genderFilter = request.getParameter("genderFilter");
 
         // Handle file upload
         byte[] imageBytes = null;
@@ -154,31 +156,25 @@ public class TeacherController extends HttpServlet {
             }
         }
 
-        // Kiểm tra dữ liệu đầu vào
-        if (name == null || name.trim().isEmpty()) {
-            request.setAttribute("message", "Tên giáo viên không được để trống!");
-            request.setAttribute("success", false);
-            ArrayList<Teachers> data = new TeacherDAO().getTeachers();
-            ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
-            request.setAttribute("data", data);
-            request.setAttribute("data1", data1);
-            request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
-            return;
-        }
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("message", "Email không được để trống!");
-            request.setAttribute("success", false);
-            ArrayList<Teachers> data = new TeacherDAO().getTeachers();
-            ArrayList<TypeCourse> data1 = new TeacherDAO().getCourseType();
-            request.setAttribute("data", data);
-            request.setAttribute("data1", data1);
-            request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
-            return;
-        }
+        
 
         ResultMessage result = null;
         TeacherDAO teacherDAO = new TeacherDAO();
         Teachers teacher = new Teachers(id, name, email, password, birthdate, gender, exp, imageBytes, role, course, years, phone);
+        
+        ArrayList<Teachers> data;
+        ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = teacherDAO.getTeacherByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = teacherDAO.getTeachersByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = teacherDAO.getTeachers();
+        }
+        request.setAttribute("data", data);
+        request.setAttribute("data1", data1);
 
         try {
             if (request.getParameter("update") != null) {
@@ -186,7 +182,7 @@ public class TeacherController extends HttpServlet {
             } else if (request.getParameter("add") != null) {
                 result = teacherDAO.add(teacher);
             } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
+                result = new ResultMessage(true, "Đã tìm giáo viên");
             }
         } catch (SQLException e) {
             Logger.getLogger(TeacherController.class.getName()).log(Level.SEVERE, null, e);
@@ -195,10 +191,9 @@ public class TeacherController extends HttpServlet {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
 
-        ArrayList<Teachers> data = teacherDAO.getTeachers();
-        ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
-        request.setAttribute("data", data);
-        request.setAttribute("data1", data1);
+        
+        
+        
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
         request.setAttribute("s", teacher);

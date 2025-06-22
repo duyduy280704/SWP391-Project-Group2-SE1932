@@ -48,6 +48,98 @@
             .error {
                 color: red;
             }
+
+            .search-filter-form {
+                display: flex;
+                gap: 20px;
+                margin: 20px 0;
+                align-items: center;
+                flex-wrap: wrap;
+                background-color: #f8f9fa; /* Nền nhẹ để nổi bật */
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-filter-form div {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .search-filter-form input[type="text"] {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                width: 250px; /* Kích thước cố định để đồng nhất */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form input[type="text"]:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form select {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                background-color: #fff;
+                cursor: pointer;
+                width: 150px; /* Kích thước cố định */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form select:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form button,
+            .search-filter-form input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .search-filter-form button:hover,
+            .search-filter-form input[type="submit"]:hover {
+                background-color: #0056b3;
+                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+            }
+
+            @media (max-width: 768px) {
+                .search-filter-form {
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding: 10px;
+                }
+
+                .search-filter-form div {
+                    width: 100%;
+                }
+
+                .search-filter-form input[type="text"],
+                .search-filter-form select {
+                    width: 100%;
+                    font-size: 14px;
+                }
+
+                .search-filter-form button,
+                .search-filter-form input[type="submit"] {
+                    width: 100%;
+                    font-size: 14px;
+                }
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -133,18 +225,20 @@
                             <li class="breadcrumb-item active">Quản Lý</li>
                         </ol>
 
-                        <form action="student" method="post" enctype="multipart/form-data" >
+                        <form action="student" method="post" enctype="multipart/form-data" class="search-filter-form">
                             <div>
                                 <input type="text" name="nameSearch" placeholder="Tìm kiếm học sinh...">
-
                                 <button type="submit" name="search">Tìm kiếm</button> 
                             </div>
-
+                            <div>
+                                <select name="genderFilter">
+                                    <option value="">Cả nam và nữ</option>
+                                    <option value="Nam" ${genderFilter == 'Nam' ? 'selected' : ''}>Nam</option>
+                                    <option value="Nữ" ${genderFilter == 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                </select>
+                                <input type="submit" name="filterGender" value="Lọc theo giới tính"/>
+                            </div>
                         </form>
-
-
-
-
 
 
                         <div class="card mb-4">
@@ -157,7 +251,7 @@
                                             <td>Họ và tên: </td>
                                             <td><input type="text" name="name" value="${s.getName()}"></td>
                                             <td>Email: </td>
-                                            <td><input type="text" name="email" value="${s.getEmail()}"></td>
+                                            <td><input type="text" name="email" value="${s.getEmail()}" placeholder="@gmail.com"></td>
                                             <td>Mật khẩu: </td>
                                             <td><input type="text" name="password" value="${s.getPassword()}"></td>
                                             <td>Ngày sinh: </td>

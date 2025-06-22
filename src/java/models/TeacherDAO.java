@@ -404,4 +404,66 @@ public class TeacherDAO extends DBContext {
         }
         return null;
     }
+    
+    // tìm kiếm giáo viên theo tên 
+    public ArrayList<Teachers> getTeacherByName(String name1) {
+        ArrayList<Teachers> data = new ArrayList<>();
+        try {
+            String strSQL = "  SELECT * FROM Teacher WHERE full_name LIKE ? ";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, "%" + name1 + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(3);
+                String password = rs.getString(2);
+                String email = rs.getString(4);
+                String birthdate = rs.getString(5);
+                String gender = rs.getString(6);
+                String exp = rs.getString(7);
+                byte[] pic = rs.getBytes(8);
+                String role = rs.getString(9);
+                String course = rs.getString(10);
+                String years = String.valueOf(rs.getInt(11));
+                String phone = rs.getString(12);
+
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getProducts" + e.getMessage());
+
+        }
+        return data;
+    }
+    // tìm kiếm giáo viên theo giới tính
+    public ArrayList<Teachers> getTeachersByGender(String gender) {
+        ArrayList<Teachers> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT * FROM Teacher WHERE gender = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, gender);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(3);
+                String password = rs.getString(2);
+                String email = rs.getString(4);
+                String birthdate = rs.getString(5);
+                String teacherGender = rs.getString(6);
+                String exp = rs.getString(7);
+                byte[] pic = rs.getBytes(8);
+                String role = rs.getString(9);
+                String course = rs.getString(10);
+                String years = String.valueOf(rs.getInt(11));
+                String phone = rs.getString(12);
+
+                Teachers p = new Teachers(id, name, email, password, birthdate, teacherGender, exp, pic, role, course, years, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudentsByGender: " + e.getMessage());
+        }
+        return data;
+    }
 }

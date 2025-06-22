@@ -113,6 +113,7 @@ public class StudentController extends HttpServlet {
         String phone = request.getParameter("phone");
         String role = "1"; // Mặc định role là học sinh
         String nameSearch = request.getParameter("nameSearch");
+        String genderFilter = request.getParameter("genderFilter");
 
         // Handle file upload
         byte[] imageBytes = null;
@@ -151,10 +152,13 @@ public class StudentController extends HttpServlet {
 
         ArrayList<Students> data;
         if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
-            data = studentDAO.getStudentByName(nameSearch); // Use nameSearch instead of name
-            request.setAttribute("nameSearch", nameSearch); // Pass the search term back to JSP for display
+            data = studentDAO.getStudentByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = studentDAO.getStudentsByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
         } else {
-            data = studentDAO.getStudents(); // Load all students if no search or empty search
+            data = studentDAO.getStudents();
         }
         request.setAttribute("data", data);
 

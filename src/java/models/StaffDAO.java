@@ -330,4 +330,58 @@ public class StaffDAO extends DBContext {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
         }
     }
+    
+    // tìm kiếm nhân viên theo tên 
+    public ArrayList<Staff> getStaffByName(String name1) {
+        ArrayList<Staff> data = new ArrayList<>();
+        try {
+            String strSQL = "  SELECT * FROM Admin_staff WHERE full_name LIKE ? ";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, "%" + name1 + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(2);
+                String email = rs.getString(3);
+                String password = rs.getString(6);
+                String birthdate = rs.getString(4);
+                String gender = rs.getString(5);
+                String role = rs.getString(7);
+                String phone = rs.getString(8);
+
+                Staff p = new Staff(id, name, email, password, birthdate, gender, role, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getProducts" + e.getMessage());
+
+        }
+        return data;
+    }
+    // tìm kiếm nhân viên theo giới tính
+    public ArrayList<Staff> getStaffsByGender(String gender) {
+        ArrayList<Staff> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT * FROM Admin_staff WHERE gender = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, gender);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(2);
+                String email = rs.getString(3);
+                String password = rs.getString(6);
+                String birthdate = rs.getString(4);
+                String staffgender = rs.getString(5);
+                String role = rs.getString(7);
+                String phone = rs.getString(8);
+
+                Staff p = new Staff(id, name, email, password, birthdate, staffgender, role, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudentsByGender: " + e.getMessage());
+        }
+        return data;
+    }
 }

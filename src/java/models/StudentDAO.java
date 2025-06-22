@@ -378,4 +378,32 @@ public class StudentDAO extends DBContext {
         }
         return data;
     }
+    // tìm kiếm học sinh theo giới tính
+    public ArrayList<Students> getStudentsByGender(String gender) {
+        ArrayList<Students> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT * FROM Student WHERE gender = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, gender);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(3);
+                String password = rs.getString(2);
+                String email = rs.getString(4);
+                String birthdate = rs.getString(5);
+                String studentGender = rs.getString(6);
+                byte[] pic = rs.getBytes(7);
+                String address = rs.getString(8);
+                String role = rs.getString(9);
+                String phone = rs.getString(10);
+
+                Students p = new Students(id, name, email, password, birthdate, studentGender, pic, address, role, phone);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudentsByGender: " + e.getMessage());
+        }
+        return data;
+    }
 }
