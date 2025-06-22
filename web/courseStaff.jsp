@@ -178,7 +178,7 @@
                                                     <option value="Nâng cao" ${p.getLevel() == 'Nâng cao' ? 'selected' : ''}>Nâng cao</option>
                                                 </select>
                                             </td>
-                                            
+
                                             <td>Ảnh: </td>
                                             <td><input type="file" name="image" value="${p.getImage()}">
 
@@ -250,8 +250,7 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${not empty item.image}">
-                                                            <img src="image?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                                        </c:when>
+                                                            <img src="image?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='/ProjectSWP_personal/images/no-image.png'; this.alt='Image not available';">                                                        </c:when>
                                                         <c:otherwise>
                                                             <span>No Image</span>
                                                         </c:otherwise>

@@ -151,7 +151,7 @@ public class CourseDAO extends DBContext {
                 stm.setNull(5, Types.BLOB);
             }
             stm.setString(6, s.level);
-            stm.setInt(8, courseId);
+            stm.setInt(7, courseId);
             int rowsAffected = stm.executeUpdate();
             return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Cập nhật khóa học thành công!" : "Không tìm thấy khóa học với ID: " + s.id);
         } catch (SQLException e) {
