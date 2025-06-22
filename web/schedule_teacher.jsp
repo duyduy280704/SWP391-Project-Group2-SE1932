@@ -1,113 +1,148 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>Thời khóa biểu giáo viên</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
         <style>
             body {
+                margin: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: #f4f7fb;
-                padding: 30px 20px;
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
                 color: #333;
             }
-
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 220px;
+                background-color: #ffffff;
+                padding-top: 60px;
+                display: flex;
+                flex-direction: column;
+                z-index: 1000;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            }
+            .sidebar a {
+                color: #000;
+                padding: 15px 20px;
+                text-decoration: none;
+            }
+            .sidebar a:hover,
+            .sidebar a.active {
+                background-color: #FF6600;
+                color: white;
+            }
+            .topbar {
+                background-color: #f8f9fa;
+                padding: 10px 30px;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                z-index: 999;
+            }
+            .topbar .logo h3 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: bold;
+            }
+            .topbar .logo span {
+                color: #FF6600;
+            }
+            .topbar .contact-info {
+                display: flex;
+                gap: 20px;
+                font-size: 14px;
+                align-items: center;
+            }
+            .topbar .contact-info i {
+                margin-right: 5px;
+                color: #007bff;
+            }
             h2 {
                 text-align: center;
                 color: #2c3e50;
                 margin-bottom: 25px;
-                font-size: 36px;
-                font-weight: 700;
-                letter-spacing: 1px;
+                margin-top: 80px;
             }
-
-            .table-container {
-                width: 100%;
-                max-width: 1000px;
-                background: #ffffff;
-                border-radius: 12px;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-                padding: 20px 25px;
-            }
-
             .selector-container {
                 display: flex;
                 justify-content: center;
                 gap: 20px;
                 margin-bottom: 20px;
             }
-
             .selector-container select {
                 padding: 10px;
                 font-size: 16px;
                 border-radius: 8px;
                 border: 1px solid #ccc;
                 background-color: #fff;
-                cursor: pointer;
-                outline: none;
-                transition: border-color 0.3s ease;
             }
-
-            .selector-container select:focus {
-                border-color: #3498db;
-            }
-
             table {
                 width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-                border-radius: 12px;
-                overflow: hidden;
+                border-collapse: collapse;
+                background: #fff;
                 box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             }
-
             th, td {
-                padding: 14px 18px;
+                padding: 14px;
                 text-align: center;
-                font-size: 16px;
-                color: #444;
-                border-bottom: 1px solid #e1e5ea;
+                border: 1px solid #ddd;
             }
-
             th {
                 background-color: #3498db;
-                color: #fff;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
+                color: white;
             }
-
-            tbody tr:hover {
-                background-color: #f1f8ff;
-                cursor: default;
-                transition: background-color 0.3s ease;
-            }
-
-            tbody tr:last-child td {
-                border-bottom: none;
-            }
-
             .error-message {
                 color: #e74c3c;
                 text-align: center;
                 margin: 20px 0;
-                font-size: 18px;
-                font-weight: 600;
+            }
+            .main-content {
+                margin-left: 220px;
+                padding: 90px 30px 30px;
             }
         </style>
     </head>
     <body>
-        <div class="table-container">
+        <div class="topbar">
+            <div class="logo">
+                <h3><span>BIG</span>DREAM</h3>
+            </div>
+            <div class="contact-info">
+                <div><i class="fas fa-map-marker-alt"></i> <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật"/></div>
+                <div><i class="fas fa-envelope"></i> <c:out value="${setting.email}" default="Email chưa cập nhật"/></div>
+                <div><i class="fas fa-phone"></i> <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật"/></div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div style="text-align: center; padding-bottom: 10px;">
+                <h3><span style="color: #FF6600;">BIG</span>DREAM</h3>
+            </div>
+            <a href="HomePage" class="nav-link">Trang Chủ</a>
+            <a href="scheduleTeacher" class="nav-link active">Lịch dạy</a>
+            <a href="attendance" class="nav-link">Điểm danh</a>
+            <a href="profile?action=view" class="nav-link">Hồ sơ</a>
+        </div>
+
+        <div class="main-content">
             <h2>Thời khóa biểu giáo viên</h2>
+
             <div class="selector-container">
                 <form action="scheduleTeacher" method="get">
                     <label for="year">Chọn năm: </label>
@@ -119,14 +154,18 @@
                     <label for="week">Chọn tuần: </label>
                     <select name="week" id="week" onchange="this.form.submit()">
                         <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>Tuần ${week.weekNumber} (${week.displayStartDate} - ${week.displayEndDate})</option>
+                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>
+                                ${week.displayStartDate} - ${week.displayEndDate}
+                            </option>
                         </c:forEach>
                     </select>
                 </form>
             </div>
+
             <c:if test="${empty scheduleTeacher}">
                 <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
             </c:if>
+
             <c:if test="${not empty scheduleTeacher}">
                 <table>
                     <thead>
@@ -137,22 +176,30 @@
                             <th>Bắt đầu</th>
                             <th>Kết thúc</th>
                             <th>Phòng học</th>
+                            <th>Điểm danh</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="day" items="${weekDays}">
-                            <c:set var="hasSchedule" value="false" />
+                            <c:set var="count" value="0" />
+
                             <c:forEach var="s" items="${scheduleTeacher}">
                                 <c:if test="${s.dayVN == day}">
-                                    <c:set var="hasSchedule" value="true" />
+                                    <c:set var="count" value="${count + 1}" />
                                 </c:if>
                             </c:forEach>
+
                             <c:choose>
-                                <c:when test="${hasSchedule}">
+
+                                <c:when test="${count > 0}">
+                                    <c:set var="printed" value="false" />
                                     <c:forEach var="s" items="${scheduleTeacher}">
                                         <c:if test="${s.dayVN == day}">
                                             <tr>
-                                                <td>${s.dayVN}</td>
+                                                <c:if test="${not printed}">
+                                                    <td rowspan="${count}">${day}</td>
+                                                    <c:set var="printed" value="true" />
+                                                </c:if>
                                                 <td>
                                                     <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
                                                     <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
@@ -161,19 +208,36 @@
                                                 <td>${fn:substring(s.startTime, 0, 5)}</td>
                                                 <td>${fn:substring(s.endTime, 0, 5)}</td>
                                                 <td>${s.room}</td>
+                                                <td>
+                                                    <form action="scheduleTeacher" method="get">
+                                                        <input type="hidden" name="action" value="attendance" />
+                                                        <input type="hidden" name="scheduleId" value="${s.id}" />
+                                                        <input type="hidden" name="classId" value="${s.classId}" />
+                                                        <input type="hidden" name="className" value="${s.nameClass}" />
+                                                        <input type="hidden" name="day" value="${s.day}" />
+                                                        <button type="submit"
+                                                                style="background-color: ${s.attendanceTaken ? '#28a745' : '#dc3545'};
+                                                                color: white; padding: 6px 12px;
+                                                                border: none; border-radius: 5px;">
+                                                            ${s.attendanceTaken ? 'Đã điểm danh' : 'Điểm danh'}
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         </c:if>
                                     </c:forEach>
                                 </c:when>
+
                                 <c:otherwise>
                                     <tr>
                                         <td>${day}</td>
-                                        <td colspan="5"></td>
+                                        <td colspan="6"></td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </tbody>
+
                 </table>
             </c:if>
         </div>

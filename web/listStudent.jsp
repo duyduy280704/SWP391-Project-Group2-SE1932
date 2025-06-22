@@ -1,65 +1,37 @@
 <%-- 
     Document   : listStudent
-    Created on : May 24, 2025, 3:29:19 PM
+    Created on : May 31, 2025, 4:17:49 PM
     Author     : Quang
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
-        <meta charset="utf-8">
-        <title>ECOURSES - Online Courses HTML Template</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="Free HTML Templates" name="keywords">
-        <meta content="Free HTML Templates" name="description">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Tables - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-        <!-- Favicon -->
-        <link href="img/favicon.ico" rel="icon">
-
-        <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
-
-        <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-        <!-- Libraries Stylesheet -->
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
         <style>
-            .admin-table {
-                width: 100%;
+            .course-list-table {
                 border-collapse: collapse;
-                margin: 20px 0;
-                font-size: 16px;
+                width: 100%;
+            }
+            .course-list-table th, .course-list-table td {
+                border: 1px solid black;
+                padding: 8px;
                 text-align: left;
             }
-
-            .admin-table th,
-            .admin-table td {
-                border: 1px solid #ddd;
-                padding: 12px 15px;
-            }
-
-            .admin-table thead {
+            .course-list-table th {
                 background-color: #f2f2f2;
             }
-
-            .admin-table tbody tr:hover {
-                background-color: #f9f9f9;
-            }
-
-            .admin-table img {
-                max-width: 100px;
-                height: auto;
-            }
-
             form input[type="text"] {
                 width: 100%;
                 padding: 6px;
@@ -70,319 +42,324 @@
                 padding: 6px 12px;
                 margin-right: 5px;
             }
-
-            form table {
-                width: 100%;
-                margin-bottom: 30px;
-            }
-
-            form table td {
-                padding: 8px;
-            }
-
             .success {
                 color: green;
             }
             .error {
                 color: red;
             }
+
+            .search-filter-form {
+                display: flex;
+                gap: 20px;
+                margin: 20px 0;
+                align-items: center;
+                flex-wrap: wrap;
+                background-color: #f8f9fa; /* Nền nhẹ để nổi bật */
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-filter-form div {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .search-filter-form input[type="text"] {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                width: 250px; /* Kích thước cố định để đồng nhất */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form input[type="text"]:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form select {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                background-color: #fff;
+                cursor: pointer;
+                width: 150px; /* Kích thước cố định */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form select:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form button,
+            .search-filter-form input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .search-filter-form button:hover,
+            .search-filter-form input[type="submit"]:hover {
+                background-color: #0056b3;
+                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+            }
+
+            @media (max-width: 768px) {
+                .search-filter-form {
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding: 10px;
+                }
+
+                .search-filter-form div {
+                    width: 100%;
+                }
+
+                .search-filter-form input[type="text"],
+                .search-filter-form select {
+                    width: 100%;
+                    font-size: 14px;
+                }
+
+                .search-filter-form button,
+                .search-filter-form input[type="submit"] {
+                    width: 100%;
+                    font-size: 14px;
+                }
+            }
         </style>
     </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">BIG DREAM</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 
-    <body>
-        <!-- Topbar Start -->
-        <div class="container-fluid d-none d-lg-block">
-            <div class="row align-items-center py-4 px-xl-5">
-                <div class="col-lg-3">
-                    <a href="" class="text-decoration-none">
-                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                    </a>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
-                            <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                            </p>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
+
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <a class="nav-link" href="adminhome">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Trang Chủ
+                            </a>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Biểu Đồ
+                            </a>
+
+
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý người dùng
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="student">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        Học Sinh
+                                    </a>
+                                    <a class="nav-link" href="teacher">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        Giáo Viên
+                                    </a>
+                                    <a class="nav-link" href="staff">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        Nhân Viên
+                                    </a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Thông báo
+
+                            </a>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Cài đặt thông tin
+
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Email</h6>
-                            <p>
-                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 text-right">
-                    <div class="d-inline-flex align-items-center">
-                        <i class="fa fa-2x fa-phone text-primary mr-3"></i>
-                        <div class="text-left">
-                            <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
-
-                            <p>
-                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                            </p>
-
-                        </div>
-                    </div>
-                </div>
+                </nav>
             </div>
-        </div>
-        <!-- Topbar End -->
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+
+                        <h1 class="mt-4">Bảng Điều Khiển</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Quản Lý</li>
+                        </ol>
+
+                        <form action="student" method="post" enctype="multipart/form-data" class="search-filter-form">
+                            <div>
+                                <input type="text" name="nameSearch" placeholder="Tìm kiếm học sinh...">
+                                <button type="submit" name="search">Tìm kiếm</button> 
+                            </div>
+                            <div>
+                                <select name="genderFilter">
+                                    <option value="">Cả nam và nữ</option>
+                                    <option value="Nam" ${genderFilter == 'Nam' ? 'selected' : ''}>Nam</option>
+                                    <option value="Nữ" ${genderFilter == 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                </select>
+                                <input type="submit" name="filterGender" value="Lọc theo giới tính"/>
+                            </div>
+                        </form>
 
 
-        <!-- Navbar Start -->
-        <div class="container-fluid">
-            <div class="row border-top px-xl-5">
-                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
-                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
-                        <!-- Logo cho mobile -->
-                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
-                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                        </a>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form action="student" method="post" enctype="multipart/form-data">
 
-                        <!-- Nút toggle cho mobile -->
-                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                                    <table>
+                                        <tr>
 
-                        <!-- Menu + Nút hành động -->
-                        <div class="collapse navbar-collapse" id="navbarCollapse">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <!-- Menu căn giữa -->
-                                <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
-                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
-                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                                </div>
-                                <!-- Nút hành động về phía phải -->
-                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
+                                            <td>Họ và tên: </td>
+                                            <td><input type="text" name="name" value="${s.getName()}"></td>
+                                            <td>Email: </td>
+                                            <td><input type="text" name="email" value="${s.getEmail()}" placeholder="@gmail.com"></td>
+                                            <td>Mật khẩu: </td>
+                                            <td><input type="text" name="password" value="${s.getPassword()}"></td>
+                                            <td>Ngày sinh: </td>
+                                            <td><input type="text" name="birthdate" value="${s.getBrithdate()}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Giới tính: </td>
+                                            <td>
+                                                <select name="gender">
+                                                    <option value="Nam" ${s.getGender().equals("Nam") ? "selected" : ""}>Nam</option>
+                                                    <option value="Nữ" ${s.getGender().equals("Nữ") ? "selected" : ""}>Nữ</option>
+                                                </select>
+                                            </td>
+
+                                            <td>Ảnh: </td>
+                                            <td>
+                                                <input type="file" name="pic" value="${s.getPic()}">
+
+
+                                            </td>
+                                            <td>Địa chỉ: </td>
+                                            <td><input type="text" name="address" value="${s.getAddress()}"></td>
+                                            <td>Số điện thoại:</td>
+                                            <td><input type="text" name="phone" value="${s.getPhone()}"></td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><input type="submit" name="add" value="Thêm"></td>
+                                            <td><input type="submit" name="update" value="Lưu"></td>
+
+                                            <td><input type="hidden" name="id" value="${s.getId()}"></td>
+                                        </tr>
+                                        <tr>
+                                            <c:if test="${not empty message}">
+                                            <p class="${success ? 'success' : 'error'}">${message}</p>
+                                        </c:if>
+                                        </tr>
+                                    </table>
+                                </form>
                             </div>
                         </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- Navbar End -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Danh Sách Học Sinh
+                            </div>
+                            <div class="card-body">
+                                <table class="course-list-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Họ và tên</th>
+                                            <th>Email</th>
+                                            <th>Mật khẩu</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Giới tính</th>
+                                            <th>Ảnh</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Chức năng</th>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
+                                        <c:forEach items="${data}" var="item">
+                                            <tr>
+                                                <td>${item.getId()}</td>
+                                                <td>${item.getName()}</td>
+                                                <td>${item.getEmail()}</td>
+                                                <td>${item.getPassword()}</td>
+                                                <td>${item.getBrithdate()}</td>
+                                                <td>${item.getGender()}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${not empty item.pic}">
+                                                            <img src="picstudent?id=${item.id}" alt="Student Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>No Image</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td>${item.getAddress()}</td>
+                                                <td>${item.getPhone()}</td>
 
-        <!-- Header Start -->
-        <div class="container-fluid page-header" style="margin-bottom: -70px;">
-            <div class="container">
-                <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Quản Trị Viên</h3>
-                    <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="">Trang Chủ</a></p>
-                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Quản Trị Viên</p>
-                    </div>
+                                                <td>
+                                                    <a href="student?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
+                                                    <a href="student?id=${item.id}&mode=2" class="btn btn-delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a>
+                                                </td>
 
-                </div>
-            </div>
-        </div>
-        <!-- Header End -->
+                                            </tr>
+                                        </c:forEach>
 
-
-<!-- quang - quản lý học sinh -->
-        <!-- Contact Start -->
-        <div class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="text-center mb-5">
-
-                    <h1>Quản Lý Người Dùng</h1>
-                </div>
-
-            </div>
-            <table class="admin-table" style="margin-top:  -80px;">
-                <thead>
-                    <tr>
-                        <th><a href="student">Danh sách học sinh</a></th>
-                        <th><a href="teacher">Danh sách giáo viên</a></th>
-                        <th><a href="staff">Danh sách nhân viên</a></th>
-                    </tr>
-                </thead>
-            </table>
-            <div class="text-center mb-5">
-                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Danh sách học sinh</h5>
-
-            </div>
-
-            <!-- Form nhập liệu -->
-            <form action="student" method="post">
-                <!-- input fields table -->
-                <table>
-                    <tr>
-                        
-                        <td>Họ và tên: </td>
-                        <td><input type="text" name="name" value="${s.getName()}"></td>
-                        <td>Email: </td>
-                        <td><input type="text" name="email" value="${s.getEmail()}"></td>
-                        <td>Mật khẩu: </td>
-                        <td><input type="text" name="password" value="${s.getPassword()}"></td>
-                    </tr>
-                    <tr>
-                        <td>Ngày sinh: </td>
-                        <td><input type="text" name="birthdate" value="${s.getBrithdate()}"></td>
-                        <td>Giới tính: </td>
-                        <td><input type="text" name="gender" value="${s.getGender()}"></td>
-                        <td>Địa chỉ: </td>
-                        <td><input type="text" name="address" value="${s.getAddress()}"></td>
-                        
-                    </tr>
-
-                    <tr>
-                        
-                        <td><input type="submit" name="add" value="Thêm"></td>
-                        <td><input type="submit" name="update" value="Sửa"></td>
-                        
-                        <td><input type="hidden" name="id" value="${s.getId()}"></td>
-                    </tr>
-                    <tr>
-                        <c:if test="${not empty message}">
-                                <p class="${success ? 'success' : 'error'}">${message}</p>
-                            </c:if>
-                    </tr>
-                </table>
-
-
-                <!-- bảng danh sách người dùng -->
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Họ và tên</th>
-                            <th>Email</th>
-                            <th>Mật khẩu</th>
-                            <th>Ngày sinh</th>
-                            <th>Giới tính</th>
-                            <th>Địa chỉ</th>
-                            <th>Vai trò</th>
-                            <th>Chức năng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${data}" var="item">
-                            <tr>
-                                <td>${item.getId()}</td>
-                                <td>${item.getName()}</td>
-                                <td>${item.getEmail()}</td>
-                                <td>${item.getPassword()}</td>
-                                <td>${item.getBrithdate()}</td>
-                                <td>${item.getGender()}</td>
-                                <td>${item.getAddress()}</td>
-                                <td>${item.getRole()}</td>
-                                <td>
-                                    <a href="student?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
-                                    <a href="student?id=${item.id}&mode=2" class="btn btn-delete">🗑️ Xóa</a>
-                                </td>
-
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-        <!-- Contact End -->
-
-
-        <!-- Footer Start -->
-        <footer class="bg-dark text-white pt-5 pb-4">
-            <div class="container text-md-left">
-                <div class="row text-md-left">
-
-                    <!-- Liên hệ -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
-                        <p><i class="fa fa-map-marker-alt mr-2"></i> 
-                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                        </p>
-                        <p><i class="fa fa-phone-alt mr-2"></i> 
-                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                        </p>
-                        <p><i class="fa fa-envelope mr-2"></i> 
-                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                        </p>
-                        <div class="mt-3">
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.instagramLink != null ? setting.instagramLink : '#'}">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a class="btn btn-outline-light btn-sm mr-2" href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}">
-                                <i class="fab fa-youtube"></i>
-                            </a>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                </main>
 
-                    <!-- Khoá học -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
-                        <ul class="list-unstyled">
-                            <c:forEach var="t" items="${applicationScope.typeList}">
-                                <li>
-                                    <a href="#" class="text-white">
-                                        <i class="fa fa-angle-right mr-2"></i> ${t.name}
-                                    </a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </div>
-
-                    <!-- Thông tin thêm -->
-                    <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
-                        <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
-                    </div>
-                </div>
-
-                <hr class="mb-4">
-
-                <!-- Bản quyền -->
-                <div class="row align-items-center">
-                    <div class="col-md-7 col-lg-8">
-                        <p class="text-white">
-                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
-                        </p>
-                    </div>
-                    <div class="col-md-5 col-lg-4">
-                        <div class="text-right">
-                            <a class="text-white" href="${setting.policyLink != null ? setting.policyLink : '#'}">Chính sách</a> |
-                            <a class="text-white" href="${setting.termsLink != null ? setting.termsLink : '#'}">Điều khoản</a>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </footer>
-
-        <!-- Footer End -->
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-        <!-- Contact Javascript File -->
-        <script src="mail/jqBootstrapValidation.min.js"></script>
-        <script src="mail/contact.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
     </body>
-
 </html>
+

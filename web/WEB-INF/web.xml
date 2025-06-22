@@ -52,6 +52,54 @@
         <servlet-name>AdminHomeController</servlet-name>
         <servlet-class>Controllers.AdminHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StaffHomeController</servlet-name>
+        <servlet-class>Controllers.StaffHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SettingController</servlet-name>
+        <servlet-class>Controllers.SettingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetBannerController</servlet-name>
+        <servlet-class>Controllers.SetBannerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetAboutController</servlet-name>
+        <servlet-class>Controllers.SetAboutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PicTeacherController</servlet-name>
+        <servlet-class>Controllers.PicTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PicStudentController</servlet-name>
+        <servlet-class>Controllers.PicStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageBannerController</servlet-name>
+        <servlet-class>Controllers.ImageBannerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageAboutController</servlet-name>
+        <servlet-class>Controllers.ImageAboutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassStudentController</servlet-name>
+        <servlet-class>Controllers.ClassStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackController</servlet-name>
+        <servlet-class>Controllers.FeedbackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListClassScheduleController</servlet-name>
+        <servlet-class>Controllers.ListClassScheduleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ScheduleByClassController</servlet-name>
+        <servlet-class>Controllers.ScheduleByClassController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -103,5 +151,53 @@
     <servlet-mapping>
         <servlet-name>AdminHomeController</servlet-name>
         <url-pattern>/adminhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffHomeController</servlet-name>
+        <url-pattern>/staffhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetBannerController</servlet-name>
+        <url-pattern>/setbanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetAboutController</servlet-name>
+        <url-pattern>/setabout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PicTeacherController</servlet-name>
+        <url-pattern>/picteacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PicStudentController</servlet-name>
+        <url-pattern>/picstudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageBannerController</servlet-name>
+        <url-pattern>/imagebanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageAboutController</servlet-name>
+        <url-pattern>/imageabout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassStudentController</servlet-name>
+        <url-pattern>/classStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackController</servlet-name>
+        <url-pattern>/feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListClassScheduleController</servlet-name>
+        <url-pattern>/listClassSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScheduleByClassController</servlet-name>
+        <url-pattern>/scheduleByClass</url-pattern>
     </servlet-mapping>
 </web-app>

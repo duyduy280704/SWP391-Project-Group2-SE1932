@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import models.ChartDAO;
 import models.CourseDAO;
+import models.Revenue;
 import models.TypeCourseCount;
 
 /**
@@ -30,7 +32,22 @@ public class AdminHomeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AdminHomeController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AdminHomeController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -44,12 +61,25 @@ public class AdminHomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CourseDAO dao = new CourseDAO();
+        ChartDAO dao = new ChartDAO();
         try {
+            int student = dao.getStudentCount();
+            int teacher = dao.getTeacherCount();
+            int staff = dao.getAdminStaffCount();
+            int course = dao.getCourseCount();
+            List<Revenue> revenueData = dao.getMonthlyRevenue();
+
+        
+        
             List<TypeCourseCount> chartData = dao.getCourseCountByType();
             List<Map<String, Object>> roleCounts = dao.getRoleCounts();
+            request.setAttribute("revenueData", revenueData);
             request.setAttribute("chartData", chartData);
             request.setAttribute("roleCounts", roleCounts);
+            request.setAttribute("student", student);
+            request.setAttribute("teacher", teacher);
+            request.setAttribute("staff", staff);
+            request.setAttribute("course", course);
             request.getRequestDispatcher("AdminHome.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException(e);
@@ -67,16 +97,7 @@ public class AdminHomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         CourseDAO dao = new CourseDAO();
-        try {
-            List<TypeCourseCount> chartData = dao.getCourseCountByType();
-            List<Map<String, Object>> roleCounts = dao.getRoleCounts();
-            request.setAttribute("chartData", chartData);
-            request.setAttribute("roleCounts", roleCounts);
-            request.getRequestDispatcher("AdminHome.jsp").forward(request, response);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+        processRequest(request, response);
     }
 
     /**

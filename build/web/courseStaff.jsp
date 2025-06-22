@@ -64,11 +64,13 @@
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-bell"></i> Thông báo</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
-
+                        <li><a class="dropdown-item" href="#!">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
                     </ul>
@@ -80,25 +82,57 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading"></div>
-                            <a class="nav-link" href="AdminHome.jsp">
+                            <a class="nav-link" href="staffhome">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Trang Chủ
                             </a>
 
 
 
-
-                            <div class="sb-sidenav-menu-heading"></div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Biểu Đồ
-                            </a>
                             <a class="nav-link" href="coursestaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản Lý Khóa học
+                                Quản lý khóa học
                             </a>
 
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý lịch học
+                            </a>
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý sự kiện
+                            </a>
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý blog
+                            </a>
+
+
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý đăng ký
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="#">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        Học Sinh
+                                    </a>
+                                    <a class="nav-link" href="#">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        Giáo Viên
+                                    </a>
+
+                                </nav>
+                            </div>
+
+                            <a class="nav-link collapsed" href="#" >
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Gửi thông báo
+
+                            </a>
                         </div>
                     </div>
 
@@ -132,8 +166,8 @@
 
                                                     </c:forEach>
                                                 </select></td>
-                                            <td>Giá: </td>
-                                            <td><input type="text" name="fee" value="${p.getFee()}"></td>
+                                            <td>Giá (VND): </td>
+                                            <td><input type="text" name="fee" value="${p.getFee()}"> </td>
                                         </tr>
                                         <tr>
                                             <td>Mức độ: </td>
@@ -144,8 +178,7 @@
                                                     <option value="Nâng cao" ${p.getLevel() == 'Nâng cao' ? 'selected' : ''}>Nâng cao</option>
                                                 </select>
                                             </td>
-                                            <td>Giảm giá: </td>
-                                            <td><input type="text" name="sale" value="${p.getSale()}"></td>
+                                            
                                             <td>Ảnh: </td>
                                             <td><input type="file" name="image" value="${p.getImage()}">
 
@@ -200,7 +233,6 @@
                                             <th>giá</th>
                                             <th>Ảnh</th>
                                             <th>Mức độ</th>
-                                            <th>Giảm giá</th>
                                             <th>Chức năng</th>
 
                                         </tr>
@@ -213,7 +245,7 @@
                                                 <td>${item.getName()}</td>
                                                 <td>${item.getType()}</td>
                                                 <td>${item.getDescription()}</td>
-                                                <td>${item.getFee()}</td>
+                                                <td>${item.getFee()} VND</td>
 
                                                 <td>
                                                     <c:choose>
@@ -226,7 +258,6 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>${item.getLevel()}</td>
-                                                <td>${item.getSale()} %</td>
                                                 <td>
                                                     <a href="coursestaff?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete" 

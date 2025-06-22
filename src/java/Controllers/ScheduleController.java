@@ -115,7 +115,7 @@ public class ScheduleController extends HttpServlet {
                 request.setAttribute("s", s);
                 request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
                 return;
-            } else if (dao.isScheduleExist(s, true)) { // Kiểm tra lịch trùng khi sửa
+            } else if (dao.isScheduleExist(s, true)) { 
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
                 request.setAttribute("s", s);
                 ArrayList<Categories_class> data1 = dao.getCategories_class();
@@ -162,7 +162,7 @@ public class ScheduleController extends HttpServlet {
                 request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                 return;
 
-            } else if (dao.isScheduleExist(s, false)) { // Kiểm tra lịch trùng khi thêm
+            } else if (dao.isScheduleExist(s, false)) { 
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
                 request.setAttribute("s", s);
                 ArrayList<Categories_class> data1 = dao.getCategories_class();

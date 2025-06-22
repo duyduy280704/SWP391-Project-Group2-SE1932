@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+// Thuy xử lí lọc ngày 
 package models;
 
-/**
- *
- * @author Admin
- */
 public class ScheduleWeek {
-     private String startDate;
+
+    private String startDate;
     private String endDate;
     private String displayStartDate;
     private String displayEndDate;
@@ -26,6 +20,7 @@ public class ScheduleWeek {
         this.weekNumber = weekNumber;
     }
 
+    // Getter và Setter
     public String getStartDate() {
         return startDate;
     }
@@ -65,6 +60,4 @@ public class ScheduleWeek {
     public void setWeekNumber(int weekNumber) {
         this.weekNumber = weekNumber;
     }
-    
-    
 }
