@@ -136,6 +136,10 @@
         <servlet-name>TeacherHomeController</servlet-name>
         <servlet-class>Controllers.TeacherHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <servlet-class>Controllers.NoticeToStaffController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -264,9 +268,12 @@
         <servlet-name>ProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
     </servlet-mapping>
-   
     <servlet-mapping>
         <servlet-name>TeacherHomeController</servlet-name>
         <url-pattern>/teacherHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <url-pattern>/noticetostaff</url-pattern>
     </servlet-mapping>
 </web-app>
