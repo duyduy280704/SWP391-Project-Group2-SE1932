@@ -17,11 +17,11 @@ public class AdminStaffDAO extends DBContext {
      PreparedStatement stm;
      ResultSet rs;
      //Huyền-checklogin của adminstaff
-     public AdminStaffs checkLogin(String email,String password){
+     public AdminStaffs checkLogin(String phone,String password){
          try{
-             String strSQL="SELECT id, full_name, email,birth_date,gender, password,  role_id FROM Admin_staff WHERE email = ? AND password = ?";
+             String strSQL="SELECT id, full_name, email,birth_date,gender, password,  role_id,phone FROM Admin_staff WHERE phone = ? AND password = ?";
              stm=connection.prepareStatement(strSQL);
-             stm.setString(1, email);
+             stm.setString(1, phone);
              stm.setString(2, password);
              rs=stm.executeQuery();
              while(rs.next()){
@@ -32,7 +32,8 @@ public class AdminStaffDAO extends DBContext {
                 String gender = rs.getString("gender");
                 String pass = rs.getString("password");
                 String roleId = String.valueOf(rs.getInt("role_id"));
-                AdminStaffs a = new AdminStaffs(id, fullName, em, birthDate, gender, pass, roleId);
+                String phones=rs.getString("phone");
+                AdminStaffs a = new AdminStaffs(id, fullName, em, birthDate, gender, pass, roleId, phones);
                 return a;
                  
              }

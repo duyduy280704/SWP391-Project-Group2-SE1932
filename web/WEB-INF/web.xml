@@ -100,6 +100,42 @@
         <servlet-name>ScheduleByClassController</servlet-name>
         <servlet-class>Controllers.ScheduleByClassController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogImageController</servlet-name>
+        <servlet-class>Controllers.BlogImageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CourseController</servlet-name>
+        <servlet-class>Controllers.CourseController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegistrationCourseController</servlet-name>
+        <servlet-class>Controllers.RegistrationCourseController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ApproveController</servlet-name>
+        <servlet-class>Controllers.ApproveController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentHomeController</servlet-name>
+        <servlet-class>Controllers.StudentHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>Controllers.LogoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>Controllers.ProfileController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherRegistrationController</servlet-name>
+        <servlet-class>Controllers.TeacherRegistrationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherHomeController</servlet-name>
+        <servlet-class>Controllers.TeacherHomeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -199,5 +235,38 @@
     <servlet-mapping>
         <servlet-name>ScheduleByClassController</servlet-name>
         <url-pattern>/scheduleByClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogImageController</servlet-name>
+        <url-pattern>/BlogImage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseController</servlet-name>
+        <url-pattern>/Course</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistrationCourseController</servlet-name>
+        <url-pattern>/RegistrationCourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ApproveController</servlet-name>
+        <url-pattern>/Approve</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentHomeController</servlet-name>
+        <url-pattern>/StudentHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+   
+    <servlet-mapping>
+        <servlet-name>TeacherHomeController</servlet-name>
+        <url-pattern>/teacherHome</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import models.AboutDAO;
 import models.Setting;
 import models.SettingDAO;
 
@@ -77,6 +78,8 @@ public class ImageAboutController extends HttpServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error retrieving image");
         }
+        
+        
     } 
 
     /** 

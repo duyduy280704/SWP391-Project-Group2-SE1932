@@ -15,9 +15,10 @@ import java.util.logging.Logger;
  * @author Quang
  */
 public class DBContext {
+
     protected Connection connection;
-    public DBContext()
-    {
+
+    public DBContext() {
         //@Students: You are allowed to edit user, pass, url variables to fit 
         //your system configuration
         //You can also add more methods for Database Interaction tasks. 
@@ -27,14 +28,15 @@ public class DBContext {
         try {
             String user = "sa";
             String pass = "123";
-            String url = "jdbc:sqlserver://DESKTOP-S72VG9I\\SQLEXPRESS:1433;databaseName=BIGDREAM";
+            String url = "jdbc:sqlserver://Dwight\\ET_DIII:1433;databaseName=BIGDREAM;TrustServerCertificate=true";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
     }
+
     public static void main(String[] args) {
         try {
             DBContext db = new DBContext();
@@ -49,4 +51,3 @@ public class DBContext {
         }
     }
 }
-

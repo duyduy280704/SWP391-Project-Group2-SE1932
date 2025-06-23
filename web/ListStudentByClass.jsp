@@ -76,8 +76,8 @@
                                     <td>${s.name}</td>
                                     <td>${s.email}</td>
                                     <c:choose>
-                                        <c:when test="${not empty s.brithdate}">
-                                    <fmt:parseDate value="${s.brithdate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                        <c:when test="${not empty s.birthdate}">
+                                    <fmt:parseDate value="${s.birthdate}" pattern="yyyy-MM-dd" var="parsedDate" />
                                     <td><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" /></td>
                                 </c:when>
                                 <c:otherwise>

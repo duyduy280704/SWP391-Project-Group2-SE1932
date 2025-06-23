@@ -52,22 +52,37 @@ public class InformationDAO extends DBContext {
     }
 
     public ArrayList<Banner> getSlides() {
-        ArrayList<Banner> slides = new ArrayList<>();
-        try {
-            String sql = "SELECT id, title, image_url FROM carousel";
-            stm = connection.prepareStatement(sql);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String title = rs.getString("title"); // đổi getNString thành getString
-                String imageUrl = rs.getString("image_url");
+    ArrayList<Banner> slides = new ArrayList<>();
+    try {
+        String sql = "SELECT id, title, image FROM carousel";
+        stm = connection.prepareStatement(sql);
+        rs = stm.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String title = rs.getString("title"); // hoặc getNString nếu dùng Unicode
+            byte[] imageData = rs.getBytes("image"); // Lấy ảnh dưới dạng byte[]
 
-                Banner slide = new Banner(id, title, imageUrl);
-                slides.add(slide);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();  // In ra lỗi đầy đủ
+            Banner slide = new Banner(id, title, imageData);
+            slides.add(slide);
         }
-        return slides;
+    } catch (Exception e) {
+        e.printStackTrace(); // In lỗi ra console
     }
+    return slides;
+}
+
+    public byte[] getBannerImageById(int id) {
+    String sql = "SELECT image FROM carousel WHERE id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getBytes("image");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
 }

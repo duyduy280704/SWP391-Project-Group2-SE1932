@@ -49,6 +49,39 @@ public class TeacherDAO extends DBContext {
         }
         return data;
     }
+    
+    //Huyền-checklogin của teacher
+    public Teachers checkLogin(String phone, String password) {
+        try {
+            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id,id_type_course,years_of_experience,phone "
+                    + "FROM Teacher "
+                    + "WHERE phone = ? AND password = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            stm.setString(2, password);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String pwd = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String emailFromDB = rs.getString("email");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String expertise = rs.getString("Expertise");
+                byte[] picture = rs.getBytes("picture");
+                String roleId = String.valueOf(rs.getInt("role_id")); 
+                String idcourse=rs.getString("id_type_course");
+                String yearexp=rs.getString("years_of_experience");
+                String phones=rs.getString("phone");
+                Teachers teacher = new Teachers(id, fullName, emailFromDB, pwd, birthDate, gender, expertise, picture, roleId,idcourse, yearexp,phones);
+                return teacher;
+            }
+        } catch (Exception e) {
+            System.out.println("checkLogin: " + e.getMessage());
+        }
+        return null;
+    }
+    
 // lấy kiểu khóa học
 
     public ArrayList<TypeCourse> getCourseType() {
@@ -463,6 +496,40 @@ public class TeacherDAO extends DBContext {
             }
         } catch (Exception e) {
             System.out.println("getStudentsByGender: " + e.getMessage());
+        }
+        return data;
+    }
+    public ArrayList<Teachers> get4Teachers() {
+        ArrayList<Teachers> data = new ArrayList<>();
+        try {
+            String strSQL = """
+                            select TOP 4 * from Teacher s join Role r on s.role_id = r.id join type_course t on s.id_type_course = t.id 
+                                                        ORDER BY s.years_of_experience DESC
+                            """
+                    ;
+
+            PreparedStatement stm = connection.prepareStatement(strSQL);
+            ResultSet rs = stm.executeQuery();
+
+             while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(3);
+                String password = rs.getString(2);
+                String email = rs.getString(4);
+                String birthdate = rs.getString(5);
+                String gender = rs.getString(6);
+                String exp = rs.getString(7);
+                byte[] pic = rs.getBytes(8);
+                String role = rs.getString(14);
+                String course = rs.getString(16);
+                String years = String.valueOf(rs.getInt(11));
+                String phone = rs.getString(12);
+
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
+                data.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return data;
     }

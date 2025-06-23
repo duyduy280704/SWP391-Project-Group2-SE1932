@@ -98,7 +98,7 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
@@ -139,7 +139,8 @@
                         <div class="col-md-6 col-lg-3 text-center team mb-4">
                             <div class="team-item rounded overflow-hidden mb-2">
                                 <div class="team-img position-relative">
-                                    <img class="card-img-top w-100" src="${t.pic}" alt="image" style="height: 200px; object-fit: cover;">
+                                    <img class="card-img-top w-100" src="picteacher?id=${t.id}" 
+                                         alt="image" style="height: 200px; object-fit: cover;">
                                     <div class="team-social">
                                         <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
                                     </div>

@@ -31,7 +31,7 @@ public class FeedbackController extends HttpServlet {
 
         // Giáo viên và Staff vào xem
         if ((account instanceof Teachers || account instanceof AdminStaffs) && "viewAll".equals(mode)) {
-            List<FeedbackByStudent> feedbackList = dao.getAllFeedback(); // Đổi sang đúng model
+            List<FeedbackByStudent> feedbackList = dao.getAllFeedback(); 
             request.setAttribute("feedbackList", feedbackList);
             request.getRequestDispatcher("feedbackView.jsp").forward(request, response);
             return;

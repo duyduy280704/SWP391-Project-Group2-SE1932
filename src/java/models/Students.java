@@ -9,19 +9,19 @@ package models;
  * @author Quang
  */
 public class Students {
-    String id, name, email, password, brithdate, gender, address, role, phone;
+    String id, name, email, password, birthdate, gender, address, role, phone;
     
     byte[] pic;
 
     public Students() {
     }
 
-    public Students(String id, String name, String email, String password, String brithdate, String gender, byte[] pic, String address, String role, String phone) {
+    public Students(String id, String name, String email, String password, String birthdate, String gender, byte[] pic, String address, String role, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.brithdate = brithdate;
+        this.birthdate = birthdate;
         this.gender = gender;
         this.pic = pic;
         this.address = address;
@@ -30,17 +30,17 @@ public class Students {
         
     }
 
-    public Students(String id, String name, String email, String password, String brithdate, String gender, String address, String role) {
+    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.brithdate = brithdate;
+        this.birthdate = birthdate;
         this.gender = gender;
         this.address = address;
         this.role = role;
     }
-
+    
     
 
     public String getId() {
@@ -75,12 +75,12 @@ public class Students {
         this.password = password;
     }
 
-    public String getBrithdate() {
-        return brithdate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBrithdate(String brithdate) {
-        this.brithdate = brithdate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getGender() {

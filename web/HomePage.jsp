@@ -97,7 +97,7 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
@@ -115,22 +115,28 @@
         <!-- Carousel Start -->
         <div class="container-fluid p-0 pb-5 mb-5">
             <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <!-- Carousel indicators -->
                 <ol class="carousel-indicators">
                     <c:forEach var="slide" items="${slides}" varStatus="status">
-                        <li data-target="#header-carousel" data-slide-to="${status.index}" class="${status.index == 0 ? 'active' : ''}"></li>
+                        <li data-target="#header-carousel" data-slide-to="${status.index}"
+                            class="${status.index == 0 ? 'active' : ''}"></li>
                         </c:forEach>
                 </ol>
+
+                <!-- Carousel items -->
                 <div class="carousel-inner">
                     <c:forEach var="slide" items="${slides}" varStatus="status">
                         <div class="carousel-item ${status.index == 0 ? 'active' : ''}" style="min-height: 300px;">
-                            <img src="${slide.imageUrl}" 
-                                 style="width: 1366px; height: 768px; object-fit: cover; object-position: center center;" 
+                            <!-- Dùng servlet để hiển thị ảnh dạng byte[] -->
+                            <img src="imagebanner?id2=${slide.id}"
+                                 style="width: 1366px; height: 768px; object-fit: cover; object-position: center center;"
                                  alt="${slide.title}">
+
                             <div class="carousel-caption d-flex align-items-center justify-content-center">
                                 <div class="p-5" style="width: 100%; max-width: 900px;">
-                                    <h5 class="text-white text-uppercase mb-md-3">Khóa học tốt nhất</h5>
+
                                     <h1 class="display-3 text-white mb-md-4">${slide.title}</h1>
-                                    <a href="#" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
+
                                 </div>
                             </div>
                         </div>
@@ -138,6 +144,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Carousel End -->
 
@@ -148,7 +155,8 @@
                     <c:forEach var="a" items="${aboutList}" varStatus="loop">
                         <c:if test="${loop.first}">
                             <div class="col-lg-5">
-                                <img class="img-fluid rounded mb-4 mb-lg-0" src="${a.image}" alt="About Image">
+                                <!-- Sửa src: dùng servlet lấy ảnh theo id -->
+                                <img class="img-fluid rounded mb-4 mb-lg-0" src="imageabout?id=${a.id}" alt="About Image">
                             </div>
                             <div class="col-lg-7">
                                 <div class="text-left mb-4">
@@ -164,6 +172,7 @@
             </div>
         </div>
 
+
         <!-- About End -->
 
 
@@ -175,115 +184,41 @@
                     <h1>Một số khóa học của chúng tôi</h1>
                 </div>
                 <form action="coursestaff" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <c:forEach var="c" items="${courseList}">
-                        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                            <div class="card shadow-sm border-0 w-100">
-                                <c:choose>
-                                    <c:when test="${not empty c.image}">
-                                        <img src="image?id=${c.id}" alt="Course Picture" style="max-width: 400px; max-height: 300px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span>No Image</span>
-                                    </c:otherwise>
-                                </c:choose>
-                                <div class="card-body bg-white">
-                                    <div class="d-flex justify-content-between mb-2 text-muted small">
-                                        <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
-                                        <span><i class="far fa-clock text-primary mr-1"></i>1h 30m</span>
+                    <div class="row">
+                        <c:forEach var="c" items="${courseList}">
+                            <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+                                <div class="card shadow-sm border-0 w-100">
+                                    <c:choose>
+                                        <c:when test="${not empty c.image}">
+                                            <img src="image?id=${c.id}" alt="Course Picture" style="max-width: 400px; max-height: 300px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span>No Image</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="card-body bg-white">
+                                        <div class="d-flex justify-content-between mb-2 text-muted small">
+                                            <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
+                                            <span><i class="far fa-clock text-primary mr-1"></i>1h 30m</span>
+                                        </div>
+                                        <h5 class="card-title">${c.name}</h5>
+                                        <p class="card-text text-body" style="min-height: 72px;">${c.description}</p>
                                     </div>
-                                    <h5 class="card-title">${c.name}</h5>
-                                    <p class="card-text text-body" style="min-height: 72px;">${c.description}</p>
-                                </div>
-                                <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                    <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>
-                                    <span class="text-primary font-weight-bold">${c.fee} đ</span>
+                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
+                                        <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>
+                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                    <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
-                </div>
-                    </form>
+                        </c:forEach>
+                        <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
+                    </div>
+                </form>
             </div>
         </div>
 
 
         <!-- Courses End -->
-
-        <!-- Registration Start -->
-        <div class="container-fluid bg-registration py-5" style="margin: 90px 0;">
-            <div class="container py-5">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-5 mb-lg-0">
-                        <div class="mb-4">
-                            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Cần Khóa Học Nào?</h5>
-                            <h1 class="text-white">Giảm 30% Cho Học Viên Mới</h1>
-                        </div>
-                        <p class="text-white">Chúng tôi mang đến trải nghiệm học tập hiệu quả, dễ tiếp cận với đội ngũ giảng viên tận tâm, cùng nội dung học sinh động, cập nhật liên tục. Mỗi học viên đều được hỗ trợ để phát triển tối đa khả năng cá nhân.</p>
-                        <ul class="list-inline text-white m-0">
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Làm việc tận tâm và chuyên nghiệp</li>
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Nội dung học rõ ràng, dễ hiểu</li>
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Môi trường năng động, khơi gợi sáng tạo</li>
-                        </ul>
-                    </div>
-
-                    <div class="col-lg-5">
-                        <div class="card border-0">
-                            <div class="card-header bg-light text-center p-4">
-                                <h1 class="m-0">Đăng Ký ngay</h1>
-                            </div>
-                            <%
-            String successMessage = (String) session.getAttribute("successMessage");
-            if (successMessage != null) {
-                            %>
-                            <div class="alert alert-success" role="alert">
-                                <%= successMessage %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="card-body rounded-bottom bg-primary p-5">
-                                <form action="HomePage" method="post">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control border-0 p-4" name="full_name" placeholder="Họ và tên" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control border-0 p-4" name="email" placeholder="email" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="date" class="form-control border-0 p-4" name="birth_date" placeholder="Ngày sinh" required="required" />
-                                    </div>                                   
-                                    <div class="form-group">
-                                        <select name="gender" class="custom-select border-0 px-4" style="height: 47px;" required>
-                                            <option value="" disabled selected>Giới tính</option>
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control border-0 p-4" name="address" placeholder="Địa chỉ" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <select name="course_id" class="custom-select border-0 px-4" style="height: 47px;" required>
-                                            <option value="" disabled selected>Chọn khóa</option>
-                                            <c:forEach var="course" items="${courses}">
-                                                <option value="${course.id}">${course.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-dark btn-block border-0 py-3" type="submit">Đăng Ký ngay</button>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Registration End -->
 
         <!-- Team Start -->
         <div class="container-fluid py-5">
@@ -297,9 +232,13 @@
                         <div class="col-md-6 col-lg-3 text-center team mb-4">
                             <div class="team-item rounded overflow-hidden mb-2">
                                 <div class="team-img position-relative">
-                                    <img class="card-img-top w-100" src="${t.pic}" alt="image" style="height: 200px; object-fit: cover;">
+                                    <!-- Sửa src để gọi servlet lấy ảnh theo id giáo viên -->
+                                    <img class="card-img-top w-100" src="picteacher?id=${t.id}" 
+                                         alt="image" style="height: 200px; object-fit: cover;">
                                     <div class="team-social">
-                                        <a class="btn btn-outline-light btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a class="btn btn-outline-light btn-square mx-1" href="#">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="bg-secondary p-4">
@@ -309,10 +248,15 @@
                             </div>
                         </div>
                     </c:forEach>
-                    <a href="teacher.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
+
+                    <!-- Nút "Xem thêm" -->
+                    <div class="col-12 text-center mt-4">
+                        <a href="teacher.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
+                    </div>
                 </div>
             </div>
         </div>
+
 
 
 
@@ -332,7 +276,7 @@
                                 <div class="text-center">
                                     <i class="fa fa-3x fa-quote-left text-primary mb-4"></i>
                                     <h4 class="font-weight-normal mb-4">${f.feedbackText}</h4>
-                                    <img class="img-fluid mx-auto mb-3" src="img/testimonial-${f.id}.jpg" alt="">
+                                    <img class="img-fluid mx-auto mb-3" src="picstudent?id=${f.studentId}" alt="stu">
                                     <h5 class="m-0">${f.studentName}</h5>
                                     <span>${f.feedbackDate}</span>
                                 </div>
@@ -351,20 +295,29 @@
                 <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
                 <h1>Các tin gần đây</h1>
             </div>
+
             <div class="row pb-3">
-                <c:forEach var="n" items="${blogList}">
-                    <div class="col-lg-4 mb-4">
-                        <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="${n.picture}" alt="">
-                            <a class="blog-overlay text-decoration-none" href="#">
-                                <h5 class="text-white mb-3">${n.title}</h5>
-                                <p class="text-primary m-0">
-                                    ${fn:substring(n.publishDate, 0, 10)}
-                                </p>
-                            </a>
+                <c:if test="${not empty blogList}">
+                    <c:forEach var="n" items="${blogList}">
+                        <div class="col-lg-4 mb-4">
+                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
+
+                                <a class="blog-overlay text-decoration-none" href="#">
+                                    <h5 class="text-white mb-3">${n.title}</h5>
+                                    <p class="text-primary m-0">
+                                        ${fn:substring(n.publishDate, 0, 10)}
+                                    </p>
+                                </a>
+                            </div>
                         </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty blogList}">
+                    <div class="col-12 text-center">
+                        <p>Không có bài viết nào gần đây.</p>
                     </div>
-                </c:forEach>
+                </c:if>
             </div>
         </div>
 

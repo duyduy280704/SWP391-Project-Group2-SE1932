@@ -98,7 +98,7 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
@@ -135,20 +135,29 @@
                 <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
                 <h1>Các tin gần đây</h1>
             </div>
+
             <div class="row pb-3">
-                <c:forEach var="n" items="${applicationScope.bloglist}">
-                    <div class="col-lg-4 mb-4">
-                        <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="${n.picture}" alt="">
-                            <a class="blog-overlay text-decoration-none" href="#">
-                                <h5 class="text-white mb-3">${n.title}</h5>
-                                <p class="text-primary m-0">
-                                    ${fn:substring(n.publishDate, 0, 10)}
-                                </p>
-                            </a>
+                <c:if test="${not empty applicationScope.bloglist}">
+                    <c:forEach var="n" items="${applicationScope.bloglist}">
+                        <div class="col-lg-4 mb-4">
+                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
+
+                                <a class="blog-overlay text-decoration-none" href="#">
+                                    <h5 class="text-white mb-3">${n.title}</h5>
+                                    <p class="text-primary m-0">
+                                        ${fn:substring(n.publishDate, 0, 10)}
+                                    </p>
+                                </a>
+                            </div>
                         </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty applicationScope.bloglist}">
+                    <div class="col-12 text-center">
+                        <p>Không có bài viết nào gần đây.</p>
                     </div>
-                </c:forEach>
+                </c:if>
             </div>
         </div>
         <!-- Blog End -->

@@ -98,7 +98,7 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link active">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
@@ -133,7 +133,8 @@
                 <c:forEach var="a" items="${applicationScope.aboutList}">
                     <div class="row align-items-center mb-5">
                         <div class="col-lg-5">
-                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${a.image}" alt="About Image">
+                            <!-- Sửa src thành gọi servlet để lấy ảnh theo id -->
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="imageabout?id=${a.id}" alt="About Image">
                         </div>
                         <div class="col-lg-7">
                             <div class="text-left mb-4">
@@ -147,107 +148,12 @@
             </div>
         </div>
 
+
         <!-- About End -->
 
-        <!-- Registration Start -->
-        <div class="container-fluid bg-registration py-5" style="margin: 90px 0;">
-            <div class="container py-5">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-5 mb-lg-0">
-                        <div class="mb-4">
-                            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Cần Khóa Học Nào?</h5>
-                            <h1 class="text-white">Giảm 30% Cho Học Viên Mới</h1>
-                        </div>
-                        <p class="text-white">Chúng tôi mang đến trải nghiệm học tập hiệu quả, dễ tiếp cận với đội ngũ giảng viên tận tâm, cùng nội dung học sinh động, cập nhật liên tục. Mỗi học viên đều được hỗ trợ để phát triển tối đa khả năng cá nhân.</p>
-                        <ul class="list-inline text-white m-0">
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Làm việc tận tâm và chuyên nghiệp</li>
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Nội dung học rõ ràng, dễ hiểu</li>
-                            <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Môi trường năng động, khơi gợi sáng tạo</li>
-                        </ul>
-                    </div>
 
-                    <div class="col-lg-5">
-                        <div class="card border-0">
-                            <div class="card-header bg-light text-center p-4">
-                                <h1 class="m-0">Đăng Ký ngay</h1>
-                            </div>
-                            <%
-            String successMessage = (String) session.getAttribute("successMessage");
-            if (successMessage != null) {
-                            %>
-                            <div class="alert alert-success" role="alert">
-                                <%= successMessage %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="card-body rounded-bottom bg-primary p-5">
-                                <form action="HomePage" method="post">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control border-0 p-4" name="full_name" placeholder="Họ và tên" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control border-0 p-4" name="email" placeholder="email" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="date" class="form-control border-0 p-4" name="birth_date" placeholder="Ngày sinh" required="required" />
-                                    </div>                                   
-                                    <div class="form-group">
-                                        <select name="gender" class="custom-select border-0 px-4" style="height: 47px;" required>
-                                            <option value="" disabled selected>Giới tính</option>
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control border-0 p-4" name="address" placeholder="Địa chỉ" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <select name="course_id" class="custom-select border-0 px-4" style="height: 47px;" required>
-                                            <option value="" disabled selected>Chọn khóa</option>
-                                            <c:forEach var="course" items="${courses}">
-                                                <option value="${course.id}">${course.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-dark btn-block border-0 py-3" type="submit">Đăng Ký ngay</button>
-                                    </div>
-                                </form>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Registration End -->
 
-        <!-- Testimonial Start -->
-        <div class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Đánh Giá</h5>
-                    <h1>Các học viên nói về khóa học</h1>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="owl-carousel testimonial-carousel">
-                            <c:forEach var="f" items="${applicationScope.feedbackList}">
-                                <div class="text-center">
-                                    <i class="fa fa-3x fa-quote-left text-primary mb-4"></i>
-                                    <h4 class="font-weight-normal mb-4">${f.feedbackText}</h4>
-                                    <img class="img-fluid mx-auto mb-3" src="img/user-default.jpg" alt="">
-                                    <h5 class="m-0">${f.studentName}</h5>
-                                    <span>${f.feedbackDate}</span>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Testimonial End -->
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">

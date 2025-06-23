@@ -31,9 +31,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Staff</div>
-                            <a class="nav-link" href="classStudent">
-                                <i class="fas fa-chalkboard me-2"></i> Danh sách lớp
-                            </a>
+                            
                             <a class="nav-link" href="listClassSchedule">
                                 <i class="fas fa-calendar-alt me-2"></i> Thời khóa biểu
                             </a>

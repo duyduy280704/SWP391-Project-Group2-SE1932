@@ -12,9 +12,9 @@ package models;
 public class Banner {
     private int id;
     private String title;
-    private String imageUrl;
+    private byte[] imageUrl;
 
-    public Banner(int id, String title, String imageUrl) {
+    public Banner(int id, String title, byte[] imageUrl) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -28,7 +28,20 @@ public class Banner {
         return title;
     }
 
-    public String getImageUrl() {
+    public byte[] getImageUrl() {
         return imageUrl;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setImageUrl(byte[] imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
 }

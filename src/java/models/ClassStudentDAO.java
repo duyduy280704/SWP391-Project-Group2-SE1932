@@ -39,7 +39,7 @@ public class ClassStudentDAO extends DBContext {
                 s.setName(rs.getString("full_name"));
                 s.setEmail(rs.getString("email"));
                 s.setPassword(rs.getString("password"));
-                s.setBrithdate(rs.getString("birth_date"));
+                s.setBirthdate(rs.getString("birth_date"));
                 s.setGender(rs.getString("gender"));
                 s.setAddress(rs.getString("address"));
                 list.add(s);
@@ -98,7 +98,7 @@ public List<Students> searchStudentName(String classId, String keyword) {
             s.setName(rs.getString("full_name"));
             s.setEmail(rs.getString("email"));
             s.setPassword(rs.getString("password"));
-            s.setBrithdate(rs.getString("birth_date"));
+            s.setBirthdate(rs.getString("birth_date"));
             s.setGender(rs.getString("gender"));
             s.setAddress(rs.getString("address"));
             list.add(s);

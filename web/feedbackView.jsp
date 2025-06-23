@@ -72,7 +72,7 @@
                                             <tr>
                                                 <td>${loop.index + 1}</td>
                                                 <td>${fb.studentName}</td>
-                                                <td>${fb.courseId}</td>
+                                                <td>${fb.className}</td>
                                                 <td>${fb.feedbackText}</td>
                                                 <td>${fb.feedbackDate}</td>
 

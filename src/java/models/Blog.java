@@ -14,12 +14,12 @@ public class Blog {
     private String title;
     private String content;
     private String publishDate;
-    private String picture;
+    private byte[] picture;
 
     public Blog() {
     }
     
-    public Blog(int id, String title, String content, String publishDate, String picture) {
+    public Blog(int id, String title, String content, String publishDate, byte[] picture) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -59,11 +59,11 @@ public class Blog {
         this.publishDate = publishDate;
     }
 
-    public String getPicture() {
+    public byte[] getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(byte[] picture) {
         this.picture = picture;
     }
     

@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-// Thuy_ in lịch họ giáo viên, ấn vào điẻm danh thì sánh trang điểm danh,sử lí điểm danh ở trang này luôn 
+
+// Thuy_ in lịch học giáo viên, điểm danh, xử lý trên cùng controller
+
 public class ScheduleTeacherController extends HttpServlet {
 
     @Override
@@ -34,12 +36,12 @@ public class ScheduleTeacherController extends HttpServlet {
         String action = request.getParameter("action");
         if ("attendance".equals(action)) {
             handleAttendance(request, response);
-            return;
+        } else {
+            handleScheduleView(request, response, teacherId);
         }
-
-        handleScheduleView(request, response, teacherId);
     }
-// in thời khóa biểu có năm, ngày ở trên ( tạo năm. tuần trong năm để lọc )
+
+    // Hiển thị thời khóa biểu theo tuần và năm
     private void handleScheduleView(HttpServletRequest request, HttpServletResponse response, int teacherId)
             throws ServletException, IOException {
 
@@ -68,13 +70,11 @@ public class ScheduleTeacherController extends HttpServlet {
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
         List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(teacherId, baseDate.format(dbFormatter));
 
-        
         List<Integer> years = new ArrayList<>();
         for (int i = year - 2; i <= year + 2; i++) {
             years.add(i);
         }
 
-        
         List<ScheduleWeek> weeks = new ArrayList<>();
         LocalDate startOfYear = LocalDate.of(year, 1, 1).with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         for (int i = 0; i < 52; i++) {
@@ -86,7 +86,7 @@ public class ScheduleTeacherController extends HttpServlet {
                         weekEnd.format(dbFormatter),
                         weekStart.format(viewFormatter),
                         weekEnd.format(viewFormatter),
-                        0 // không dùng tuần số nữa
+                        0
                 ));
             }
         }
@@ -100,7 +100,8 @@ public class ScheduleTeacherController extends HttpServlet {
 
         request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
     }
-// điểm danh 
+
+    // Xử lý khi giáo viên ấn vào nút điểm danh
     private void handleAttendance(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -142,6 +143,7 @@ public class ScheduleTeacherController extends HttpServlet {
         }
     }
 
+    // Lưu điểm danh sau khi submit
     private void handleSubmitAttendance(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -164,15 +166,19 @@ public class ScheduleTeacherController extends HttpServlet {
                 status = "Vắng mặt";
             }
 
+            String reason = request.getParameter("reason_" + id);
+
             Students student = new Students();
             student.setId(id);
 
-            attendanceList.add(new StudentAttendance(student, status));
+            StudentAttendance sa = new StudentAttendance(student, status, reason);
+            attendanceList.add(sa);
         }
 
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
         dao.saveAttendance(scheduleId, attendanceList, day);
 
+        // Lấy lại dữ liệu để hiển thị sau khi lưu
         List<Students> students = dao.getStudentsByScheduleId(scheduleId);
         List<StudentAttendance> updated = dao.getStudentAttendanceList(classId, day);
 

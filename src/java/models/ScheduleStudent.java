@@ -3,6 +3,7 @@ package models;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduleStudent {
@@ -15,10 +16,27 @@ public class ScheduleStudent {
     private String room;
     private String specificDay;
     private String dayVN;
+    private String reason;
+    private String teacherName;
     private String attendanceStatus;
 
+    private String startTimeFormatted;
+    private String endTimeFormatted;
+
     public ScheduleStudent() {
-        this.dayVN = "Không xác định"; 
+        this.dayVN = "Không xác định";
+    }
+
+    public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room, String teacherName) {
+        this.id = id;
+        this.day = day;
+        this.nameClass = nameClass;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.room = room;
+        this.teacherName = teacherName;
+        computeDayOfWeek();
+        formatTime(); // gọi format ngay
     }
 
     public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room) {
@@ -28,7 +46,7 @@ public class ScheduleStudent {
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        this.dayVN = "Không xác định"; 
+        this.dayVN = "Không xác định";
         computeDayOfWeek();
     }
 
@@ -71,6 +89,21 @@ public class ScheduleStudent {
             this.specificDay = "UNKNOWN";
             this.dayVN = "Không xác định";
             System.out.println("Error in computeDayOfWeek: " + e.getMessage());
+        }
+    }
+    private void formatTime() {
+        try {
+            LocalTime st = LocalTime.parse(startTime);
+            this.startTimeFormatted = st.format(DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (Exception e) {
+            this.startTimeFormatted = startTime;
+        }
+
+        try {
+            LocalTime et = LocalTime.parse(endTime);
+            this.endTimeFormatted = et.format(DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (Exception e) {
+            this.endTimeFormatted = endTime;
         }
     }
 
@@ -146,5 +179,26 @@ public class ScheduleStudent {
 
     public void setAttendanceStatus(String attendanceStatus) {
         this.attendanceStatus = attendanceStatus;
+    }
+     public String getStartTimeFormatted() {
+        return startTimeFormatted;
+    }
+
+    public String getEndTimeFormatted() {
+        return endTimeFormatted;
+    }
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+     public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

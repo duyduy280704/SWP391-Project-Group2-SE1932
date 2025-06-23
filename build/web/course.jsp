@@ -1,4 +1,3 @@
-<!-- Dương_homepage -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -96,9 +95,9 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <!-- Menu căn giữa -->
                                 <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="course.jsp" class="nav-item nav-link active">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
@@ -111,7 +110,6 @@
             </div>
         </div>
         <!-- Navbar End -->
-
 
         <!-- Header Start -->
         <div class="container-fluid page-header" style="margin-bottom: 90px;">
@@ -129,212 +127,105 @@
         <!-- Header End -->
 
 
-        <!-- Category Start -->
-        <div class="container-fluid py-5">
-            <div class="container pt-5 pb-3">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Môn Học</h5>
-                    <h1>Các Môn Học</h1>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-1.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Web Design</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-2.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Development</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-3.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Game Design</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-4.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Apps Design</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-5.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Marketing</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-6.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Research</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-7.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">Content Writing</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="img/cat-8.jpg" alt="">
-                            <a class="cat-overlay text-white text-decoration-none" href="">
-                                <h4 class="text-white font-weight-medium">SEO</h4>
-                                <span>100 Courses</span>
-                            </a>
-                        </div>
+        <div class="container px-4">
+            <form method="get" action="Course" class="mb-4">
+                <!-- Dòng 1: Tìm kiếm -->
+                <div class="row mb-3">
+                    <div class="col-md-6 offset-md-3">
+                        <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
                     </div>
                 </div>
-            </div>
+
+                <!-- Dòng 2: Bộ lọc -->
+                <div class="row g-2 justify-content-center">
+                    <div class="col-md-2">
+                        <select name="type" class="form-control">
+                            <option value="">Tất cả loại</option>
+                            <c:forEach var="t" items="${typeList}">
+                                <option value="${t.name}" ${t.name == param.type ? 'selected' : ''}>${t.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input name="minPrice" type="number" step="0.01" class="form-control" placeholder="Giá từ" value="${param.minPrice}">
+                    </div>
+                    <div class="col-md-2">
+                        <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="checkbox" name="saleOnly" id="saleOnly" ${param.saleOnly == 'on' ? 'checked' : ''}>
+                            <label class="form-check-label" for="saleOnly">Sale</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-primary w-100">Lọc</button>
+                        <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
+                    </div>
+                </div>
+            </form>
         </div>
-        <!-- Category Start -->
 
 
-        <!-- Courses Start -->
-        <div class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Khóa Học</h5>
-                    <h1>Các Khóa Học</h1>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-1.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
+
+
+
+        <hr>
+
+        <!-- Display Courses -->
+        <div class="container-fluid py-4 bg-light">
+            <div class="container py-4">
+                <form action="coursestaff" method="post" enctype="multipart/form-data">
+                    <div class="row justify-content-center">
+                        <c:forEach var="c" items="${courseList}">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
+                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
+
+                                    
+                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
+                                        <c:choose>
+                                            <c:when test="${not empty c.image}">
+                                                <img src="image?id=${c.id}" class="course-img"
+                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                     alt="Course Picture"
+                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="images/no-image.png" class="course-img"
+                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                     alt="No Image">
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </a>
+
+                                  
+                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
+                                        <div class="text-muted small mb-1">
+                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
+                                        </div>
+                                        <h6 class="card-title text-dark font-weight-bold mb-1 text-truncate">${c.name}</h6>
+                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
+                                            ${c.description}
+                                        </p>
+                                    </div>
+
+                                    
+                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
+                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
                     </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-2.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-3.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-4.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-5.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="rounded overflow-hidden mb-2">
-                            <img class="img-fluid" src="img/course-6.jpg" alt="">
-                            <div class="bg-secondary p-4">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                                    <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                                </div>
-                                <a class="h5" href="">Web design & development courses for beginner</a>
-                                <div class="border-top mt-4 pt-4">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                        <h5 class="m-0">$99</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
+
+
         <!-- Courses End -->
+
+
+
 
 
         <!-- Footer Start -->
