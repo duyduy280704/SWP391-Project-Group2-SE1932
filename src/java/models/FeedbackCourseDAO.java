@@ -1,4 +1,4 @@
-// xử lí sinh viên điền feedback, staff xem tất cả
+// Thuy - xử lí sinh viên điền feedback, staff xem tất cả
 package models;
 
 import dal.DBContext;

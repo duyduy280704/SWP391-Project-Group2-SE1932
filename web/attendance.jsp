@@ -6,19 +6,17 @@
     <head>
         <meta charset="UTF-8">
         <title>Điểm danh lớp</title>
-
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
 
         <style>
             body {
                 font-family: 'Poppins', sans-serif;
-                margin: 0;
-                padding: 0;
                 background: #f4f7fb;
-                color: #333;
+                margin: 0;
             }
+
             .sidebar {
                 position: fixed;
                 top: 0;
@@ -27,205 +25,193 @@
                 width: 220px;
                 background-color: #ffffff;
                 padding-top: 60px;
-                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             }
+
             .sidebar a {
-                display: block;
                 color: #000;
                 padding: 15px 20px;
                 text-decoration: none;
             }
-            .sidebar a:hover, .sidebar a.active {
+
+            .sidebar a:hover,
+            .sidebar a.active {
                 background-color: #FF6600;
                 color: white;
             }
+
+            .topbar {
+                width: 100%;
+                background-color: #f8f9fa;
+                padding: 10px 230px 10px 240px;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 40px;
+                box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            }
+
+            .topbar-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+                color: #333;
+            }
+
+            .topbar-item i {
+                color: #007bff;
+            }
+
             .main-content {
                 margin-left: 220px;
                 padding: 30px;
             }
-            .topbar {
-                background: #fff;
-                border-bottom: 1px solid #ddd;
-                padding: 10px 30px;
-                display: flex;
-                justify-content: flex-end;
+
+            h2 {
+                color: #2c3e50;
+                margin-bottom: 20px;
             }
-            .topbar .info-block {
-                margin-left: 30px;
-            }
-            .topbar i {
-                color: #007bff;
-                margin-right: 8px;
-            }
-            .submit-btn {
-                padding: 10px 20px;
-                background: #007bff;
-                color: white;
-                border: none;
-                cursor: pointer;
-            }
-            .submit-btn:hover {
-                background: #0056b3;
-            }
+
             table {
-                border-collapse: collapse;
                 width: 100%;
-                margin-top: 20px;
+                border-collapse: collapse;
                 background: white;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+                margin-top: 20px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             }
+
             th, td {
                 padding: 12px;
+                border: 1px solid #ddd;
                 text-align: center;
-                border-bottom: 1px solid #eee;
             }
+
             th {
-                background-color: #3498db;
+                background: #3498db;
                 color: white;
-                text-transform: uppercase;
             }
-            h2 {
+
+            input[type=text] {
+                width: 90%;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                padding: 5px;
+            }
+
+            .submit-btn {
                 margin-top: 20px;
-                font-size: 24px;
-                font-weight: 600;
+                padding: 10px 20px;
+                background: #3498db;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
             }
-            .message-success {
-                color: green;
-                font-weight: bold;
-            }
-            .message-error {
-                color: red;
-                font-weight: bold;
+
+            .submit-btn:hover {
+                background-color: #2980b9;
             }
         </style>
     </head>
     <body>
 
+        <!-- Sidebar -->
         <div class="sidebar">
-            <div class="text-center mb-4">
-                <h3><span style="color:#FF6600;">BIG</span>DREAM</h3>
+            <div style="text-align: center; padding-bottom: 10px;">
+                <h3><span style="color: #FF6600;">BIG</span>DREAM</h3>
             </div>
-            <a href="HomePage">Trang Chủ</a>
-            <a href="course.jsp">Danh sách các lớp</a>
-            <a href="scheduleTeacher">Lịch dạy</a>
-            <a href="blog.jsp">Điểm danh</a>
-            <a href="profile?action=view">Hồ Sơ</a>
+            <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
+            <a href="classStudent" class="nav-item nav-link">Danh sách các lớp</a>
+            <a href="scheduleTeacher" class="nav-item nav-link">Lịch dạy</a>
+            <a href="profile?action=view" class="nav-item nav-link">Hồ sơ</a>
         </div>
 
+        <!-- Topbar -->
         <div class="topbar">
-            <div class="info-block">
-                <i class="fa fa-map-marker-alt"></i>
+            <div class="topbar-item">
+                <i class="fas fa-map-marker-alt"></i>
                 <span><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></span>
             </div>
-            <div class="info-block">
-                <i class="fa fa-envelope"></i>
+            <div class="topbar-item">
+                <i class="fas fa-envelope"></i>
                 <span><c:out value="${setting.email}" default="Email chưa cập nhật" /></span>
             </div>
-            <div class="info-block">
-                <i class="fa fa-phone"></i>
+            <div class="topbar-item">
+                <i class="fas fa-phone"></i>
                 <span><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></span>
             </div>
         </div>
 
-
+        <!-- Main Content -->
         <div class="main-content">
             <h2>Điểm danh lớp: ${className} - Ngày: ${day}</h2>
 
             <c:if test="${not empty message}">
-                <p class="message-success">${message}</p>
+                <p style="color:green">${message}</p>
             </c:if>
             <c:if test="${not empty error}">
-                <p class="message-error">${error}</p>
+                <p style="color:red">${error}</p>
             </c:if>
 
-            <c:choose>
+            <form action="scheduleTeacher" method="post">
+                <input type="hidden" name="action" value="submitAttendance" />
+                <input type="hidden" name="scheduleId" value="${scheduleId}" />
+                <input type="hidden" name="day" value="${day}" />
+                <input type="hidden" name="classId" value="${classId}" />
+                <input type="hidden" name="className" value="${className}" />
 
-                <c:when test="${not empty attendanceList}">
-                    <form action="scheduleTeacher" method="post">
-                        <input type="hidden" name="action" value="submitAttendance" />
-                        <input type="hidden" name="scheduleId" value="${scheduleId}" />
-                        <input type="hidden" name="day" value="${day}" />
-                        <input type="hidden" name="classId" value="${classId}" />
-                        <input type="hidden" name="className" value="${className}" />
-
-                        <table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên học sinh</th>
+                            <th>Trạng thái điểm danh</th>
+                            <th>Lý do nghỉ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="s" items="${students}" varStatus="loop">
                             <tr>
-                                <th>STT</th>
-                                <th>Tên học sinh</th>
-                                <th>Trạng thái điểm danh</th>
-                            </tr>
-                            <c:forEach var="sa" items="${attendanceList}" varStatus="loop">
-                                <tr>
-                                    <td>${loop.index + 1}</td>
-                                    <td>
-                                        ${sa.student.name}
-                                        <input type="hidden" name="studentId[]" value="${sa.student.id}" />
-                                    </td>
-                                    <td>
-                                        <label>
-                                            <input type="radio" name="attendance_${sa.student.id}" value="Có mặt"
-                                                   <c:if test="${sa.status eq 'Có mặt'}">checked</c:if> required> Có mặt
-                                            </label>
-                                            <label>
-                                                <input type="radio" name="attendance_${sa.student.id}" value="Vắng mặt"
-                                                   <c:if test="${sa.status eq 'Vắng mặt'}">checked</c:if>> Vắng mặt
-                                            </label>
-                                        </td>
-                                    </tr>
-                            </c:forEach>
-                        </table>
-
-                        <br>
-                        <input type="submit" value="Lưu điểm danh" class="submit-btn" />
-                    </form>
-                </c:when>
-
-
-                <c:when test="${not empty students}">
-                    <form action="scheduleTeacher" method="post">
-                        <input type="hidden" name="action" value="submitAttendance" />
-                        <input type="hidden" name="scheduleId" value="${scheduleId}" />
-                        <input type="hidden" name="day" value="${day}" />
-                        <input type="hidden" name="classId" value="${classId}" />
-                        <input type="hidden" name="className" value="${className}" />
-
-                        <table>
-                            <tr>
-                                <th>STT</th>
-                                <th>Tên học sinh</th>
-                                <th>Trạng thái điểm danh</th>
-                            </tr>
-                            <c:forEach var="s" items="${students}" varStatus="loop">
-                                <tr>
-                                    <td>${loop.index + 1}</td>
-                                    <td>
-                                        ${s.name}
-                                        <input type="hidden" name="studentId[]" value="${s.id}" />
-                                    </td>
-                                    <td>
-                                        <label>
-                                            <input type="radio" name="attendance_${s.id}" value="Có mặt" required> Có mặt
+                                <td>${loop.index + 1}</td>
+                                <td>
+                                    ${s.name}
+                                    <input type="hidden" name="studentId[]" value="${s.id}" />
+                                </td>
+                                <td>
+                                    <c:set var="status" value="" />
+                                    <c:forEach var="a" items="${attendanceList}">
+                                        <c:if test="${a.student.id == s.id}">
+                                            <c:set var="status" value="${a.status}" />
+                                        </c:if>
+                                    </c:forEach>
+                                    <label>
+                                        <input type="radio" name="attendance_${s.id}" value="Có mặt"
+                                               <c:if test="${status == 'Có mặt'}">checked</c:if>> Có mặt
                                         </label>
                                         <label>
-                                            <input type="radio" name="attendance_${s.id}" value="Vắng mặt"> Vắng mặt
+                                            <input type="radio" name="attendance_${s.id}" value="Vắng mặt"
+                                               <c:if test="${status == 'Vắng mặt'}">checked</c:if>> Vắng mặt
                                         </label>
                                     </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                                    <td>
+                                    <c:set var="reason" value="" />
+                                    <c:forEach var="a" items="${attendanceList}">
+                                        <c:if test="${a.student.id == s.id}">
+                                            <c:set var="reason" value="${a.reason}" />
+                                        </c:if>
+                                    </c:forEach>
+                                    <input type="text" name="reason_${s.id}" placeholder="Lý do nghỉ" value="${reason}" />
+                            </tr>
+                            </td>
+                        </c:forEach>
+                    </tbody>
+                </table>
 
-                        <br>
-                        <input type="submit" value="Lưu điểm danh" class="submit-btn" />
-                    </form>
-                </c:when>
-
-
-                <c:otherwise>
-                    <p>Không có học sinh nào trong lớp này.</p>
-                </c:otherwise>
-            </c:choose>
+                <input type="submit" class="submit-btn" value="Lưu điểm danh" />
+            </form>
         </div>
 
     </body>

@@ -1,3 +1,5 @@
+//Thuy= in danh sách lớp có thời khóa biểu 
+
 package models;
 
 import java.sql.*;

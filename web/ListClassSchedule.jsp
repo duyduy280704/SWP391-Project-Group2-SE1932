@@ -26,8 +26,8 @@
                         <i class="fas fa-chalkboard me-2"></i> Danh sách lớp
                     </a>
                     <a class="nav-link" href="listClassSchedule">
-                        <i class="fas fa-calendar-alt me-2"></i> Thời khóa biểu
-                    </a>
+                                <i class="fas fa-calendar-alt me-2"></i> Thời khóa biểu
+                            </a>
                     <a class="nav-link" href="feedback?mode=viewAll">
                         <i class="fas fa-comments me-2"></i> Phản hồi học viên
                     </a>

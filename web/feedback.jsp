@@ -137,11 +137,12 @@
             </div>
         </div>
         <div class="sidebar">
+            <div style="text-align: center; padding-bottom: 10px;">
+                <h3><span style="color: #FF6600;">BIG</span>DREAM</h3>
+            </div>
             <a href="HomePage" class="nav-link">Trang Chủ</a>
-            <a href="scheduleStudent" class="nav-link">Lịch học</a>
+            <a href="scheduleStudent" class="nav-link active">Lịch học</a>
             <a href="feedback" class="nav-link">Phản hồi khóa học </a>
-
-            <a href="profile?action=view" class="nav-link">Hồ sơ</a>
         </div>
         <div class="main-content">
             <h2>Gửi phản hồi về lớp học bạn đã tham gia</h2>

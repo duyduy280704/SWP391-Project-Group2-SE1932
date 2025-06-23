@@ -16,9 +16,10 @@ public class ScheduleStudent {
     private String specificDay;
     private String dayVN;
     private String attendanceStatus;
+    private String reason;
 
     public ScheduleStudent() {
-        this.dayVN = "Không xác định"; 
+        this.dayVN = "Không xác định";
     }
 
     public ScheduleStudent(String id, String day, String nameClass, String startTime, String endTime, String room) {
@@ -28,7 +29,7 @@ public class ScheduleStudent {
         this.startTime = startTime;
         this.endTime = endTime;
         this.room = room;
-        this.dayVN = "Không xác định"; 
+        this.dayVN = "Không xác định";
         computeDayOfWeek();
     }
 
@@ -74,7 +75,7 @@ public class ScheduleStudent {
         }
     }
 
-    // Getter và Setter
+    // Getter & Setter
     public String getId() {
         return id;
     }
@@ -146,5 +147,13 @@ public class ScheduleStudent {
 
     public void setAttendanceStatus(String attendanceStatus) {
         this.attendanceStatus = attendanceStatus;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }
