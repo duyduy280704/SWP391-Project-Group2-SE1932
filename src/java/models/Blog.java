@@ -14,17 +14,17 @@ public class Blog {
     private String title;
     private String content;
     private String publishDate;
-    private String picture;
+    private byte[] img;
 
     public Blog() {
     }
-    
-    public Blog(int id, String title, String content, String publishDate, String picture) {
+
+    public Blog(int id, String title, String content, String publishDate, byte[] img) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.publishDate = publishDate;
-        this.picture = picture;
+        this.img = img;
     }
 
     public int getId() {
@@ -59,12 +59,13 @@ public class Blog {
         this.publishDate = publishDate;
     }
 
-    public String getPicture() {
-        return picture;
+    public byte[] getImg() {
+        return img;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setImg(byte[] img) {
+        this.img = img;
     }
-    
+
+   
 }

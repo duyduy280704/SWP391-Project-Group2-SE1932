@@ -82,7 +82,7 @@
                 text-align: center;
                 margin-bottom: 20px;
                 padding: 12px;
-        border-radius: 6px;
+                border-radius: 6px;
             }
 
             .message.success {
@@ -225,7 +225,7 @@
                 margin-left: 10px;
             }
         </style>
-        <script>
+       <script>
             function toggleContent(section) {
                 const contents = document.getElementsByClassName('content');
                 for (let content of contents) {
@@ -233,9 +233,19 @@
                 }
                 document.getElementById(section).classList.add('active');
             }
-            window.onload = function() {
+            window.onload = function () {
                 document.getElementById('personalInfo').classList.add('active');
             };
+            function checkPasswordMatch() {
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const errorMsg = document.getElementById('passwordMatchError');
+                if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+                    errorMsg.style.display = 'block';
+                } else {
+                    errorMsg.style.display = 'none';
+                }
+            }
         </script>
     </head>
     <body>
@@ -252,9 +262,7 @@
                         <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
-                            <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -263,9 +271,7 @@
                         <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Email</h6>
-                            <p>
-                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.email}" default="Email chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -274,9 +280,7 @@
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
-                            <p>
-                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -297,9 +301,7 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarCollapse">
                             <div class="d-flex justify-content-between align-items-center w-100">
-                                <div class="navbar-nav mx-auto">
-                                    <!-- Bỏ phần "Trang Chủ" -->
-                                </div>
+                                <div class="navbar-nav mx-auto"></div>
                             </div>
                         </div>
                     </nav>
@@ -319,25 +321,26 @@
                     </c:if>
                     <c:choose>
                         <c:when test="${not empty profile}">
-                            <form action="profile" method="post" enctype="multipart/form-data">
+                            <form action="profile" method="post">
+                                <input type="hidden" name="action" value="updateAccount">
                                 <div class="form-group">
                                     <label>Số điện thoại mới:</label>
-                                    <input type="email" name="newPhone" value="${profile.phone}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
+                                    <input type="text" name="newPhone" value="${profile.phone}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
                                 </div>
                                 <div class="form-group">
                                     <label>Mật Khẩu Cũ:</label>
-                                    <input type="password" name="oldPassword" placeholder="Nhập mật khẩu cũ" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
+                                    <input type="password" name="oldPassword" placeholder="Nhập mật khẩu cũ">
                                 </div>
                                 <div class="form-group">
                                     <label>Mật Khẩu Mới:</label>
-                                    <input type="password" name="newPassword" id="newPassword" placeholder="Nhập mật khẩu mới" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
+                                    <input type="password" name="newPassword" id="newPassword" placeholder="Nhập mật khẩu mới" oninput="checkPasswordMatch()">
                                 </div>
                                 <div class="form-group">
                                     <label>Xác Nhận Mật Khẩu Mới:</label>
-                                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu mới" required oninput="checkPasswordMatch()">
+                                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu mới" oninput="checkPasswordMatch()">
                                 </div>
                                 <p id="passwordMatchError" style="color: red; display: none;">Mật khẩu không khớp!</p>
-                                <button type="submit" name="action" value="update">Cập Nhật</button>
+                                <button type="submit">Cập Nhật</button>
                             </form>
                         </c:when>
                         <c:otherwise>
@@ -354,24 +357,12 @@
                             ${message}
                         </div>
                     </c:if>
-                    <c:set var="roleId" value="" />
-                    <c:if test="${not empty sessionScope.account}">
-                        <c:choose>
-                            <c:when test="${sessionScope.account['class'].simpleName == 'AdminStaffs'}">
-                                <c:set var="roleId" value="${sessionScope.account.roleId}" />
-                            </c:when>
-                            <c:when test="${sessionScope.account['class'].simpleName == 'Students'}">
-                                <c:set var="roleId" value="${sessionScope.account.role}" />
-                            </c:when>
-                            <c:when test="${sessionScope.account['class'].simpleName == 'Teachers'}">
-                                <c:set var="roleId" value="${sessionScope.account.role}" />
-                            </c:when>
-                        </c:choose>
-                    </c:if>
+                    <c:set var="roleId" value="${sessionScope.roleId}" />
                     <c:choose>
                         <c:when test="${not empty profile}">
                             <form action="profile" method="post" enctype="multipart/form-data">
-                                 <div class="form-group">
+                                <input type="hidden" name="action" value="updatePersonalInfo">
+                                <div class="form-group">
                                     <label>Số điện thoại:</label>
                                     <input type="text" name="phone" value="${profile.phone}" readonly>
                                 </div>
@@ -383,7 +374,6 @@
                                     <label>Họ và Tên:</label>
                                     <input type="text" name="fullName" value="${profile.name}" required oninvalid="this.setCustomValidity('Vui lòng nhập vào đây')" oninput="this.setCustomValidity('')">
                                 </div>
-                                
                                 <div class="form-group">
                                     <label>Giới Tính:</label>
                                     <select name="gender" required oninvalid="this.setCustomValidity('Vui lòng chọn vào đây')" oninput="this.setCustomValidity('')">
@@ -396,11 +386,23 @@
                                     <label>Ngày Sinh:</label>
                                     <input type="date" name="birthDate" value="${profile.birthdate}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
                                 </div>
-                                
                                 <c:if test="${roleId == '1'}">
                                     <div class="form-group">
                                         <label>Địa Chỉ:</label>
                                         <input type="text" name="address" value="${profile.address}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ảnh Đại Diện:</label>
+                                        <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
+                                        <c:choose>
+                                            <c:when test="${not empty picturePath}">
+                                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Picture" class="profile-image">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <input type="file" name="picture" accept="image/*">
                                     </div>
                                 </c:if>
                                 <c:if test="${roleId == '2'}">
@@ -414,19 +416,20 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Ảnh Đại Diện:</label>
-                                        <c:if test="${not empty profile.pic}">
-                                            <img src="${pageContext.request.contextPath}/uploads/${profile.pic}" alt="Profile Picture" class="profile-image">
-                                        </c:if>
+                                        <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
+                                        <c:choose>
+                                            <c:when test="${not empty picturePath}">
+                                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Picture" class="profile-image">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                                            </c:otherwise>
+                                        </c:choose>
                                         <input type="file" name="picture" accept="image/*">
                                     </div>
                                 </c:if>
-                                <button type="submit" name="action" value="update">Cập Nhật</button>
+                                <button type="submit">Cập Nhật</button>
                             </form>
-                            <c:if test="${not empty profile.name or not empty profile.gender or not empty profile.birthdate or 
-                                          (roleId == '1' and not empty profile.address) or 
-                                          (roleId == '2' and (not empty profile.exp or not empty profile.pic))}">
-                                <a href="profile?action=view">Quay Lại Xem Thông Tin</a>
-                            </c:if>
                         </c:when>
                         <c:otherwise>
                             <p>Bạn chưa có thông tin cá nhân. Vui lòng liên hệ admin để thêm thông tin.</p>
@@ -440,7 +443,6 @@
         <footer class="bg-dark text-white pt-5 pb-4">
             <div class="container text-center text-md-left">
                 <div class="row">
-                    <!-- Liên hệ -->
                     <div class="col-md-4 mb-4 mb-md-0">
                         <h5 class="text-uppercase font-weight-bold text-primary">Liên Hệ</h5>
                         <p><i class="fa fa-map-marker-alt mr-2"></i> <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></p>
@@ -452,7 +454,6 @@
                             <a href="${setting.youtubeLink != null ? setting.youtubeLink : '#'}" class="btn btn-outline-light btn-sm"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
-                    <!-- Khoá học -->
                     <div class="col-md-4 mb-4 mb-md-0">
                         <h5 class="text-uppercase font-weight-bold text-primary">Khoá học</h5>
                         <ul class="list-unstyled">
@@ -461,7 +462,6 @@
                             </c:forEach>
                         </ul>
                     </div>
-                    <!-- Thông tin thêm -->
                     <div class="col-md-4">
                         <h5 class="text-uppercase font-weight-bold text-primary">Về Chúng Tôi</h5>
                         <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
@@ -492,18 +492,5 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
-
-        <script>
-            function checkPasswordMatch() {
-                const newPassword = document.getElementById('newPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                const errorMsg = document.getElementById('passwordMatchError');
-                if (newPassword && confirmPassword && newPassword !== confirmPassword) {
-                    errorMsg.style.display = 'block';
-                } else {
-                    errorMsg.style.display = 'none';
-                }
-            }
-        </script>
     </body>
 </html>

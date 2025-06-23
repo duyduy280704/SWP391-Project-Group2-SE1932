@@ -11,10 +11,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import models.ResultMessage;
 import models.Staff;
 import models.StaffDAO;
+import models.Teachers;
 
 /**
  *
@@ -58,7 +60,8 @@ public class StaffController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffDAO sd = new StaffDAO();
-        
+        HttpSession session = request.getSession();
+        Staff staff =(Staff) session.getAttribute("account");
         if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
             //tìm Product tương ứng cùng với code truyền sang
             String id = request.getParameter("id");
@@ -76,6 +79,8 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("error", "ID không hợp lệ!");
             }
         }
+          request.setAttribute("profile", staff); // Truyền thông tin giáo viên
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         
         ArrayList<Staff> data = sd.getStaff();
         request.setAttribute("data", data);

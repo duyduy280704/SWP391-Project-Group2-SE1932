@@ -2,12 +2,13 @@ package models;
 
 public class Teachers {
 
-    String id, name, email, password, birthdate, gender, exp, pic, role,idtypecourse,yearofcourse,phone;
+    String id, name, email, password, birthdate, gender, exp, role, idtypecourse, yearofcourse, phone;
+    byte[] pic; 
 
     public Teachers() {
     }
 
-    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, String pic, String role, String idtypecourse, String yearofcourse, String phone) {
+    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, byte[] pic, String role, String idtypecourse, String yearofcourse, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -15,7 +16,7 @@ public class Teachers {
         this.birthdate = birthdate;
         this.gender = gender;
         this.exp = exp;
-        this.pic = pic;
+        this.pic = pic; // Thay đổi từ String thành byte[]
         this.role = role;
         this.idtypecourse = idtypecourse;
         this.yearofcourse = yearofcourse;
@@ -78,11 +79,11 @@ public class Teachers {
         this.exp = exp;
     }
 
-    public String getPic() {
+    public byte[] getPic() { // Thay đổi từ String thành byte[]
         return pic;
     }
 
-    public void setPic(String pic) {
+    public void setPic(byte[] pic) { // Thay đổi từ String thành byte[]
         this.pic = pic;
     }
 
@@ -117,8 +118,4 @@ public class Teachers {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    
 }
-
-   

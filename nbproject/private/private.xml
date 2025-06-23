@@ -4,27 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/profile.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/UserDAO.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/TeacherRegistion.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Students.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/TeacherHome.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Teachers.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/StaffController.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/StudentDAO.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Staff.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/ProfileController.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/changePassword.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/ForgotPasswordServlet.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/TeacherDAO.java</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/ProfileDAO.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/StaffDAO.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/login.jsp</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherHome.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/TeacherHome.jsp</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/LoginControllers.java</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/AdminStaffs.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/forgot-password.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherController.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/ResetPasswordServlet.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Staff.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/ProfileController.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/LogoutController.java</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/AdminStaffDAO.java</file>
         </group>
     </open-files>

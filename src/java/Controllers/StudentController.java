@@ -11,6 +11,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -105,9 +108,17 @@ public class StudentController extends HttpServlet {
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
          String phone=request.getParameter("phone");
-         String pic=request.getParameter("picture");
+        
         String role = "1";
-
+byte[] pic = null;
+        try {
+            Part picturePart = request.getPart("picture");
+            if (picturePart != null && picturePart.getSize() > 0) {
+                pic = Files.readAllBytes((Path) picturePart.getInputStream());
+            }
+        } catch (IOException e) {
+            Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, "Lỗi đọc ảnh", e);
+        }
         ResultMessage result = null;
 
         Students s = new Students(id, name, email, password, birthdate, gender, address, role, phone, pic);

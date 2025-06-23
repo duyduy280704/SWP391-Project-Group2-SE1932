@@ -34,7 +34,7 @@ public class TeacherDAO extends DBContext {
                 String birthDate = rs.getString("birth_date");
                 String gender = rs.getString("gender");
                 String expertise = rs.getString("Expertise");
-                String picture = rs.getString("picture");
+                byte[] picture = rs.getBytes("picture");
                 String role = rs.getString("role_name");
                 String idcourse=rs.getString("id_type_course");
                 String yearexp=rs.getString("years_of_experience");
@@ -67,7 +67,7 @@ public class TeacherDAO extends DBContext {
                 String birthDate = rs.getString("birth_date");
                 String gender = rs.getString("gender");
                 String expertise = rs.getString("Expertise");
-                String picture = rs.getString("picture");
+                byte[] picture = rs.getBytes("picture");
                 String roleId = String.valueOf(rs.getInt("role_id")); 
                 String idcourse=rs.getString("id_type_course");
                 String yearexp=rs.getString("years_of_experience");
@@ -97,7 +97,7 @@ public class TeacherDAO extends DBContext {
                 String birthdate = rs.getString(5);
                 String gender = rs.getString(6);
                 String exp = rs.getString(7);
-                String pic = rs.getString(8);
+                byte[] pic = rs.getBytes(8);
                 String role = rs.getString(13);
                 String idcourse=rs.getString(10);
                 String yearexp=rs.getString(11);

@@ -2,26 +2,19 @@ package models;
 //Huyền-adminstaff
 public class AdminStaffs {
 
-    private String id;
-    private String fullName;
-    private String email;
-    private String birthDate;
-    private String gender;
-    private String password;
-    private String roleId;
-    private String phone;
+    String id, name, email, password, birthdate, gender, role,phone;
 
     public AdminStaffs() {
     }
 
-    public AdminStaffs(String id, String fullName, String email, String birthDate, String gender, String password, String roleId, String phone) {
+    public AdminStaffs(String id, String name, String email, String password, String birthdate, String gender, String role, String phone) {
         this.id = id;
-        this.fullName = fullName;
+        this.name = name;
         this.email = email;
-        this.birthDate = birthDate;
-        this.gender = gender;
         this.password = password;
-        this.roleId = roleId;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.role = role;
         this.phone = phone;
     }
 
@@ -33,12 +26,12 @@ public class AdminStaffs {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -49,12 +42,20 @@ public class AdminStaffs {
         this.email = email;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getPassword() {
+        return password;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getGender() {
@@ -65,20 +66,12 @@ public class AdminStaffs {
         this.gender = gender;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPhone() {
@@ -89,5 +82,5 @@ public class AdminStaffs {
         this.phone = phone;
     }
 
-   
+
 }

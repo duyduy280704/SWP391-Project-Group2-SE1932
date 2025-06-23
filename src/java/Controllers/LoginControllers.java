@@ -59,10 +59,10 @@ public class LoginControllers extends HttpServlet {
             HttpSession session = request.getSession();
             if (staff != null) {
                 session.setAttribute("account", staff);
-                System.out.println("AdminStaff RoleId: " + staff.getRoleId());
-                if ("4".equals(staff.getRoleId())) {
+                System.out.println("AdminStaff RoleId: " + staff.getRole());
+                if ("4".equals(staff.getRole())) {
                     response.sendRedirect("adminhome");
-                } else if ("3".equals(staff.getRoleId())) {
+                } else if ("3".equals(staff.getRole())) {
                     response.sendRedirect("staff.jsp");
                 }
                 return;
@@ -74,7 +74,7 @@ public class LoginControllers extends HttpServlet {
             } else if (teacher != null) {
                 session.setAttribute("account", teacher);
                 System.out.println("Teacher RoleId: " + teacher.getRole());
-                response.sendRedirect("TeacherHome.jsp");
+                response.sendRedirect("teacherHome");
                 return;
             } else {
                 message = "Số điện thoại hoặc mật khẩu không đúng!";

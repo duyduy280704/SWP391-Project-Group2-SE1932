@@ -63,10 +63,22 @@
         <url-pattern>/ProfileController</url-pattern>
     </servlet-mapping>
     -->
-<!--    <servlet>
+    <!--    <servlet>
         <servlet-name>TeacherRegistrationController</servlet-name>
         <servlet-class>Controllers.TeacherRegistrationController</servlet-class>
     </servlet>-->
+    <servlet>
+        <servlet-name>EventController</servlet-name>
+        <servlet-class>Controllers.EventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>Controllers.LogoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherHome</servlet-name>
+        <servlet-class>Controllers.TeacherHome</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -119,8 +131,20 @@
         <servlet-name>AdminHomeController</servlet-name>
         <url-pattern>/adminhome</url-pattern>
     </servlet-mapping>
-<!--    <servlet-mapping>
+<!--        <servlet-mapping>
         <servlet-name>TeacherRegistrationController</servlet-name>
         <url-pattern>/registerTeacher</url-pattern>
     </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>EventController</servlet-name>
+        <url-pattern>/recentevents</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherHome</servlet-name>
+        <url-pattern>/teacherHome</url-pattern>
+    </servlet-mapping>
 </web-app>

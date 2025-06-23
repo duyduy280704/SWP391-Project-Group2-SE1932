@@ -33,7 +33,7 @@ public class StudentDAO extends DBContext{
                 String address = rs.getString(8);
                 String role = rs.getString(11);
                 String phones=rs.getString(10);
-                String pic=rs.getString(7);
+                byte[] pic=rs.getBytes(7);
                 
                 Students p = new Students(id, name, email, password, brithdate, gender, address, role,phones,pic);
                 data.add(p);
@@ -67,7 +67,7 @@ public class StudentDAO extends DBContext{
                 String address = rs.getString("address");
                 String roleId = String.valueOf(rs.getInt("Role_id"));
                 String phones=rs.getString("phone");
-                 String pic=rs.getString("picture");
+                 byte[] pic=rs.getBytes("picture");
                 Students student = new Students(id, fullName, emailFromDB, pwd, birthDate, gender, address, roleId,phones,pic);
                 return student;
             }                   
@@ -92,7 +92,7 @@ public class StudentDAO extends DBContext{
                 String address = rs.getString(8);
                 String role = rs.getString(9);
                 String phones=rs.getString(10);
-                 String pic=rs.getString(7);
+                byte[] pic=rs.getBytes(7);
                 Students p = new Students(id, name, email, password, brithdate, gender, address, role,phones,pic);
                 return p;
             }

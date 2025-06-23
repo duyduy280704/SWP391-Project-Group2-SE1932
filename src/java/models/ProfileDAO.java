@@ -1,307 +1,505 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package models;
 
 import dal.DBContext;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ProfileDAO extends DBContext {
 
-    private PreparedStatement stm;
-    private ResultSet rs;
+    // Khai báo các thành phần xử lý Database
+    PreparedStatement stm; // Thực hiện câu lệnh SQL
+    ResultSet rs; // Lưu trữ và xử lý dữ liệu
 
-    public Teachers getProfile(String phone) {
+    // Teacher methods
+    /**
+     * Lấy thông tin hồ sơ của một giáo viên dựa trên số điện thoại.
+     */
+    public Teachers getTeacherByPhone(String phone) {
         try {
-            String sql = "SELECT * FROM Teacher WHERE phone = ? ";
-            stm = connection.prepareStatement(sql);
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, role_id, "
+                    + "Expertise, picture, id_type_course, years_of_experience, phone "
+                    + "FROM Teacher WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
             stm.setString(1, phone);
-            
             rs = stm.executeQuery();
             if (rs.next()) {
-                String id = rs.getString("id");
-                String name = rs.getString("full_name");
-                String e = rs.getString("email");
-                String pas = rs.getString("password");
-                String birt = rs.getString("birth_date");
-                String gen = rs.getString("gender");
-                String ex = rs.getString("Expertise");
-                String pic = rs.getString("picture");
-                String role = rs.getString("role_id");
-                String idcourse = rs.getString("id_type_course");
-                String yearexp = rs.getString("years_of_experience");
-                String phones=rs.getString("phone");
-                Teachers t = new Teachers(id, name, e, pas, birt, gen, ex, pic, role, idcourse, yearexp,phones);
-                return t;
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String roleId = String.valueOf(rs.getInt("role_id"));
+                String expertise = rs.getString("Expertise");
+                byte[] picture = rs.getBytes("picture");
+                String idTypeCourse = rs.getString("id_type_course");
+                String yearsOfExperience = rs.getString("years_of_experience");
+                return new Teachers(id, fullName, email, password, birthDate, gender, expertise, picture, roleId, idTypeCourse, yearsOfExperience, phone);
             }
-        } catch (SQLException e) {
-            System.out.println("getProfile Teacher: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("getTeacherByPhone: " + e.getMessage());
         } finally {
             closeResources();
         }
         return null;
     }
-    public boolean verifyPassword(String phone, String oldPassword) {
+
+    /**
+     * Lấy danh sách tất cả giáo viên trong cơ sở dữ liệu.
+     */
+    public ArrayList<Teachers> getAllTeachers() {
+        ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String sql = "SELECT password FROM Teacher WHERE phone = ? UNION SELECT password FROM Student WHERE phone = ? UNION SELECT password FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(sql);
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, role_id, "
+                    + "Expertise, picture, id_type_course, years_of_experience, phone "
+                    + "FROM Teacher";
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String roleId = String.valueOf(rs.getInt("role_id"));
+                String expertise = rs.getString("Expertise");
+                byte[] picture = rs.getBytes("picture");
+                String idTypeCourse = rs.getString("id_type_course");
+                String yearsOfExperience = rs.getString("years_of_experience");
+                String phone = rs.getString("phone");
+                Teachers teacher = new Teachers(id, fullName, email, password, birthDate, gender, expertise, picture, roleId, idTypeCourse, yearsOfExperience, phone);
+                data.add(teacher);
+            }
+        } catch (Exception e) {
+            System.out.println("getAllTeachers: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+        return data;
+    }
+
+    /**
+     * Cập nhật thông tin cá nhân của giáo viên (tên, email, ngày sinh, giới
+     * tính, chuyên môn, hình ảnh, v.v.).
+     */
+    public void updateTeacher(Teachers t) {
+        try {
+            String strSQL = "UPDATE Teacher SET full_name = ?, email = ?, birth_date = ?, gender = ?, "
+                    + "Expertise = ?, picture = ?, id_type_course = ?, years_of_experience = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, t.getName());
+            stm.setString(2, t.getEmail());
+            stm.setString(3, t.getBirthdate());
+            stm.setString(4, t.getGender());
+            stm.setString(5, t.getExp());
+            stm.setBytes(6, t.getPic() != null ? t.getPic() : getCurrentTeacherPicture(t.getPhone()));
+            stm.setString(7, t.getIdtypecourse());
+            stm.setString(8, t.getYearofcourse());
+            stm.setString(9, t.getPhone());
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateTeacher: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+    }
+
+    /**
+     * Cập nhật số điện thoại và/hoặc mật khẩu của giáo viên.
+     */
+    public boolean updateTeacherCredentials(String oldPhone, String newPhone, String newPassword) {
+        try {
+            String strSQL = "UPDATE Teacher SET phone = ?, password = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, newPhone != null ? newPhone : oldPhone);
+            stm.setString(2, newPassword != null ? newPassword : getCurrentTeacherPassword(oldPhone));
+            stm.setString(3, oldPhone);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("updateTeacherCredentials: " + e.getMessage());
+            return false;
+        } finally {
+            closeResources();
+        }
+    }
+
+    /**
+     * Xác minh mật khẩu của giáo viên dựa trên số điện thoại.
+     */
+    public boolean verifyTeacherPassword(String phone, String password) {
+        try {
+            String strSQL = "SELECT password FROM Teacher WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
             stm.setString(1, phone);
-            stm.setString(2, phone);
-            stm.setString(3, phone);
             rs = stm.executeQuery();
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
-                return storedPassword != null && storedPassword.equals(oldPassword); // Simple comparison (consider hashing in production)
+                return storedPassword != null && storedPassword.equals(password);
             }
-        } catch (SQLException e) {
-            System.out.println("verifyPassword: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("verifyTeacherPassword: " + e.getMessage());
         } finally {
             closeResources();
         }
         return false;
     }
 
-    // New method to update password
-   public boolean updatePassword(String phone, String newPassword) {
+    // Student methods
+    /**
+     * Lấy thông tin hồ sơ của một học sinh dựa trên số điện thoại.
+     */
+    public Students getStudentByPhone(String phone) {
         try {
-            String checkSql = "SELECT role_id FROM Teacher WHERE phone = ? UNION SELECT Role_id FROM Student WHERE phone = ? UNION SELECT role_id FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(checkSql);
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, Role_id, picture, address, phone "
+                    + "FROM Student WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
             stm.setString(1, phone);
-            stm.setString(2, phone);
-            stm.setString(3, phone);
             rs = stm.executeQuery();
             if (rs.next()) {
-                int roleId = rs.getInt(1);
-                String updateSql = "";
-                if (roleId == 2) { // Teacher
-                    updateSql = "UPDATE Teacher SET password = ? WHERE phone = ?";
-                } else if (roleId == 1) { // Student
-                    updateSql = "UPDATE Student SET password = ? WHERE phone = ?";
-                } else { // Admin_staff (role_id 3 or 4)
-                    updateSql = "UPDATE Admin_staff SET password = ? WHERE phone = ?";
-                }
-                stm = connection.prepareStatement(updateSql);
-                stm.setString(1, newPassword);
-                stm.setString(2, phone);
-                int rowsAffected = stm.executeUpdate();
-                return rowsAffected > 0;
-            }
-        } catch (SQLException e) {
-            System.out.println("updatePassword: " + e.getMessage());
-        } finally {
-            closeResources();
-        }
-        return false;
-    }
-
-    // New method to update email (if needed)
-   public boolean updatePhone(String oldphone, String newPhone) {
-        try {
-            String checkSql = "SELECT role_id FROM Teacher WHERE phone = ? UNION SELECT Role_id FROM Student WHERE phone = ? UNION SELECT role_id FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(checkSql);
-            stm.setString(1, oldphone);
-            stm.setString(2, oldphone);
-            stm.setString(3, oldphone);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                int roleId = rs.getInt(1);
-                String updateSql = "";
-                if (roleId == 2) { // Teacher
-                    updateSql = "UPDATE Teacher SET phone = ? WHERE phone = ?";
-                } else if (roleId == 1) { // Student
-                    updateSql = "UPDATE Student SET phone = ? WHERE phone = ?";
-                } else { // Admin_staff (role_id 3 or 4)
-                    updateSql = "UPDATE Admin_staff SET phone = ? WHERE phone = ?";
-                }
-                stm = connection.prepareStatement(updateSql);
-                stm.setString(1, newPhone);
-                stm.setString(2, oldphone);
-                int rowsAffected = stm.executeUpdate();
-                return rowsAffected > 0;
-            }
-        } catch (SQLException e) {
-            System.out.println("updateEmail: " + e.getMessage());
-        } finally {
-            closeResources();
-        }
-        return false;
-    }
-   public Object getAccountByPhone(String phone) {
-        try {
-            String sql = "SELECT id, full_name, email, password, birth_date, gender, role_id, " +
-            "NULL AS address, Expertise, picture, id_type_course, years_of_experience, phone " +
-            "FROM Teacher WHERE phone = ? " +
-            "UNION " +
-            "SELECT id, full_name, email, password, birth_date, gender, Role_id AS role_id, " +
-            "address, NULL AS Expertise, picture, NULL AS id_type_course, NULL AS years_of_experience, phone " +
-            "FROM Student WHERE phone = ? " +
-            "UNION " +
-            "SELECT id, full_name, email, password, birth_date, gender, role_id, " +
-            "NULL AS address, NULL AS Expertise, NULL AS picture, NULL AS id_type_course, NULL AS years_of_experience, phone " +
-            "FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, phone);
-            stm.setString(2, phone);
-            stm.setString(3, phone);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                String id = rs.getString("id");
+                String id = String.valueOf(rs.getInt("id"));
                 String fullName = rs.getString("full_name");
-                String e = rs.getString("email");
-                String pas = rs.getString("password");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
                 String birthDate = rs.getString("birth_date");
                 String gender = rs.getString("gender");
-                String roleId = rs.getString("role_id");
-                String RoleId=rs.getString("Role_id");
-                String address = rs.getString("address"); 
-                String expertise = rs.getString("Expertise"); 
-                String picture = rs.getString("picture"); 
-                String idTypeCourse = rs.getString("id_type_course"); 
-                String yearsOfExperience = rs.getString("years_of_experience"); 
-                String phones=rs.getString("phone");
-                 
-                if ("2".equals(roleId)) {
-                    return new Teachers(id, fullName, e, pas, birthDate, gender, expertise, picture, roleId, idTypeCourse, yearsOfExperience,phones);
-                } else if ("1".equals(roleId)) {
-                    return new Students(id, fullName, e, pas, birthDate, gender, address, RoleId,phones,picture);
-                } else {
-                    return new AdminStaffs(id, fullName, e, pas, birthDate, gender, roleId,phones);
-                }
+                String roleId = String.valueOf(rs.getInt("Role_id"));
+                byte[] picture = rs.getBytes("picture");
+                String address = rs.getString("address");
+                return new Students(id, fullName, email, password, birthDate, gender, address, roleId, phone, picture);
             }
-        } catch (SQLException e) {
-            System.out.println("getAccountByEmail: " + e.getMessage());
-        } finally {
-            closeResources();
-        }
-        return null;
-    }
-   
-
-    public Students getProfileStudent(String phone) {
-        try {
-            String sql = "SELECT * FROM Student WHERE phone = ? " ;
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, phone);
-           
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                String id = rs.getString("id");
-                String name = rs.getString("full_name");
-                String e = rs.getString("email");
-                String pas = rs.getString("password");
-                String birt = rs.getString("birth_date");
-                String gen = rs.getString("gender");
-                String add = rs.getString("address");
-                String role = rs.getString("Role_id");
-                String phones=rs.getString("phone");
-                 String pic=rs.getString("picture");
-                Students s = new Students(id, name, e, pas, birt, gen, add, role,phones,pic);
-                return s;
-            }
-        } catch (SQLException e) {
-            System.out.println("getProfile Student: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("getStudentByPhone: " + e.getMessage());
         } finally {
             closeResources();
         }
         return null;
     }
 
-    public Staff getProfileStaff(String phone) {
+    /**
+     * Lấy danh sách tất cả học sinh trong cơ sở dữ liệu.
+     */
+    public ArrayList<Students> getAllStudents() {
+        ArrayList<Students> data = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, phone);
-            
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, Role_id, picture, address, phone "
+                    + "FROM Student";
+            stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
-            if (rs.next()) {
-                String id = rs.getString("id");
-                String name = rs.getString("full_name");
-                String e = rs.getString("email");
-                String pas = rs.getString("password");
-                String birt = rs.getString("birth_date");
-                String gen = rs.getString("gender");
-                String role = rs.getString("role_id");
-                String phones=rs.getString("phone");
-                Staff s = new Staff(id, name, e, pas, birt, gen, role,phones);
-                return s;
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String roleId = String.valueOf(rs.getInt("Role_id"));
+                byte[] picture = rs.getBytes("picture");
+                String address = rs.getString("address");
+                String phone = rs.getString("phone");
+                Students student = new Students(id, fullName, email, password, birthDate, gender, address, roleId, phone, picture);
+                data.add(student);
             }
-        } catch (SQLException e) {
-            System.out.println("getProfile Staff: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("getAllStudents: " + e.getMessage());
         } finally {
             closeResources();
         }
-        return null;
+        return data;
     }
 
-    public boolean updateProfile(String phone, String fullName, String gender, String address, String birthDate, String expertise, Integer yearsOfExperience, String picturePath,String email) {
+    /**
+     * Cập nhật thông tin cá nhân của học sinh (tên, email, ngày sinh, giới
+     * tính, địa chỉ, hình ảnh).
+     */
+    public void updateStudent(Students s) {
         try {
-            String checkSql = "SELECT role_id FROM Teacher WHERE phone = ? UNION SELECT Role_id FROM Student WHERE phone = ? UNION SELECT role_id FROM Admin_staff WHERE phone = ?";
-            stm = connection.prepareStatement(checkSql);
+            String strSQL = "UPDATE Student SET full_name = ?, email = ?, birth_date = ?, gender = ?, address = ?, picture = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, s.getName());
+            stm.setString(2, s.getEmail());
+            stm.setString(3, s.getBirthdate());
+            stm.setString(4, s.getGender());
+            stm.setString(5, s.getAddress());
+            stm.setBytes(6, s.getPic() != null ? s.getPic() : getCurrentStudentPicture(s.getPhone()));
+            stm.setString(7, s.getPhone());
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateStudent: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+    }
+
+    /**
+     * Cập nhật số điện thoại và/hoặc mật khẩu của học sinh.
+     */
+    public boolean updateStudentCredentials(String oldPhone, String newPhone, String newPassword) {
+        try {
+            String strSQL = "UPDATE Student SET phone = ?, password = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, newPhone != null ? newPhone : oldPhone);
+            stm.setString(2, newPassword != null ? newPassword : getCurrentStudentPassword(oldPhone));
+            stm.setString(3, oldPhone);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("updateStudentCredentials: " + e.getMessage());
+            return false;
+        } finally {
+            closeResources();
+        }
+    }
+
+    /**
+     */
+    public boolean verifyStudentPassword(String phone, String password) {
+        try {
+            String strSQL = "SELECT password FROM Student WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
             stm.setString(1, phone);
-            stm.setString(2, phone);
-            stm.setString(3, phone);
             rs = stm.executeQuery();
             if (rs.next()) {
-                int roleId = rs.getInt(1);
-                String updateSql = "";
-                if (roleId == 2) { // Teacher
-                    updateSql = "UPDATE Teacher SET full_name = ?, gender = ?, birth_date = ?, Expertise = ?, years_of_experience = ?, picture = ?,email=? WHERE phone  = ?";
-                    stm = connection.prepareStatement(updateSql);
-                    stm.setString(1, fullName);
-                    stm.setString(2, gender);
-                    stm.setString(3, birthDate);
-                    stm.setString(4, expertise);
-                    stm.setInt(5, yearsOfExperience != null ? yearsOfExperience : 0);
-                    stm.setString(6, picturePath != null ? picturePath : "");
-                    stm.setString(8, phone);
-                    stm.setString(7, email);
-                } else if (roleId == 1) { // Student
-                    updateSql = "UPDATE Student SET full_name = ?, gender = ?, birth_date = ?, address = ? ,picture=? email=? WHERE phone = ?";
-                    stm = connection.prepareStatement(updateSql);
-                    stm.setString(1, fullName);
-                    stm.setString(2, gender);
-                    stm.setString(3, birthDate);
-                    stm.setString(4, address);
-                    stm.setString(7, phone);
-                    stm.setString(6, email);
-                    stm.setString(5, picturePath != null ? picturePath : "");
-                } else { // Admin_staff (role_id 3 or 4)
-                    updateSql = "UPDATE Admin_staff SET full_name = ?, gender = ?, birth_date = ? WHERE phone = ?";
-                    stm = connection.prepareStatement(updateSql);
-                    stm.setString(1, fullName);
-                    stm.setString(2, gender);
-                    stm.setString(3, birthDate);
-                    stm.setString(5, phone);
-                    stm.setString(4, email);
-                    
-                }
-                int rowsAffected = stm.executeUpdate();
-                return rowsAffected > 0;
+                String storedPassword = rs.getString("password");
+                return storedPassword != null && storedPassword.equals(password);
             }
-        } catch (SQLException e) {
-            System.out.println("updateProfile: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("verifyStudentPassword: " + e.getMessage());
         } finally {
             closeResources();
         }
         return false;
     }
 
-    private void closeResources() {
-        if (rs != null) {
-            try { rs.close(); } catch (SQLException e) { System.out.println("close ResultSet: " + e.getMessage()); }
+    // Staff methods
+    /**
+     * Lấy thông tin hồ sơ của một nhân viên dựa trên số điện thoại.
+     */
+    public AdminStaffs getStaffByPhone(String phone) {
+        try {
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, role_id, phone "
+                    + "FROM Admin_staff WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String roleId = String.valueOf(rs.getInt("role_id"));
+                return new AdminStaffs(id, fullName, email, password, birthDate, gender, roleId, phone);
+            }
+        } catch (Exception e) {
+            System.out.println("getStaffByPhone: " + e.getMessage());
+        } finally {
+            closeResources();
         }
-        if (stm != null) {
-            try { stm.close(); } catch (SQLException e) { System.out.println("close Statement: " + e.getMessage()); }
+        return null;
+    }
+
+    /**
+     * Lấy danh sách tất cả nhân viên trong cơ sở dữ liệu.
+     */
+    public ArrayList<AdminStaffs> getAllStaff() {
+        ArrayList<AdminStaffs> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, role_id, phone "
+                    + "FROM Admin_staff";
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthDate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String roleId = String.valueOf(rs.getInt("role_id"));
+                String phone = rs.getString("phone");
+                AdminStaffs staff = new AdminStaffs(id, fullName, email, password, birthDate, gender, roleId, phone);
+                data.add(staff);
+            }
+        } catch (Exception e) {
+            System.out.println("getAllStaff: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+        return data;
+    }
+
+    /**
+     * Cập nhật thông tin cá nhân của nhân viên (tên, email, ngày sinh, giới
+     * tính).
+     */
+    public void updateStaff(AdminStaffs s) {
+        try {
+            String strSQL = "UPDATE Admin_staff SET full_name = ?, email = ?, birth_date = ?, gender = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, s.getName());
+            stm.setString(2, s.getEmail());
+            stm.setString(3, s.getBirthdate());
+            stm.setString(4, s.getGender());
+            stm.setString(5, s.getPhone());
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateStaff: " + e.getMessage());
+        } finally {
+            closeResources();
         }
     }
 
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println("closeConnection: " + e.getMessage());
+    /**
+     * Cập nhật số điện thoại và/hoặc mật khẩu của nhân viên.
+     */
+    public boolean updateStaffCredentials(String oldPhone, String newPhone, String newPassword) {
+        try {
+            String strSQL = "UPDATE Admin_staff SET phone = ?, password = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, newPhone != null ? newPhone : oldPhone);
+            stm.setString(2, newPassword != null ? newPassword : getCurrentStaffPassword(oldPhone));
+            stm.setString(3, oldPhone);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("updateStaffCredentials: " + e.getMessage());
+            return false;
+        } finally {
+            closeResources();
+        }
+    }
+
+    /**
+     * Xác minh mật khẩu của nhân viên dựa trên số điện thoại.
+     */
+    public boolean verifyStaffPassword(String phone, String password) {
+        try {
+            String strSQL = "SELECT password FROM Admin_staff WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+                return storedPassword != null && storedPassword.equals(password);
             }
+        } catch (Exception e) {
+            System.out.println("verifyStaffPassword: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+        return false;
+    }
+
+    // Helper methods
+    /**
+     * Lấy hình ảnh hiện tại của giáo viên dựa trên số điện thoại.
+     */
+    private byte[] getCurrentTeacherPicture(String phone) {
+        try {
+            String strSQL = "SELECT picture FROM Teacher WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("picture");
+            }
+        } catch (Exception e) {
+            System.out.println("getCurrentTeacherPicture: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Lấy hình ảnh hiện tại của học sinh dựa trên số điện thoại.
+     */
+    private byte[] getCurrentStudentPicture(String phone) {
+        try {
+            String strSQL = "SELECT picture FROM Student WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("picture");
+            }
+        } catch (Exception e) {
+            System.out.println("getCurrentStudentPicture: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Lấy mật khẩu hiện tại của giáo viên dựa trên số điện thoại.
+     */
+    private String getCurrentTeacherPassword(String phone) {
+        try {
+            String strSQL = "SELECT password FROM Teacher WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+        } catch (Exception e) {
+            System.out.println("getCurrentTeacherPassword: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Lấy mật khẩu hiện tại của học sinh dựa trên số điện thoại.
+     */
+    private String getCurrentStudentPassword(String phone) {
+        try {
+            String strSQL = "SELECT password FROM Student WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+        } catch (Exception e) {
+            System.out.println("getCurrentStudentPassword: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Lấy mật khẩu hiện tại của nhân viên dựa trên số điện thoại.
+     */
+    private String getCurrentStaffPassword(String phone) {
+        try {
+            String strSQL = "SELECT password FROM Admin_staff WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+        } catch (Exception e) {
+            System.out.println("getCurrentStaffPassword: " + e.getMessage());
+        }
+        return null;
+    }
+    
+
+    public void closeResources() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        } catch (Exception e) {
+            System.out.println("closeResources: " + e.getMessage());
         }
     }
 }

@@ -1,20 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 /**
  *
  * @author Quang
- *///quang - quản lý học sinh
+ */
 public class Students {
-    String id, name, email, password, birthdate, gender, address, role,phone, pic;
+    String id, name, email, password, birthdate, gender, address, role, phone;
+    byte[] pic;
 
     public Students() {
     }
 
-    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role, String phone, String pic) {
+    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role, String phone, byte[] pic) { // Thay đổi từ String thành byte[]
         this.id = id;
         this.name = name;
         this.email = email;
@@ -24,7 +21,7 @@ public class Students {
         this.address = address;
         this.role = role;
         this.phone = phone;
-        this.pic = pic;
+        this.pic = pic; // Thay đổi từ String thành byte[]
     }
 
     public String getId() {
@@ -99,14 +96,11 @@ public class Students {
         this.phone = phone;
     }
 
-    public String getPic() {
+    public byte[] getPic() { 
         return pic;
     }
 
-    public void setPic(String pic) {
+    public void setPic(byte[] pic) { 
         this.pic = pic;
     }
-
-   
-   
 }

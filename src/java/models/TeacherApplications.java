@@ -2,12 +2,12 @@ package models;
 
 public class TeacherApplications {
     private int id;
-    String fullName, email, cvlink, status, birthDate, gender, expertise, image, idTypeCourse, yearOfExpertise,phone;
+    String fullName, email, cvlink, status, birthDate, gender, expertise, idTypeCourse, yearOfExpertise,phone;
 
     public TeacherApplications() {
     }
 
-    public TeacherApplications(int id, String fullName, String email, String cvlink, String status, String birthDate, String gender, String expertise, String image, String idTypeCourse, String yearOfExpertise, String phone) {
+    public TeacherApplications(int id, String fullName, String email, String cvlink, String status, String birthDate, String gender, String expertise, String idTypeCourse, String yearOfExpertise, String phone) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -16,7 +16,6 @@ public class TeacherApplications {
         this.birthDate = birthDate;
         this.gender = gender;
         this.expertise = expertise;
-        this.image = image;
         this.idTypeCourse = idTypeCourse;
         this.yearOfExpertise = yearOfExpertise;
         this.phone = phone;
@@ -86,14 +85,6 @@ public class TeacherApplications {
         this.expertise = expertise;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getIdTypeCourse() {
         return idTypeCourse;
     }
@@ -118,5 +109,6 @@ public class TeacherApplications {
         this.phone = phone;
     }
 
+   
     
 }

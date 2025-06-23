@@ -27,7 +27,7 @@ public class BlogDAO extends DBContext {
                 String title = rs.getString("name");
                 String content = rs.getString("content");
                 String publishDate = rs.getString("dateBlog"); 
-                String picture = rs.getString("img");
+                byte[] picture = rs.getBytes("img");
 
                 Blog blog = new Blog(id, title, content, publishDate, picture);
                 list.add(blog);
@@ -50,7 +50,7 @@ public class BlogDAO extends DBContext {
                 String title = rs.getString("name");
                 String content = rs.getString("content");
                 String publishDate = rs.getString("dateBlog"); 
-                String picture = rs.getString("img");
+                byte[] picture = rs.getBytes("img");
 
                 Blog blog = new Blog(id, title, content, publishDate, picture);
                 list.add(blog);
@@ -61,5 +61,6 @@ public class BlogDAO extends DBContext {
 
         return list;
     }
+   
 }
 

@@ -1,163 +1,190 @@
-/*
- * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import models.*;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import models.ScheduleTeacherDAO;
-import models.ScheduleTeacher;
-import models.Teachers;
-import models.ScheduleWeek;
+import java.util.*;
 
 public class ScheduleTeacherController extends HttpServlet {
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
-        Teachers te = (Teachers) session.getAttribute("account");
-        if (te == null) {
+        Teachers teacher = (Teachers) session.getAttribute("account");
+
+        if (teacher == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-        String teacherId = te.getId();
-        int id;
+
+        int teacherId;
         try {
-            id = Integer.parseInt(teacherId);
+            teacherId = Integer.parseInt(teacher.getId());
         } catch (NumberFormatException e) {
             response.sendRedirect("login.jsp");
             return;
         }
-        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
-        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(id);
 
-        // Xử lý năm và tuần được chọn
+        String action = request.getParameter("action");
+        if ("attendance".equals(action)) {
+            handleAttendance(request, response);
+            return;
+        }
+
+        handleScheduleView(request, response, teacherId);
+    }
+
+    private void handleScheduleView(HttpServletRequest request, HttpServletResponse response, int teacherId)
+            throws ServletException, IOException {
+
         String selectedYear = request.getParameter("year");
         String selectedWeek = request.getParameter("week");
-        LocalDate baseDate;
-        int year;
-        if (selectedYear != null && !selectedYear.isEmpty()) {
-            try {
+
+        int year = LocalDate.now().getYear();
+        DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter viewFormatter = DateTimeFormatter.ofPattern("dd/MM");
+
+        try {
+            if (selectedYear != null && !selectedYear.isEmpty()) {
                 year = Integer.parseInt(selectedYear);
-            } catch (NumberFormatException e) {
-                year = LocalDate.now().getYear();
             }
-        } else {
-            year = LocalDate.now().getYear();
+        } catch (NumberFormatException ignored) {
         }
 
-        // Tìm ngày sớm nhất trong dữ liệu
-        LocalDate minDate = null;
-        if (!scheduleTeacher.isEmpty()) {
-            for (ScheduleTeacher s : scheduleTeacher) {
-                LocalDate date = LocalDate.parse(s.getDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                if (minDate == null || date.isBefore(minDate)) {
-                    minDate = date;
-                }
-            }
-        } else {
-            minDate = LocalDate.now();
-        }
-        LocalDate startOfFirstWeek = minDate.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
-        LocalDate endOfTenthWeek = startOfFirstWeek.plusWeeks(9);
-
-        if (selectedWeek != null && !selectedWeek.isEmpty()) {
-            try {
-                baseDate = LocalDate.parse(selectedWeek, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            } catch (Exception e) {
-                baseDate = startOfFirstWeek;
-            }
-        } else {
-            baseDate = startOfFirstWeek;
+        LocalDate baseDate;
+        try {
+            baseDate = (selectedWeek != null && !selectedWeek.isEmpty())
+                    ? LocalDate.parse(selectedWeek, dbFormatter)
+                    : LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        } catch (Exception e) {
+            baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         }
 
-        // Tính tuần cơ sở trong chu kỳ 10 tuần
-        long weeksSinceStart = java.time.temporal.ChronoUnit.WEEKS.between(startOfFirstWeek, baseDate);
-        long cycleWeek = weeksSinceStart % 10; // Lấy tuần trong chu kỳ 10 tuần
-        LocalDate cycleBaseDate = startOfFirstWeek.plusWeeks(cycleWeek);
+        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
+        List<ScheduleTeacher> scheduleTeacher = dao.getScheduleTeacher(teacherId, baseDate.format(dbFormatter));
 
-        // Chỉ điều chỉnh lịch nếu tuần được chọn nằm trong 10 tuần đầu tiên
-        List<ScheduleTeacher> adjustedSchedule = new ArrayList<>();
-        if (baseDate.isBefore(startOfFirstWeek) || baseDate.isAfter(endOfTenthWeek)) {
-            // Nếu tuần được chọn ngoài phạm vi 10 tuần, trả về danh sách rỗng
-            adjustedSchedule = new ArrayList<>();
-        } else {
-            for (ScheduleTeacher s : scheduleTeacher) {
-                LocalDate originalDate = LocalDate.parse(s.getDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                java.time.DayOfWeek dayOfWeek = originalDate.getDayOfWeek();
-                LocalDate newDate = baseDate.with(java.time.temporal.TemporalAdjusters.nextOrSame(dayOfWeek)).withYear(year);
-                ScheduleTeacher adjusted = new ScheduleTeacher(
-                    s.getId(),
-                    newDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                    s.getNameClass(),
-                    s.getStartTime(),
-                    s.getEndTime(),
-                    s.getRoom()
-                );
-                adjusted.computeDayOfWeek();
-                adjustedSchedule.add(adjusted);
-            }
-        }
-
-        // Tạo danh sách năm (hiện tại và ±2 năm)
+        // Năm xung quanh hiện tại
         List<Integer> years = new ArrayList<>();
-        int currentYear = LocalDate.now().getYear();
-        for (int i = currentYear - 2; i <= currentYear + 2; i++) {
+        for (int i = year - 2; i <= year + 2; i++) {
             years.add(i);
         }
 
-        // Tạo danh sách 52 tuần cho năm được chọn
+        // Tạo danh sách các tuần có ngày bắt đầu/kết thúc
         List<ScheduleWeek> weeks = new ArrayList<>();
-        DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM");
-        LocalDate startOfYear = LocalDate.of(year, 1, 1);
-        LocalDate firstMonday = startOfYear.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        LocalDate startOfYear = LocalDate.of(year, 1, 1).with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         for (int i = 0; i < 52; i++) {
-            LocalDate weekStart = firstMonday.plusWeeks(i);
-            if (weekStart.getYear() == year) {
+            LocalDate weekStart = startOfYear.plusWeeks(i);
+            if (weekStart.getYear() == year || weekStart.plusDays(6).getYear() == year) {
                 LocalDate weekEnd = weekStart.plusDays(6);
                 weeks.add(new ScheduleWeek(
-                    weekStart.format(fullFormatter),
-                    weekEnd.format(fullFormatter),
-                    weekStart.format(displayFormatter),
-                    weekEnd.format(displayFormatter),
-                    i + 1
+                        weekStart.format(dbFormatter),
+                        weekEnd.format(dbFormatter),
+                        weekStart.format(viewFormatter),
+                        weekEnd.format(viewFormatter),
+                        0 // không dùng tuần số nữa
                 ));
             }
         }
 
-        List<String> weekDays = Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật");
-
-        request.setAttribute("weekDays", weekDays);
-        request.setAttribute("scheduleTeacher", adjustedSchedule);
+        request.setAttribute("weekDays", Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"));
+        request.setAttribute("scheduleTeacher", scheduleTeacher);
         request.setAttribute("weeks", weeks);
         request.setAttribute("years", years);
-        request.setAttribute("selectedWeek", baseDate.format(fullFormatter));
+        request.setAttribute("selectedWeek", baseDate.format(dbFormatter));
         request.setAttribute("selectedYear", year);
+
         request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
+    }
+
+    private void handleAttendance(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String scheduleId = request.getParameter("scheduleId");
+        String classId = request.getParameter("classId");
+        String className = request.getParameter("className");
+        String day = request.getParameter("day");
+
+        if (scheduleId == null || classId == null || className == null || day == null) {
+            request.setAttribute("error", "Thiếu thông tin điểm danh.");
+            request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
+            return;
+        }
+
+        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
+        List<Students> students = dao.getStudentsByScheduleId(scheduleId);
+        List<StudentAttendance> attendanceList = dao.getStudentAttendanceList(classId, day);
+
+        request.setAttribute("students", students);
+        request.setAttribute("attendanceList", attendanceList);
+        request.setAttribute("className", className);
+        request.setAttribute("classId", classId);
+        request.setAttribute("scheduleId", scheduleId);
+        request.setAttribute("day", day);
+
+        request.getRequestDispatcher("attendance.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Gọi doGet để xử lý POST tương tự
+
+        String action = request.getParameter("action");
+        if ("submitAttendance".equals(action)) {
+            handleSubmitAttendance(request, response);
+        } else {
+            request.setAttribute("error", "Hành động không hợp lệ.");
+            request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
+        }
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Servlet for displaying teacher's schedule";
+    private void handleSubmitAttendance(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String scheduleId = request.getParameter("scheduleId");
+        String classId = request.getParameter("classId");
+        String className = request.getParameter("className");
+        String day = request.getParameter("day");
+        String[] studentIds = request.getParameterValues("studentId[]");
+
+        if (scheduleId == null || classId == null || className == null || day == null || studentIds == null) {
+            request.setAttribute("error", "Thiếu thông tin cần thiết để lưu điểm danh.");
+            request.getRequestDispatcher("attendance.jsp").forward(request, response);
+            return;
+        }
+
+        List<StudentAttendance> attendanceList = new ArrayList<>();
+        for (String id : studentIds) {
+            String status = request.getParameter("attendance_" + id);
+            if (status == null || status.trim().isEmpty()) {
+                status = "Vắng mặt";
+            }
+
+            Students student = new Students();
+            student.setId(id);
+
+            attendanceList.add(new StudentAttendance(student, status));
+        }
+
+        ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
+        dao.saveAttendance(scheduleId, attendanceList, day);
+
+        List<Students> students = dao.getStudentsByScheduleId(scheduleId);
+        List<StudentAttendance> updated = dao.getStudentAttendanceList(classId, day);
+
+        request.setAttribute("students", students);
+        request.setAttribute("attendanceList", updated);
+        request.setAttribute("className", className);
+        request.setAttribute("classId", classId);
+        request.setAttribute("scheduleId", scheduleId);
+        request.setAttribute("day", day);
+        request.setAttribute("message", "Lưu điểm danh thành công!");
+
+        request.getRequestDispatcher("attendance.jsp").forward(request, response);
     }
 }
