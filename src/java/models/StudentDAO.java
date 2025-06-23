@@ -93,8 +93,8 @@ public class StudentDAO extends DBContext {
         if (!s.email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             return new ResultMessage(false, "Định dạng email không hợp lệ: " + s.email);
         }
-        if (s.brithdate != null && !s.brithdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.brithdate);
+        if (s.birthdate != null && !s.birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.birthdate);
         }
         if (s.gender != null && !s.gender.matches("Nam|Nữ")) {
             return new ResultMessage(false, "Giới tính không hợp lệ (phải là 'Nam' hoặc 'Nữ'): " + s.gender);
@@ -136,7 +136,7 @@ public class StudentDAO extends DBContext {
             stm.setString(1, s.password);
             stm.setString(2, s.name);
             stm.setString(3, s.email);
-            stm.setString(4, s.brithdate);
+            stm.setString(4, s.birthdate);
             stm.setString(5, s.gender);
             if (s.pic != null) {
                 stm.setBytes(6, s.pic);
@@ -212,8 +212,8 @@ public class StudentDAO extends DBContext {
         if (!s.email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             return new ResultMessage(false, "Định dạng email không hợp lệ: " + s.email);
         }
-        if (s.brithdate != null && !s.brithdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.brithdate);
+        if (s.birthdate != null && !s.birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày sinh không hợp lệ (yyyy-MM-dd): " + s.birthdate);
         }
         if (s.gender != null && !s.gender.matches("Nam|Nữ")) {
             return new ResultMessage(false, "Giới tính không hợp lệ (phải là 'Nam' hoặc 'Nữ'): " + s.gender);
@@ -249,7 +249,7 @@ public class StudentDAO extends DBContext {
             stm.setString(1, s.name);
             stm.setString(2, s.email);
             stm.setString(3, s.password);
-            stm.setString(4, s.brithdate);
+            stm.setString(4, s.birthdate);
             stm.setString(5, s.gender);
             if (s.pic != null) {
                 stm.setBytes(6, s.pic);

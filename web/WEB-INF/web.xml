@@ -56,6 +56,14 @@
         <servlet-name>ImageBannerController</servlet-name>
         <servlet-class>Controllers.ImageBannerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NoticeToStaff</servlet-name>
+        <servlet-class>Controllers.NoticeToStaff</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <servlet-class>Controllers.NoticeToStaffController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -111,5 +119,9 @@
     <servlet-mapping>
         <servlet-name>ImageBannerController</servlet-name>
         <url-pattern>/imagebanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <url-pattern>/noticetostaff</url-pattern>
     </servlet-mapping>
 </web-app>

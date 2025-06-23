@@ -255,7 +255,7 @@
                                             <td>Mật khẩu: </td>
                                             <td><input type="text" name="password" value="${s.getPassword()}"></td>
                                             <td>Ngày sinh: </td>
-                                            <td><input type="text" name="birthdate" value="${s.getBrithdate()}"></td>
+                                            <td><input type="text" name="birthdate" value="${s.getBirthdate()}"></td>
                                         </tr>
                                         <tr>
                                             <td>Giới tính: </td>
@@ -323,7 +323,7 @@
                                                 <td>${item.getName()}</td>
                                                 <td>${item.getEmail()}</td>
                                                 <td>${item.getPassword()}</td>
-                                                <td>${item.getBrithdate()}</td>
+                                                <td>${item.getBirthdate()}</td>
                                                 <td>${item.getGender()}</td>
                                                 <td>
                                                     <c:choose>

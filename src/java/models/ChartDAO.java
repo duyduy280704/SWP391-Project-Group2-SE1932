@@ -16,6 +16,9 @@ import java.util.Map;
  * @author Quang
  */
 public class ChartDAO extends DBContext {
+    
+    PreparedStatement stm;
+    ResultSet rs;
 // đếm khóa học theo kiểu khóa học
     public ArrayList<TypeCourseCount> getCourseCountByType() {
         ArrayList<TypeCourseCount> list = new ArrayList<>();
@@ -137,4 +140,24 @@ public class ChartDAO extends DBContext {
 
         return revenueList;
     }
+    // hiển thị thông báo
+    public ArrayList<NoticeToStaff> getNoticeToStaffById(String id) {
+    ArrayList<NoticeToStaff> list = new ArrayList<>();
+    try {
+        String strSQL = "SELECT message, date FROM NoticeToStaff WHERE id_staff = ? ";
+        stm = connection.prepareStatement(strSQL);
+        stm.setString(1, id);
+        rs = stm.executeQuery();
+        while (rs.next()) {
+            String mess = rs.getString("message");
+            String date = rs.getString("date");
+            NoticeToStaff p = new NoticeToStaff(id, mess, date);
+            list.add(p);
+        }
+    } catch (Exception e) {
+        System.out.println("getCoursesById" + e.getMessage());
+    }
+    return list; 
+}
+    
 }
