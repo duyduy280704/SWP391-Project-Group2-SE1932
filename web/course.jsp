@@ -152,12 +152,7 @@
                     <div class="col-md-2">
                         <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
                     </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <div class="form-check ms-2">
-                            <input class="form-check-input" type="checkbox" name="saleOnly" id="saleOnly" ${param.saleOnly == 'on' ? 'checked' : ''}>
-                            <label class="form-check-label" for="saleOnly">Sale</label>
-                        </div>
-                    </div>
+                    
                     <div class="col-md-2 d-flex gap-2">
                         <button class="btn btn-primary w-100">Lọc</button>
                         <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>

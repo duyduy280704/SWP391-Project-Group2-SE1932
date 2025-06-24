@@ -49,6 +49,7 @@ public class RegistrationCourseController extends HttpServlet {
         String birthDate = request.getParameter("birth_date");
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
+        String agree = request.getParameter("agree");
 
         // Validate dữ liệu
         String errorMessage = null;
@@ -67,6 +68,9 @@ public class RegistrationCourseController extends HttpServlet {
             errorMessage = "Vui lòng chọn giới tính.";
         } else if (address == null || address.trim().isEmpty()) {
             errorMessage = "Địa chỉ không được để trống.";
+        }
+        else if (agree == null || address.trim().isEmpty()) {
+            errorMessage = "Bạn phải đồng ý với điều khoản.";
         }
 
         if (errorMessage != null) {

@@ -353,7 +353,6 @@
 
                 <a href="HomePage" class="nav-link">Trang Chủ</a>
                 <a href="scheduleTeacher" class="nav-link active">Lịch dạy</a>
-                <a href="attendance" class="nav-link">Điểm danh</a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
             </div>
             <!-- Navbar End -->
