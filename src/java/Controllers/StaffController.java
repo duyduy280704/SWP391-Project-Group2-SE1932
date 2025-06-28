@@ -111,17 +111,7 @@ public class StaffController extends HttpServlet {
         StaffDAO sd = new StaffDAO();
         Staff s = new Staff(id, name, email, password, birthdate, gender, role, phone);
         
-        ArrayList<Staff> data;
-        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
-            data = sd.getStaffByName(nameSearch);
-            request.setAttribute("nameSearch", nameSearch);
-        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
-            data = sd.getStaffsByGender(genderFilter);
-            request.setAttribute("genderFilter", genderFilter);
-        } else {
-            data = sd.getStaff();
-        }
-        request.setAttribute("data", data);
+        
         
         try {
 
@@ -139,6 +129,18 @@ public class StaffController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(StaffController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        ArrayList<Staff> data;
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = sd.getStaffByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = sd.getStaffsByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = sd.getStaff();
+        }
+        request.setAttribute("data", data);
         
         
         request.setAttribute("message", result.getMessage());

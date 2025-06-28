@@ -15,7 +15,9 @@ import java.util.Map;
 import models.ChartDAO;
 import models.CourseDAO;
 import models.Revenue;
+import models.StudentRegistration;
 import models.TypeCourseCount;
+import models.TypeStudentCount;
 
 /**
  *
@@ -68,14 +70,16 @@ public class AdminHomeController extends HttpServlet {
             int staff = dao.getAdminStaffCount();
             int course = dao.getCourseCount();
             List<Revenue> revenueData = dao.getMonthlyRevenue();
+            List<StudentRegistration> studentData = dao.getStudentRegistrationByMonth();
+            List<TypeStudentCount> studentCountByType = dao.getStudentCountByType();
 
         
         
             List<TypeCourseCount> chartData = dao.getCourseCountByType();
-            List<Map<String, Object>> roleCounts = dao.getRoleCounts();
             request.setAttribute("revenueData", revenueData);
+            request.setAttribute("studentData", studentData);
             request.setAttribute("chartData", chartData);
-            request.setAttribute("roleCounts", roleCounts);
+            request.setAttribute("studentCountByType", studentCountByType);
             request.setAttribute("student", student);
             request.setAttribute("teacher", teacher);
             request.setAttribute("staff", staff);

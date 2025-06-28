@@ -12,12 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/Controllers/StaffHomeController.java</file>
-            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/models/NoticeToStaff.java</file>
+            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/web/AdminHome.jsp</file>
             <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/models/ChartDAO.java</file>
-            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/web/WEB-INF/web.xml</file>
-            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/web/StaffHome.jsp</file>
-            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/Controllers/NoticeToStaffController.java</file>
+            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/models/TypeStudentCount.java</file>
+            <file>file:/C:/PRJ_SRC/ProjectSWP_personal/src/java/Controllers/AdminHomeController.java</file>
         </group>
     </open-files>
 </project-private>

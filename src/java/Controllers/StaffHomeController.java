@@ -11,14 +11,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import models.ChartDAO;
 import models.Feedback;
 import models.FeedbackDAO;
-import models.Staff;
 
 import models.TypeCourseCount;
 
@@ -76,10 +73,8 @@ public class StaffHomeController extends HttpServlet {
         
         
             List<TypeCourseCount> chartData = dao.getCourseCountByType();
-            List<Map<String, Object>> roleCounts = dao.getRoleCounts();
            
             request.setAttribute("chartData", chartData);
-            request.setAttribute("roleCounts", roleCounts);
             request.setAttribute("student", student);
             request.setAttribute("teacher", teacher);
             request.setAttribute("staff", staff);

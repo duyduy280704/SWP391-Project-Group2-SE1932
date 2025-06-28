@@ -162,19 +162,7 @@ public class TeacherController extends HttpServlet {
         TeacherDAO teacherDAO = new TeacherDAO();
         Teachers teacher = new Teachers(id, name, email, password, birthdate, gender, exp, imageBytes, role, course, years, phone);
         
-        ArrayList<Teachers> data;
-        ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
-        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
-            data = teacherDAO.getTeacherByName(nameSearch);
-            request.setAttribute("nameSearch", nameSearch);
-        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
-            data = teacherDAO.getTeachersByGender(genderFilter);
-            request.setAttribute("genderFilter", genderFilter);
-        } else {
-            data = teacherDAO.getTeachers();
-        }
-        request.setAttribute("data", data);
-        request.setAttribute("data1", data1);
+        
 
         try {
             if (request.getParameter("update") != null) {
@@ -191,7 +179,19 @@ public class TeacherController extends HttpServlet {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
 
-        
+        ArrayList<Teachers> data;
+        ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = teacherDAO.getTeacherByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = teacherDAO.getTeachersByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = teacherDAO.getTeachers();
+        }
+        request.setAttribute("data", data);
+        request.setAttribute("data1", data1);
         
         
         request.setAttribute("message", result.getMessage());
