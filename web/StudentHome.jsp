@@ -118,6 +118,22 @@
                 height: 100%;
                 object-fit: cover;
             }
+            .profile-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #FF6600;
+                cursor: pointer;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .profile-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         </style>
     </head>
     <body>
@@ -174,6 +190,24 @@
                     <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                 </a>
             </div>
+            <div class="profile-container">
+                <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
+                <c:choose>
+                    <c:when test="${not empty picturePath}">
+                        <a href="profile" class="profile-avatar">
+                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                        </a>
+                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="profile" class="profile-avatar">
+                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                        </a>
+                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
             <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
             <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
             <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>

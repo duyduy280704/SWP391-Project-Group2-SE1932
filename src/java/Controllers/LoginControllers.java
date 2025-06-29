@@ -59,6 +59,7 @@ public class LoginControllers extends HttpServlet {
             HttpSession session = request.getSession();
             if (staff != null) {
                 session.setAttribute("account", staff);
+                session.setAttribute("role", "staff");
                 System.out.println("AdminStaff RoleId: " + staff.getRole());
                 if ("4".equals(staff.getRole())) {
                     response.sendRedirect("adminhome");
@@ -68,11 +69,13 @@ public class LoginControllers extends HttpServlet {
                 return;
             } else if (student != null) {
                 session.setAttribute("account", student);
+                session.setAttribute("role", "student");
                 System.out.println("Student RoleId: " + student.getRole());
                 response.sendRedirect("StudentHome");
                 return;
             } else if (teacher != null) {
                 session.setAttribute("account", teacher);
+                session.setAttribute("role", "teacher");
                 System.out.println("Teacher RoleId: " + teacher.getRole());
                 response.sendRedirect("teacherHome");
                 return;

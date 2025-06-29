@@ -11,16 +11,16 @@ package models;
 public class Notification {
 
     private String id;
-    private String idStudent;
+    private String idUser;
     private String message;
     private String date;
 
     public Notification() {
     }
 
-    public Notification(String id, String idStudent, String message, String date) {
+    public Notification(String id, String idUser, String message, String date) {
         this.id = id;
-        this.idStudent = idStudent;
+        this.idUser = idUser;
         this.message = message;
         this.date = date;
     }
@@ -35,12 +35,12 @@ public class Notification {
         this.id = id;
     }
 
-    public String getIdStudent() {
-        return idStudent;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setIdStudent(String idStudent) {
-        this.idStudent = idStudent;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
     public String getMessage() {

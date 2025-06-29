@@ -1,8 +1,10 @@
 package models;
 
 public class TeacherApplications {
+
     private int id;
-    String fullName, email, cvlink, status, birthDate, gender, expertise, idTypeCourse, yearOfExpertise,phone;
+    private String fullName, email, cvlink, status, birthDate, gender, expertise, idTypeCourse, yearOfExpertise, phone;
+    private String typeCourseName;
 
     public TeacherApplications() {
     }
@@ -20,6 +22,23 @@ public class TeacherApplications {
         this.yearOfExpertise = yearOfExpertise;
         this.phone = phone;
     }
+
+    public TeacherApplications(int id, String fullName, String email, String cvlink, String status, String birthDate, String gender, String expertise, String idTypeCourse, String yearOfExpertise, String phone, String typeCourseName) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.cvlink = cvlink;
+        this.status = status;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.expertise = expertise;
+        this.idTypeCourse = idTypeCourse;
+        this.yearOfExpertise = yearOfExpertise;
+        this.phone = phone;
+        this.typeCourseName = typeCourseName;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -109,6 +128,13 @@ public class TeacherApplications {
         this.phone = phone;
     }
 
-   
+    public String getTypeCourseName() {
+        return typeCourseName;
+    }
+
+    public void setTypeCourseName(String typeCourseName) {
+        this.typeCourseName = typeCourseName;
+    }
+
     
 }

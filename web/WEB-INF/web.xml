@@ -136,6 +136,18 @@
         <servlet-name>TeacherHomeController</servlet-name>
         <servlet-class>Controllers.TeacherHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TeacherApplicationController</servlet-name>
+        <servlet-class>Controllers.TeacherApplicationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationController</servlet-name>
+        <servlet-class>Controllers.NotificationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendNotificationController</servlet-name>
+        <servlet-class>Controllers.SendNotificationController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -264,9 +276,20 @@
         <servlet-name>ProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
     </servlet-mapping>
-   
     <servlet-mapping>
         <servlet-name>TeacherHomeController</servlet-name>
         <url-pattern>/teacherHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherApplicationController</servlet-name>
+        <url-pattern>/TeacherApplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationController</servlet-name>
+        <url-pattern>/Notification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendNotificationController</servlet-name>
+        <url-pattern>/SendNotification</url-pattern>
     </servlet-mapping>
 </web-app>
