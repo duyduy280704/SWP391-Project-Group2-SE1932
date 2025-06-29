@@ -148,6 +148,10 @@
         <servlet-name>SendNotificationController</servlet-name>
         <servlet-class>Controllers.SendNotificationController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AssignClassController</servlet-name>
+        <servlet-class>Controllers.AssignClassController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -291,5 +295,9 @@
     <servlet-mapping>
         <servlet-name>SendNotificationController</servlet-name>
         <url-pattern>/SendNotification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AssignClassController</servlet-name>
+        <url-pattern>/AssignClass</url-pattern>
     </servlet-mapping>
 </web-app>
