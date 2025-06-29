@@ -64,6 +64,14 @@
         <servlet-name>NoticeToStaffController</servlet-name>
         <servlet-class>Controllers.NoticeToStaffController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EventStaffController</servlet-name>
+        <servlet-class>Controllers.EventStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageEvent</servlet-name>
+        <servlet-class>Controllers.ImageEvent</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -123,5 +131,13 @@
     <servlet-mapping>
         <servlet-name>NoticeToStaffController</servlet-name>
         <url-pattern>/noticetostaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventStaffController</servlet-name>
+        <url-pattern>/eventstaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageEvent</servlet-name>
+        <url-pattern>/imageevent</url-pattern>
     </servlet-mapping>
 </web-app>
