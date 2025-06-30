@@ -276,6 +276,52 @@
                 font-size: 2.5rem;
                 margin: 0;
             }
+
+            /* Modal Styles */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1002;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.5);
+            }
+
+            .modal-content {
+                background-color: #fff;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 600px;
+                border-radius: 10px;
+                position: relative;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .event-image {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin-bottom: 15px;
+            }
         </style>
     </head>
     <body>
@@ -446,6 +492,9 @@
                                 </tbody>
                             </table>
                         </c:if>
+                             <div class="col-12 mt-3">
+                    <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                </div>
                     </div>
                 </div>
                 <!-- Weekly Schedule End -->
@@ -462,13 +511,12 @@
                         <c:if test="${not empty events}">
                             <div class="event-list">
                                 <c:forEach var="e" items="${events}">
-                                    <div class="event-list-item">
+                                    <div class="event-list-item" onclick="showEventDetails('${e.id}', '${fn:escapeXml(e.name)}', '${fn:escapeXml(e.content)}', '${fn:escapeXml(e.date)}', '${e.id}', '${fn:escapeXml(e.courseid)}')">
                                         <div class="event-card bg-light rounded p-3 shadow-sm">
                                             <h4 class="event-title text-primary">${e.name}</h4>
                                             <p class="event-date text-muted mb-2">
                                                 <i class="fa fa-calendar-alt mr-2"></i>
-
-                                                <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var = "parseDate"/>
+                                                <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var="parseDate"/>
                                                 <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
                                             </p>
                                             <p class="event-content">${fn:substring(e.content, 0, 150)}...</p>
@@ -476,10 +524,22 @@
                                     </div>
                                 </c:forEach>
                             </div>
+                             
                         </c:if>
                     </div>
                 </div>
                 <!-- Recent Events End -->
+                <!-- Event Details Modal -->
+                <div id="eventModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeEventModal()">×</span>
+                        <h2 id="eventTitle"></h2>
+                        <p id="eventDate" class="text-muted"></p>
+                        <img id="eventImage" class="event-image" src="" alt="Event Image">
+                        <p id="eventContent"></p>
+                        <p id="eventCourseId" class="text-muted"></p>
+                    </div>
+                </div>
 
                 <div class="container-fluid py-5">
                     <div class="container py-5">
@@ -505,7 +565,7 @@
                                             <td>${f.studentName}</td>
                                             <td>${fn:substring(f.feedbackText, 0, 100)}${f.feedbackText.length() > 100 ? '...' : ''}</td>
                                             <td>
-                                                <fmt:parseDate value="${f.feedbackDate}" pattern="yyyy-MM-dd" var = "parseDate"/>
+                                                <fmt:parseDate value="${f.feedbackDate}" pattern="yyyy-MM-dd" var="parseDate"/>
                                                 <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/></td>
                                         </tr>
                                     </c:forEach>
@@ -598,26 +658,62 @@
             <script src="js/main.js"></script>
             <!-- Sidebar Toggle Script -->
             <script>
-                                    function toggleSidebar() {
-                                        const sidebar = document.getElementById('sidebar');
-                                        const mainContent = document.getElementById('main-content');
-                                        const toggleBtn = document.querySelector('.toggle-btn');
+                function toggleSidebar() {
+                    const sidebar = document.getElementById('sidebar');
+                    const mainContent = document.getElementById('main-content');
+                    const toggleBtn = document.querySelector('.toggle-btn');
 
-                                        sidebar.classList.toggle('hidden');
-                                        mainContent.classList.toggle('full');
-                                        toggleBtn.classList.toggle('hidden');
+                    sidebar.classList.toggle('hidden');
+                    mainContent.classList.toggle('full');
+                    toggleBtn.classList.toggle('hidden');
 
-                                        // Change icon based on sidebar state
-                                        const icon = toggleBtn.querySelector('i');
-                                        if (sidebar.classList.contains('hidden')) {
-                                            icon.classList.remove('fa-times');
-                                            icon.classList.add('fa-bars');
-                                        } else {
-                                            icon.classList.remove('fa-bars');
-                                            icon.classList.add('fa-times');
-                                        }
-                                    }
+                    // Change icon based on sidebar state
+                    const icon = toggleBtn.querySelector('i');
+                    if (sidebar.classList.contains('hidden')) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    } else {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    }
+                }
+
+                function showEventDetails(id, name, content, date, eventId, courseId) {
+                    const modal = document.getElementById('eventModal');
+                    const title = document.getElementById('eventTitle');
+                    const eventDate = document.getElementById('eventDate');
+                    const eventImage = document.getElementById('eventImage');
+                    const eventContent = document.getElementById('eventContent');
+                    const eventCourseId = document.getElementById('eventCourseId');
+
+                    title.textContent = name;
+                    eventDate.textContent = 'Ngày: ' + date;
+                    eventContent.textContent = content;
+                    eventCourseId.textContent = 'Mã khóa học: ' + (courseId || 'Không có');
+
+                    // Set image source to TeacherHome servlet with eventId
+                    if (eventId && eventId !== 'null') {
+                        eventImage.src = '${pageContext.request.contextPath}/teacherHome?eventId=' + eventId;
+                        eventImage.style.display = 'block';
+                    } else {
+                        eventImage.style.display = 'none';
+                    }
+
+                    modal.style.display = 'block';
+                }
+
+                function closeEventModal() {
+                    const modal = document.getElementById('eventModal');
+                    modal.style.display = 'none';
+                }
+
+                // Close modal when clicking outside
+                window.onclick = function(event) {
+                    const modal = document.getElementById('eventModal');
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                }
             </script>
     </body>
-
 </html>

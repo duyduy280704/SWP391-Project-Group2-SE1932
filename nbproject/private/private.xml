@@ -5,14 +5,11 @@
         <group>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/profile.jsp</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/ProfileDAO.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherHome.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/TeacherHome.jsp</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/LoginControllers.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/AdminStaffs.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Staff.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/web/blog.jsp</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/Teachers.java</file>
+            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/BlogDAO.java</file>
             <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/ProfileController.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/Controllers/LogoutController.java</file>
-            <file>file:/D:/test/SWP391-Project-Group2-SE1932/src/java/models/AdminStaffDAO.java</file>
         </group>
     </open-files>
 </project-private>

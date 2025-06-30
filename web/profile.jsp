@@ -225,7 +225,7 @@
                 margin-left: 10px;
             }
         </style>
-       <script>
+        <script>
             function toggleContent(section) {
                 const contents = document.getElementsByClassName('content');
                 for (let content of contents) {
@@ -405,15 +405,31 @@
                                         <input type="file" name="picture" accept="image/*">
                                     </div>
                                 </c:if>
+
                                 <c:if test="${roleId == '2'}">
                                     <div class="form-group">
                                         <label>Chuyên Môn:</label>
                                         <input type="text" name="expertise" value="${profile.exp}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
                                     </div>
+
+                                    <!-- THÊM TRƯỜNG LOẠI KHÓA HỌC -->
+                                    <div class="form-group">
+                                        <label>Loại Khóa Học Dạy:</label>
+                                        <select name="idTypeCourse" required oninvalid="this.setCustomValidity('Vui lòng chọn loại khóa học')" oninput="this.setCustomValidity('')">
+                                            <option value="">-- Chọn loại khóa học --</option>
+                                            <c:forEach var="type" items="${applicationScope.typeList}">
+                                                <option value="${type.id}" ${profile.idtypecourse == type.id ? 'selected' : ''}>
+                                                    ${type.name}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
                                     <div class="form-group">
                                         <label>Kinh Nghiệm (Năm):</label>
                                         <input type="number" name="yearsOfExperience" value="${profile.yearofcourse}" required oninvalid="this.setCustomValidity('Vui lòng điền vào đây')" oninput="this.setCustomValidity('')">
                                     </div>
+
                                     <div class="form-group">
                                         <label>Ảnh Đại Diện:</label>
                                         <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
@@ -459,7 +475,7 @@
                         <ul class="list-unstyled">
                             <c:forEach var="t" items="${applicationScope.typeList}">
                                 <li><a href="#" class="text-white"><i class="fa fa-angle-right mr-2"></i> ${t.name}</a></li>
-                            </c:forEach>
+                                </c:forEach>
                         </ul>
                     </div>
                     <div class="col-md-4">

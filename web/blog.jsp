@@ -1,4 +1,3 @@
-<!-- Dương_homepage -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -64,11 +63,9 @@
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
-
                             <p>
                                 <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
                             </p>
-
                         </div>
                     </div>
                 </div>
@@ -79,22 +76,16 @@
         <!-- Navbar Start -->
         <div class="container-fluid">
             <div class="row border-top px-xl-5">
-                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
+                <div class="col-lg-9 mx-auto">
                     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
-                        <!-- Logo cho mobile -->
                         <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
                             <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                         </a>
-
-                        <!-- Nút toggle cho mobile -->
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-
-                        <!-- Menu + Nút hành động -->
                         <div class="collapse navbar-collapse" id="navbarCollapse">
                             <div class="d-flex justify-content-between align-items-center w-100">
-                                <!-- Menu căn giữa -->
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
@@ -102,8 +93,7 @@
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
-                                <!-- Nút hành động về phía phải -->
-                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
+                                
                             </div>
                         </div>
                     </nav>
@@ -111,7 +101,6 @@
             </div>
         </div>
         <!-- Navbar End -->
-
 
         <!-- Header Start -->
         <div class="container-fluid page-header" style="margin-bottom: 90px;">
@@ -128,38 +117,125 @@
         </div>
         <!-- Header End -->
 
-
-        <!-- Blog Start -->
+        <!-- Blog Management Start -->
         <div class="container pt-5 pb-3">
             <div class="text-center mb-5">
-                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                <h1>Các tin gần đây</h1>
+                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Quản Lý Tin Tức</h5>
+                <h1>Danh Sách Bài Viết</h1>
             </div>
-            <div class="row pb-3">
-                <c:forEach var="n" items="${applicationScope.bloglist}">
-                    <div class="col-lg-4 mb-4">
-                        <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                            <img class="img-fluid" src="${n.picture}" alt="">
-                            <a class="blog-overlay text-decoration-none" href="#">
-                                <h5 class="text-white mb-3">${n.title}</h5>
-                                <p class="text-primary m-0">
-                                    ${fn:substring(n.publishDate, 0, 10)}
-                                </p>
-                            </a>
-                        </div>
+
+            <!-- Search Form -->
+            <!-- Search Form -->
+           <form action="Blog" method="post" class="form-inline mb-3 justify-content-center">
+    <input type="text" name="title" class="form-control mr-2" placeholder="Tìm tiêu đề" value="${searchTitle}">
+    <input type="date" name="fromDate" class="form-control mr-2" value="${fromDate}">
+    <input type="date" name="toDate" class="form-control mr-2" value="${toDate}">
+    <input type="hidden" name="search" value="true">
+    <button type="submit" class="btn btn-secondary">Tìm Kiếm</button>
+</form>
+
+            <!-- Search Message -->
+            <c:if test="${not empty searchMessage}">
+                <div class="alert alert-info text-center">${searchMessage}</div>
+            </c:if>
+
+            <!-- Add Blog Form -->
+            <div class="mb-5">
+                <h3 class="text-uppercase mb-3">Thêm Bài Viết Mới</h3>
+                <form action="Blog" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="add" value="true">
+                    <div class="form-group">
+                        <label>Tiêu Đề</label>
+                        <input type="text" name="title" class="form-control" required>
                     </div>
-                </c:forEach>
+                    <div class="form-group">
+                        <label>Nội Dung</label>
+                        <textarea name="content" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hình Ảnh</label>
+                        <input type="file" name="img" class="form-control-file" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày Đăng</label>
+                        <input type="date" name="publishDate" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm Bài Viết</button>
+                </form>
+            </div>
+
+            <!-- Edit Blog Form (shown when mode=1) -->
+            <c:if test="${blog != null}">
+                <div class="mb-5">
+                    <h3 class="text-uppercase mb-3">Chỉnh Sửa Bài Viết</h3>
+                    <form action="Blog" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="update" value="true">
+                        <input type="hidden" name="id" value="${blog.id}">
+                        <div class="form-group">
+                            <label>Tiêu Đề</label>
+                            <input type="text" name="title" class="form-control" value="${blog.title}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nội Dung</label>
+                            <textarea name="content" class="form-control" rows="4" required>${blog.content}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hình Ảnh</label>
+                            <input type="file" name="img" class="form-control-file" accept="image/*">
+                            <c:if test="${blog.img != null}">
+                                <img src="Blog?mode=image&id=${blog.id}" alt="Blog Image" class="img-fluid mt-2" style="max-width: 100px;"/>
+                                <small class="form-text text-muted">Để trống để giữ hình ảnh hiện tại</small>
+                            </c:if>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày Đăng</label>
+                            <input type="date" name="publishDate" class="form-control" value="${blog.publishDate}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập Nhật Bài Viết</button>
+                    </form>
+                </div>
+            </c:if>
+
+            <!-- Blog List -->
+            <h3 class="text-uppercase mb-3">${search == 'true' ? 'Kết Quả Tìm Kiếm' : 'Danh Sách Bài Viết'}</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tiêu Đề</th>
+                            <th>Ngày Đăng</th>
+                            <th>Hình Ảnh</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="blog" items="${data}">
+                            <tr>
+                                <td>${blog.id}</td>
+                                <td>${blog.title}</td>
+                                <td>${fn:substring(blog.publishDate, 0, 10)}</td>
+                                <td>
+                                    <c:if test="${blog.img != null}">
+                                        <img src="Blog?mode=image&id=${blog.id}" alt="Blog Image" class="img-fluid" style="max-width: 100px;"/>
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <a href="Blog?mode=1&id=${blog.id}" class="btn btn-info btn-sm">Chỉnh Sửa</a>
+                                    <a href="Blog?mode=2&id=${blog.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <!-- Blog End -->
-
+        <!-- Blog Management End -->
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
             <div class="container text-md-left">
                 <div class="row text-md-left">
-
-                    <!-- Liên hệ -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
                         <p><i class="fa fa-map-marker-alt mr-2"></i> 
@@ -183,8 +259,6 @@
                             </a>
                         </div>
                     </div>
-
-                    <!-- Khoá học -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
                         <ul class="list-unstyled">
@@ -197,17 +271,12 @@
                             </c:forEach>
                         </ul>
                     </div>
-
-                    <!-- Thông tin thêm -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
                         <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
                     </div>
                 </div>
-
                 <hr class="mb-4">
-
-                <!-- Bản quyền -->
                 <div class="row align-items-center">
                     <div class="col-md-7 col-lg-8">
                         <p class="text-white">
@@ -225,23 +294,16 @@
         </footer>
         <!-- Footer End -->
 
-
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-        <!-- Contact Javascript File -->
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
-
-        <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>
