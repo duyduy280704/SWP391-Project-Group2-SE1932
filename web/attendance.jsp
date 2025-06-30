@@ -12,9 +12,10 @@
 
         <style>
             body {
-                font-family: 'Poppins', sans-serif;
-                background: #f4f7fb;
                 margin: 0;
+                padding: 0;
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f7fb;
             }
 
             .sidebar {
@@ -34,6 +35,7 @@
                 color: #000;
                 padding: 15px 20px;
                 text-decoration: none;
+                transition: background 0.3s;
             }
 
             .sidebar a:hover,
@@ -53,17 +55,30 @@
                 box-shadow: 0 1px 5px rgba(0,0,0,0.1);
             }
 
-            .topbar-item {
+            .info-block {
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                font-size: 14px;
+                font-size: 13px;
                 color: #333;
             }
 
-            .topbar-item i {
-                color: #007bff;
+            .info-block i {
+                font-size: 16px;
+                color: #FF6600;
             }
+
+            .info-block h6 {
+                font-size: 13px;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .info-block p {
+                font-size: 12px;
+                margin: 0;
+            }
+
 
             .main-content {
                 margin-left: 220px;
@@ -71,48 +86,63 @@
             }
 
             h2 {
+                text-align: center;
                 color: #2c3e50;
+                margin-bottom: 25px;
+            }
+
+            .selector-container {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
                 margin-bottom: 20px;
+            }
+
+            .selector-container select {
+                padding: 10px;
+                font-size: 16px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                cursor: pointer;
             }
 
             table {
                 width: 100%;
                 border-collapse: collapse;
-                background: white;
-                margin-top: 20px;
+                background: #fff;
                 box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             }
 
             th, td {
-                padding: 12px;
-                border: 1px solid #ddd;
+                padding: 14px;
                 text-align: center;
+                border-bottom: 1px solid #e1e5ea;
             }
 
             th {
-                background: #3498db;
+                background-color: #3498db;
                 color: white;
             }
 
-            input[type=text] {
-                width: 90%;
-                border-radius: 4px;
-                border: 1px solid #ccc;
-                padding: 5px;
+            .error-message {
+                color: #e74c3c;
+                text-align: center;
+                margin: 20px 0;
+                font-size: 18px;
             }
 
-            .submit-btn {
-                margin-top: 20px;
-                padding: 10px 20px;
-                background: #3498db;
+            .btn-attendance {
+                background-color: #28a745;
                 color: white;
+                padding: 6px 12px;
                 border: none;
-                border-radius: 4px;
+                border-radius: 5px;
                 cursor: pointer;
             }
 
-            .submit-btn:hover {
-                background-color: #2980b9;
+            .btn-attendance:hover {
+                background-color: #218838;
             }
         </style>
     </head>
@@ -131,17 +161,26 @@
 
         <!-- Topbar -->
         <div class="topbar">
-            <div class="topbar-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></span>
+            <div class="info-block">
+                <i class="fa fa-map-marker-alt"></i>
+                <div>
+                    <h6 class="mb-0">Địa Chỉ</h6>
+                    <p class="mb-0"><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></p>
+                </div>
             </div>
-            <div class="topbar-item">
-                <i class="fas fa-envelope"></i>
-                <span><c:out value="${setting.email}" default="Email chưa cập nhật" /></span>
+            <div class="info-block">
+                <i class="fa fa-envelope"></i>
+                <div>
+                    <h6 class="mb-0">Email</h6>
+                    <p class="mb-0"><c:out value="${setting.email}" default="Email chưa cập nhật" /></p>
+                </div>
             </div>
-            <div class="topbar-item">
-                <i class="fas fa-phone"></i>
-                <span><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></span>
+            <div class="info-block">
+                <i class="fa fa-phone"></i>
+                <div>
+                    <h6 class="mb-0">Số Điện Thoại</h6>
+                    <p class="mb-0"><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></p>
+                </div>
             </div>
         </div>
 
@@ -204,8 +243,8 @@
                                         </c:if>
                                     </c:forEach>
                                     <input type="text" name="reason_${s.id}" placeholder="Lý do nghỉ" value="${reason}" />
+                                </td>
                             </tr>
-                            </td>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -213,6 +252,5 @@
                 <input type="submit" class="submit-btn" value="Lưu điểm danh" />
             </form>
         </div>
-
     </body>
 </html>

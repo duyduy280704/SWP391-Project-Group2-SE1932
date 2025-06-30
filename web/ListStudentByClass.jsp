@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,12 +19,18 @@
         </nav>
 
         <div id="layoutSidenav">
-            <!-- Sidebar -->
+            <!-- Sidebar đầy đủ -->
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Staff</div>
+
+                            <a class="nav-link" href="staffhome">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Trang Chủ
+                            </a>
+
                             <a class="nav-link" href="classStudent">
                                 <i class="fas fa-chalkboard me-2"></i> Danh sách lớp
                             </a>
@@ -35,6 +40,40 @@
                             <a class="nav-link" href="feedback?mode=viewAll">
                                 <i class="fas fa-comments me-2"></i> Phản hồi học viên
                             </a>
+
+                            <a class="nav-link" href="coursestaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                                Quản lý khóa học
+                            </a>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-week"></i></div>
+                                Quản lý sự kiện
+                            </a>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý blog
+                            </a>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
+                               aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Quản lý đăng ký
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="#">Học sinh</a>
+                                    <a class="nav-link" href="#">Giáo viên</a>
+                                </nav>
+                            </div>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
+                                Gửi thông báo
+                            </a>
+
                             <a class="nav-link text-danger" href="logout.jsp">
                                 <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
                             </a>
@@ -51,6 +90,12 @@
                 <main class="container-fluid px-4 mt-4">
                     <h2 class="mb-4">Danh sách học sinh của lớp: <span class="text-primary">${className}</span></h2>
 
+                    <c:if test="${not empty search}">
+                        <div class="alert alert-info">
+                            Kết quả tìm kiếm với từ khóa: <strong>${search}</strong> (${fn:length(students)} học sinh)
+                        </div>
+                    </c:if>
+
                     <form method="get" action="classStudent" class="mb-4 d-flex">
                         <input type="hidden" name="mode" value="students"/>
                         <input type="hidden" name="classId" value="${classId}"/>
@@ -61,37 +106,38 @@
                     <table class="table table-bordered table-hover">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
                                 <th>Ngày sinh</th>
                                 <th>Giới tính</th>
                                 <th>Địa chỉ</th>
+                                <th>Số điện thoại</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="s" items="${students}">
+                            <c:forEach var="s" items="${students}" varStatus="status">
                                 <tr>
-                                    <td>${s.id}</td>
+                                    <td>${status.index + 1}</td>
                                     <td>${s.name}</td>
                                     <td>${s.email}</td>
                                     <c:choose>
                                         <c:when test="${not empty s.birthdate}">
-                                    <fmt:parseDate value="${s.birthdate}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                    <td><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" /></td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td><span class="text-muted">Chưa có</span></td>
-                                </c:otherwise>
-                            </c:choose>
-
-                            <td>${s.gender}</td>
-                            <td>${s.address}</td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty students}">
-                            <tr><td colspan="6" class="text-center text-muted">Không có học sinh nào trong lớp.</td></tr>
-                        </c:if>
+                                            <fmt:parseDate value="${s.birthdate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                            <td><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" /></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td><span class="text-muted">Chưa có</span></td>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <td>${s.gender}</td>
+                                    <td>${s.address}</td>
+                                    <td>${s.phone}</td> 
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${empty students}">
+                                <tr><td colspan="7" class="text-center text-muted">Không có học sinh nào trong lớp.</td></tr>
+                            </c:if>
                         </tbody>
                     </table>
                 </main>

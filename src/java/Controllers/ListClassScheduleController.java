@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -18,6 +19,7 @@ import models.Categories_class;
 import models.ScheduleDAO;
 import models.Schedules;
 // Mai Thuy _ Danh sách lớp có thời khóa biểu, có thể sửa xóa, tạo
+
 public class ListClassScheduleController extends HttpServlet {
 
     ScheduleDAO dao = new ScheduleDAO();
@@ -28,23 +30,17 @@ public class ListClassScheduleController extends HttpServlet {
         String mode = request.getParameter("mode");
 
         if ("1".equals(mode)) {
-            ArrayList<Categories_class> data1 = dao.getCategories_class();
-            request.setAttribute("data1", data1);
-
-            ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
-            request.setAttribute("data3", data3);
-
+            request.setAttribute("data1", dao.getCategories_class());
+            request.setAttribute("data3", dao.getCategoriesTeacher());
             request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
         } else {
-            
-            List<Categories_class> classList = dao.getClassesHaveSchedule();
+            List<Schedules> classList = dao.getClassInfo();  // Lấy danh sách lớp với lịch học gần nhất
             request.setAttribute("classList", classList);
             request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);
         }
     }
 
     @Override
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -61,12 +57,11 @@ public class ListClassScheduleController extends HttpServlet {
         }
 
         if ("delete".equals(action)) {
-    String classId = request.getParameter("classId");
-    dao.deleteScheduleByClassId(classId);
-    response.sendRedirect("listClassSchedule");  
-    return;
-}
-
+            String classId = request.getParameter("classId");
+            dao.deleteScheduleByClassId(classId);
+            response.sendRedirect("listClassSchedule");
+            return;
+        }
 
         String scheduleId = request.getParameter("scheduleId");
         String classID = request.getParameter("classname");
@@ -123,47 +118,14 @@ public class ListClassScheduleController extends HttpServlet {
             }
 
         } else if (request.getParameter("add") != null) {
-    if (classID == null || classID.isEmpty()
-            || startTime == null || startTime.isEmpty()
-            || endTime == null || endTime.isEmpty()
-            || day == null || day.isEmpty()
-            || teacherID == null || teacherID.isEmpty()
-            || room == null || room.isEmpty()) {
+            if (classID == null || classID.isEmpty()
+                    || startTime == null || startTime.isEmpty()
+                    || endTime == null || endTime.isEmpty()
+                    || day == null || day.isEmpty()
+                    || teacherID == null || teacherID.isEmpty()
+                    || room == null || room.isEmpty()) {
 
-        request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để thêm lịch học.");
-        request.setAttribute("s", s);
-
-        ArrayList<Categories_class> data1 = dao.getCategories_class();
-        request.setAttribute("data1", data1);
-
-        ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
-        request.setAttribute("data3", data3);
-
-        request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
-        return;
-
-    } else if (startTime.compareTo(endTime) >= 0) {
-        request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
-        request.setAttribute("s", s);
-
-        ArrayList<Categories_class> data1 = dao.getCategories_class();
-        request.setAttribute("data1", data1);
-
-        ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
-        request.setAttribute("data3", data3);
-
-        request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
-        return;
-
-    }
-    else {  
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate inputDate = LocalDate.parse(day, formatter);
-            LocalDate today = LocalDate.now();
-
-            if (inputDate.isBefore(today)) {
-                request.setAttribute("err", "Không thể tạo lịch học trong quá khứ.");
+                request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để thêm lịch học.");
                 request.setAttribute("s", s);
 
                 ArrayList<Categories_class> data1 = dao.getCategories_class();
@@ -174,40 +136,72 @@ public class ListClassScheduleController extends HttpServlet {
 
                 request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                 return;
+
+            } else if (startTime.compareTo(endTime) >= 0) {
+                request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
+                request.setAttribute("s", s);
+
+                ArrayList<Categories_class> data1 = dao.getCategories_class();
+                request.setAttribute("data1", data1);
+
+                ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                request.setAttribute("data3", data3);
+
+                request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                return;
+
+            } else {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate inputDate = LocalDate.parse(day, formatter);
+                    LocalDate today = LocalDate.now();
+
+                    if (inputDate.isBefore(today)) {
+                        request.setAttribute("err", "Không thể tạo lịch học trong quá khứ.");
+                        request.setAttribute("s", s);
+
+                        ArrayList<Categories_class> data1 = dao.getCategories_class();
+                        request.setAttribute("data1", data1);
+
+                        ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                        request.setAttribute("data3", data3);
+
+                        request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                        return;
+                    }
+                } catch (Exception e) {
+                    request.setAttribute("err", "Định dạng ngày không hợp lệ.");
+                    request.setAttribute("s", s);
+
+                    ArrayList<Categories_class> data1 = dao.getCategories_class();
+                    request.setAttribute("data1", data1);
+
+                    ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                    request.setAttribute("data3", data3);
+
+                    request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                    return;
+                }
+
+                if (dao.isScheduleExist(s, false)) {
+                    request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
+                    request.setAttribute("s", s);
+
+                    ArrayList<Categories_class> data1 = dao.getCategories_class();
+                    request.setAttribute("data1", data1);
+
+                    ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
+                    request.setAttribute("data3", data3);
+
+                    request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                    return;
+                }
+
+                dao.add(s);
+                response.sendRedirect("listClassSchedule");
+                return;
             }
-        } catch (Exception e) {
-            request.setAttribute("err", "Định dạng ngày không hợp lệ.");
-            request.setAttribute("s", s);
-
-            ArrayList<Categories_class> data1 = dao.getCategories_class();
-            request.setAttribute("data1", data1);
-
-            ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
-            request.setAttribute("data3", data3);
-
-            request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
-            return;
         }
-
-        if (dao.isScheduleExist(s, false)) {
-            request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
-            request.setAttribute("s", s);
-
-            ArrayList<Categories_class> data1 = dao.getCategories_class();
-            request.setAttribute("data1", data1);
-
-            ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
-            request.setAttribute("data3", data3);
-
-            request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
-            return;
-        }
-
-        dao.add(s);
-        response.sendRedirect("listClassSchedule");
-        return;
-    }
-}
 
         request.setAttribute("schedule", schedule);
         request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);

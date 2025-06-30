@@ -5,6 +5,7 @@ import java.util.*;
 import models.*;
 import dal.DBContext;
 // Thủy _ in tất cả các lớp
+
 public class ClassStudentDAO extends DBContext {
 
     // Lấy danh sách tất cả lớp
@@ -25,11 +26,11 @@ public class ClassStudentDAO extends DBContext {
     public List<Students> getStudentsByClassId(String classId) {
         List<Students> list = new ArrayList<>();
         String sql = """
-            SELECT s.id, s.full_name, s.email, s.password, s.birth_date, s.gender, s.address
-            FROM Student s
-            JOIN Class_Student cs ON s.id = cs.student_id
-            WHERE cs.class_id = ?
-        """;
+        SELECT s.id, s.full_name, s.email, s.password, s.birth_date, s.gender, s.address, s.phone
+        FROM Student s
+        JOIN Class_Student cs ON s.id = cs.student_id
+        WHERE cs.class_id = ?
+    """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, classId);
             ResultSet rs = ps.executeQuery();
@@ -42,6 +43,7 @@ public class ClassStudentDAO extends DBContext {
                 s.setBirthdate(rs.getString("birth_date"));
                 s.setGender(rs.getString("gender"));
                 s.setAddress(rs.getString("address"));
+                s.setPhone(rs.getString("phone"));
                 list.add(s);
             }
         } catch (Exception e) {
@@ -49,6 +51,7 @@ public class ClassStudentDAO extends DBContext {
         }
         return list;
     }
+
 //lấy tên lớp học vì kia đang in id 
     public String getClassNameById(String classId) {
         String sql = "SELECT name FROM Class WHERE id = ?";
@@ -63,51 +66,92 @@ public class ClassStudentDAO extends DBContext {
         }
         return "";
     }
-    
+
     // tìm kiếm tên lớp
-public List<Courses> searchClassesByName(String keyword) {
-    List<Courses> list = new ArrayList<>();
-    String sql = "SELECT id, name FROM Class WHERE name LIKE ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, "%" + keyword + "%");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            list.add(new Courses(rs.getString("id"), rs.getString("name")));
+    public List<Courses> searchClassesByName(String keyword) {
+        List<Courses> list = new ArrayList<>();
+        String sql = "SELECT id, name FROM Class WHERE name LIKE ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Courses(rs.getString("id"), rs.getString("name")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return list;
     }
-    return list;
-}
 //tìm tên học sinh 
-public List<Students> searchStudentName(String classId, String keyword) {
-    List<Students> list = new ArrayList<>();
-    String sql = """
-        SELECT s.id, s.full_name, s.email, s.password, s.birth_date, s.gender, s.address
+
+    public List<Students> searchStudentName(String classId, String keyword) {
+        List<Students> list = new ArrayList<>();
+        String sql = """
+        SELECT s.id, s.full_name, s.email, s.password, s.birth_date, s.gender, s.address, s.phone
         FROM Student s
         JOIN Class_Student cs ON s.id = cs.student_id
         WHERE cs.class_id = ? AND s.full_name LIKE ?
     """;
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, classId);
-        ps.setString(2, "%" + keyword + "%");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Students s = new Students();
-            s.setId(rs.getString("id"));
-            s.setName(rs.getString("full_name"));
-            s.setEmail(rs.getString("email"));
-            s.setPassword(rs.getString("password"));
-            s.setBirthdate(rs.getString("birth_date"));
-            s.setGender(rs.getString("gender"));
-            s.setAddress(rs.getString("address"));
-            list.add(s);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Students s = new Students();
+                s.setId(rs.getString("id"));
+                s.setName(rs.getString("full_name"));
+                s.setEmail(rs.getString("email"));
+                s.setPassword(rs.getString("password"));
+                s.setBirthdate(rs.getString("birth_date"));
+                s.setGender(rs.getString("gender"));
+                s.setAddress(rs.getString("address"));
+                s.setPhone(rs.getString("phone"));
+                list.add(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return list;
     }
-    return list;
-}
+// Kiểm tra giáo viên có dạy lớp này không
 
+    public boolean studentByTeacher(String teacherId, String classId) {
+        String sql = """
+        SELECT 1
+        FROM Schedule
+        WHERE teacher_id = ? AND class_id = ?
+        LIMIT 1
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ps.setString(2, classId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // nếu có bản ghi => giáo viên có dạy lớp đó
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+// Lấy danh sách lớp mà giáo viên đang dạy
+    public List<Courses> getClassesByTeacher(String teacherId) {
+        List<Courses> list = new ArrayList<>();
+        String sql = """
+       SELECT DISTINCT c.id, c.name
+                FROM Class c
+                JOIN Schedule s ON c.id = s.id_class
+                WHERE s.id_teacher = ?
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Courses(rs.getString("id"), rs.getString("name")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 }

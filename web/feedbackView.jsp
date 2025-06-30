@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <!-- Thêm dòng này -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,12 +18,18 @@
         </nav>
 
         <div id="layoutSidenav">
-            <!-- Sidebar -->
+            <!-- Sidebar đầy đủ -->
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Staff</div>
+
+                            <a class="nav-link" href="staffhome">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Trang Chủ
+                            </a>
+
                             <a class="nav-link" href="classStudent">
                                 <i class="fas fa-chalkboard me-2"></i> Danh sách lớp
                             </a>
@@ -33,6 +39,40 @@
                             <a class="nav-link" href="feedback?mode=viewAll">
                                 <i class="fas fa-comments me-2"></i> Phản hồi học viên
                             </a>
+
+                            <a class="nav-link" href="coursestaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                                Quản lý khóa học
+                            </a>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-week"></i></div>
+                                Quản lý sự kiện
+                            </a>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý blog
+                            </a>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
+                               aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Quản lý đăng ký
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="#">Học sinh</a>
+                                    <a class="nav-link" href="#">Giáo viên</a>
+                                </nav>
+                            </div>
+
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
+                                Gửi thông báo
+                            </a>
+
                             <a class="nav-link text-danger" href="logout.jsp">
                                 <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
                             </a>
@@ -75,7 +115,6 @@
                                                 <td>${fb.className}</td>
                                                 <td>${fb.feedbackText}</td>
                                                 <td>${fb.feedbackDate}</td>
-
                                             </tr>
                                         </c:forEach>
                                     </tbody>
@@ -92,7 +131,6 @@
                 </footer>
             </div>
         </div>
-
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>

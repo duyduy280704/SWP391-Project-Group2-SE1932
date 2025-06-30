@@ -103,7 +103,6 @@ public class ScheduleTeacherDAO extends DBContext {
                     return;
                 }
             }
-
             // Xóa dữ liệu cũ
             String sqlDelete = "DELETE FROM attendance WHERE id_class = ? AND date = ? AND id_student = ?";
             try (PreparedStatement stmDelete = connection.prepareStatement(sqlDelete)) {
@@ -115,7 +114,6 @@ public class ScheduleTeacherDAO extends DBContext {
                 }
                 stmDelete.executeBatch();
             }
-
             // Thêm mới
             String sqlInsert = "INSERT INTO attendance (id_student, id_class, date, status, reason) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmInsert = connection.prepareStatement(sqlInsert)) {

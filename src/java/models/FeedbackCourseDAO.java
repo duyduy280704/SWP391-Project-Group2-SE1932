@@ -1,4 +1,3 @@
-// xử lí sinh viên điền feedback, staff xem tất cả
 package models;
 
 import dal.DBContext;
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class FeedbackCourseDAO extends DBContext {
 
-    // in danh sách lớp dã học
+    // Lấy danh sách lớp (course) sinh viên đã học
     public List<Courses> getCoursesByStudentId(String studentId) {
         List<Courses> courses = new ArrayList<>();
         String sql = """
@@ -26,9 +25,7 @@ public class FeedbackCourseDAO extends DBContext {
             stm.setString(1, studentId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                String id = rs.getString("course_id");
-                String name = rs.getString("class_name");
-                courses.add(new Courses(id, name));
+                courses.add(new Courses(rs.getString("course_id"), rs.getString("class_name")));
             }
         } catch (SQLException e) {
             System.err.println("Lỗi getCoursesByStudentId: " + e.getMessage());
@@ -37,7 +34,7 @@ public class FeedbackCourseDAO extends DBContext {
         return courses;
     }
 
-    // thêm feedback
+    // Thêm phản hồi
     public void addFeedback(String studentId, String courseId, String comment) {
         String sql = "INSERT INTO feedback (id_student, id_course, text, date) VALUES (?, ?, ?, GETDATE())";
 
@@ -51,7 +48,7 @@ public class FeedbackCourseDAO extends DBContext {
         }
     }
 
-    // in ra tất cả feedback 
+    // Lấy tất cả phản hồi (STAFF)
     public List<FeedbackByStudent> getAllFeedback() {
         List<FeedbackByStudent> list = new ArrayList<>();
         String sql = """
@@ -65,26 +62,102 @@ public class FeedbackCourseDAO extends DBContext {
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String studentId = rs.getString("id_student");
-                String courseId = rs.getString("id_course");
-                String studentName = rs.getString("full_name");
-                String className = rs.getString("class_name");
-                String text = rs.getString("text");
-
-                // Chuyển Date sang chuỗi định dạng dd/MM/yyyy
                 String formattedDate = "";
                 Date rawDate = rs.getDate("date");
                 if (rawDate != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    formattedDate = sdf.format(rawDate);
+                    formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(rawDate);
                 }
 
-                FeedbackByStudent fb = new FeedbackByStudent(id, studentId, courseId, text, formattedDate, studentName, className);
-                list.add(fb);
+                list.add(new FeedbackByStudent(
+                        rs.getInt("id"),
+                        rs.getString("id_student"),
+                        rs.getString("id_course"),
+                        rs.getString("text"),
+                        formattedDate,
+                        rs.getString("full_name"),
+                        rs.getString("class_name")
+                ));
             }
         } catch (SQLException e) {
             System.err.println("Lỗi getAllFeedback: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+    // Giáo viên xem phản hồi từ lớp mình dạy
+    public List<FeedbackByStudent> getFeedbackByTeacher(String teacherId) {
+        List<FeedbackByStudent> list = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT f.id, f.id_student, s.full_name, f.id_course, f.text, f.date, cl.name AS class_name
+            FROM feedback f
+            JOIN student s ON f.id_student = s.id
+            JOIN course c ON f.id_course = c.id
+            JOIN class cl ON cl.course_id = c.id
+            JOIN schedule sch ON cl.id = sch.id_class
+            WHERE sch.id_teacher = ?
+            ORDER BY f.date DESC
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String formattedDate = "";
+                Date rawDate = rs.getDate("date");
+                if (rawDate != null) {
+                    formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(rawDate);
+                }
+
+                list.add(new FeedbackByStudent(
+                        rs.getInt("id"),
+                        rs.getString("id_student"),
+                        rs.getString("id_course"),
+                        rs.getString("text"),
+                        formattedDate,
+                        rs.getString("full_name"),
+                        rs.getString("class_name")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Lịch sử phản hồi của sinh viên
+    public List<FeedbackByStudent> getFeedbackByStudent(String studentId) {
+        List<FeedbackByStudent> list = new ArrayList<>();
+        String sql = """
+            SELECT f.id, f.id_student, f.id_course, f.text, f.date, cl.name AS class_name
+            FROM feedback f
+            JOIN class cl ON f.id_course = cl.course_id
+            WHERE f.id_student = ?
+            ORDER BY f.date DESC
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, studentId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String formattedDate = "";
+                Date rawDate = rs.getDate("date");
+                if (rawDate != null) {
+                    formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(rawDate);
+                }
+
+                list.add(new FeedbackByStudent(
+                        rs.getInt("id"),
+                        rs.getString("id_student"),
+                        rs.getString("id_course"),
+                        rs.getString("text"),
+                        formattedDate,
+                        "", 
+                        rs.getString("class_name")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return list;
