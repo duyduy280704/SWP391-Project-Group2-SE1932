@@ -55,30 +55,36 @@ public class AssignClassController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String[]> paramMap = request.getParameterMap();
+        List<String> messages = new ArrayList<>();
 
         for (String key : paramMap.keySet()) {
-            if (key.startsWith("assignments[")) {
+            if (key.startsWith("regisitionId_")) {
                 try {
-                    String regisitionIdStr = key.substring(11, key.length() - 1);
+                    String regisitionIdStr = key.substring("regisitionId_".length());
                     String classIdStr = request.getParameter(key);
 
-                    // Ghi log để debug
-                    System.out.println("👉 Regisition ID raw: " + regisitionIdStr);
-                    System.out.println("👉 Class ID raw: " + classIdStr);
-
                     if (classIdStr != null && !classIdStr.isEmpty()) {
-                        int regisitionId = Integer.parseInt(regisitionIdStr);
-                        int classId = Integer.parseInt(classIdStr);
+                        int regisitionId = Integer.parseInt(regisitionIdStr.trim());
+                        int classId = Integer.parseInt(classIdStr.trim());
 
-                        dao.assignToClassSingle(regisitionId, classId);
-                        dao.updateStatus(regisitionId, "đã phân lớp");
+                        boolean assigned = dao.assignToClassSingle(regisitionId, classId);
+                        String studentName = dao.getStudentNameByRegisitionId(regisitionId); // 👈 Lấy tên học viên
+
+                        if (assigned) {
+                            dao.updateStatus(regisitionId, "đã phân lớp");
+                        } else {
+                            messages.add("⚠️ Học viên <strong>" + studentName + "</strong> đã được phân vào lớp này trước đó.");
+                        }
                     }
+
                 } catch (NumberFormatException e) {
-                    System.err.println("⚠️ Lỗi chuyển số: " + e.getMessage());
+                    messages.add("❌ Lỗi định dạng số ở " + key + ": " + e.getMessage());
                 }
             }
         }
 
+        // Truyền message sang JSP
+        request.getSession().setAttribute("messages", messages);
         response.sendRedirect("AssignClass");
     }
 

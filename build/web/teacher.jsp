@@ -27,6 +27,50 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+            /* Animation */
+            .wow {
+                animation-duration: 1s;
+                animation-fill-mode: both;
+            }
+            .fadeInLeft {
+                animation-name: fadeInLeft;
+            }
+            .fadeInRight {
+                animation-name: fadeInRight;
+            }
+            @keyframes fadeInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            @keyframes fadeInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Button Hover */
+            .btn-light:hover {
+                background-color: #fff3cd;
+                color: #d63384;
+                transform: scale(1.05);
+                transition: all 0.3s ease;
+            }
+        </style>
+
+
     </head>
     <body>
         <!-- Topbar Start -->
@@ -96,10 +140,10 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <!-- Menu căn giữa -->
                                 <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
                                     <a href="Course" class="nav-item nav-link">Khóa Học</a>
-                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link active">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
                                 <!-- Nút hành động về phía phải -->
@@ -126,6 +170,20 @@
             </div>
         </div>
         <!-- Header End -->
+
+        <!-- Banner Tuyển Dụng Sáng Tạo và Thu Hút -->
+        <div class="container my-5 py-5 px-4 rounded-4 text-white position-relative" style="background: linear-gradient(135deg, #ff9a9e, #fad0c4); overflow: hidden;">
+            <div class="row align-items-center">
+                <div class="col-md-8 wow fadeInLeft">
+                    <h2 class="display-6 fw-bold mb-3">🚀 Cơ hội trở thành giáo viên tại <span class="text-light">Trung tâm BigDream</span></h2>
+                    <p class="lead mb-4">Bạn yêu thích giảng dạy, chia sẻ kiến thức, truyền cảm hứng cho thế hệ trẻ? Hãy gia nhập đội ngũ của chúng tôi ngay hôm nay!</p>
+                    <a href="resgiterTeacher" class="btn btn-light btn-lg px-4 py-2 fw-bold rounded-pill shadow-sm">
+                        Ứng tuyển ngay 🔥
+                    </a>
+                </div>
+                
+            </div>
+        </div>
 
         <!-- Team Start -->
         <div class="container-fluid py-5">
@@ -155,6 +213,10 @@
                 </div>
             </div>
         </div>
+
+
+
+
 
         <!-- Team End -->
 

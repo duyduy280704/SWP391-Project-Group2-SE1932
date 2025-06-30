@@ -96,11 +96,11 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <!-- Menu căn giữa -->
                                 <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
                                     <a href="Course" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+                                    <a href="blog.jsp" class="nav-item nav-link active">Tin Tức</a>
                                 </div>
                                 <!-- Nút hành động về phía phải -->
                                 <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>

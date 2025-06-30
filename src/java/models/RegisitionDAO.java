@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class RegisitionDAO extends DBContext {
 
-        // Lọc danh sách đăng ký theo khóa học, trạng thái, tên học viên
+    // Lọc danh sách đăng ký theo khóa học, trạng thái, tên học viên
     public List<Regisition> filterRegisitions(String courseId, String status, String studentName) {
         List<Regisition> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT r.id, r.course_id, s.full_name AS studentName, c.name AS courseName, r.status, r.note "
@@ -68,8 +68,7 @@ public class RegisitionDAO extends DBContext {
     public List<Courses> getAllCourses() {
         List<Courses> list = new ArrayList<>();
         String sql = "SELECT id, name FROM Course";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Courses c = new Courses();
                 c.setId(rs.getString("id"));
@@ -86,8 +85,8 @@ public class RegisitionDAO extends DBContext {
     public List<Categories_class> getClassesByCourse(String courseId) {
         List<Categories_class> list = new ArrayList<>();
         String sql = "SELECT c.id, c.name, tc.name AS courseName "
-                   + "FROM Class c JOIN Course tc ON c.course_id = tc.id "
-                   + "WHERE c.course_id = ?";
+                + "FROM Class c JOIN Course tc ON c.course_id = tc.id "
+                + "WHERE c.course_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, courseId);
             ResultSet rs = ps.executeQuery();
@@ -104,17 +103,48 @@ public class RegisitionDAO extends DBContext {
         return list;
     }
 
-    // Phân lớp cho từng học viên
-    public void assignToClassSingle(int regisitionId, int classId) {
-        String sql = "INSERT INTO Class_Student (id_class, id_student) "
-                   + "SELECT ?, student_id FROM regisition WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+    public boolean assignToClassSingle(int regisitionId, int classId) {
+        // Kiểm tra trùng
+        String checkSql = "SELECT cs.id FROM Class_Student cs "
+                + "JOIN regisition r ON cs.id_student = r.student_id "
+                + "WHERE r.id = ? AND cs.id_class = ?";
+        try (PreparedStatement check = connection.prepareStatement(checkSql)) {
+            check.setInt(1, regisitionId);
+            check.setInt(2, classId);
+            ResultSet rs = check.executeQuery();
+            if (rs.next()) {
+                return false; // đã tồn tại
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Thêm mới nếu chưa trùng
+        String insertSql = "INSERT INTO Class_Student (id_class, id_student) "
+                + "SELECT ?, student_id FROM regisition WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
             ps.setInt(1, classId);
             ps.setInt(2, regisitionId);
             ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isAlreadyAssigned(int studentId, int classId) {
+        String sql = "SELECT 1 FROM Class_Student WHERE student_id = ? AND class_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setInt(2, classId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     // Cập nhật trạng thái phân lớp cho từng học viên
@@ -128,4 +158,18 @@ public class RegisitionDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    
+    public String getStudentNameByRegisitionId(int regisitionId) {
+    String sql = "SELECT s.full_name FROM regisition r JOIN Student s ON r.student_id = s.id WHERE r.id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, regisitionId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("full_name");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return "Không rõ";
+}
 }

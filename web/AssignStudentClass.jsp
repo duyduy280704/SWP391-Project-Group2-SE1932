@@ -98,6 +98,18 @@
             <button type="submit">🔍 Lọc</button>
         </form>
 
+        <c:if test="${not empty sessionScope.messages}">
+            <div class="alert">
+                <ul>
+                    <c:forEach var="msg" items="${sessionScope.messages}">
+                        <li>${msg}</li>
+                        </c:forEach>
+                </ul>
+            </div>
+            <c:remove var="messages" scope="session" />
+        </c:if>
+
+
 
         <!-- Danh sách -->
         <form class="assign-form" method="post" action="AssignClass">
@@ -119,7 +131,7 @@
                             <td>${r.status}</td>
                             <td>${r.note}</td>
                             <td>
-                                <select name="assignments[${r.id}]">
+                                <select name="regisitionId_${r.id}">
                                     <option value="">-- Chọn lớp --</option>
                                     <c:forEach var="cls" items="${classByCourse[r.courseId]}">
                                         <option value="${cls.id_class}">${cls.name_class}</option>
@@ -128,12 +140,13 @@
                             </td>
                         </tr>
                     </c:forEach>
+
                 </tbody>
             </table>
 
             <button type="submit">✅ Phân lớp</button>
         </form>
-        >
+
 
         <div class="footer">
             Hệ thống quản lý trung tâm năng khiếu - BigDream © 2025
