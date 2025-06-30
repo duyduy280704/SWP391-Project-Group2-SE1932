@@ -23,6 +23,7 @@ public class PreRegistration {
     private String courseName;
     private int course_id;
     private String status;
+    private String note;
 
     public PreRegistration() {
     }
@@ -38,7 +39,7 @@ public class PreRegistration {
         this.status = status;
     }
 
-    public PreRegistration(String full_name, String email, String phone, String birth_date, String gender, String address, int course_id, String status) {
+    public PreRegistration(String full_name, String email, String phone, String birth_date, String gender, String address, int course_id, String status, String note) {
 
         this.full_name = full_name;
         this.email = email;
@@ -48,6 +49,7 @@ public class PreRegistration {
         this.address = address;
         this.course_id = course_id;
         this.status = status;
+        this.note = note;
     }
 
     public PreRegistration(int id, String full_name, String email, String birth_date, String gender, String address, String courseName, String status) {
@@ -140,5 +142,14 @@ public class PreRegistration {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+    
 
 }

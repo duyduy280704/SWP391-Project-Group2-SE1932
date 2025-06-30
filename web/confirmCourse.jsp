@@ -180,6 +180,7 @@
                                             <th>Khóa học</th>
                                             <th>Giới tính</th>
                                             <th>Địa chỉ</th>
+                                            <th>Ghi chú</th>
                                             <th>Trạng thái</th>
                                             <th>Chức năng</th>
                                         </tr>
@@ -195,10 +196,16 @@
                                                 <td>${item.courseName}</td>
                                                 <td>${item.gender}</td>
                                                 <td>${item.address}</td>
+                                                <td contenteditable="true"
+                                                    onblur="updateNote(${item.id}, this.innerText)"
+                                                    class="editable-note">
+                                                    ${item.note}
+                                                </td>
+
                                                 <td>${item.status}</td>
                                                 <td>
                                                     <button class="btn btn-success btn-sm" onclick="showConfirmModal(${item.id})">✔️ Xác nhận</button>
-                                                    <button class="btn btn-danger btn-sm" onclick="showRejectModal(${item.id})">❌ Từ chối</button>
+                                                    <button class="btn btn-danger btn-sm" onclick="showRejectModal(${item.id})">❌ Chờ lớp</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -224,19 +231,18 @@
                     <!-- Modal từ chối -->
                     <div id="rejectModal" class="modal">
                         <div class="modal-content">
-                            <p>Nhập lý do từ chối:</p>
+                            <p>Bạn có chắc chắn chờ lớp</p>
                             <form method="post" action="Approve">
                                 <input type="hidden" name="id" id="rejectId">
                                 <input type="hidden" name="action" value="reject">
-                                <textarea name="reason" required class="form-control" rows="3"></textarea>
-                                <br>
-                                <button type="submit" class="btn btn-danger">Gửi từ chối</button>
+                                
+                                <button type="submit" class="btn btn-danger">Đồng Ý</button>
                                 <button type="button" onclick="closeModal('rejectModal')" class="btn btn-secondary">Hủy</button>
                             </form>
                         </div>
                     </div>
                 </main>
-                
+
 
             </div>
         </div>
@@ -246,50 +252,37 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
         <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        // Initialize DataTables
-                        const dataTable = document.getElementById('datatablesSimple');
-                        if (dataTable) {
-                            new simpleDatatables.DataTable(dataTable);
-                            console.log('DataTables initialized for datatablesSimple');
-                        } else {
-                            console.error('DataTable element not found');
-                        }
+                                    function updateNote(id, newNote) {
+                                        if (!id) {
+                                            console.error("Thiếu ID");
+                                            return;
+                                        }
 
-                        // Initialize CKEditor
-                        const descriptionTextarea = document.getElementById('description');
-                        if (descriptionTextarea && typeof CKEDITOR !== 'undefined') {
-                            // Destroy existing CKEditor instance if it exists
-                            if (CKEDITOR.instances.description) {
-                                CKEDITOR.instances.description.destroy(true);
-                            }
+                                        fetch('Approve', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded'
+                                            },
+                                            body: "id=" + id + "&note=" + encodeURIComponent(newNote)
+                                        })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        console.error("Lỗi HTTP: ", response.status);
+                                                        throw new Error("Lỗi HTTP");
+                                                    }
+                                                    return response.text();
+                                                })
+                                                .then(data => {
+                                                    console.log("Ghi chú cập nhật thành công:", data);
+                                                })
+                                                .catch(error => {
+                                                    alert("Không thể cập nhật ghi chú!");
+                                                    console.error("Chi tiết lỗi:", error);
+                                                });
+                                    }
 
-                            // Initialize CKEditor
-                            CKEDITOR.replace('description', {
-                                height: 200,
-                                toolbar: [
-                                    {name: 'basic', items: ['Bold', 'Italic', 'Underline', 'Link', 'Unlink', 'NumberedList', 'BulletedList']},
-                                    {name: 'paragraph', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight']},
-                                    {name: 'styles', items: ['Font', 'FontSize']},
-                                    {name: 'colors', items: ['TextColor', 'BGColor']}
-                                ]
-                            });
-
-                            // Set description value safely
-                            const descriptionValue = '${p.description != null ? fn:escapeXml(p.description) : ''}';
-                            CKEDITOR.instances.description.setData(descriptionValue);
-                            console.log('CKEditor initialized with description:', descriptionValue);
-                        } else {
-                            console.error('CKEditor not loaded or textarea not found.');
-                            if (!descriptionTextarea) {
-                                console.error('Textarea with id "description" not found.');
-                            }
-                            if (typeof CKEDITOR === 'undefined') {
-                                console.error('CKEDITOR object is undefined. Verify ckeditor.js is loaded.');
-                            }
-                        }
-                    });
         </script>
+
         <script>
             function showConfirmModal(id) {
                 document.getElementById("confirmId").value = id;
@@ -319,6 +312,7 @@
                 }
             }
         </script>
+
 
     </body>
 </html>

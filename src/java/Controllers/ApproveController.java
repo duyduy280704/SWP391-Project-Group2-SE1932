@@ -43,19 +43,18 @@ public class ApproveController extends HttpServlet {
 
         } else if ("reject".equals(action)) {
             String reason = request.getParameter("reason");
-            dao.updateStatus(id, "Từ chối");
-            String email = dao.getEmailById(id);
-            if (email != null && !email.isEmpty()) {
-                String subject = "Từ chối đăng ký khóa học";
-                String message = "Chúng tôi rất tiếc phải từ chối đơn đăng ký của bạn.\n\n"
-                        + "👉 Lý do: " + reason + "\n\n"
-                        + "Nếu có thắc mắc, vui lòng liên hệ trực tiếp qua trung tâm bằng số điện thoại 0123456789 để được hỗ trợ.";
-
-                SendMail.send(email, subject, message);
-            }
+            dao.updateStatus(id, "Chưa xếp được lớp");
 
         }
 
         response.sendRedirect("Approve");
+        
+        String note = request.getParameter("note");
+
+       
+        dao.updateNote(id, note);
+
+        response.setContentType("text/plain");
+        response.getWriter().write("success");
     }
 }

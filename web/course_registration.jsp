@@ -217,6 +217,11 @@
                             <input type="text" class="form-control border-0 p-3" name="address"
                                    placeholder="Địa chỉ"  />
                         </div>
+                        
+                        <div class="form-group mb-3">
+                            <input type="text" class="form-control border-0 p-3" name="note"
+                                   placeholder="ghi chú(lịch học mong muốn)"  />
+                        </div>
 
                         <div class="form-check mb-4">
                             <input type="checkbox" class="form-check-input" id="agree" >

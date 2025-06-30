@@ -2,26 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/Categories_class.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/Students.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/AssignClassController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherApplicationController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/TeacherApprove.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/RegisitionDAO.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/AssignStudentClass.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/SendMail.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/LoginControllers.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/PreRegistration.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/Regisition.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/Notification.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/Notification.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/NotificationController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/SendNotificationController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/LogoutController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/SendNotification.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/AdminHome.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/NotificationDAO.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

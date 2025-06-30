@@ -18,8 +18,8 @@ import models.PreRegistration;
 public class PreRegistrationDAO extends DBContext {
 
     public boolean insertPreRegistration(PreRegistration preReg) {
-        String sql = "INSERT INTO PreRegistrations (full_name, email, phone, birth_date, gender, address, course_id, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PreRegistrations (full_name, email, phone, birth_date, gender, address, course_id, status, note) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, preReg.getFull_name());
             ps.setString(2, preReg.getEmail());
@@ -29,6 +29,7 @@ public class PreRegistrationDAO extends DBContext {
             ps.setString(6, preReg.getAddress());
             ps.setInt(7, preReg.getCourse_id());
             ps.setString(8, preReg.getStatus());
+            ps.setString(9, preReg.getNote());
 
             int rows = ps.executeUpdate();
             return rows > 0;
@@ -51,13 +52,14 @@ public class PreRegistrationDAO extends DBContext {
                              pr.gender, 
                              pr.address, 
                              c.name AS course_name, 
-                             pr.status 
+                             pr.status, 
+                             pr.note 
                          FROM PreRegistrations pr 
                          JOIN Course c ON pr.course_id = c.id 
                          ORDER BY 
                              CASE 
                                  WHEN LOWER(TRIM(pr.status)) = N'đang chờ' THEN 0 
-                                 WHEN LOWER(TRIM(pr.status)) = 'đã duyệt' THEN 1 
+                                 WHEN LOWER(TRIM(pr.status)) = N'Chưa xếp được lớp' THEN 1 
                                  ELSE 2 
                              END, 
                              pr.status;	
@@ -75,6 +77,7 @@ public class PreRegistrationDAO extends DBContext {
                 pr.setAddress(rs.getString("address"));
                 pr.setCourseName(rs.getString("course_name")); // phải có field này trong bean
                 pr.setStatus(rs.getString("status"));
+                pr.setNote(rs.getString("note"));
                 list.add(pr);
             }
         } catch (Exception e) {
@@ -128,4 +131,30 @@ public class PreRegistrationDAO extends DBContext {
             System.out.println("-----------------------------");
         }
     }
+
+    public void updateNote(int id, String note) {
+        String sql = "UPDATE PreRegistrations SET note = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, note);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateNote: " + e.getMessage());
+        }
+    }
+    public boolean isEmailOrPhoneExists(String email, String phone) {
+    String sql = "SELECT 1 FROM PreRegistrations WHERE email = ? OR phone = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, email);
+        ps.setString(2, phone);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next(); // chỉ cần có 1 dòng trùng là trả về true
+        }
+    } catch (Exception e) {
+        System.out.println("isEmailOrPhoneExists: " + e.getMessage());
+    }
+    return false;
+}
+
+
 }

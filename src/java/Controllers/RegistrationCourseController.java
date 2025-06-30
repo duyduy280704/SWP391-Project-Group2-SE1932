@@ -23,7 +23,8 @@ import models.PreRegistrationDAO;
 public class RegistrationCourseController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         String id = request.getParameter("id");
         if (id == null || id.trim().isEmpty()) {
@@ -49,6 +50,7 @@ public class RegistrationCourseController extends HttpServlet {
         String birthDate = request.getParameter("birth_date");
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
+        String note = request.getParameter("note");
 
         // Validate dữ liệu
         String errorMessage = null;
@@ -77,15 +79,33 @@ public class RegistrationCourseController extends HttpServlet {
             request.setAttribute("birthDate", birthDate);
             request.setAttribute("gender", gender);
             request.setAttribute("address", address);
+            request.setAttribute("note", note);
+            request.setAttribute("course", course);
             request.getRequestDispatcher("course_registration.jsp").forward(request, response);
             return;
         }
 
-        // Thêm dữ liệu vào DB nếu hợp lệ
         try {
             int courseId = Integer.parseInt(id);
-            PreRegistration preReg = new PreRegistration(fullName, email, phone, birthDate, gender, address, courseId, "Đang Chờ");
             PreRegistrationDAO dao = new PreRegistrationDAO();
+
+            // ✅ Kiểm tra trùng email hoặc SĐT cho cùng một khóa học
+            if (dao.isEmailOrPhoneExists(email, phone)) {
+                request.setAttribute("error", "Email hoặc số điện thoại này đã được đăng ký cho khóa học này.");
+                request.setAttribute("fullName", fullName);
+                request.setAttribute("email", email);
+                request.setAttribute("phone", phone);
+                request.setAttribute("birthDate", birthDate);
+                request.setAttribute("gender", gender);
+                request.setAttribute("address", address);
+                request.setAttribute("note", note);
+                request.setAttribute("course", course);
+                request.getRequestDispatcher("course_registration.jsp").forward(request, response);
+                return;
+            }
+
+            // Nếu không trùng thì thêm mới
+            PreRegistration preReg = new PreRegistration(fullName, email, phone, birthDate, gender, address, courseId, "Đang Chờ", note);
             boolean success = dao.insertPreRegistration(preReg);
 
             if (success) {
@@ -93,6 +113,7 @@ public class RegistrationCourseController extends HttpServlet {
             } else {
                 request.setAttribute("error", "Không thể lưu đăng ký. Vui lòng thử lại sau.");
             }
+
         } catch (NumberFormatException e) {
             request.setAttribute("error", "ID khóa học không hợp lệ.");
         }

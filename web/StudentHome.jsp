@@ -134,6 +134,53 @@
                 height: 100%;
                 object-fit: cover;
             }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 15px;
+                font-family: "Segoe UI", sans-serif;
+                background-color: #fff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0,0,0,0.08);
+            }
+
+            thead {
+                background-color: #4a90e2;
+                color: white;
+                text-align: center;
+            }
+
+            th, td {
+                padding: 10px 14px;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+            }
+
+            tbody tr:hover {
+                background-color: #f5faff;
+            }
+
+            tbody tr td:first-child {
+                font-weight: bold;
+                color: #333;
+            }
+
+            td[colspan="6"] {
+                color: #999;
+                font-style: italic;
+            }
+
+            @media screen and (max-width: 768px) {
+                table {
+                    font-size: 13px;
+                }
+
+                th, td {
+                    padding: 8px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -237,33 +284,100 @@
             </ul>
             <!-- lịch học sắp tới -->        
             <h5 class="section-title">🕒 Lịch học sắp tới</h5>
-            <div class="table-responsive mb-4">
-                <table class="table table-striped">
+
+            <div class="selector-container">
+                <form action="scheduleStudent" method="get">
+                    <label for="year">Chọn năm: </label>
+                    <select name="year" id="year" onchange="this.form.submit()">
+                        <c:forEach var="year" items="${years}">
+                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
+                        </c:forEach>
+                    </select>
+                    <label for="week">Chọn tuần: </label>
+                    <select name="week" id="week" onchange="this.form.submit()">
+                        <c:forEach var="week" items="${weeks}">
+                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
+                        </c:forEach>
+                    </select>
+                </form>
+            </div>
+
+            <c:if test="${empty scheduleStudent}">
+                <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
+            </c:if>
+
+            <c:if test="${not empty scheduleStudent}">
+                <table>
                     <thead>
                         <tr>
+                            <th>Thứ</th>
                             <th>Ngày</th>
-                            <th>Giờ</th>
                             <th>Lớp</th>
-                            <th>Giáo viên</th>
-                            <th>Phòng</th>
+                            <th>Bắt đầu</th>
+                            <th>Kết thúc</th>
+                            <th>Phòng học</th>
+                            <th>Điểm danh</th>
+                            <th>Lý do</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="s" items="${schedules}">
-                            <tr>
-                                <td>${s.dayVN}, ${fn:substring(s.day, 8, 10)}/${fn:substring(s.day, 5, 7)}/${fn:substring(s.day, 0, 4)}</td>
-                                <td>${s.startTimeFormatted}‑${s.endTimeFormatted}</td>
-                                <td>${s.nameClass}</td>
-                                <td>${s.teacherName}</td>
-                                <td>${s.room}</td>
-                            </tr>
+                        <c:forEach var="day" items="${weekDays}">
+                            <c:set var="count" value="0" />
+                            <c:forEach var="s" items="${scheduleStudent}">
+                                <c:if test="${s.dayVN == day}">
+                                    <c:set var="count" value="${count + 1}" />
+                                </c:if>
+                            </c:forEach>
+
+                            <c:if test="${count > 0}">
+                                <c:set var="printed" value="false" />
+                                <c:forEach var="s" items="${scheduleStudent}">
+                                    <c:if test="${s.dayVN == day}">
+                                        <tr>
+                                            <c:if test="${not printed}">
+                                                <td rowspan="${count}">${day}</td>
+                                                <c:set var="printed" value="true" />
+                                            </c:if>
+                                            <td>
+                                                <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
+                                            </td>
+                                            <td>${s.nameClass}</td>
+                                            <td>${fn:substring(s.startTime, 0, 5)}</td>
+                                            <td>${fn:substring(s.endTime, 0, 5)}</td>
+                                            <td>${s.room}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${s.attendanceStatus == 'present'}">Có mặt</c:when>
+                                                    <c:when test="${s.attendanceStatus == 'absent'}">Vắng mặt</c:when>
+                                                    <c:otherwise>Chưa điểm danh</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty s.reason}">
+                                                        ${s.reason}
+                                                    </c:when>
+                                                    <c:otherwise>-</c:otherwise>
+                                                </c:choose>
+                                            </td>
+
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                            </c:if>
+
+                            <c:if test="${count == 0}">
+                                <tr>
+                                    <td>${day}</td>
+                                    <td colspan="6"></td>
+                                </tr>
+                            </c:if>
                         </c:forEach>
                     </tbody>
                 </table>
-                <div class="col-12 mt-3">
-                    <a href="scheduleStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
-                </div>
-            </div>
+            </c:if>
+
 
 
             <!-- Courses Start -->
@@ -318,15 +432,34 @@
 
             <!-- Courses End -->
 
-            <div class="p-3 bg-light rounded shadow-sm">
-                <h5><i class="fas fa-calendar-alt text-primary me-2"></i> Sự kiện sắp tới</h5>
-                <hr>
-                <c:forEach var="e" items="${eventList}">
-                    <div class="bg-white p-2 my-2 rounded border">
-                        <strong>${e.name}</strong> - 
-                        ${e.date}
+            <div class="container-fluid py-5">
+                <div class="container pt-5 pb-3">
+                    <div class="text-center.mb-5.sukien">
+                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Sự Kiện</h5>
+                        <h1>Sự kiện sắp tới</h1>
                     </div>
-                </c:forEach>
+                    <c:if test="${empty events}">
+                        <p class="text-center text-muted">Không có sự kiện nào để hiển thị!</p>
+                    </c:if>
+                    <c:if test="${not empty events}">
+                        <div class="event-list">
+                            <c:forEach var="e" items="${events}">
+                                <div class="event-list-item">
+                                    <div class="event-card bg-light rounded p-3 shadow-sm">
+                                        <h4 class="event-title text-primary">${e.name}</h4>
+                                        <p class="event-date text-muted mb-2">
+                                            <i class="fa fa-calendar-alt mr-2"></i>
+
+                                            <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var = "parseDate"/>
+                                            <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
+                                        </p>
+                                        <p class="event-content">${fn:substring(e.content, 0, 150)}...</p>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:if>
+                </div>
             </div>
 
             <div class="container pt-5 pb-3">
@@ -444,25 +577,25 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('main-content');
-                const toggleBtn = document.querySelector('.toggle-btn');
+                        function toggleSidebar() {
+                            const sidebar = document.getElementById('sidebar');
+                            const mainContent = document.getElementById('main-content');
+                            const toggleBtn = document.querySelector('.toggle-btn');
 
-                sidebar.classList.toggle('hidden');
-                mainContent.classList.toggle('full');
-                toggleBtn.classList.toggle('hidden');
+                            sidebar.classList.toggle('hidden');
+                            mainContent.classList.toggle('full');
+                            toggleBtn.classList.toggle('hidden');
 
-                // Change icon based on sidebar state
-                const icon = toggleBtn.querySelector('i');
-                if (sidebar.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
-            }
+                            // Change icon based on sidebar state
+                            const icon = toggleBtn.querySelector('i');
+                            if (sidebar.classList.contains('hidden')) {
+                                icon.classList.remove('fa-times');
+                                icon.classList.add('fa-bars');
+                            } else {
+                                icon.classList.remove('fa-bars');
+                                icon.classList.add('fa-times');
+                            }
+                        }
         </script>
     </body>
 </html>

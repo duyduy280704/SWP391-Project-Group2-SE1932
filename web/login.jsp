@@ -261,7 +261,7 @@ input[type="submit"]:active {
                 <div class="forgot-password">
                     <a href="forgot-password.jsp">Quên mật khẩu?</a>
                 </div>
-                <input type="submit" value="Đăng nhập">
+                <input type="submit" value="Đăng Nhập">
               
             </form>
             <p class="error-message text-center mt-3 text-danger">${message}</p>
