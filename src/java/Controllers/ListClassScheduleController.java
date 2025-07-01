@@ -34,7 +34,7 @@ public class ListClassScheduleController extends HttpServlet {
             request.setAttribute("data3", dao.getCategoriesTeacher());
             request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
         } else {
-            List<Schedules> classList = dao.getClassInfo();  // Lấy danh sách lớp với lịch học gần nhất
+            List<Schedules> classList = dao.getClassInfo(); 
             request.setAttribute("classList", classList);
             request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);
         }
@@ -99,7 +99,7 @@ public class ListClassScheduleController extends HttpServlet {
                 request.setAttribute("s", s);
                 request.getRequestDispatcher("schedule_update.jsp").forward(request, response);
                 return;
-            } else if (dao.isScheduleExist(s, true)) { // chưa kiểm tra nếu trùng một ít giờ thì sao 
+            } else if (dao.isScheduleExist(s, true)) {
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
                 request.setAttribute("s", s);
                 ArrayList<Categories_class> data1 = dao.getCategories_class();
@@ -192,17 +192,14 @@ public class ListClassScheduleController extends HttpServlet {
 
                     ArrayList<CategoriesTeacher> data3 = dao.getCategoriesTeacher();
                     request.setAttribute("data3", data3);
-
                     request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                     return;
                 }
-
                 dao.add(s);
                 response.sendRedirect("listClassSchedule");
                 return;
             }
         }
-
         request.setAttribute("schedule", schedule);
         request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);
 

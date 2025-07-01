@@ -1,3 +1,4 @@
+//Thủy_ viewfeedback  staff xem
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
@@ -95,6 +96,16 @@
 
                     <c:if test="${not empty feedbackList}">
                         <div class="card mb-4">
+                            <form class="row mb-3" method="get" action="feedback">
+                                <input type="hidden" name="mode" value="viewAll"/>
+                                <div class="col-md-4">
+                                    <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm ..." value="${param.keyword}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search me-1"></i> Tìm kiếm</button>
+                                </div>
+                            </form>
+
                             <div class="card-header"><i class="fas fa-comments me-1"></i>Danh sách phản hồi</div>
                             <div class="card-body">
                                 <table class="table table-bordered table-hover">

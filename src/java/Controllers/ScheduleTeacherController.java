@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-// Thuy_ in lịch học giáo viên, điểm danh, xử lý trên cùng controller
+// Thuy_ in lịch học giáo viên, điểm danh,
 
 public class ScheduleTeacherController extends HttpServlet {
 
@@ -101,7 +101,7 @@ public class ScheduleTeacherController extends HttpServlet {
         request.getRequestDispatcher("schedule_teacher.jsp").forward(request, response);
     }
 
-    // Xử lý khi giáo viên ấn vào nút điểm danh
+    // điểm danh
     private void handleAttendance(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -143,7 +143,7 @@ public class ScheduleTeacherController extends HttpServlet {
         }
     }
 
-    // Lưu điểm danh sau khi submit
+    // Lưu điểm danh 
     private void handleSubmitAttendance(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -178,7 +178,6 @@ public class ScheduleTeacherController extends HttpServlet {
         ScheduleTeacherDAO dao = new ScheduleTeacherDAO();
         dao.saveAttendance(scheduleId, attendanceList, day);
 
-        // Lấy lại dữ liệu để hiển thị sau khi lưu
         List<Students> students = dao.getStudentsByScheduleId(scheduleId);
         List<StudentAttendance> updated = dao.getStudentAttendanceList(classId, day);
 

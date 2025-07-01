@@ -218,7 +218,7 @@ public class ScheduleDAO extends DBContext {
             System.out.println("update: " + e.getMessage());
         }
     }
-// tạo thời khóa biêur
+// tạo thời khóa biểu
 
     public void add(Schedules s) {
         try {
@@ -446,7 +446,7 @@ public class ScheduleDAO extends DBContext {
         }
         return list;
     }
-
+// xóa lịch  theo id
     public void deleteScheduleById(String id) {
         try {
             String sql = "DELETE FROM schedule WHERE id = ?";
@@ -609,7 +609,7 @@ public class ScheduleDAO extends DBContext {
             System.out.println("updateFutureSchedules: " + e.getMessage());
         }
     }
-// lấy Tên lớp,Giáo viên,Phòng lịch gần nhaasts 
+// lấy Tên lớp,Giáo viên,Phòng lịch gần nhất 
 
     public List<Schedules> getClassInfo() {
         List<Schedules> list = new ArrayList<>();
@@ -636,7 +636,7 @@ public class ScheduleDAO extends DBContext {
                 s.setNameClass(rs.getString("class_name"));
                 s.setTeacher(rs.getString("teacher_name"));
                 s.setRoom(rs.getString("room"));
-                s.setDay(rs.getString("day"));  // yyyy-MM-dd
+                s.setDay(rs.getString("day")); 
                 list.add(s);
             }
 

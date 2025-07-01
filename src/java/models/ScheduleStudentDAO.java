@@ -47,7 +47,7 @@ public class ScheduleStudentDAO extends DBContext {
                         rs.getString("room")
                 );
                 String status = rs.getString("status");
-                s.setAttendanceStatus(status != null ? status : "");  // set "" nếu null để tránh lỗi
+                s.setAttendanceStatus(status != null ? status : "");  
                 s.setReason(rs.getString("reason"));
                 data.add(s);
             }
@@ -57,7 +57,7 @@ public class ScheduleStudentDAO extends DBContext {
     }
     return data;
 }
-
+// lấy ba lịch học gần nhất _ studentHome
 public List<ScheduleStudent> getTop3UpcomingSchedulesByStudentId(int studentId) {
         List<ScheduleStudent> list = new ArrayList<>();
         String sql = """
@@ -95,7 +95,7 @@ public List<ScheduleStudent> getTop3UpcomingSchedulesByStudentId(int studentId) 
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi getTop3UpcomingSchedulesByStudentId: " + e.getMessage());
+            System.out.println("Lỗi : " + e.getMessage());
         }
 
         return list;

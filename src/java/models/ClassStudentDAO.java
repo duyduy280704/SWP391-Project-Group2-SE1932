@@ -52,7 +52,7 @@ public class ClassStudentDAO extends DBContext {
         return list;
     }
 
-//lấy tên lớp học vì kia đang in id 
+//lấy tên lớp học theo id
     public String getClassNameById(String classId) {
         String sql = "SELECT name FROM Class WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -144,6 +144,28 @@ public class ClassStudentDAO extends DBContext {
     """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Courses(rs.getString("id"), rs.getString("name")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Courses> searchTeacherClassesByName(String teacherId, String keyword) {
+        List<Courses> list = new ArrayList<>();
+        String sql = """
+        SELECT DISTINCT c.id, c.name
+        FROM Class c
+        JOIN Schedule s ON c.id = s.id_class
+        WHERE s.id_teacher = ? AND c.name LIKE ?
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ps.setString(2, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Courses(rs.getString("id"), rs.getString("name")));

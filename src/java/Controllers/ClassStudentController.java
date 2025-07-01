@@ -12,7 +12,7 @@ import models.AdminStaffs;
 import models.Teachers;
 
 public class ClassStudentController extends HttpServlet {
-
+// Thủy _ danh sách học sinh của lớp
     private final ClassStudentDAO dao = new ClassStudentDAO();
 
     @Override
@@ -31,67 +31,68 @@ public class ClassStudentController extends HttpServlet {
         }
 
         String mode = request.getParameter("mode");
-        String search = request.getParameter("search");
+        String keyword = request.getParameter("keyword");
         String classId = request.getParameter("classId");
 
-        // === STAFF ===
+        // dăng nhập của staff
         if (account instanceof AdminStaffs) {
             if (mode == null || mode.equals("list")) {
-                List<Courses> classes = (search != null && !search.isEmpty())
-                        ? dao.searchClassesByName(search)
+                List<Courses> classes = (keyword != null && !keyword.isEmpty())
+                        ? dao.searchClassesByName(keyword)
                         : dao.getAllClasses();
-                request.setAttribute("search", search);
+
+                request.setAttribute("keyword", keyword);
                 request.setAttribute("classes", classes);
                 request.getRequestDispatcher("ListClass.jsp").forward(request, response);
                 return;
             }
 
             if ("students".equals(mode) && classId != null) {
-                List<Students> students = (search != null && !search.isEmpty())
-                        ? dao.searchStudentName(classId, search)
+                List<Students> students = (keyword != null && !keyword.isEmpty())
+                        ? dao.searchStudentName(classId, keyword)
                         : dao.getStudentsByClassId(classId);
+
                 String className = dao.getClassNameById(classId);
                 request.setAttribute("classId", classId);
                 request.setAttribute("className", className);
-                request.setAttribute("search", search);
+                request.setAttribute("keyword", keyword);
                 request.setAttribute("students", students);
                 request.getRequestDispatcher("ListStudentByClass.jsp").forward(request, response);
                 return;
             }
         }
 
-        // === GIÁO VIÊN ===
+        // Teacher đăng nhập
         if (account instanceof Teachers) {
             Teachers teacher = (Teachers) account;
 
-            // Xem danh sách lớp giáo viên dạy
+            // Xem danh sách lớp
             if (mode == null || mode.equals("teacherView")) {
-                List<Courses> teacherClasses = dao.getClassesByTeacher(teacher.getId());
+                List<Courses> teacherClasses = (keyword != null && !keyword.isEmpty())
+                        ? dao.searchTeacherClassesByName(teacher.getId(), keyword)
+                        : dao.getClassesByTeacher(teacher.getId());
+
+                request.setAttribute("keyword", keyword);
                 request.setAttribute("classes", teacherClasses);
                 request.getRequestDispatcher("ListClass_Teacher.jsp").forward(request, response);
                 return;
             }
 
-            // Xem danh sách học sinh trong lớp (nếu giáo viên dạy lớp đó)
+            // Xem học sinh trong lớp
             if ("students".equals(mode) && classId != null) {
-                List<Students> students = (search != null && !search.isEmpty())
-                        ? dao.searchStudentName(classId, search)
+                List<Students> students = (keyword != null && !keyword.isEmpty())
+                        ? dao.searchStudentName(classId, keyword)
                         : dao.getStudentsByClassId(classId);
-                String className = dao.getClassNameById(classId);
 
+                String className = dao.getClassNameById(classId);
                 request.setAttribute("classId", classId);
                 request.setAttribute("className", className);
-                request.setAttribute("search", search);
+                request.setAttribute("keyword", keyword);
                 request.setAttribute("students", students);
-
-                // Đảm bảo giáo viên luôn vào đúng giao diện riêng
                 request.getRequestDispatcher("ListStudentByClass_Teacher.jsp").forward(request, response);
                 return;
             }
-
         }
-
-        // Nếu không phải giáo viên hoặc staff → về trang login
         response.sendRedirect("login.jsp");
     }
 

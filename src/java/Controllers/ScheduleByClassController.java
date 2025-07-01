@@ -3,7 +3,6 @@ package Controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -157,7 +156,6 @@ public class ScheduleByClassController extends HttpServlet {
                 return;
             }
 
-            // Nếu có lỗi thì không update và quay lại form
             request.setAttribute("s", s);
             request.setAttribute("data1", dao.getCategories_class());
             request.setAttribute("data3", dao.getCategoriesTeacher());
