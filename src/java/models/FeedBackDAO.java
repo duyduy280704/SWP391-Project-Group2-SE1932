@@ -41,4 +41,29 @@ public class FeedBackDAO extends DBContext {
         }
         return data;
     }
+    public ArrayList<FeedBack> getTop3Feedbacks() {
+    ArrayList<FeedBack> data = new ArrayList<>();
+    try {
+        String strSQL = "SELECT TOP 3 f.id, f.id_student, f.id_course, f.text, f.date, u.full_name "
+                + "FROM feedback f JOIN Student u ON f.id_student = u.id "
+                + "ORDER BY f.date DESC";
+        stm = connection.prepareStatement(strSQL);
+        rs = stm.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            int studentId = rs.getInt("id_student");
+            int courseId = rs.getInt("id_course");
+            String feedbackText = rs.getString("text");
+            String feedbackDate = rs.getString("date");
+            String studentName = rs.getString("full_name");
+
+            FeedBack f = new FeedBack(id, studentId, courseId, feedbackText, feedbackDate, studentName);
+            data.add(f);
+        }
+    } catch (Exception e) {
+        System.out.println("getTop3Feedbacks: " + e.getMessage());
+    }
+    return data;
+}
+
 }

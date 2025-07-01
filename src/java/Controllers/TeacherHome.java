@@ -124,12 +124,18 @@ public class TeacherHome extends HttpServlet {
         request.setAttribute("selectedYear", year);
 
         FeedBackDAO dao1 = new FeedBackDAO();
-        ArrayList<FeedBack> feedbackList = dao1.getFeedbacks();
+        ArrayList<FeedBack> feedbackList = dao1.getTop3Feedbacks();
         request.setAttribute("feedbackList", feedbackList);
 
         EventDAO ev = new EventDAO();
         List<Event> events = ev.getRecentEvents(3);
         request.setAttribute("events", events);
+        
+        NoticeToTeacherDAO noticedao = new NoticeToTeacherDAO();
+        int id=Integer.parseInt(teacher.getId());
+        List<NoticeToTeacher> notices = noticedao.getNoticesByTeacherId(id);
+
+        request.setAttribute("notices", notices);
 
         request.getRequestDispatcher("TeacherHome.jsp").forward(request, response);
     }

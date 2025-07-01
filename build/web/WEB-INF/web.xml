@@ -79,6 +79,10 @@
         <servlet-name>BlogController</servlet-name>
         <servlet-class>Controllers.BlogController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackController</servlet-name>
+        <servlet-class>Controllers.FeedbackController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -146,5 +150,9 @@
     <servlet-mapping>
         <servlet-name>BlogController</servlet-name>
         <url-pattern>/Blog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackController</servlet-name>
+        <url-pattern>/Feedback</url-pattern>
     </servlet-mapping>
 </web-app>

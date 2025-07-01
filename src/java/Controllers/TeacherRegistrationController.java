@@ -12,7 +12,9 @@ import models.TeacherApplicationDAO;
 import models.CourseDAO;
 import models.TypeCourse;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -198,21 +200,36 @@ public class TeacherRegistrationController extends HttpServlet {
         }
 
       
+       byte[] fileData = null;
+        String fileName = null;
+        String fileExtension = null;
+
         if (filePart == null || filePart.getSize() == 0) {
             message += "Bạn chưa tải lên file CV<br>";
             check = false;
-        } else if (filePart.getSize() > 10 * 1024 * 1024) {
-            message += "File CV không được lớn hơn 10MB<br>";
-            check = false;
         } else {
-            String fileName = extractFileName(filePart);
-            
-                String fileExtension = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-                if (!fileExtension.equals(".pdf") && !fileExtension.equals(".doc") && !fileExtension.equals(".docx")) {
-                    message += "File CV phải có định dạng .pdf, .doc hoặc .docx<br>";
+            long maxSize = 10 * 1024 * 1024; // 10MB
+
+            if (filePart.getSize() > maxSize) {
+                message += "File CV không được lớn hơn 10MB<br>";
+                check = false;
+            }
+
+            fileName = extractFileName(filePart);
+            fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+            if (!fileExtension.equals("pdf") && !fileExtension.equals("doc") && !fileExtension.equals("docx")) {
+                message += "File CV phải có định dạng .pdf, .doc hoặc .docx<br>";
+                check = false;
+            }
+
+            if (check) {
+                try (InputStream is = filePart.getInputStream()) {
+                    fileData = is.readAllBytes();
+                } catch (IOException e) {
+                    message += "Lỗi khi đọc file CV<br>";
                     check = false;
                 }
-            
+            }
         }
 
        
@@ -233,21 +250,22 @@ public class TeacherRegistrationController extends HttpServlet {
             request.setAttribute("idTypeCourse", idTypeCourse);
             request.setAttribute("yearsOfExperience", yearOfExpertise);
             request.setAttribute("phone", phone);
-            request.getRequestDispatcher("TeacherRegistion.jsp").forward(request, response);
+            
             return;
         }
 
         // Process registration
         try {
             // Handle file upload
-            String fileName = extractFileName(filePart);
-            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+             String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
             String uploadPath = getServletContext().getRealPath("") + File.separator + "Uploads";
             File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+            if (!uploadDir.exists()) uploadDir.mkdir();
+
+            try (FileOutputStream fos = new FileOutputStream(uploadPath + File.separator + uniqueFileName)) {
+                fos.write(fileData);
             }
-            filePart.write(uploadPath + File.separator + uniqueFileName);
+           
 
             // Set teacher properties
             TeacherApplications teacher = new TeacherApplications();

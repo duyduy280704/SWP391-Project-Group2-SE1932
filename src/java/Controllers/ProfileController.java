@@ -1,414 +1,321 @@
 package Controllers;
 
+import models.ProfileDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
-import java.nio.file.*;
-import java.time.LocalDate;
 import models.*;
 
-@WebServlet(name = "ProfileController", urlPatterns = {"/profile"})
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50 // 50MB
-)
+@MultipartConfig(maxFileSize = 16177215)
+@WebServlet("/profile")
 public class ProfileController extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "Uploads";
+    ProfileDAO dao = new ProfileDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        processRequest(request, response);
+
+        String mode = request.getParameter("mode");
+
+        if ("image".equals(mode)) {
+            String id = request.getParameter("id");
+            String role = request.getParameter("role");
+            byte[] imageData = null;
+
+            switch (role) {
+                case "student":
+                    Students s = dao.getStudentById(id);
+                    if (s != null) {
+                        imageData = s.getPic();
+                    }
+                    break;
+                case "teacher":
+                    Teachers t = dao.getTeacherById(id);
+                    if (t != null) {
+                        imageData = t.getPic();
+                    }
+                    break;
+                            }
+
+            if (imageData != null) {
+                response.setContentType("image/jpeg");
+                response.setContentLength(imageData.length);
+                try (OutputStream os = response.getOutputStream()) {
+                    os.write(imageData);
+                }
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
+            return;
+        }
+
+        HttpSession session = request.getSession();
+        Object acc = session.getAttribute("account");
+        String role = (String) session.getAttribute("role");
+
+        if (acc == null || role == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        switch (role) {
+            case "student":
+                Students s = (Students) acc;
+                acc = dao.getStudentById(s.getId());
+                break;
+            case "teacher":
+                Teachers t = (Teachers) acc;
+                acc = dao.getTeacherById(t.getId());
+                break;
+            case "admin":
+            case "staff":
+                AdminStaffs a = (AdminStaffs) acc;
+                acc = dao.getAdminStaffById(a.getId());
+                break;
+        }
+
+        session.setAttribute("account", acc);
+        request.setAttribute("role", role);
+        request.setAttribute("profile", acc);
+        request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        processRequest(request, response);
-    }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Object account = session.getAttribute("account");
+        Object acc = session.getAttribute("account");
+        String role = (String) session.getAttribute("role");
 
-        // Kiểm tra đăng nhập
-        if (account == null) {
+        if (acc == null || role == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-        String message = "";
 
-        // Lấy số điện thoại và vai trò từ account
-        String roleId = getRoleId(account);
-        String phone = getPhone(account);
-        if (phone == null || roleId == null || !isValidRoleId(roleId)) {
-            message = "Thông tin tài khoản không hợp lệ!";
-            request.setAttribute("message", message);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+        String action = request.getParameter("action");
+        if ("updateAccount".equals(action)) {
+            handleAccountUpdate(request, response, session, role);
             return;
         }
 
-        // Lưu roleId vào session để profile.jsp sử dụng
-        session.setAttribute("roleId", roleId);
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        String gender = request.getParameter("gender");
+        String birthdate = request.getParameter("birthDate");
+        String phone = request.getParameter("phone");
 
-        Object profile = getProfile(roleId, phone);
+        if (fullName == null || fullName.trim().isEmpty()
+                || email == null || email.trim().isEmpty()
+                || gender == null || gender.trim().isEmpty()
+                || birthdate == null || birthdate.trim().isEmpty()) {
+            request.setAttribute("message", "Vui lòng điền đầy đủ các trường thông tin bắt buộc.");
+            doGet(request, response);
+            return;
+        }
 
-        try {
-            String action = request.getParameter("action");
-            String contentType = request.getContentType();
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            request.setAttribute("message", "Địa chỉ email không hợp lệ.");
+            doGet(request, response);
+            return;
+        }
 
-            // Debug các tham số
-            System.out.println("Action: " + action);
-            System.out.println("Content-Type: " + contentType);
-            System.out.println("RoleId: " + roleId);
+        Part filePart = request.getPart("picture");
+        byte[] picture = null;
 
-            if (action == null || action.trim().isEmpty()) {
-                message = "Hành động không được xác định!";
-            } else if ("updateAccount".equals(action)) {
-                // Cập nhật thông tin tài khoản
-                String newPhone = request.getParameter("newPhone");
-                String oldPassword = request.getParameter("oldPassword");
-                String newPassword = request.getParameter("newPassword");
-                String confirmPassword = request.getParameter("confirmPassword");
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = filePart.getSubmittedFileName();
+            String contentType = filePart.getContentType();
+            long fileSize = filePart.getSize();
 
-                // Kiểm tra dữ liệu đầu vào
-                if ((newPhone != null && !newPhone.equals(phone)) || (newPassword != null && !newPassword.isEmpty())) {
-                    boolean verified = verifyPassword(roleId, phone, oldPassword);
-                    if (newPassword != null && !newPassword.isEmpty() && !verified) {
-                        message = "Mật khẩu cũ không đúng!";
-                    } else if (!newPassword.equals(confirmPassword)) {
-                        message = "Mật khẩu xác nhận không khớp!";
-                    } else if (newPhone != null && !newPhone.matches("\\d{10,11}")) {
-                        message = "Số điện thoại phải có 10-11 số!";
-                    } else if (newPassword != null && !newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$")) {
-                        message = "Mật khẩu phải trên 6 ký tự, có chữ thường, in hoa, số và ký hiệu!";
-                    } else {
-                        boolean updated = updateAccount(roleId, phone, newPhone, newPassword);
-                        if (updated && newPhone != null && !newPhone.equals(phone)) {
-                            phone = newPhone;
-                            profile = getProfile(roleId, newPhone);
-                            session.setAttribute("account", profile);
-                        }
-                        message = updated ? "Cập nhật thông tin tài khoản thành công!" : "Cập nhật thông tin tài khoản thất bại!";
-                    }
-                } else {
-                    message = "Không có thay đổi để cập nhật tài khoản!";
+            
+            if (!contentType.equals("image/jpeg")
+                    && !contentType.equals("image/png")
+                    && !contentType.equals("image/gif")) {
+                request.setAttribute("message", "Chỉ cho phép ảnh định dạng JPG, PNG hoặc GIF!");
+                doGet(request, response);
+                return;
+            }
+
+            
+            if (fileSize > 5 * 1024 * 1024) {
+                request.setAttribute("message", "Ảnh không được vượt quá 5MB!");
+                doGet(request, response);
+                return;
+            }
+
+            try (InputStream is = filePart.getInputStream()) {
+                picture = is.readAllBytes();
+            }
+        }
+
+        switch (role) {
+            case "student":
+                String address = request.getParameter("address");
+                if (address == null || address.trim().isEmpty()) {
+                    request.setAttribute("message", "Vui lòng nhập địa chỉ.");
+                    doGet(request, response);
+                    return;
                 }
-                profile = getProfile(roleId, phone);
-                session.setAttribute("name", getName(profile, roleId));
-            } else if ("updatePersonalInfo".equals(action)) {
-                // Cập nhật thông tin cá nhân
-                String fullName = request.getParameter("fullName");
-                String email = request.getParameter("email");
-                String birthDate = request.getParameter("birthDate");
-                String gender = request.getParameter("gender");
+
+                Students s = (Students) acc;
+                s.setName(fullName);
+                s.setEmail(email);
+                s.setGender(gender);
+                s.setBirthdate(birthdate);
+                s.setAddress(address);
+                if (picture != null) {
+                    s.setPic(picture);
+                }
+                dao.updateStudent(s);
+                session.setAttribute("account", s);
+                break;
+
+            case "teacher":
                 String expertise = request.getParameter("expertise");
                 String idTypeCourse = request.getParameter("idTypeCourse");
-                String yearsOfExperience = request.getParameter("yearsOfExperience");
-                String address = request.getParameter("address");
+                String years = request.getParameter("yearsOfExperience");
 
-                // Debug các tham số
-                System.out.println("fullName: " + fullName);
-                System.out.println("email: " + email);
-                System.out.println("birthDate: " + birthDate);
-                System.out.println("gender: " + gender);
-                System.out.println("expertise: " + expertise);
-                System.out.println("idTypeCourse: " + idTypeCourse);
-                System.out.println("yearsOfExperience: " + yearsOfExperience);
-                System.out.println("address: " + address);
-
-                byte[] pictureBytes = null;
-                // Xử lý file ảnh nếu có (chỉ áp dụng cho roleId=1 hoặc 2)
-                if (("1".equals(roleId) || "2".equals(roleId)) && contentType != null && contentType.toLowerCase().startsWith("multipart/")) {
-                    pictureBytes = getPictureBytes(request, phone, roleId);
+                if (expertise == null || expertise.trim().isEmpty()
+                        || idTypeCourse == null || idTypeCourse.trim().isEmpty()
+                        || years == null || years.trim().isEmpty()) {
+                    request.setAttribute("message", "Vui lòng điền đầy đủ thông tin chuyên môn.");
+                    doGet(request, response);
+                    return;
                 }
 
-                // Nếu không có ảnh mới, lấy ảnh hiện tại
-                if (pictureBytes == null && ("1".equals(roleId) || "2".equals(roleId))) {
-                    ProfileDAO dao = new ProfileDAO();
-                    try {
-                        switch (roleId) {
-                            case "1":
-                                Students student = dao.getStudentByPhone(phone);
-                                pictureBytes = student != null ? student.getPic() : null;
-                                break;
-                            case "2":
-                                Teachers teacher = dao.getTeacherByPhone(phone);
-                                pictureBytes = teacher != null ? teacher.getPic() : null;
-                                break;
-                        }
-                    } finally {
-                        dao.closeResources();
+                try {
+                    int y = Integer.parseInt(years);
+                    if (y < 0 || y > 50) {
+                        request.setAttribute("message", "Kinh nghiệm phải nằm trong khoảng hợp lý.");
+                        doGet(request, response);
+                        return;
                     }
+                } catch (NumberFormatException e) {
+                    request.setAttribute("message", "Kinh nghiệm phải là số.");
+                    doGet(request, response);
+                    return;
                 }
 
-                // Kiểm tra dữ liệu đầu vào
-                if (fullName == null || fullName.trim().isEmpty()) {
-                    message = "Họ tên không được để trống!";
-                } else if (!isValidEmail(email)) {
-                    message = "Email không hợp lệ!";
-                } else if (!isValidBirthDate(birthDate)) {
-                    message = "Ngày sinh không hợp lệ!";
-                } else if (gender == null || gender.trim().isEmpty()) {
-                    message = "Giới tính không được để trống!";
-                } else if ("2".equals(roleId) && (expertise == null || expertise.trim().isEmpty())) {
-                    message = "Chuyên môn không được để trống!";
-                } else if ("2".equals(roleId) && (idTypeCourse == null || idTypeCourse.trim().isEmpty() || !isValidNumber(idTypeCourse))) {
-                    message = "Loại khóa học không hợp lệ!";
-                } else if ("2".equals(roleId) && (yearsOfExperience == null || yearsOfExperience.trim().isEmpty() || !isValidYearsOfExperience(yearsOfExperience))) {
-                    message = "Kinh nghiệm không hợp lệ!";
-                } else if ("1".equals(roleId) && (address == null || address.trim().isEmpty())) {
-                    message = "Địa chỉ không được để trống!";
-                } else {
-                    ProfileDAO dao = new ProfileDAO();
-                    boolean updated = false;
-                    try {
-                        switch (roleId) {
-                            case "1": // Student
-                                Students student = new Students(null, fullName, email, null, birthDate, gender, address, roleId, phone, pictureBytes);
-                                updated = dao.updateStudent(student);
-                                break;
-                            case "2": // Teacher
-                                Teachers teacher = new Teachers(null, fullName, email, null, birthDate, gender, expertise, pictureBytes, roleId, idTypeCourse, yearsOfExperience, phone);
-                                updated = dao.updateTeacher(teacher);
-                                break;
-                            case "3": // Staff
-                            case "4": // Admin
-                                AdminStaffs staff = new AdminStaffs(null, fullName, email, null, birthDate, gender, roleId, phone);
-                                updated = dao.updateStaff(staff);
-                                break;
-                        }
-                        if (updated) {
-                            profile = getProfile(roleId, phone);
-                            session.setAttribute("name", getName(profile, roleId));
-                            session.setAttribute("account", profile);
-                            if ("1".equals(roleId) || "2".equals(roleId)) {
-                                setProfilePicture(request, session, profile, roleId, phone);
-                            }
-                            message = "Cập nhật thông tin cá nhân thành công!";
-                        } else {
-                            message = "Cập nhật thông tin cá nhân thất bại!";
-                        }
-                    } finally {
-                        dao.closeResources();
-                    }
+                Teachers t = (Teachers) acc;
+                t.setName(fullName);
+                t.setEmail(email);
+                t.setGender(gender);
+                t.setBirthdate(birthdate);
+                t.setExp(expertise);
+                t.setIdtypecourse(idTypeCourse);
+                t.setYearofcourse(years);
+                if (picture != null) {
+                    t.setPic(picture);
                 }
-            } else {
-                message = "Yêu cầu không hợp lệ!";
-            }
-        } catch (Exception e) {
-            message = "Lỗi xử lý yêu cầu: " + e.getMessage();
-            e.printStackTrace();
-        } finally {
-            request.setAttribute("profile", profile);
-            request.setAttribute("message", message);
-            request.setAttribute("picturePath", session.getAttribute("picturePath_" + roleId)); // Phân biệt picturePath theo roleId
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
+                dao.updateTeacher(t);
+                session.setAttribute("account", t);
+                break;
+
+            case "admin":
+            case "staff":
+                AdminStaffs a = (AdminStaffs) acc;
+                a.setName(fullName);
+                a.setEmail(email);
+                a.setGender(gender);
+                a.setBirthdate(birthdate);
+                dao.updateAdminStaff(a);
+                session.setAttribute("account", a);
+                break;
         }
+
+        request.setAttribute("message", "Cập nhật thông tin cá nhân thành công!");
+        doGet(request, response);
     }
 
-    // Kiểm tra roleId hợp lệ
-    private boolean isValidRoleId(String roleId) {
-        return "1".equals(roleId) || "2".equals(roleId) || "3".equals(roleId) || "4".equals(roleId);
-    }
+    private void handleAccountUpdate(HttpServletRequest request, HttpServletResponse response, HttpSession session, String role)
+            throws ServletException, IOException {
 
-    // Lấy số điện thoại từ account
-    private String getPhone(Object account) {
-        if (account == null) return null;
-        if (account instanceof Students) {
-            return ((Students) account).getPhone();
-        } else if (account instanceof Teachers) {
-            return ((Teachers) account).getPhone();
-        } else if (account instanceof AdminStaffs) {
-            return ((AdminStaffs) account).getPhone();
-        }
-        return null;
-    }
+        String oldPassword = request.getParameter("oldPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String newPhone = request.getParameter("newPhone");
 
-    // Lấy roleId từ account
-    private String getRoleId(Object account) {
-        if (account == null) return null;
-        if (account instanceof Students) {
-            return ((Students) account).getRole();
-        } else if (account instanceof Teachers) {
-            return ((Teachers) account).getRole();
-        } else if (account instanceof AdminStaffs) {
-            return ((AdminStaffs) account).getRole();
+        if (oldPassword == null || oldPassword.trim().isEmpty()
+                || newPhone == null || newPhone.trim().isEmpty()) {
+            request.setAttribute("message", "Vui lòng điền đầy đủ thông tin.");
+            doGet(request, response);
+            return;
         }
-        return null;
-    }
 
-    // Lấy tên từ hồ sơ
-    private String getName(Object profile, String roleId) {
-        if (profile == null) return null;
-        switch (roleId) {
-            case "1": return ((Students) profile).getName();
-            case "2": return ((Teachers) profile).getName();
-            case "3":
-            case "4": return ((AdminStaffs) profile).getName();
-            default: return null;
+        if (!newPhone.matches("^\\d{9,11}$")) {
+            request.setAttribute("message", "Số điện thoại không hợp lệ.");
+            doGet(request, response);
+            return;
         }
-    }
 
-    // Lấy hồ sơ từ cơ sở dữ liệu
-    private Object getProfile(String roleId, String phone) {
-        ProfileDAO dao = new ProfileDAO();
-        try {
-            switch (roleId) {
-                case "1": return dao.getStudentByPhone(phone);
-                case "2": return dao.getTeacherByPhone(phone);
-                case "3":
-                case "4": return dao.getStaffByPhone(phone);
-                default: return null;
-            }
-        } finally {
-            dao.closeResources();
+        if (newPassword.length() <= 6 || !newPassword.matches(".*[a-z]*")
+                || !newPassword.matches(".*[A-Z]*") || !newPassword.matches(".*\\d.*") || !newPassword.matches(".*[^a-zA-Z0-9].*")) {
+            request.setAttribute("message", "Mật khẩu phải trên 6 kí tự,có ít nhất 1 chữ thường,1 chữ in hoa, 1 số và 1 ký hiệu đặc biệt");
+            doGet(request, response);
+            return;
         }
-    }
 
-    // Xác minh mật khẩu
-    private boolean verifyPassword(String roleId, String phone, String password) {
-        if (password == null || password.isEmpty()) {
-            return false;
-        }
-        ProfileDAO dao = new ProfileDAO();
-        try {
-            switch (roleId) {
-                case "1": return dao.verifyStudentPassword(phone, password);
-                case "2": return dao.verifyTeacherPassword(phone, password);
-                case "3":
-                case "4": return dao.verifyStaffPassword(phone, password);
-                default: return false;
-            }
-        } finally {
-            dao.closeResources();
-        }
-    }
+        Object acc = session.getAttribute("account");
+        boolean updated = false;
 
-    // Cập nhật thông tin tài khoản
-    private boolean updateAccount(String roleId, String oldPhone, String newPhone, String newPassword) {
-        ProfileDAO dao = new ProfileDAO();
-        try {
-            switch (roleId) {
-                case "1": return dao.updateStudentCredentials(oldPhone, newPhone, newPassword);
-                case "2": return dao.updateTeacherCredentials(oldPhone, newPhone, newPassword);
-                case "3":
-                case "4": return dao.updateStaffCredentials(oldPhone, newPhone, newPassword);
-                default: return false;
-            }
-        } finally {
-            dao.closeResources();
-        }
-    }
-
-    // Xử lý ảnh đại diện
-    private void setProfilePicture(HttpServletRequest request, HttpSession session, Object profile, String roleId, String phone) throws IOException {
-        byte[] picture = null;
-        switch (roleId) {
-            case "1": picture = ((Students) profile).getPic(); break;
-            case "2": picture = ((Teachers) profile).getPic(); break;
-            case "3": // Staff không có ảnh
-            case "4": // Admin không có ảnh
-                return; // Bỏ qua nếu là Staff hoặc Admin
-        }
-        if (picture != null) {
-            String prefix = "1".equals(roleId) ? "student_" : "teacher_"; // Phân biệt Student và Teacher
-            String tempPath = UPLOAD_DIR + File.separator + prefix + phone + ".jpg";
-            String realPath = getServletContext().getRealPath("") + File.separator + tempPath;
-            File uploadDir = new File(getServletContext().getRealPath("") + File.separator + UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            // Sử dụng buffer để tối ưu hóa hiệu suất ghi file
-            try (FileOutputStream fos = new FileOutputStream(realPath)) {
-                fos.write(picture);
-            }
-            request.setAttribute("picturePath", tempPath);
-            session.setAttribute("picturePath_" + roleId, tempPath); // Phân biệt picturePath theo roleId
-        }
-    }
-
-    // Lấy dữ liệu ảnh từ form
-    private byte[] getPictureBytes(HttpServletRequest request, String phone, String roleId) throws IOException, ServletException {
-        Part filePart = request.getPart("picture");
-        if (filePart != null && filePart.getSize() > 0 && filePart.getContentType().startsWith("image/")) {
-            String prefix = "1".equals(roleId) ? "student_" : "teacher_"; // Phân biệt Student và Teacher
-            String fileName = prefix + phone + ".jpg";
-            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR + File.separator + fileName;
-            File uploadDir = new File(getServletContext().getRealPath("") + File.separator + UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            // Sử dụng buffer để tối ưu hóa hiệu suất đọc file
-            try (InputStream inputStream = filePart.getInputStream();
-                 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                byte[] buffer = new byte[8192]; // Buffer 8KB
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    baos.write(buffer, 0, bytesRead);
+        switch (role) {
+            case "student":
+                Students s = (Students) acc;
+                if (!dao.checkStudentOldPassword(s.getId(), oldPassword)) {
+                    request.setAttribute("message", "Mật khẩu cũ không đúng!");
+                    doGet(request, response);
+                    return;
                 }
-                filePart.write(uploadPath); // Lưu file vào thư mục Uploads
-                return baos.toByteArray();
-            }
-        }
-        return null;
-    }
+                updated = dao.updateStudentAccount(s, oldPassword, newPassword, newPhone);
+                if (updated) {
+                    s.setPassword(newPassword);
+                    s.setPhone(newPhone);
+                    session.setAttribute("account", s);
+                }
+                break;
 
-    // Kiểm tra định dạng email
-    private boolean isValidEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    }
+            case "teacher":
+                Teachers t = (Teachers) acc;
+                if (!dao.checkTeacherOldPassword(t.getId(), oldPassword)) {
+                    request.setAttribute("message", "Mật khẩu cũ không đúng!");
+                    doGet(request, response);
+                    return;
+                }
+                updated = dao.updateTeacherAccount(t, oldPassword, newPassword, newPhone);
+                if (updated) {
+                    t.setPassword(newPassword);
+                    t.setPhone(newPhone);
+                    session.setAttribute("account", t);
+                }
+                break;
 
-    // Kiểm tra ngày sinh hợp lệ
-    private boolean isValidBirthDate(String birthDate) {
-        if (birthDate == null || birthDate.trim().isEmpty()) {
-            return false;
+            case "admin":
+            case "staff":
+                AdminStaffs a = (AdminStaffs) acc;
+                if (!dao.checkAdminStaffOldPassword(a.getId(), oldPassword)) {
+                    request.setAttribute("message", "Mật khẩu cũ không đúng!");
+                    doGet(request, response);
+                    return;
+                }
+                updated = dao.updateAdminStaffAccount(a, oldPassword, newPassword, newPhone);
+                if (updated) {
+                    a.setPassword(newPassword);
+                    a.setPhone(newPhone);
+                    session.setAttribute("account", a);
+                }
+                break;
         }
-        try {
-            LocalDate date = LocalDate.parse(birthDate);
-            return date.isAfter(LocalDate.of(1900, 1, 1)) && date.isBefore(LocalDate.now().minusYears(10));
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
-    // Kiểm tra số năm kinh nghiệm hợp lệ
-    private boolean isValidYearsOfExperience(String years) {
-        if (years == null || years.trim().isEmpty()) {
-            return false; // Bắt buộc phải có giá trị cho roleId=2
+        if (updated) {
+            request.setAttribute("message", "Cập nhật tài khoản thành công!");
+        } else {
+            request.setAttribute("message", "Có lỗi khi cập nhật tài khoản!");
         }
-        try {
-            int y = Integer.parseInt(years);
-            return y >= 0 && y <= 50;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 
-    // Kiểm tra số hợp lệ
-    private boolean isValidNumber(String number) {
-        if (number == null || number.trim().isEmpty()) {
-            return false;
-        }
-        try {
-            Integer.parseInt(number);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "ProfileController for managing user profile with update account and update personal info actions";
+        doGet(request, response);
     }
 }

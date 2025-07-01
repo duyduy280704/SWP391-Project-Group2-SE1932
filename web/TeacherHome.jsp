@@ -400,6 +400,7 @@
                 <a href="HomePage" class="nav-link">Trang Chủ</a>
                 <a href="scheduleTeacher" class="nav-link active">Lịch dạy</a>
                 <a href="attendance" class="nav-link">Điểm danh</a>
+                <a href="classStudent" class="nav-link">Danh sách lớp học</a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
             </div>
             <!-- Navbar End -->
@@ -420,9 +421,22 @@
                                 <h4 class="text-primary">Xin chào, Giáo viên!</h4>
                                 <p class="text-muted">Chúc bạn một ngày làm việc hiệu quả và tràn đầy năng lượng! 🌟</p>
                             </c:if>
-                                <div class="text-center.mb-5.lich-day">  <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;"></h5>
-                                    <h1>Lịch dạy tuần này</h1></div>
+                            <h3>🔔 Thông báo</h3>
+                            <c:forEach var="notice" items="${notices}">
+                                <div class="notice">
+                                    <p><strong>${notice.date}</strong>: ${notice.message}</p>
+                                </div>
+                            </c:forEach>
+
+                            <c:if test="${empty notices}">
+                                <p>No notifications found.</p>
+                            </c:if>
+                            <div class="col-12 mt-3">
+                            <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
                         </div>
+                        </div>
+                            <div class="text-center.mb-5.lich-day">  <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;"></h5>
+                                <h1>Lịch dạy tuần này</h1></div>
                         <div class="selector-container">
                             <form action="${pageContext.request.contextPath}/teacherHome" method="get">
                                 <label for="year">Chọn năm: </label>
@@ -492,9 +506,9 @@
                                 </tbody>
                             </table>
                         </c:if>
-                             <div class="col-12 mt-3">
-                    <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
-                </div>
+                        <div class="col-12 mt-3">
+                            <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                        </div>
                     </div>
                 </div>
                 <!-- Weekly Schedule End -->
@@ -524,7 +538,7 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                             
+
                         </c:if>
                     </div>
                 </div>
@@ -572,6 +586,9 @@
                                 </tbody>
                             </table>
                         </c:if>
+                        <div class="col-12 mt-3">
+                            <a href="Feedback" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                        </div>
                     </div>
                 </div>
                 <!-- Testimonial End -->
@@ -658,62 +675,62 @@
             <script src="js/main.js"></script>
             <!-- Sidebar Toggle Script -->
             <script>
-                function toggleSidebar() {
-                    const sidebar = document.getElementById('sidebar');
-                    const mainContent = document.getElementById('main-content');
-                    const toggleBtn = document.querySelector('.toggle-btn');
+                            function toggleSidebar() {
+                                const sidebar = document.getElementById('sidebar');
+                                const mainContent = document.getElementById('main-content');
+                                const toggleBtn = document.querySelector('.toggle-btn');
 
-                    sidebar.classList.toggle('hidden');
-                    mainContent.classList.toggle('full');
-                    toggleBtn.classList.toggle('hidden');
+                                sidebar.classList.toggle('hidden');
+                                mainContent.classList.toggle('full');
+                                toggleBtn.classList.toggle('hidden');
 
-                    // Change icon based on sidebar state
-                    const icon = toggleBtn.querySelector('i');
-                    if (sidebar.classList.contains('hidden')) {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    } else {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                    }
-                }
+                                // Change icon based on sidebar state
+                                const icon = toggleBtn.querySelector('i');
+                                if (sidebar.classList.contains('hidden')) {
+                                    icon.classList.remove('fa-times');
+                                    icon.classList.add('fa-bars');
+                                } else {
+                                    icon.classList.remove('fa-bars');
+                                    icon.classList.add('fa-times');
+                                }
+                            }
 
-                function showEventDetails(id, name, content, date, eventId, courseId) {
-                    const modal = document.getElementById('eventModal');
-                    const title = document.getElementById('eventTitle');
-                    const eventDate = document.getElementById('eventDate');
-                    const eventImage = document.getElementById('eventImage');
-                    const eventContent = document.getElementById('eventContent');
-                    const eventCourseId = document.getElementById('eventCourseId');
+                            function showEventDetails(id, name, content, date, eventId, courseId) {
+                                const modal = document.getElementById('eventModal');
+                                const title = document.getElementById('eventTitle');
+                                const eventDate = document.getElementById('eventDate');
+                                const eventImage = document.getElementById('eventImage');
+                                const eventContent = document.getElementById('eventContent');
+                                const eventCourseId = document.getElementById('eventCourseId');
 
-                    title.textContent = name;
-                    eventDate.textContent = 'Ngày: ' + date;
-                    eventContent.textContent = content;
-                    eventCourseId.textContent = 'Mã khóa học: ' + (courseId || 'Không có');
+                                title.textContent = name;
+                                eventDate.textContent = 'Ngày: ' + date;
+                                eventContent.textContent = content;
+                                eventCourseId.textContent = 'Mã khóa học: ' + (courseId || 'Không có');
 
-                    // Set image source to TeacherHome servlet with eventId
-                    if (eventId && eventId !== 'null') {
-                        eventImage.src = '${pageContext.request.contextPath}/teacherHome?eventId=' + eventId;
-                        eventImage.style.display = 'block';
-                    } else {
-                        eventImage.style.display = 'none';
-                    }
+                                // Set image source to TeacherHome servlet with eventId
+                                if (eventId && eventId !== 'null') {
+                                    eventImage.src = '${pageContext.request.contextPath}/teacherHome?eventId=' + eventId;
+                                    eventImage.style.display = 'block';
+                                } else {
+                                    eventImage.style.display = 'none';
+                                }
 
-                    modal.style.display = 'block';
-                }
+                                modal.style.display = 'block';
+                            }
 
-                function closeEventModal() {
-                    const modal = document.getElementById('eventModal');
-                    modal.style.display = 'none';
-                }
+                            function closeEventModal() {
+                                const modal = document.getElementById('eventModal');
+                                modal.style.display = 'none';
+                            }
 
-                // Close modal when clicking outside
-                window.onclick = function(event) {
-                    const modal = document.getElementById('eventModal');
-                    if (event.target == modal) {
-                        modal.style.display = 'none';
-                    }
-                }
+                            // Close modal when clicking outside
+                            window.onclick = function (event) {
+                                const modal = document.getElementById('eventModal');
+                                if (event.target == modal) {
+                                    modal.style.display = 'none';
+                                }
+                            }
             </script>
     </body>
 </html>

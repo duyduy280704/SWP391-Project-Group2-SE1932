@@ -61,19 +61,23 @@ public class LoginControllers extends HttpServlet {
                 session.setAttribute("account", staff);
                 System.out.println("AdminStaff RoleId: " + staff.getRole());
                 if ("4".equals(staff.getRole())) {
+                    session.setAttribute("role", "admin");
                     response.sendRedirect("adminhome");
                 } else if ("3".equals(staff.getRole())) {
+                    session.setAttribute("role", "staff");
                     response.sendRedirect("staff.jsp");
                 }
                 return;
             } else if (student != null) {
                 session.setAttribute("account", student);
+                session.setAttribute("role", "student");
                 System.out.println("Student RoleId: " + student.getRole());
                 response.sendRedirect("student.jsp");
                 return;
             } else if (teacher != null) {
                 session.setAttribute("account", teacher);
                 System.out.println("Teacher RoleId: " + teacher.getRole());
+                 session.setAttribute("role", "teacher");
                 response.sendRedirect("teacherHome");
                 return;
             } else {
