@@ -97,7 +97,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý lịch học
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="eventstaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý sự kiện
                             </a>
