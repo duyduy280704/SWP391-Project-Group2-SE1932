@@ -174,14 +174,13 @@
 
         <!-- Display Courses -->
         <div class="container-fluid py-4 bg-light">
-            <div class="container py-4">
-                <form action="coursestaff" method="post" enctype="multipart/form-data">
+            <div class="container py-4">                
                     <div class="row justify-content-center">
                         <c:forEach var="c" items="${courseList}">
                             <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
                                 <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
 
-                                    
+
                                     <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
                                         <c:choose>
                                             <c:when test="${not empty c.image}">
@@ -198,26 +197,27 @@
                                         </c:choose>
                                     </a>
 
-                                  
+
                                     <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
                                         <div class="text-muted small mb-1">
                                             <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
                                         </div>
-                                        <h6 class="card-title text-dark font-weight-bold mb-1 text-truncate">${c.name}</h6>
+                                        <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
+                                            <h6 class="mb-0">${c.name}</h6>
+                                        </a>
                                         <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
                                             ${c.description}
                                         </p>
                                     </div>
 
-                                    
+
                                     <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
                                         <span class="text-primary font-weight-bold">${c.fee} đ</span>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
-                    </div>
-                </form>
+                    </div>     
             </div>
         </div>
 

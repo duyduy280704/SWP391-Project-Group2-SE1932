@@ -158,18 +158,46 @@ public class RegisitionDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
+
     public String getStudentNameByRegisitionId(int regisitionId) {
-    String sql = "SELECT s.full_name FROM regisition r JOIN Student s ON r.student_id = s.id WHERE r.id = ?";
+        String sql = "SELECT s.full_name FROM regisition r JOIN Student s ON r.student_id = s.id WHERE r.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("full_name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Không rõ";
+    }
+
+    public void insert(Regisition r) {
+        String sql = "INSERT INTO Regisition (student_id, course_id, note, status) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, r.getStudentId());
+            ps.setInt(2, r.getCourseId());
+            ps.setString(3, r.getNote());
+            ps.setString(4, r.getStatus());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insert Regisition: " + e.getMessage());
+        }
+    }
+    public boolean isAlreadyRegistered(String studentId, int courseId) {
+    String sql = "SELECT COUNT(*) FROM regisition WHERE student_id = ? AND course_id = ?";
     try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, regisitionId);
+        ps.setString(1, studentId);
+        ps.setInt(2, courseId);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return rs.getString("full_name");
+            return rs.getInt(1) > 0;
         }
     } catch (Exception e) {
-        e.printStackTrace();
+        System.out.println("isAlreadyRegistered: " + e.getMessage());
     }
-    return "Không rõ";
+    return false;
 }
+    
 }

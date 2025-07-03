@@ -16,12 +16,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import models.About;
+import models.AboutDAO;
 import models.Blog;
 import models.BlogDAO;
 import models.CourseDAO;
 import models.Courses;
 import models.Event;
 import models.EventDAO;
+import models.FeedBack;
+import models.FeedBackDAO;
+import models.Information;
+import models.InformationDAO;
 import models.Notification;
 import models.NotificationDAO;
 import models.ScheduleDAO;
@@ -30,12 +36,31 @@ import models.ScheduleStudentDAO;
 import models.ScheduleWeek;
 import models.StudentDAO;
 import models.Students;
+import models.TeacherDAO;
+import models.Teachers;
+import models.TypeCourse;
 
 /**
  *
  * @author Dwight
  */
 public class StudentHomeController extends HttpServlet {
+    
+    private CourseDAO courseDAO = new CourseDAO();
+    private InformationDAO daoI = new InformationDAO();
+    private TeacherDAO dao = new TeacherDAO();
+    private AboutDAO dao2 = new AboutDAO();
+    
+    public void init() {
+        Information setting = daoI.getSetting();
+        getServletContext().setAttribute("setting", setting);
+        List<TypeCourse> typeList = courseDAO.getType();
+        getServletContext().setAttribute("typeList", typeList);     
+        List<Teachers> teacherlist = dao.getTeachers();
+        getServletContext().setAttribute("teacherlist", teacherlist); 
+        List<About> list = dao2.getAllAbouts();
+        getServletContext().setAttribute("aboutList", list);
+    }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

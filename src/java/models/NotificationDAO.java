@@ -279,4 +279,16 @@ public class NotificationDAO extends DBContext {
         }
         return list;
     }
+    public void insert(Notification n) {
+        String sql = "INSERT INTO Notification (id_student, messenge, date) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, n.getIdUser());
+            ps.setString(2, n.getMessage());
+            ps.setString(3, n.getDate());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insert Notification: " + e.getMessage());
+        }
+    }
+    
 }

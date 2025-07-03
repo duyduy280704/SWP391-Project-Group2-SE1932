@@ -18,8 +18,8 @@ import models.PreRegistration;
 public class PreRegistrationDAO extends DBContext {
 
     public boolean insertPreRegistration(PreRegistration preReg) {
-        String sql = "INSERT INTO PreRegistrations (full_name, email, phone, birth_date, gender, address, course_id, status, note) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PreRegistrations (full_name, email, phone, birth_date, gender, address, course_id, status, note, register_date, id_sale) "
+           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, preReg.getFull_name());
             ps.setString(2, preReg.getEmail());
@@ -30,6 +30,7 @@ public class PreRegistrationDAO extends DBContext {
             ps.setInt(7, preReg.getCourse_id());
             ps.setString(8, preReg.getStatus());
             ps.setString(9, preReg.getNote());
+            ps.setInt(10, preReg.getId_sale());
 
             int rows = ps.executeUpdate();
             return rows > 0;

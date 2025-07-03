@@ -6,14 +6,31 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import models.AdminStaffDAO;
 import models.AdminStaffs;
+import models.CourseDAO;
+import models.Information;
+import models.InformationDAO;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
 import models.Teachers;
+import models.TypeCourse;
 
 public class LoginControllers extends HttpServlet {
+    
+    private CourseDAO courseDAO = new CourseDAO();
+    private InformationDAO daoI = new InformationDAO();
+    
+    
+    public void init() {
+        Information setting = daoI.getSetting();
+        getServletContext().setAttribute("setting", setting);
+        List<TypeCourse> typeList = courseDAO.getType();
+        getServletContext().setAttribute("typeList", typeList);     
+              
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

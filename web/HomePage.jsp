@@ -187,35 +187,50 @@
                     <div class="row">
                         <c:forEach var="c" items="${courseList}">
                             <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                                <div class="card shadow-sm border-0 w-100">
-                                    <c:choose>
-                                        <c:when test="${not empty c.image}">
-                                            <img src="image?id=${c.id}" alt="Course Picture" style="max-width: 400px; max-height: 300px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span>No Image</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <div class="card-body bg-white">
+                                <div class="card shadow-sm border-0 w-100 d-flex flex-column">
+                                    <div style="width: 100%; height: 200px; overflow: hidden;">
+                                        <c:choose>
+                                            <c:when test="${not empty c.image}">
+                                                <img src="image?id=${c.id}" alt="Course Picture"
+                                                     style="width: 100%; height: 100%; object-fit: cover;"
+                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                                                     style="width: 100%; height: 100%;">
+                                                    No Image
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+
+                                    <div class="card-body bg-white flex-grow-1 d-flex flex-column">
                                         <div class="d-flex justify-content-between mb-2 text-muted small">
                                             <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
                                             <span><i class="far fa-clock text-primary mr-1"></i>1h 30m</span>
                                         </div>
                                         <h5 class="card-title">${c.name}</h5>
                                         <p class="card-text text-body" style="min-height: 72px;">${c.description}</p>
-                                    </div>
-                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                        <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>
-                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
+                                        <div class="mt-auto">
+                                            <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center px-0 pt-3">
+                                                <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>
+                                                <span class="text-primary font-weight-bold">${c.fee} đ</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
-                        <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Xem Thêm</a>
+
+                        <!-- Đưa "Xem thêm" ra ngoài row để tránh bị lồng sai vị trí -->
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="course.jsp" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
                     </div>
                 </form>
             </div>
         </div>
+
 
 
         <!-- Courses End -->
@@ -301,7 +316,7 @@
                     <c:forEach var="n" items="${blogList}">
                         <div class="col-lg-4 mb-4">
                             <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
+                                <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
 
                                 <a class="blog-overlay text-decoration-none" href="#">
                                     <h5 class="text-white mb-3">${n.title}</h5>

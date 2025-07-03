@@ -152,6 +152,14 @@
         <servlet-name>AssignClassController</servlet-name>
         <servlet-class>Controllers.AssignClassController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SaleController</servlet-name>
+        <servlet-class>Controllers.SaleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherListController</servlet-name>
+        <servlet-class>Controllers.TeacherListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -299,5 +307,13 @@
     <servlet-mapping>
         <servlet-name>AssignClassController</servlet-name>
         <url-pattern>/AssignClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaleController</servlet-name>
+        <url-pattern>/Sale</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherListController</servlet-name>
+        <url-pattern>/TeacherList</url-pattern>
     </servlet-mapping>
 </web-app>

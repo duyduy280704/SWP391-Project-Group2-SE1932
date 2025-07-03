@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -146,28 +146,54 @@
                     <h2 class="text-dark font-weight-bold">${course.name}</h2>
                     <p class="text-muted mb-2"><strong>Loại:</strong> ${course.type}</p>
                     <p class="text-muted mb-2"><strong>Cấp độ:</strong> ${course.level}</p>
-
                     <hr>
 
-                    <!-- Học phí -->
+                    <!-- ✅ Học phí + áp dụng mã giảm giá -->
                     <div class="mb-3">
-                        
-                                <span class="text-primary h5 font-weight-bold">${course.fee} đ</span>
-                            
+                        <c:choose>
+                            <c:when test="${not empty salePercent && salePercent > 0}">
+                                <span class="text-muted"><del>
+                                        <fmt:formatNumber value="${course.fee}" type="number" maxFractionDigits="0" /> đ
+                                    </del></span>
+                                <br>
+                                <span class="text-success">Đã áp dụng mã giảm ${salePercent}%</span><br>
+                                <span class="text-primary h5 font-weight-bold">
+                                    <fmt:formatNumber value="${course.fee * (100 - salePercent) / 100}" type="number" maxFractionDigits="0" /> đ
+                                </span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="text-primary h5 font-weight-bold">
+                                    <fmt:formatNumber value="${course.fee}" type="number" maxFractionDigits="0" /> đ
+                                </span>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
+                    <c:if test="${not empty saleMessage}">
+                        <div class="text-danger">${saleMessage}</div>
+                    </c:if>
+                    <!-- ✅ Nhập mã khuyến mãi -->
+                    <form action="RegistrationCourse" method="get" class="form-inline">
+                        <input type="hidden" name="id" value="${course.id}" />
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="saleCode" placeholder="Nhập mã giảm giá"
+                                   value="${saleCode}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="submit">Áp dụng</button>
+                            </div>
+                        </div>
+                    </form>
 
                     <!-- Mô tả -->
                     <div class="mb-4">
                         <h5 class="font-weight-bold mb-2">Mô tả khóa học</h5>
-                        <div class="text-justify " style="white-space: pre-wrap;">
+                        <div class="text-justify" style="white-space: pre-wrap;">
                             ${course.description}
                         </div>
                     </div>
-
-                   
                 </div>
             </div>
         </div>
+
 
 
         <div id="register-form" style="margin-top:15px;">
@@ -184,7 +210,7 @@
 
 
                         <input type="hidden" name="id" value="${course.id}">
-
+                        <input type="hidden" name="saleCode" value="${saleCode}">
                         <div class="form-group mb-3">
                             <input type="text" class="form-control border-0 p-3" name="full_name"
                                    placeholder="Họ và tên"  />
@@ -194,7 +220,7 @@
                             <input type="email" class="form-control border-0 p-3" name="email"
                                    placeholder="Email"  />
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <input type="text" class="form-control border-0 p-3" name="phone"
                                    placeholder="phone"  />
@@ -217,7 +243,7 @@
                             <input type="text" class="form-control border-0 p-3" name="address"
                                    placeholder="Địa chỉ"  />
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <input type="text" class="form-control border-0 p-3" name="note"
                                    placeholder="ghi chú(lịch học mong muốn)"  />
@@ -370,19 +396,19 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script>
-                        function toggleRegisterForm() {
-                            var form = document.getElementById('register-form');
-                            if (form.style.display === "none") {
-                                form.style.display = "block";
-                            } else {
-                                form.style.display = "none";
-                            }
-                        }
+            function toggleRegisterForm() {
+                var form = document.getElementById('register-form');
+                if (form.style.display === "none") {
+                    form.style.display = "block";
+                } else {
+                    form.style.display = "none";
+                }
+            }
 
-                        function showContract() {
-                            alert("Hiển thị popup điều khoản ở đây hoặc mở modal.");
-                            // Hoặc dùng Bootstrap modal nếu có sẵn
-                        }
+            function showContract() {
+                alert("Hiển thị popup điều khoản ở đây hoặc mở modal.");
+                // Hoặc dùng Bootstrap modal nếu có sẵn
+            }
         </script>
     </body>
 

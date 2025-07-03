@@ -255,10 +255,9 @@
                 </c:choose>
             </div>
 
-            <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
-            <a href="scheduleStudent" class="nav-item nav-link ">Lịch Học</a>
-            <a href="Course" class="nav-item nav-link">Khóa Học</a>
-            <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
+            <a href="Course" class="nav-item nav-link active">Khóa Học</a>
+            <a href="TeacherList" class="nav-item nav-link ">Giáo Viên</a>
             <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
         </div>
@@ -267,232 +266,159 @@
         <!-- Main Content -->
         <div class="main-content" id="main-content">
 
-            <div class="mb-4">
-                <h2>
-                    Xin chào, ${name} 👋
-                </h2>
-                <p>Chúc bạn một ngày học tập hiệu quả tại BigDream!</p>
-            </div>
-            <!-- thông báo mới nhất -->  
-            <h5 class="section-title"> 🔔Thông báo mới</h5>
-            <ul>
-                <c:forEach var="n" items="${notifications}">
-                    <li>
-                        <strong>${n.message}</strong><br/>
-                        Ngày gửi: ${n.date}<br/>
-                    </li>
-                </c:forEach>
-            </ul>
-            <!-- lịch học sắp tới -->        
-            <h5 class="section-title">🕒 Lịch học tuần này</h5>
-
-            <div class="selector-container">
-                <form action="StudentHome" method="get">
-                    <label for="year">Chọn năm: </label>
-                    <select name="year" id="year" onchange="this.form.submit()">
-                        <c:forEach var="year" items="${years}">
-                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
-                        </c:forEach>
-                    </select>
-                    <label for="week">Chọn tuần: </label>
-                    <select name="week" id="week" onchange="this.form.submit()">
-                        <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
-                        </c:forEach>
-                    </select>
-                </form>
-            </div>
-
-            <c:if test="${empty scheduleStudent}">
-                <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
-            </c:if>
-
-            <c:if test="${not empty scheduleStudent}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Thứ</th>
-                            <th>Ngày</th>
-                            <th>Lớp</th>
-                            <th>Bắt đầu</th>
-                            <th>Kết thúc</th>
-                            <th>Phòng học</th>
-                            <th>Điểm danh</th>
-                            <th>Lý do</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="count" value="0" />
-                            <c:forEach var="s" items="${scheduleStudent}">
-                                <c:if test="${s.dayVN == day}">
-                                    <c:set var="count" value="${count + 1}" />
-                                </c:if>
-                            </c:forEach>
-
-                            <c:if test="${count > 0}">
-                                <c:set var="printed" value="false" />
-                                <c:forEach var="s" items="${scheduleStudent}">
-                                    <c:if test="${s.dayVN == day}">
-                                        <tr>
-                                            <c:if test="${not printed}">
-                                                <td rowspan="${count}">${day}</td>
-                                                <c:set var="printed" value="true" />
-                                            </c:if>
-                                            <td>
-                                                <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
-                                            </td>
-                                            <td>${s.nameClass}</td>
-                                            <td>${fn:substring(s.startTime, 0, 5)}</td>
-                                            <td>${fn:substring(s.endTime, 0, 5)}</td>
-                                            <td>${s.room}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${s.attendanceStatus == 'present'}">Có mặt</c:when>
-                                                    <c:when test="${s.attendanceStatus == 'absent'}">Vắng mặt</c:when>
-                                                    <c:otherwise>Chưa điểm danh</c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty s.reason}">
-                                                        ${s.reason}
-                                                    </c:when>
-                                                    <c:otherwise>-</c:otherwise>
-                                                </c:choose>
-                                            </td>
-
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-
-                            <c:if test="${count == 0}">
-                                <tr>
-                                    <td>${day}</td>
-                                    <td colspan="6"></td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
-
-
-            <!-- Courses Start -->
-            <div class="container-fluid py-5 bg-light">
-                <div class="container py-5">
-                    <h5 class="section-title mt-5">🔥 Khóa học được đăng ký nhiều nhất</h5>
-                    <hr>
-                    <form action="coursestaff" method="post" enctype="multipart/form-data">
-                        <div class="row">
-                            <c:forEach var="c" items="${courseList}">
-                                <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                                    <div class="card shadow-sm border-0 w-100 d-flex flex-column">
-
-
-                                        <div class="img-container">
-                                            <c:choose>
-                                                <c:when test="${not empty c.image}">
-                                                    <img src="image?id=${c.id}" class="course-img" alt="Course Picture"
-                                                         onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img src="images/no-image.png" class="course-img" alt="No Image">
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-
-
-                                        <div class="card-body bg-white flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between mb-2 text-muted small">
-                                                <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
-                                            </div>
-                                            <h5 class="card-title">${c.name}</h5>
-                                        </div>
-
-
-                                        <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                            <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
-
-                            <div class="col-12 mt-3">
-                                <a href="Course" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <!-- Courses End -->
-
-            <div class="container-fluid py-5">
-                <div class="container pt-5 pb-3">
-                    <div class="text-center.mb-5.sukien">
-                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Sự Kiện</h5>
-                        <h1>Sự kiện sắp tới</h1>
+            <div class="container py-5">
+                <div class="row">
+                    <!-- Ảnh -->
+                    <div class="col-md-6 mb-4">
+                        <c:choose>
+                            <c:when test="${not empty course.image}">
+                                <img src="image?id=${course.id}" class="img-fluid rounded shadow"
+                                     alt="Course Image"
+                                     style="width: 100%; height: 400px; object-fit: cover;"
+                                     onerror="this.src='images/no-image.png';">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="images/no-image.png" class="img-fluid rounded shadow"
+                                     alt="No Image"
+                                     style="width: 100%; height: 400px; object-fit: cover;">
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <c:if test="${empty events}">
-                        <p class="text-center text-muted">Không có sự kiện nào để hiển thị!</p>
-                    </c:if>
-                    <c:if test="${not empty events}">
-                        <div class="event-list">
-                            <c:forEach var="e" items="${events}">
-                                <div class="event-list-item">
-                                    <div class="event-card bg-light rounded p-3 shadow-sm">
-                                        <h4 class="event-title text-primary">${e.name}</h4>
-                                        <p class="event-date text-muted mb-2">
-                                            <i class="fa fa-calendar-alt mr-2"></i>
 
-                                            <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var = "parseDate"/>
-                                            <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
-                                        </p>
-                                        <p class="event-content">${fn:substring(e.content, 0, 150)}...</p>
-                                    </div>
-                                </div>
-                            </c:forEach>
+                    <!-- Thông tin -->
+                    <div class="col-md-6">
+                        <h2 class="text-dark font-weight-bold">${course.name}</h2>
+                        <p class="text-muted mb-2"><strong>Loại:</strong> ${course.type}</p>
+                        <p class="text-muted mb-2"><strong>Cấp độ:</strong> ${course.level}</p>
+                        <hr>
+
+                        <!-- ✅ Học phí + áp dụng mã giảm giá -->
+                        <div class="mb-3">
+                            <c:choose>
+                                <c:when test="${not empty salePercent && salePercent > 0}">
+                                    <span class="text-muted"><del>
+                                            <fmt:formatNumber value="${course.fee}" type="number" maxFractionDigits="0" /> đ
+                                        </del></span>
+                                    <br>
+                                    <span class="text-success">Đã áp dụng mã giảm ${salePercent}%</span><br>
+                                    <span class="text-primary h5 font-weight-bold">
+                                        <fmt:formatNumber value="${course.fee * (100 - salePercent) / 100}" type="number" maxFractionDigits="0" /> đ
+                                    </span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="text-primary h5 font-weight-bold">
+                                        <fmt:formatNumber value="${course.fee}" type="number" maxFractionDigits="0" /> đ
+                                    </span>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
-                    </c:if>
-                </div>
-            </div>
-
-            <div class="container pt-5 pb-3">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                    <h1>Các tin gần đây</h1>
-                </div>
-
-                <div class="row pb-3">
-                    <c:if test="${not empty blogList}">
-                        <c:forEach var="n" items="${blogList}">
-                            <div class="col-lg-4 mb-4">
-                                <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                    <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
-
-                                    <a class="blog-overlay text-decoration-none" href="#">
-                                        <h5 class="text-white mb-3">${n.title}</h5>
-                                        <p class="text-primary m-0">
-                                            ${fn:substring(n.publishDate, 0, 10)}
-                                        </p>
-                                    </a>
+                        <c:if test="${not empty saleMessage}">
+                            <div class="text-danger">${saleMessage}</div>
+                        </c:if>
+                        <!-- ✅ Nhập mã khuyến mãi -->
+                        <form action="RegistrationCourse" method="get" class="form-inline">
+                            <input type="hidden" name="id" value="${course.id}" />
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="saleCode" placeholder="Nhập mã giảm giá"
+                                       value="${saleCode}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary" type="submit">Áp dụng</button>
                                 </div>
                             </div>
-                        </c:forEach>
-                    </c:if>
-                    <c:if test="${empty blogList}">
-                        <div class="col-12 text-center">
-                            <p>Không có bài viết nào gần đây.</p>
+                        </form>
+
+                        <!-- Mô tả -->
+                        <div class="mb-4">
+                            <h5 class="font-weight-bold mb-2">Mô tả khóa học</h5>
+                            <div class="text-justify" style="white-space: pre-wrap;">
+                                ${course.description}
+                            </div>
                         </div>
-                    </c:if>
+                    </div>
                 </div>
             </div>
 
 
+
+            <div id="register-form" style="margin-top:15px;">
+                <div class="card shadow-sm mx-auto" style="max-width:480px;">   <!-- căn giữa, giới hạn rộng -->
+                    <div class="card-body p-4">     
+                        <c:if test="${not empty message}">
+                            <div class="alert alert-success">${message}</div>
+                        </c:if>
+                        <c:if test="${not empty error}">
+                            <div class="alert alert-danger">${error}</div>
+                        </c:if><!-- padding đều 1rem -->
+                        <form action="RegistrationCourse" method="get">
+                            <input type="hidden" name="full_name" value="${account.name}">
+                            <input type="hidden" name="id" value="${course.id}">
+                            <input type="hidden" name="saleCode" value="${saleCode}">                      
+
+                            <div class="form-group mb-3">
+                                <input type="email" class="form-control border-0 p-3" name="email"
+                                       placeholder="Email"  />
+                            </div>
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control border-0 p-3" name="note"
+                                       placeholder="ghi chú(lịch học mong muốn)"  />
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" id="agree" >
+                                <label class="form-check-label" for="agree">
+                                    Tôi đồng ý với
+                                    <a href="#" data-toggle="modal" data-target="#termsModal">điều khoản</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-block">
+                                Xác nhận đăng ký
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal Điều khoản -->
+            <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="termsModalLabel">Điều khoản và Cam kết</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>1. Cam kết học viên:</strong></p>
+                            <ul>
+                                <li>Tham gia đầy đủ và đúng giờ các buổi học.</li>
+                                <li>Không gây rối hoặc làm ảnh hưởng đến lớp học.</li>
+                                <li>Tuân thủ các quy định của trung tâm.</li>
+                            </ul>
+
+                            <p><strong>2. Hoàn phí và hủy đăng ký:</strong></p>
+                            <ul>
+                                <li>Không hoàn lại học phí sau khi đã bắt đầu khóa học.</li>
+                                <li>Nếu hủy trước ngày khai giảng, hoàn lại 80% học phí.</li>
+                            </ul>
+
+                            <p><strong>3. Quyền lợi học viên:</strong></p>
+                            <ul>
+                                <li>Được cung cấp tài liệu học miễn phí.</li>
+                                <li>Được hỗ trợ kỹ thuật và tư vấn trong suốt khóa học.</li>
+                            </ul>
+
+                            <p class="text-muted mt-3">Mọi thắc mắc xin liên hệ: <strong>0123 456 789</strong> hoặc email: <strong>support@trungtam.com</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Footer Start -->
             <footer class="bg-dark text-white pt-5 pb-4">
@@ -576,25 +502,40 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-                        function toggleSidebar() {
-                            const sidebar = document.getElementById('sidebar');
-                            const mainContent = document.getElementById('main-content');
-                            const toggleBtn = document.querySelector('.toggle-btn');
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('main-content');
+                const toggleBtn = document.querySelector('.toggle-btn');
 
-                            sidebar.classList.toggle('hidden');
-                            mainContent.classList.toggle('full');
-                            toggleBtn.classList.toggle('hidden');
+                sidebar.classList.toggle('hidden');
+                mainContent.classList.toggle('full');
+                toggleBtn.classList.toggle('hidden');
 
-                            // Change icon based on sidebar state
-                            const icon = toggleBtn.querySelector('i');
-                            if (sidebar.classList.contains('hidden')) {
-                                icon.classList.remove('fa-times');
-                                icon.classList.add('fa-bars');
-                            } else {
-                                icon.classList.remove('fa-bars');
-                                icon.classList.add('fa-times');
-                            }
-                        }
+                // Change icon based on sidebar state
+                const icon = toggleBtn.querySelector('i');
+                if (sidebar.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            }
+        </script>
+        <script>
+            function toggleRegisterForm() {
+                var form = document.getElementById('register-form');
+                if (form.style.display === "none") {
+                    form.style.display = "block";
+                } else {
+                    form.style.display = "none";
+                }
+            }
+
+            function showContract() {
+                alert("Hiển thị popup điều khoản ở đây hoặc mở modal.");
+                // Hoặc dùng Bootstrap modal nếu có sẵn
+            }
         </script>
     </body>
 </html>

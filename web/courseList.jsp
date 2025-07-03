@@ -255,10 +255,9 @@
                 </c:choose>
             </div>
 
-            <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
-            <a href="scheduleStudent" class="nav-item nav-link ">Lịch Học</a>
-            <a href="Course" class="nav-item nav-link">Khóa Học</a>
-            <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
+            <a href="Course" class="nav-item nav-link active">Khóa Học</a>
+            <a href="TeacherList" class="nav-item nav-link ">Giáo Viên</a>
             <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
         </div>
@@ -267,230 +266,102 @@
         <!-- Main Content -->
         <div class="main-content" id="main-content">
 
-            <div class="mb-4">
-                <h2>
-                    Xin chào, ${name} 👋
-                </h2>
-                <p>Chúc bạn một ngày học tập hiệu quả tại BigDream!</p>
-            </div>
-            <!-- thông báo mới nhất -->  
-            <h5 class="section-title"> 🔔Thông báo mới</h5>
-            <ul>
-                <c:forEach var="n" items="${notifications}">
-                    <li>
-                        <strong>${n.message}</strong><br/>
-                        Ngày gửi: ${n.date}<br/>
-                    </li>
-                </c:forEach>
-            </ul>
-            <!-- lịch học sắp tới -->        
-            <h5 class="section-title">🕒 Lịch học tuần này</h5>
-
-            <div class="selector-container">
-                <form action="StudentHome" method="get">
-                    <label for="year">Chọn năm: </label>
-                    <select name="year" id="year" onchange="this.form.submit()">
-                        <c:forEach var="year" items="${years}">
-                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
-                        </c:forEach>
-                    </select>
-                    <label for="week">Chọn tuần: </label>
-                    <select name="week" id="week" onchange="this.form.submit()">
-                        <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
-                        </c:forEach>
-                    </select>
-                </form>
-            </div>
-
-            <c:if test="${empty scheduleStudent}">
-                <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
-            </c:if>
-
-            <c:if test="${not empty scheduleStudent}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Thứ</th>
-                            <th>Ngày</th>
-                            <th>Lớp</th>
-                            <th>Bắt đầu</th>
-                            <th>Kết thúc</th>
-                            <th>Phòng học</th>
-                            <th>Điểm danh</th>
-                            <th>Lý do</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="count" value="0" />
-                            <c:forEach var="s" items="${scheduleStudent}">
-                                <c:if test="${s.dayVN == day}">
-                                    <c:set var="count" value="${count + 1}" />
-                                </c:if>
-                            </c:forEach>
-
-                            <c:if test="${count > 0}">
-                                <c:set var="printed" value="false" />
-                                <c:forEach var="s" items="${scheduleStudent}">
-                                    <c:if test="${s.dayVN == day}">
-                                        <tr>
-                                            <c:if test="${not printed}">
-                                                <td rowspan="${count}">${day}</td>
-                                                <c:set var="printed" value="true" />
-                                            </c:if>
-                                            <td>
-                                                <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
-                                            </td>
-                                            <td>${s.nameClass}</td>
-                                            <td>${fn:substring(s.startTime, 0, 5)}</td>
-                                            <td>${fn:substring(s.endTime, 0, 5)}</td>
-                                            <td>${s.room}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${s.attendanceStatus == 'present'}">Có mặt</c:when>
-                                                    <c:when test="${s.attendanceStatus == 'absent'}">Vắng mặt</c:when>
-                                                    <c:otherwise>Chưa điểm danh</c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty s.reason}">
-                                                        ${s.reason}
-                                                    </c:when>
-                                                    <c:otherwise>-</c:otherwise>
-                                                </c:choose>
-                                            </td>
-
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-
-                            <c:if test="${count == 0}">
-                                <tr>
-                                    <td>${day}</td>
-                                    <td colspan="6"></td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
-
-
-            <!-- Courses Start -->
-            <div class="container-fluid py-5 bg-light">
-                <div class="container py-5">
-                    <h5 class="section-title mt-5">🔥 Khóa học được đăng ký nhiều nhất</h5>
-                    <hr>
-                    <form action="coursestaff" method="post" enctype="multipart/form-data">
-                        <div class="row">
-                            <c:forEach var="c" items="${courseList}">
-                                <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                                    <div class="card shadow-sm border-0 w-100 d-flex flex-column">
-
-
-                                        <div class="img-container">
-                                            <c:choose>
-                                                <c:when test="${not empty c.image}">
-                                                    <img src="image?id=${c.id}" class="course-img" alt="Course Picture"
-                                                         onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img src="images/no-image.png" class="course-img" alt="No Image">
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-
-
-                                        <div class="card-body bg-white flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between mb-2 text-muted small">
-                                                <span><i class="fa fa-folder text-primary mr-1"></i>${c.type}</span>
-                                            </div>
-                                            <h5 class="card-title">${c.name}</h5>
-                                        </div>
-
-
-                                        <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                            <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
-
-                            <div class="col-12 mt-3">
-                                <a href="Course" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <!-- Courses End -->
-
-            <div class="container-fluid py-5">
-                <div class="container pt-5 pb-3">
-                    <div class="text-center.mb-5.sukien">
-                        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Sự Kiện</h5>
-                        <h1>Sự kiện sắp tới</h1>
+           <div class="container px-4">
+            <form method="get" action="Course" class="mb-4">
+                <!-- Dòng 1: Tìm kiếm -->
+                <div class="row mb-3">
+                    <div class="col-md-6 offset-md-3">
+                        <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
                     </div>
-                    <c:if test="${empty events}">
-                        <p class="text-center text-muted">Không có sự kiện nào để hiển thị!</p>
-                    </c:if>
-                    <c:if test="${not empty events}">
-                        <div class="event-list">
-                            <c:forEach var="e" items="${events}">
-                                <div class="event-list-item">
-                                    <div class="event-card bg-light rounded p-3 shadow-sm">
-                                        <h4 class="event-title text-primary">${e.name}</h4>
-                                        <p class="event-date text-muted mb-2">
-                                            <i class="fa fa-calendar-alt mr-2"></i>
+                </div>
 
-                                            <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var = "parseDate"/>
-                                            <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
-                                        </p>
-                                        <p class="event-content">${fn:substring(e.content, 0, 150)}...</p>
-                                    </div>
-                                </div>
+                <!-- Dòng 2: Bộ lọc -->
+                <div class="row g-2 justify-content-center">
+                    <div class="col-md-2">
+                        <select name="type" class="form-control">
+                            <option value="">Tất cả loại</option>
+                            <c:forEach var="t" items="${typeList}">
+                                <option value="${t.name}" ${t.name == param.type ? 'selected' : ''}>${t.name}</option>
                             </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input name="minPrice" type="number" step="0.01" class="form-control" placeholder="Giá từ" value="${param.minPrice}">
+                    </div>
+                    <div class="col-md-2">
+                        <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="form-check ms-2">
+                            <input class="form-check-input" type="checkbox" name="saleOnly" id="saleOnly" ${param.saleOnly == 'on' ? 'checked' : ''}>
+                            <label class="form-check-label" for="saleOnly">Sale</label>
                         </div>
-                    </c:if>
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-primary w-100">Lọc</button>
+                        <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
+                    </div>
                 </div>
-            </div>
+            </form>
+        </div>
 
-            <div class="container pt-5 pb-3">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                    <h1>Các tin gần đây</h1>
-                </div>
 
-                <div class="row pb-3">
-                    <c:if test="${not empty blogList}">
-                        <c:forEach var="n" items="${blogList}">
-                            <div class="col-lg-4 mb-4">
-                                <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                    <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
 
-                                    <a class="blog-overlay text-decoration-none" href="#">
-                                        <h5 class="text-white mb-3">${n.title}</h5>
-                                        <p class="text-primary m-0">
-                                            ${fn:substring(n.publishDate, 0, 10)}
-                                        </p>
+
+
+        <hr>
+
+        <!-- Display Courses -->
+        <div class="container-fluid py-4 bg-light">
+            <div class="container py-4">
+                    <div class="row justify-content-center">
+                        <c:forEach var="c" items="${courseList}">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
+                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
+
+
+                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
+                                        <c:choose>
+                                            <c:when test="${not empty c.image}">
+                                                <img src="image?id=${c.id}" class="course-img"
+                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                     alt="Course Picture"
+                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="images/no-image.png" class="course-img"
+                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                     alt="No Image">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </a>
+
+
+                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
+                                        <div class="text-muted small mb-1">
+                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
+                                        </div>
+                                        <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
+                                            <h6 class="mb-0">${c.name}</h6>
+                                        </a>
+                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
+                                            ${c.description}
+                                        </p>
+                                    </div>
+
+
+                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
+                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
-                    </c:if>
-                    <c:if test="${empty blogList}">
-                        <div class="col-12 text-center">
-                            <p>Không có bài viết nào gần đây.</p>
-                        </div>
-                    </c:if>
-                </div>
+                    </div>
             </div>
+        </div>
+
+
+        <!-- Courses End -->
 
 
 

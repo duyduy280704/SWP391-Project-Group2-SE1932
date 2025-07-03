@@ -24,6 +24,7 @@ public class PreRegistration {
     private int course_id;
     private String status;
     private String note;
+    private int id_sale;
 
     public PreRegistration() {
     }
@@ -39,7 +40,7 @@ public class PreRegistration {
         this.status = status;
     }
 
-    public PreRegistration(String full_name, String email, String phone, String birth_date, String gender, String address, int course_id, String status, String note) {
+    public PreRegistration(String full_name, String email, String phone, String birth_date, String gender, String address, int course_id, String status, String note, int id_sale) {
 
         this.full_name = full_name;
         this.email = email;
@@ -50,6 +51,7 @@ public class PreRegistration {
         this.course_id = course_id;
         this.status = status;
         this.note = note;
+        this.id_sale = id_sale;
     }
 
     public PreRegistration(int id, String full_name, String email, String birth_date, String gender, String address, String courseName, String status) {
@@ -69,6 +71,14 @@ public class PreRegistration {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId_sale() {
+        return id_sale;
+    }
+
+    public void setId_sale(int id_sale) {
+        this.id_sale = id_sale;
     }
 
     public String getFull_name() {

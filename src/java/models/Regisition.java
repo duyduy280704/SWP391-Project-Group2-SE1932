@@ -16,6 +16,7 @@ public class Regisition {
     private String status;
     private int courseId;
     private String note;
+    private String studentId;
 
     public Regisition() {
     }
@@ -36,11 +37,25 @@ public class Regisition {
         this.courseId = courseId;
         this.note = note;
     }
-    
+
+    public Regisition(String studentId, int courseId, String note, String status) {
+        this.studentId = studentId;
+        this.courseId = courseId;
+        this.note = note;
+        this.status = status;
+    }
 
     // Getter - Setter
     public int getId() {
         return id;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public void setId(int id) {
