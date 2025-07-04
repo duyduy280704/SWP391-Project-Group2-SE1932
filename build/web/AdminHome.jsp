@@ -28,6 +28,11 @@
             .card-body {
                 padding: 20px;
             }
+            .filter-container {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -121,6 +126,30 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- FILTER FOR CHARTS -->
+                        <div class="filter-container">
+                            <select id="yearFilter" class="form-select">
+                                <option value="">Tất cả năm</option>
+                                <c:forEach var="year" items="${years}">
+                                    <option value="${year}">${year}</option>
+                                </c:forEach>
+                            </select>
+                            <select id="monthFilter" class="form-select">
+                                <option value="">Tất cả tháng</option>
+                                <option value="01">Tháng 1</option>
+                                <option value="02">Tháng 2</option>
+                                <option value="03">Tháng 3</option>
+                                <option value="04">Tháng 4</option>
+                                <option value="05">Tháng 5</option>
+                                <option value="06">Tháng 6</option>
+                                <option value="07">Tháng 7</option>
+                                <option value="08">Tháng 8</option>
+                                <option value="09">Tháng 9</option>
+                                <option value="10">Tháng 10</option>
+                                <option value="11">Tháng 11</option>
+                                <option value="12">Tháng 12</option>
+                            </select>
+                        </div>
                         <!-- CARD HIỂN THỊ BIỂU ĐỒ DOANH THU -->
                         <div class="card mb-4">
                             <div class="card-header">
@@ -188,15 +217,26 @@
                         Chart.defaults.font.family = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
                         Chart.defaults.color = '#292b2c';
 
-                        // Biểu đồ doanh thu
+                        // Lưu trữ dữ liệu gốc
                         const revenueCanvas = document.getElementById("revenueChart");
-                        if (revenueCanvas) {
-                            let labels = revenueCanvas.getAttribute("data-labels") ? revenueCanvas.getAttribute("data-labels").split(',').filter(l => l.trim()).map(l => l.trim()) : [];
-                            let values = revenueCanvas.getAttribute("data-values") ? revenueCanvas.getAttribute("data-values").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : [];
-                            console.log("Revenue Labels:", labels);
-                            console.log("Revenue Values:", values);
+                        const studentCanvas = document.getElementById("studentRegistrationChart");
+                        const originalRevenueData = {
+                            labels: revenueCanvas.getAttribute("data-labels") ? revenueCanvas.getAttribute("data-labels").split(',').filter(l => l.trim()).map(l => l.trim()) : [],
+                            values: revenueCanvas.getAttribute("data-values") ? revenueCanvas.getAttribute("data-values").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : []
+                        };
+                        const originalStudentData = {
+                            labels: studentCanvas.getAttribute("data-labels") ? studentCanvas.getAttribute("data-labels").split(',').filter(l => l.trim()).map(l => l.trim()) : [],
+                            approved: studentCanvas.getAttribute("data-approved") ? studentCanvas.getAttribute("data-approved").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : [],
+                            pending: studentCanvas.getAttribute("data-pending") ? studentCanvas.getAttribute("data-pending").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : []
+                        };
+
+                        let revenueChartInstance, studentChartInstance;
+
+                        // Hàm vẽ biểu đồ doanh thu
+                        function drawRevenueChart(labels, values) {
+                            if (revenueChartInstance) revenueChartInstance.destroy();
                             if (labels.length > 0 && values.length > 0) {
-                                new Chart(revenueCanvas, {
+                                revenueChartInstance = new Chart(revenueCanvas, {
                                     type: 'bar',
                                     data: {
                                         labels: labels,
@@ -250,27 +290,18 @@
                             } else {
                                 console.error("No data or mismatch for revenue chart. Labels length:", labels.length, "Values length:", values.length);
                             }
-                        } else {
-                            console.error("Revenue chart canvas not found.");
                         }
 
-                        // Biểu đồ số học sinh đăng ký
-                        const studentCanvas = document.getElementById("studentRegistrationChart");
-                        if (studentCanvas) {
-                            let labels = studentCanvas.getAttribute("data-labels") ? studentCanvas.getAttribute("data-labels").split(',').filter(l => l.trim()).map(l => l.trim()) : [];
-                            let approved = studentCanvas.getAttribute("data-approved") ? studentCanvas.getAttribute("data-approved").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : [];
-                            let pending = studentCanvas.getAttribute("data-pending") ? studentCanvas.getAttribute("data-pending").split(',').filter(v => v.trim()).map(v => Number(v.trim()) || 0) : [];
-                            console.log("Student Labels:", labels);
-                            console.log("Approved Counts:", approved);
-                            console.log("Pending Counts:", pending);
-
+                        // Hàm vẽ biểu đồ học sinh đăng ký
+                        function drawStudentChart(labels, approved, pending) {
+                            if (studentChartInstance) studentChartInstance.destroy();
                             const maxLength = Math.max(labels.length, approved.length, pending.length);
                             while (labels.length < maxLength) labels.push('');
                             while (approved.length < maxLength) approved.push(0);
                             while (pending.length < maxLength) pending.push(0);
 
                             if (labels.length > 0) {
-                                new Chart(studentCanvas, {
+                                studentChartInstance = new Chart(studentCanvas, {
                                     type: 'bar',
                                     data: {
                                         labels: labels,
@@ -293,9 +324,54 @@
                             } else {
                                 console.error("No data for student registration chart. Labels length:", labels.length);
                             }
-                        } else {
-                            console.error("Student registration chart canvas not found.");
                         }
+
+                        // Hàm lọc dữ liệu theo năm và tháng
+                        function filterData() {
+                            const year = document.getElementById('yearFilter').value;
+                            const month = document.getElementById('monthFilter').value;
+
+                            // Lọc dữ liệu doanh thu
+                            let filteredRevenueLabels = [...originalRevenueData.labels];
+                            let filteredRevenueValues = [...originalRevenueData.values];
+                            if (year || month) {
+                                filteredRevenueLabels = [];
+                                filteredRevenueValues = [];
+                                originalRevenueData.labels.forEach((label, index) => {
+                                    const [dataYear, dataMonth] = label.split('-');
+                                    if ((year && dataYear !== year) || (month && dataMonth !== month)) return;
+                                    filteredRevenueLabels.push(label);
+                                    filteredRevenueValues.push(originalRevenueData.values[index]);
+                                });
+                            }
+                            drawRevenueChart(filteredRevenueLabels, filteredRevenueValues);
+
+                            // Lọc dữ liệu học sinh đăng ký
+                            let filteredStudentLabels = [...originalStudentData.labels];
+                            let filteredApproved = [...originalStudentData.approved];
+                            let filteredPending = [...originalStudentData.pending];
+                            if (year || month) {
+                                filteredStudentLabels = [];
+                                filteredApproved = [];
+                                filteredPending = [];
+                                originalStudentData.labels.forEach((label, index) => {
+                                    const [dataYear, dataMonth] = label.split('-');
+                                    if ((year && dataYear !== year) || (month && dataMonth !== month)) return;
+                                    filteredStudentLabels.push(label);
+                                    filteredApproved.push(originalStudentData.approved[index]);
+                                    filteredPending.push(originalStudentData.pending[index]);
+                                });
+                            }
+                            drawStudentChart(filteredStudentLabels, filteredApproved, filteredPending);
+                        }
+
+                        // Vẽ biểu đồ ban đầu
+                        drawRevenueChart(originalRevenueData.labels, originalRevenueData.values);
+                        drawStudentChart(originalStudentData.labels, originalStudentData.approved, originalStudentData.pending);
+
+                        // Thêm sự kiện cho bộ lọc
+                        document.getElementById('yearFilter').addEventListener('change', filterData);
+                        document.getElementById('monthFilter').addEventListener('change', filterData);
 
                         // Biểu đồ số học sinh theo thể loại
                         const studentByTypeCanvas = document.getElementById("studentByTypeChart");
@@ -309,7 +385,7 @@
                                 new Chart(studentByTypeCanvas, {
                                     type: 'bar',
                                     data: {
-                                        labels: typeNames, // Sử dụng tên thể loại làm nhãn
+                                        labels: typeNames,
                                         datasets: [{
                                             label: 'Số học sinh',
                                             backgroundColor: 'rgba(153, 102, 255, 0.6)',
