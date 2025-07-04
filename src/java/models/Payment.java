@@ -14,22 +14,48 @@ public class Payment {
     private int idCourse;
     private String status;
     private String date;
-    private String img;
+    private String orderCode;
+    private String method;
     private Integer idSale; // có thể null
-
-    public Payment(String idStudent, int idCourse, String status, String date, String img, Integer idSale) {
+     
+    
+    public Payment(String idStudent, int idCourse, String status, String date, Integer idSale) {
         this.idStudent = idStudent;
         this.idCourse = idCourse;
         this.status = status;
         this.date = date;
-        this.img = img;
+        
         this.idSale = idSale;
     }
-
+    
+    public Payment(String idStudent, int idCourse, String status, String date, Integer idSale, String orderCode) {
+    this.idStudent = idStudent;
+    this.idCourse = idCourse;
+    this.status = status;
+    this.date = date;
+    this.idSale = idSale;
+    this.orderCode = orderCode;
+}
     // Getters & setters
 
     public int getId() {
         return id;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public void setId(int id) {
@@ -68,13 +94,7 @@ public class Payment {
         this.date = date;
     }
 
-    public String getImg() {
-        return img;
-    }
 
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     public Integer getIdSale() {
         return idSale;

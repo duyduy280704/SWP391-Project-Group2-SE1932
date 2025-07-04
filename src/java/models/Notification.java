@@ -24,6 +24,11 @@ public class Notification {
         this.message = message;
         this.date = date;
     }
+    public Notification( String idUser, String message, String date) {
+        this.idUser = idUser;
+        this.message = message;
+        this.date = date;
+    }
     
     
 

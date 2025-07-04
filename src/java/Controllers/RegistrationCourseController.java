@@ -120,14 +120,14 @@ public class RegistrationCourseController extends HttpServlet {
                     double fee = Double.parseDouble(course.getFee());
                     double finalFee = fee * (100 - salePercent) / 100;
                     String today = LocalDate.now().toString();
-
+                    String orderCode = "DKH_" + System.currentTimeMillis();
                     payDao.insert(new Payment(
                             student.getId(),
                             courseId,
                             "Chưa thanh toán",
-                            today,
-                            null,
-                            usedSale != null ? usedSale.getId() : null
+                            today,             
+                            usedSale != null ? usedSale.getId() : null,
+                            orderCode
                     ));
 
                     if (usedSale != null) {

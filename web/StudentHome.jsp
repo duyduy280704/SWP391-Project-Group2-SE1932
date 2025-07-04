@@ -259,6 +259,7 @@
             <a href="scheduleStudent" class="nav-item nav-link ">Lịch Học</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
             <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
             <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
         </div>

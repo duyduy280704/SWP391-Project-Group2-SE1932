@@ -160,6 +160,14 @@
         <servlet-name>TeacherListController</servlet-name>
         <servlet-class>Controllers.TeacherListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentPaymentController</servlet-name>
+        <servlet-class>Controllers.StudentPaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminPaymentController</servlet-name>
+        <servlet-class>Controllers.AdminPaymentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -315,5 +323,13 @@
     <servlet-mapping>
         <servlet-name>TeacherListController</servlet-name>
         <url-pattern>/TeacherList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentPaymentController</servlet-name>
+        <url-pattern>/StudentPayment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminPaymentController</servlet-name>
+        <url-pattern>/AdminPayment</url-pattern>
     </servlet-mapping>
 </web-app>

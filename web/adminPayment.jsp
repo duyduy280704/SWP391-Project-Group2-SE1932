@@ -1,11 +1,12 @@
 <%-- 
-    Document   : listStaff
-    Created on : May 31, 2025, 11:53:52 PM
+    Document   : listStudent
+    Created on : May 31, 2025, 4:17:49 PM
     Author     : Quang
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -139,6 +140,18 @@
                     font-size: 14px;
                 }
             }
+            .text-orange {
+                color: #fd7e14;
+            }
+            .btn-orange {
+                background-color: #fd7e14;
+                color: white;
+                border: none;
+            }
+            .btn-orange:hover {
+                background-color: #e96b10;
+                color: white;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -218,94 +231,92 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sale Management</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Sale Management</li>
-                        </ol>
 
-                        <!-- Search -->
-                        <form action="Sale" method="get" class="search-filter-form">
-                            <div>
-                                <input type="text" name="keyword" placeholder="Search sale code..." value="${keyword != null ? keyword : ''}" />
-                                <button type="submit">Search</button>
-                                <a href="sale">Reset</a>
-                            </div>
-                        </form>
+                        <div class="container my-5">
+                            <h2 class="text-orange mb-4">📊 Quản lý thanh toán</h2>
 
-                        <!-- Add / Edit Form -->
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <form action="Sale" method="post">
-                                    <table>
-                                        <tr>
-                                            <td>Code:</td>
-                                            <td><input type="text" name="code" value="${sale != null ? sale.code : ''}" ></td>
-                                            <td>Value (%):</td>
-                                            <td><input type="number" step="0.01" name="value" value="${sale != null ? sale.value : ''}" ></td>
-                                            <td>Quantity:</td>
-                                            <td><input type="number" name="quantity" value="${sale != null ? sale.quantity : ''}" ></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="submit" name="add" value="Add"></td>
-                                            <td><input type="submit" name="update" value="Update"></td>
-                                            <td colspan="3"><input type="hidden" name="id" value="${sale != null ? sale.id : 0}" /></td>
-                                        </tr>
-                                        <tr>
-                                            <c:if test="${not empty message}">
-                                                <td colspan="6"><p class="${success ? 'success' : 'error'}">${message}</p></td>
-                                                </c:if>
-                                        </tr>
-                                    </table>
-                                </form>
-                            </div>
-                        </div>
+                            <!-- Bộ lọc -->
+                            <form method="get" class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <input type="text" name="keyword" class="form-control" placeholder="🔍 Tên khóa học" value="${keyword}">
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="status" class="form-select">
+                                        <option value="all" ${status == 'all' ? 'selected' : ''}>Tất cả</option>
+                                        <option value="Chưa thanh toán" ${status == 'Chưa thanh toán' ? 'selected' : ''}>Chưa thanh toán</option>
+                                        <option value="Đã chuyển khoản" ${status == 'Đã chuyển khoản' ? 'selected' : ''}>Đã chuyển khoản</option>
+                                        <option value="Hoàn tất" ${status == 'Hoàn tất' ? 'selected' : ''}>Đã Hoàn Tất</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-orange w-100">Lọc</button>
+                                </div>
+                            </form>
 
-                        <!-- Sale List -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i> Sale List
-                            </div>
-                            <div class="card-body">
-                                <table class="course-list-table" border="1" cellpadding="5">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Code</th>
-                                            <th>Value</th>
-                                            <th>Created At</th>
-                                            <th>Quantity</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${data}" var="item">
+                            <!-- Bảng thanh toán -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Danh Sách Nhân Viên
+                                </div>
+                                <div class="card-body">
+                                    <table class="course-list-table">
+                                        <thead>
                                             <tr>
-                                                <td>${item.id}</td>
-                                                <td>${item.code}</td>
-                                                <td>${item.value}</td>
-                                                <td>${item.createdAt}</td>
-                                                <td>${item.quantity}</td>
-                                                <td>
-                                                    <a href="Sale?id=${item.id}&mode=1" class="btn btn-edit">✏️ Edit</a>
-                                                    <a href="Sale?id=${item.id}&mode=2" class="btn btn-delete"
-                                                       onclick="return confirm('Are you sure to delete this sale?')">🗑️ Delete</a>
-                                                </td>
+                                                <th>📌 Mã đơn</th>
+                                                <th>📚 Khóa học</th>
+                                                <th>👤 Học viên</th>
+                                                <th>📅 Ngày</th>
+                                                <th>💰 Số tiền</th>
+                                                <th>📌 Trạng thái</th>
+                                                <th>⚙️ Hành động</th>
                                             </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="p" items="${payments}">
+                                                <tr>
+                                                    <td>${p.orderCode}</td>
+                                                    <td>${p.courseName}</td>
+                                                    <td>${p.nameStudent}</td>
+                                                    <td>${p.date}</td>
+                                                    <td>${p.finalAmount} VND</td>
+                                                    <td>
+                                                        <span class="badge
+                                                              ${p.status == 'Đã thanh toán' ? 'bg-success' : 
+                                                                (p.status == 'Đã chuyển khoản' ? 'bg-info' : 'bg-warning text-dark')}">
+                                                                  ${p.status}
+                                                              </span>
+                                                        </td>
+                                                        <td>
+                                                            <form method="post" style="display:inline;">
+                                                                <input type="hidden" name="orderCode" value="${p.orderCode}">
+                                                                <input type="hidden" name="idStudent" value="${p.idStudent}">
+                                                                <input type="hidden" name="email" value="${p.email}">
+                                                                <button name="action" value="approve" class="btn btn-success btn-sm">✅ Duyệt</button>
+                                                            </form>
+                                                            <form method="post" style="display:inline;">
+                                                                <input type="hidden" name="orderCode" value="${p.orderCode}">
+                                                                <input type="hidden" name="idStudent" value="${p.idStudent}">
+                                                                <input type="hidden" name="email" value="${p.email}">
+                                                                <button name="action" value="reject" class="btn btn-danger btn-sm">❌ Trả lại</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
-                    </div>
+                    </main>
 
-                </main>
-
+                </div>
             </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-    </body>
-</html>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            <script src="js/scripts.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+            <script src="js/datatables-simple-demo.js"></script>
+        </body>
+    </html>
+

@@ -17,6 +17,7 @@ import models.PreRegistrationDAO;
  *
  * @author Dwight
  */
+
 public class ApproveController extends HttpServlet {
 
     @Override
