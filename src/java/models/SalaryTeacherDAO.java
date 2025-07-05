@@ -23,21 +23,11 @@ public class SalaryTeacherDAO extends DBContext {
         ArrayList<SalaryTeacher> data = new ArrayList<>();
         try {
             String strSQL = """
-                            WITH ClassFee AS (
-                                SELECT 
-                                    c.id AS class_id,
-                                    c.name AS class_name,
-                                    co.fee * COUNT(cs.student_id) AS tien_khoa_hoc
-                                FROM Class c
-                                JOIN Course co ON c.course_id = co.id
-                                JOIN Class_Student cs ON c.id = cs.class_id
-                                GROUP BY c.id, c.name, co.fee
-                            )
                             SELECT 
                                 s.id,
                                 t.full_name AS [Tên giáo viên],
-                                cf.class_name AS [Tên lớp],
-                                cf.tien_khoa_hoc AS [Tiền khóa học],
+                                c.name AS [Tên lớp],
+                                s.Course_fee AS [Tiền khóa học],
                                 s.commission_percent AS [% hoa hồng],
                                 s.bonus AS [Tiền thưởng],
                                 s.penalty AS [Tiền phạt],
@@ -48,8 +38,7 @@ public class SalaryTeacherDAO extends DBContext {
                             JOIN schedule sch ON s.id_class = sch.id_class AND s.id_teacher = sch.id_teacher
                             JOIN Class c ON sch.id_class = c.id
                             JOIN Teacher t ON s.id_teacher = t.id
-                            JOIN ClassFee cf ON c.id = cf.class_id
-                            GROUP BY s.id, t.full_name, cf.class_name, cf.tien_khoa_hoc, 
+                            GROUP BY s.id, t.full_name, c.name, s.Course_fee, 
                                      s.commission_percent, s.bonus, s.penalty, s.note, s.amount, s.pay_salary_date
                             ORDER BY s.pay_salary_date DESC;
                             
@@ -200,8 +189,8 @@ public class SalaryTeacherDAO extends DBContext {
             double amount = (tienKhoaHoc * (commissionPercent / 100.0)) + bonus - penalty;
 
             String sql = """
-                     INSERT INTO salary (id_teacher, id_class, commission_percent, bonus, penalty, note, pay_salary_date, amount)
-                     VALUES (?, (SELECT id FROM Class WHERE name = ?), ?, ?, ?, ?, ?, ?)
+                     INSERT INTO salary (id_teacher, id_class, commission_percent, bonus, penalty, note, pay_salary_date, amount, Course_fee)
+                     VALUES (?, (SELECT id FROM Class WHERE name = ?), ?, ?, ?, ?, ?, ?, ?)
                      """;
             stm = connection.prepareStatement(sql);
             stm.setInt(1, Integer.parseInt(s.getTeacher()));
@@ -212,6 +201,7 @@ public class SalaryTeacherDAO extends DBContext {
             stm.setString(6, note);
             stm.setDate(7, new java.sql.Date(new java.util.Date().getTime()));
             stm.setDouble(8, amount);
+            stm.setDouble(9, tienKhoaHoc);
             stm.executeUpdate();
             return new ResultMessage(true, "Thêm lương thành công!");
         } catch (SQLException | NumberFormatException e) {
@@ -404,21 +394,11 @@ public class SalaryTeacherDAO extends DBContext {
         ArrayList<SalaryTeacher> data = new ArrayList<>();
         try {
             String strSQL = """
-                            WITH ClassFee AS (
-                                SELECT 
-                                    c.id AS class_id,
-                                    c.name AS class_name,
-                                    co.fee * COUNT(cs.student_id) AS tien_khoa_hoc
-                                FROM Class c
-                                JOIN Course co ON c.course_id = co.id
-                                JOIN Class_Student cs ON c.id = cs.class_id
-                                GROUP BY c.id, c.name, co.fee
-                            )
                             SELECT 
                                 s.id,
                                 t.full_name AS [Tên giáo viên],
-                                cf.class_name AS [Tên lớp],
-                                cf.tien_khoa_hoc AS [Tiền khóa học],
+                                c.name AS [Tên lớp],
+                                s.Course_fee AS [Tiền khóa học],
                                 s.commission_percent AS [% hoa hồng],
                                 s.bonus AS [Tiền thưởng],
                                 s.penalty AS [Tiền phạt],
@@ -429,9 +409,8 @@ public class SalaryTeacherDAO extends DBContext {
                             JOIN schedule sch ON s.id_class = sch.id_class AND s.id_teacher = sch.id_teacher
                             JOIN Class c ON sch.id_class = c.id
                             JOIN Teacher t ON s.id_teacher = t.id
-                            JOIN ClassFee cf ON c.id = cf.class_id
                             WHERE t.full_name LIKE ?
-                            GROUP BY s.id, t.full_name, cf.class_name, cf.tien_khoa_hoc, 
+                            GROUP BY s.id, t.full_name, c.name, s.Course_fee, 
                                      s.commission_percent, s.bonus, s.penalty, s.note, s.amount, s.pay_salary_date
                             ORDER BY s.pay_salary_date DESC;
                             """;
@@ -464,21 +443,11 @@ public class SalaryTeacherDAO extends DBContext {
         ArrayList<SalaryTeacher> data = new ArrayList<>();
         try {
             String strSQL = """
-                            WITH ClassFee AS (
-                                SELECT 
-                                    c.id AS class_id,
-                                    c.name AS class_name,
-                                    co.fee * COUNT(cs.student_id) AS tien_khoa_hoc
-                                FROM Class c
-                                JOIN Course co ON c.course_id = co.id
-                                JOIN Class_Student cs ON c.id = cs.class_id
-                                GROUP BY c.id, c.name, co.fee
-                            )
-                            SELECT 
+                           SELECT 
                                 s.id,
                                 t.full_name AS [Tên giáo viên],
-                                cf.class_name AS [Tên lớp],
-                                cf.tien_khoa_hoc AS [Tiền khóa học],
+                                c.name AS [Tên lớp],
+                                s.Course_fee AS [Tiền khóa học],
                                 s.commission_percent AS [% hoa hồng],
                                 s.bonus AS [Tiền thưởng],
                                 s.penalty AS [Tiền phạt],
@@ -489,9 +458,8 @@ public class SalaryTeacherDAO extends DBContext {
                             JOIN schedule sch ON s.id_class = sch.id_class AND s.id_teacher = sch.id_teacher
                             JOIN Class c ON sch.id_class = c.id
                             JOIN Teacher t ON s.id_teacher = t.id
-                            JOIN ClassFee cf ON c.id = cf.class_id
-                            WHERE cf.class_name = ?
-                            GROUP BY s.id, t.full_name, cf.class_name, cf.tien_khoa_hoc, 
+                            WHERE c.name = ?
+                            GROUP BY s.id, t.full_name, c.name, s.Course_fee, 
                                      s.commission_percent, s.bonus, s.penalty, s.note, s.amount, s.pay_salary_date
                             ORDER BY s.pay_salary_date DESC;
                             """;
