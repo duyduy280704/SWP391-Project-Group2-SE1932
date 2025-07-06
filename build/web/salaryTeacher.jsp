@@ -37,25 +37,72 @@
             .course-list-table {
                 border-collapse: collapse;
                 width: 100%;
+                max-width: 1300px;
+                margin: 30px auto;
+                background-color: #ffffff;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                border-radius: 8px;
+                overflow: hidden;
             }
-            .course-list-table th, .course-list-table td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
-            }
+
             .course-list-table th {
-                background-color: #f2f2f2;
+                background-color: #2c3e50; /* Màu xanh đậm cho tiêu đề */
+                color: #ffffff;
+                padding: 15px;
+                text-align: left;
+                font-size: 16px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #34495e; /* Đường viền dưới tiêu đề */
             }
+
+            .course-list-table td {
+                padding: 15px;
+                text-align: left;
+                font-size: 15px;
+                color: #333;
+                border-bottom: 1px solid #ecf0f1; /* Đường viền nhẹ giữa các hàng */
+            }
+
+            .course-list-table tbody tr {
+                background-color: #f9fbfd; /* Màu nền nhạt cho danh sách */
+                transition: all 0.3s ease;
+            }
+
+            .course-list-table tbody tr:hover {
+                background-color: #e8eef7; /* Màu nền nhạt hơn khi hover */
+                transform: scale(1.01); /* Hiệu ứng phóng to nhẹ */
+            }
+
+            .course-list-table th:nth-child(1), /* STT */
+            .course-list-table th:nth-child(4), /* Tiền khóa học */
+            .course-list-table th:nth-child(7), /* Tổng lương */
+            .course-list-table th:nth-child(8) { /* Ngày */
+                min-width: 100px;
+            }
+
+            @media (max-width: 768px) {
+                .course-list-table {
+                    margin: 15px 0;
+                    font-size: 13px;
+                }
+                .course-list-table th, .course-list-table td {
+                    padding: 10px;
+                }
+            }
+
             form select, form input[type="text"] {
                 width: 100%;
                 padding: 6px;
                 box-sizing: border-box;
             }
+
             form input[type="submit"] {
                 padding: 6px 12px;
                 margin-right: 5px;
             }
-            
+
             .table thead th {
                 padding: 12px;
                 text-align: center;
@@ -184,8 +231,6 @@
                     left: 230px;
                 }
             }
-
-
         </style>
     </head>
     <body>
@@ -231,7 +276,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- Topbar End -->
 
@@ -269,14 +313,38 @@
 
             <!-- Main Content -->
             <div class="main-content" id="main-content">
-
-
                 <!-- Salary Content --> 
                 <div class="card-body">
+
+                    <!-- Error Message -->
+                    <c:if test="${not empty error}">
+                        <div class="error-message">${error}</div>
+                    </c:if>
+
+                    <!-- Form lọc theo tháng -->
+                    <form method="GET" action="salaryteacher" class="mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <label for="monthFilter">Lọc theo tháng:</label>
+                                <select name="month" id="monthFilter" class="form-control">
+                                    <option value="" ${empty param.month ? 'selected' : ''}>Tất cả</option>
+                                    <c:forEach var="i" begin="1" end="12">
+                                        <option value="${i}" ${param.month == i ? 'selected' : ''}>Tháng ${i}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary mt-3">Lọc</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Bảng lương -->
                     <table class="course-list-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
+                                <th>Giáo viên</th>
                                 <th>Lớp dạy</th>
                                 <th>Tiền khóa học</th>
                                 <th>% hoa hồng</th>
@@ -285,15 +353,26 @@
                                 <th>Tổng lương</th>
                                 <th>Ngày</th>
                                 <th>Ghi chú</th>
-                                
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            <c:forEach items="${data}" var="item">
+                                <tr>
+                                    <td>${item.getId()}</td>
+                                    <td>${item.getTeacher()}</td>
+                                    <td>${item.getClassName()}</td>
+                                    <td>${item.getCost()}</td>
+                                    <td>${item.getPer()}</td>
+                                    <td>${item.getBonus()}</td>
+                                    <td>${item.getPenalty()}</td>
+                                    <td>${item.getSalary()}</td>
+                                    <td>${item.getDate()}</td>
+                                    <td>${item.getNote()}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
-
 
                 <!-- Footer Start -->
                 <footer class="bg-dark text-white pt-5 pb-4">
@@ -376,6 +455,5 @@
             <!-- Template Javascript -->
             <script src="js/main.js"></script>
             <!-- Sidebar Toggle Script -->
-
     </body>
 </html>

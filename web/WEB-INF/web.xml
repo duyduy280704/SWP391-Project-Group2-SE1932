@@ -76,6 +76,10 @@
         <servlet-name>SalaryAdminController</servlet-name>
         <servlet-class>Controllers.SalaryAdminController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SalaryTeacherController</servlet-name>
+        <servlet-class>Controllers.SalaryTeacherController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -147,5 +151,9 @@
     <servlet-mapping>
         <servlet-name>SalaryAdminController</servlet-name>
         <url-pattern>/salaryadmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SalaryTeacherController</servlet-name>
+        <url-pattern>/salaryteacher</url-pattern>
     </servlet-mapping>
 </web-app>

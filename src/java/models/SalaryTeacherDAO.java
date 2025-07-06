@@ -505,4 +505,119 @@ public class SalaryTeacherDAO extends DBContext {
         }
         return data;
     }
+
+    // lấy danh sách lương của từng giáo viên
+    public ArrayList<SalaryTeacher> getSalaryListByTeacherId(int teacherId) {
+        ArrayList<SalaryTeacher> data = new ArrayList<>();
+        int stt = 1;
+        try {
+            String strSQL = """
+                            SELECT 
+                                t.full_name AS [Tên giáo viên],
+                                c.name AS [Tên lớp],
+                                s.Course_fee AS [Tiền khóa học],
+                                s.commission_percent AS [% hoa hồng],
+                                s.bonus AS [Tiền thưởng],
+                                s.penalty AS [Tiền phạt],
+                                s.note AS [Ghi chú],
+                                s.amount AS [Số tiền],
+                                s.pay_salary_date AS [Ngày]
+                            FROM salary s
+                            JOIN Class c ON s.id_class = c.id
+                            JOIN Teacher t ON s.id_teacher = t.id
+                            WHERE s.id_teacher = ?
+                            ORDER BY s.pay_salary_date DESC;
+                            """;
+            stm = connection.prepareStatement(strSQL);
+            stm.setInt(1, teacherId); // Sử dụng id_teacher
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String teacher = rs.getString(1);
+                String className = rs.getString(2);
+                String cost = rs.getString(3);
+                String per = rs.getString(4);
+                String bonus = rs.getString(5);
+                String penalty = rs.getString(6);
+                String note = rs.getString(7);
+                String salary = rs.getString(8);
+                String date = rs.getString(9);
+
+                SalaryTeacher p = new SalaryTeacher(String.valueOf(stt), teacher, className, cost, per, bonus, penalty, note, salary, date);
+                data.add(p);
+                stt++;
+            }
+        } catch (Exception e) {
+            System.out.println("getSalaryList" + e.getMessage());
+        }
+        return data;
+    }
+
+    // Lấy danh sách lương của giáo viên theo teacherId và tháng
+    public ArrayList<SalaryTeacher> getSalaryListByTeacherIdAndMonth(int teacherId, Integer month) {
+        return getSalaryList(teacherId, month);
+    }
+
+    private ArrayList<SalaryTeacher> getSalaryList(int teacherId, Integer month) {
+        ArrayList<SalaryTeacher> data = new ArrayList<>();
+        int stt = 1;
+        String strSQL = """
+                        SELECT DISTINCT 
+                            t.full_name AS [Tên giáo viên],
+                            c.name AS [Tên lớp],
+                            s.Course_fee AS [Tiền khóa học],
+                            s.commission_percent AS [% hoa hồng],
+                            s.bonus AS [Tiền thưởng],
+                            s.penalty AS [Tiền phạt],
+                            s.note AS [Ghi chú],
+                            s.amount AS [Số tiền],
+                            s.pay_salary_date AS [Ngày]
+                        FROM salary s
+                        JOIN Class c ON s.id_class = c.id
+                        JOIN Teacher t ON s.id_teacher = t.id
+                        WHERE s.id_teacher = ?
+                        """;
+        if (month != null) {
+            strSQL += " AND MONTH(s.pay_salary_date) = ?";
+        }
+        strSQL += " ORDER BY s.pay_salary_date DESC;";
+
+        try (PreparedStatement stm = connection.prepareStatement(strSQL)) {
+            stm.setInt(1, teacherId);
+            if (month != null) {
+                stm.setInt(2, month);
+            }
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String teacher = rs.getString(1);
+                String className = rs.getString(2);
+                String cost = rs.getString(3);
+                String per = rs.getString(4);
+                String bonus = rs.getString(5);
+                String penalty = rs.getString(6);
+                String note = rs.getString(7);
+                String salary = rs.getString(8);
+                String date = rs.getString(9);
+
+                SalaryTeacher p = new SalaryTeacher(String.valueOf(stt), teacher, className, cost, per, bonus, penalty, note, salary, date);
+                data.add(p);
+                stt++;
+            }
+            System.out.println("Retrieved " + data.size() + " salary records for teacherId: " + teacherId + (month != null ? ", month: " + month : ""));
+        } catch (SQLException e) {
+            System.err.println("getSalaryList: " + e.getMessage());
+            throw new RuntimeException("Error fetching salary list: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return data;
+    }
 }
