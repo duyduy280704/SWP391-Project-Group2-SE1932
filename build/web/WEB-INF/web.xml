@@ -80,6 +80,22 @@
         <servlet-name>SalaryTeacherController</servlet-name>
         <servlet-class>Controllers.SalaryTeacherController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentApplicationController</servlet-name>
+        <servlet-class>Controllers.StudentApplicationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherApplicationController</servlet-name>
+        <servlet-class>Controllers.TeacherApplicationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListApplicationStuController</servlet-name>
+        <servlet-class>Controllers.ListApplicationStuController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListApplicationTeaController</servlet-name>
+        <servlet-class>Controllers.ListApplicationTeaController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StudentController</servlet-name>
         <url-pattern>/student</url-pattern>
@@ -155,5 +171,21 @@
     <servlet-mapping>
         <servlet-name>SalaryTeacherController</servlet-name>
         <url-pattern>/salaryteacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentApplicationController</servlet-name>
+        <url-pattern>/studentapplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherApplicationController</servlet-name>
+        <url-pattern>/teacherapplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListApplicationStuController</servlet-name>
+        <url-pattern>/listapplicationStu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListApplicationTeaController</servlet-name>
+        <url-pattern>/listapplicationTea</url-pattern>
     </servlet-mapping>
 </web-app>
