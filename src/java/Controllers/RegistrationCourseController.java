@@ -27,7 +27,7 @@ public class RegistrationCourseController extends HttpServlet {
         }
 
         CourseDAO courseDAO = new CourseDAO();
-        Courses course = courseDAO.getCoursesById(id);
+        Courses course = courseDAO.getCoursesById1(id);
 
         // Xử lý mã giảm giá
         String saleCode = request.getParameter("saleCode");

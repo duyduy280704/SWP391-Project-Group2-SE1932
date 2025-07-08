@@ -168,6 +168,10 @@
         <servlet-name>AdminPaymentController</servlet-name>
         <servlet-class>Controllers.AdminPaymentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CancelCourseController</servlet-name>
+        <servlet-class>Controllers.CancelCourseController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -331,5 +335,9 @@
     <servlet-mapping>
         <servlet-name>AdminPaymentController</servlet-name>
         <url-pattern>/AdminPayment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelCourseController</servlet-name>
+        <url-pattern>/CancelCourse</url-pattern>
     </servlet-mapping>
 </web-app>

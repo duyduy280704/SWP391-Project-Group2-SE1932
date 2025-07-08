@@ -406,6 +406,7 @@ public class CourseDAO extends DBContext {
         }
         return list;
     }
+
     public ArrayList<Courses> searchCourses(String search, String type, String minPrice, String maxPrice) {
         ArrayList<Courses> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("""
@@ -437,8 +438,6 @@ public class CourseDAO extends DBContext {
             params.add(Double.parseDouble(maxPrice));
         }
 
-        
-
         try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < params.size(); i++) {
                 stm.setObject(i + 1, params.get(i));
@@ -454,7 +453,6 @@ public class CourseDAO extends DBContext {
                             rs.getString("fee"),
                             rs.getBytes("image"),
                             rs.getString("level")
-                            
                     );
                     list.add(c);
                 }
@@ -464,6 +462,35 @@ public class CourseDAO extends DBContext {
         }
 
         return list;
+    }
+
+    public Courses getCoursesById1(String id) {
+        try {
+            String strSQL = """ 
+                            SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level
+                            FROM Course c
+                            JOIN type_course t ON c.type_id = t.id
+                            WHERE c.id = ?
+                            """;
+            try (PreparedStatement stm = connection.prepareStatement(strSQL)) {
+                stm.setString(1, id);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        String name = rs.getString("name");
+                        String typeName = rs.getString("type_name"); // dùng alias
+                        String description = rs.getString("description");
+                        String fee = rs.getString("fee");
+                        byte[] image = rs.getBytes("image");
+                        String level = rs.getString("level");
+
+                        return new Courses(id, name, typeName, description, fee, image, level);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("getCoursesById: " + e.getMessage());
+        }
+        return null;
     }
 
 }

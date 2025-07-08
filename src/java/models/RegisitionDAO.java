@@ -199,5 +199,108 @@ public class RegisitionDAO extends DBContext {
     }
     return false;
 }
-    
+    public List<Regisition> getRegisteredCourses(String studentId) {
+        List<Regisition> list = new ArrayList<>();
+        String sql = "SELECT r.id AS regis_id, r.status, r.note, " +
+                     "       c.id AS course_id, c.name AS course_name " +
+                     "FROM regisition r " +
+                     "JOIN Course c ON r.course_id = c.id " +
+                     "WHERE r.student_id = ? ";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, studentId);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Regisition r = new Regisition();
+                    r.setId(rs.getInt("regis_id"));
+                    r.setCourseId(rs.getInt("course_id"));
+                    r.setCourseName(rs.getString("course_name"));
+                    r.setStatus(rs.getString("status"));
+                    r.setNote(rs.getString("note"));
+                    r.setStudentId(studentId);
+                    list.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Lấy trạng thái hiện tại từ regisition
+    public String getRegistrationStatus(int regisId) {
+        String sql = "SELECT status FROM regisition WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, regisId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) return rs.getString("status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Lấy lịch học đầu tiên của lớp mà học sinh đang theo học
+    public Timestamp getFirstSchedule(String studentId, int courseId) {
+        String sql = "SELECT MIN(s.start_time) AS first_time " +
+                     "FROM schedule s " +
+                     "JOIN Class c ON c.id = s.id_class " +
+                     "JOIN Class_Student cs ON cs.class_id = c.id " +
+                     "WHERE cs.student_id = ? AND c.course_id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, studentId);
+            stm.setInt(2, courseId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) return rs.getTimestamp("first_time");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Cập nhật trạng thái hủy đăng ký
+    public void cancelRegistration(int regisId) {
+        String sql = "UPDATE regisition SET status = N'đã hủy' WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, regisId);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Xóa học sinh ra khỏi lớp
+    public void removeFromClass(String studentId, int courseId) {
+        String sql = "DELETE cs FROM Class_Student cs " +
+                     "JOIN Class c ON cs.class_id = c.id " +
+                     "WHERE cs.student_id = ? AND c.course_id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, studentId);
+            stm.setInt(2, courseId);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public String getFirstScheduleAsString(String studentId, int courseId) {
+    String sql = "SELECT FORMAT(MIN(s.day), 'yyyy-MM-dd HH:mm') AS first_time " +
+                 "FROM schedule s " +
+                 "JOIN Class c ON c.id = s.id_class " +
+                 "JOIN Class_Student cs ON cs.class_id = c.id " +
+                 "WHERE cs.student_id = ? AND c.course_id = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, studentId);
+        stm.setInt(2, courseId);
+        try (ResultSet rs = stm.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("first_time"); // trả về chuỗi ngày giờ
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 }

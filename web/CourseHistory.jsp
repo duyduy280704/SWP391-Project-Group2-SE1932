@@ -265,106 +265,65 @@
 
         <!-- Main Content -->
         <div class="main-content" id="main-content">
-            <a href="CancelCourse" class="btn btn-warning btn-lg">
-                Các khóa học đã đăng ký &raquo;
-            </a>
-            <hr>
-            <div class="container px-4"> 
-                <form method="get" action="Course" class="mb-4">
-                    <!-- Dòng 1: Tìm kiếm -->
-                    <div class="row mb-3">
-                        <div class="col-md-6 offset-md-3">
-                            <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
-                        </div>
-                    </div>
 
-                    <!-- Dòng 2: Bộ lọc -->
-                    <div class="row g-2 justify-content-center">
-                        <div class="col-md-2">
-                            <select name="type" class="form-control">
-                                <option value="">Tất cả loại</option>
-                                <c:forEach var="t" items="${typeList}">
-                                    <option value="${t.name}" ${t.name == param.type ? 'selected' : ''}>${t.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <input name="minPrice" type="number" step="0.01" class="form-control" placeholder="Giá từ" value="${param.minPrice}">
-                        </div>
-                        <div class="col-md-2">
-                            <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
-                        </div>
-                        <div class="col-md-2 d-flex align-items-center">
-                            <div class="form-check ms-2">
-                                <input class="form-check-input" type="checkbox" name="saleOnly" id="saleOnly" ${param.saleOnly == 'on' ? 'checked' : ''}>
-                                <label class="form-check-label" for="saleOnly">Sale</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2 d-flex gap-2">
-                            <button class="btn btn-primary w-100">Lọc</button>
-                            <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <div class="container my-5">
+                <h2 class="text-primary mb-4">📚 Danh sách khóa học đã đăng ký</h2>
 
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger">${error}</div>
+                </c:if>
+                <c:if test="${not empty message}">
+                    <div class="alert alert-danger">${message}</div>
+                </c:if>
 
+                <div class="row">
+                    <c:forEach var="r" items="${list}">
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm border-0">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">${r.courseName}</h5>
 
+                                    <p class="card-text mb-1">
+                                        <strong>Trạng thái:</strong>
+                                        <span class="badge
+                                              <c:choose>
+                                                  <c:when test="${r.status eq 'chưa phân lớp'}">bg-warning</c:when>
+                                                  <c:when test="${r.status eq 'đã phân lớp'}">bg-success</c:when>
+                                                  <c:when test="${r.status eq 'đã hủy'}">bg-secondary</c:when>
+                                                  <c:otherwise>bg-light text-dark</c:otherwise>
+                                              </c:choose>">
+                                            ${r.status}
+                                        </span>
+                                    </p>
 
+                                    <p class="card-text mb-3">
+                                        <strong>Ghi chú:</strong> ${r.note}
+                                    </p>
 
-            <hr>
-
-            <!-- Display Courses -->
-            <div class="container-fluid py-4 bg-light">
-                <div class="container py-4">
-                    <div class="row justify-content-center">
-                        <c:forEach var="c" items="${courseList}">
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
-                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
-
-
-                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
-                                        <c:choose>
-                                            <c:when test="${not empty c.image}">
-                                                <img src="image?id=${c.id}" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="Course Picture"
-                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img src="images/no-image.png" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="No Image">
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </a>
-
-
-                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
-                                        <div class="text-muted small mb-1">
-                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
-                                        </div>
-                                        <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
-                                            <h6 class="mb-0">${c.name}</h6>
-                                        </a>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
-                                            ${c.description}
-                                        </p>
-                                    </div>
-
-
-                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
-                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                    </div>
+                                    <c:if test="${r.status ne 'đã hủy'}">
+                                        <form action="CancelCourse" method="post" onsubmit="return confirm('Bạn có chắc muốn hủy đăng ký không?');">
+                                            <input type="hidden" name="regisId" value="${r.id}" />
+                                            <input type="hidden" name="studentId" value="${sessionScope.account.id}" />
+                                            <input type="hidden" name="courseId" value="${r.courseId}" />
+                                            <button type="submit" class="btn btn-outline-danger w-100">Hủy đăng ký</button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${r.status eq 'đã hủy'}">
+                                        <span class="text-muted">Bạn đã hủy đăng ký khóa học này.</span>
+                                    </c:if>
                                 </div>
                             </div>
-                        </c:forEach>
-                    </div>
+                        </div>
+                    </c:forEach>
+
+                    <c:if test="${empty list}">
+                        <div class="col-12 text-center text-muted">
+                            <p>Bạn chưa đăng ký khóa học nào.</p>
+                        </div>
+                    </c:if>
                 </div>
             </div>
 
-
-            <!-- Courses End -->
 
 
 
@@ -450,25 +409,25 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('main-content');
-                const toggleBtn = document.querySelector('.toggle-btn');
+                                            function toggleSidebar() {
+                                                const sidebar = document.getElementById('sidebar');
+                                                const mainContent = document.getElementById('main-content');
+                                                const toggleBtn = document.querySelector('.toggle-btn');
 
-                sidebar.classList.toggle('hidden');
-                mainContent.classList.toggle('full');
-                toggleBtn.classList.toggle('hidden');
+                                                sidebar.classList.toggle('hidden');
+                                                mainContent.classList.toggle('full');
+                                                toggleBtn.classList.toggle('hidden');
 
-                // Change icon based on sidebar state
-                const icon = toggleBtn.querySelector('i');
-                if (sidebar.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
-            }
+                                                // Change icon based on sidebar state
+                                                const icon = toggleBtn.querySelector('i');
+                                                if (sidebar.classList.contains('hidden')) {
+                                                    icon.classList.remove('fa-times');
+                                                    icon.classList.add('fa-bars');
+                                                } else {
+                                                    icon.classList.remove('fa-bars');
+                                                    icon.classList.add('fa-times');
+                                                }
+                                            }
         </script>
     </body>
 </html>
