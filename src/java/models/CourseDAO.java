@@ -467,7 +467,7 @@ public class CourseDAO extends DBContext {
     public Courses getCoursesById1(String id) {
         try {
             String strSQL = """ 
-                            SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level
+                            SELECT c.id, c.name, t.name AS type_name, c.description, c.fee, c.image, c.level, c.number_of_sessions 
                             FROM Course c
                             JOIN type_course t ON c.type_id = t.id
                             WHERE c.id = ?
@@ -482,8 +482,9 @@ public class CourseDAO extends DBContext {
                         String fee = rs.getString("fee");
                         byte[] image = rs.getBytes("image");
                         String level = rs.getString("level");
+                        String number = rs.getString("number_of_sessions");
 
-                        return new Courses(id, name, typeName, description, fee, image, level);
+                        return new Courses(id, name, typeName, description, fee, image, level, number);
                     }
                 }
             }

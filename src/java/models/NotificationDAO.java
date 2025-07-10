@@ -279,6 +279,7 @@ public class NotificationDAO extends DBContext {
         }
         return list;
     }
+
     public void insert(Notification n) {
         String sql = "INSERT INTO Notification (id_student, messenge, date) VALUES (?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -290,5 +291,115 @@ public class NotificationDAO extends DBContext {
             System.out.println("insert Notification: " + e.getMessage());
         }
     }
-    
+
+    public List<Students> getStudentsWithUnpaidPayments() {
+        List<Students> list = new ArrayList<>();
+        String sql = """
+        SELECT DISTINCT s.*
+        FROM Student s
+        JOIN Payment p ON s.id = p.id_student
+        WHERE p.status = N'chưa thanh toán'
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Students s = new Students();
+                s.setId(rs.getString("id"));
+                s.setName(rs.getString("full_name"));
+                s.setEmail(rs.getString("email"));
+                list.add(s);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudentsWithUnpaidPayments: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<PreRegistration> getApprovedRegistrations() {
+        List<PreRegistration> list = new ArrayList<>();
+        String sql = "SELECT * FROM PreRegistrations WHERE status = N'Đã duyệt'";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                PreRegistration p = new PreRegistration();
+                p.setId(rs.getInt("id"));
+                p.setFull_name(rs.getString("full_name"));
+                p.setEmail(rs.getString("email"));
+                list.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getApprovedRegistrations: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public void insertNotificationByEmail(String email, String content) {
+        String sql = "INSERT INTO Notification (receiver_email, content, date) VALUES (?, ?, GETDATE())";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, content);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insertNotificationByEmail: " + e.getMessage());
+        }
+    }
+
+    public void updateStatus(int id, String newStatus) {
+        String sql = "UPDATE PreRegistrations SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateStatus: " + e.getMessage());
+        }
+    }
+
+    public List<PreRegistration> getApprovedRegistrationsDetailed() {
+        List<PreRegistration> list = new ArrayList<>();
+        String sql = """
+        SELECT pr.*, c.name AS course_name
+        FROM PreRegistrations pr
+        JOIN Course c ON pr.course_id = c.id
+        WHERE pr.status = N'Đã duyệt'
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                PreRegistration p = new PreRegistration();
+                p.setId(rs.getInt("id"));
+                p.setFull_name(rs.getString("full_name"));
+                p.setEmail(rs.getString("email"));
+                p.setPhone(rs.getString("phone"));
+                p.setCourseName(rs.getString("course_name")); // phải có trong bean
+                list.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getApprovedRegistrationsDetailed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Students> getStudentsWithUnpaidPaymentsDetailed() {
+        List<Students> list = new ArrayList<>();
+        String sql = """
+        SELECT s.id, s.full_name, s.email, s.phone, c.name AS course_name
+        FROM Student s
+        JOIN Payment p ON s.id = p.id_student
+        JOIN Course c ON c.id = p.id_course
+        WHERE p.status = N'chưa thanh toán'
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Students s = new Students();
+                s.setId(rs.getString("id"));
+                s.setName(rs.getString("full_name"));
+                s.setEmail(rs.getString("email"));
+                s.setPhone(rs.getString("phone"));
+                s.setCourseName(rs.getString("course_name")); // thêm field trong bean
+                list.add(s);
+            }
+        } catch (Exception e) {
+            System.out.println("getStudentsWithUnpaidPaymentsDetailed: " + e.getMessage());
+        }
+        return list;
+    }
+
 }

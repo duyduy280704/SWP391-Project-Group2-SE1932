@@ -170,6 +170,36 @@
                                 Danh Sách Đăng ký khóa học
                             </div>
                             <div class="card-body">
+                                <form method="get" class="row mb-3">
+                                    <div class="col-md-4">
+                                        <input type="text" name="keyword" class="form-control" placeholder="🔍 Tìm theo tên..."
+                                               value="${keyword != null ? keyword : ''}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select name="course" class="form-select">
+                                            <option value="">-- Lọc theo khóa học --</option>
+                                            <c:forEach var="course" items="${courses}">
+                                                <option value="${course.name}" ${course.name == selectedCourse ? 'selected' : ''}>${course.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select name="status" class="form-select">
+                                            <option value="">-- Lọc theo trạng thái --</option>
+                                            <option value="Đang chờ" ${selectedStatus == 'Đang chờ' ? 'selected' : ''}>Đang chờ</option>
+                                            <option value="Chưa xếp được lớp" ${selectedStatus == 'Chưa xếp được lớp' ? 'selected' : ''}>Chưa xếp được lớp</option>
+                                            <option value="Đã duyệt" ${selectedStatus == 'Đã duyệt' ? 'selected' : ''}>Đã duyệt</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                    </div>
+                                </form>
+                                <c:if test="${not empty sessionScope.message}">
+                                    <div class="alert alert-info">${sessionScope.message}</div>
+                                    <c:remove var="message" scope="session"/>
+                                </c:if>
+
                                 <table class="course-list-table">
                                     <thead>
                                         <tr>
@@ -235,7 +265,7 @@
                             <form method="post" action="Approve">
                                 <input type="hidden" name="id" id="rejectId">
                                 <input type="hidden" name="action" value="reject">
-                                
+
                                 <button type="submit" class="btn btn-danger">Đồng Ý</button>
                                 <button type="button" onclick="closeModal('rejectModal')" class="btn btn-secondary">Hủy</button>
                             </form>

@@ -9,8 +9,10 @@ package models;
  * @author Quang
  */
 public class Students {
+
     String id, name, email, password, birthdate, gender, address, role, phone;
-    
+    private String courseName;
+
     byte[] pic;
 
     public Students() {
@@ -27,7 +29,7 @@ public class Students {
         this.address = address;
         this.role = role;
         this.phone = phone;
-        
+
     }
 
     public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role) {
@@ -40,8 +42,6 @@ public class Students {
         this.address = address;
         this.role = role;
     }
-    
-    
 
     public String getId() {
         return id;
@@ -98,8 +98,6 @@ public class Students {
     public void setPic(byte[] pic) {
         this.pic = pic;
     }
-    
-    
 
     public String getAddress() {
         return address;
@@ -124,6 +122,12 @@ public class Students {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 }

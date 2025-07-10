@@ -19,7 +19,7 @@ public class PreRegistrationDAO extends DBContext {
 
     public boolean insertPreRegistration(PreRegistration preReg) {
         String sql = "INSERT INTO PreRegistrations (full_name, email, phone, birth_date, gender, address, course_id, status, note, register_date, id_sale) "
-           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, preReg.getFull_name());
             ps.setString(2, preReg.getEmail());
@@ -143,19 +143,112 @@ public class PreRegistrationDAO extends DBContext {
             System.out.println("updateNote: " + e.getMessage());
         }
     }
-    public boolean isEmailOrPhoneExists(String email, String phone) {
-    String sql = "SELECT 1 FROM PreRegistrations WHERE email = ? OR phone = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, email);
-        ps.setString(2, phone);
-        try (ResultSet rs = ps.executeQuery()) {
-            return rs.next(); // chỉ cần có 1 dòng trùng là trả về true
-        }
-    } catch (Exception e) {
-        System.out.println("isEmailOrPhoneExists: " + e.getMessage());
-    }
-    return false;
-}
 
+    public boolean isEmailOrPhoneExists(String email, String phone) {
+        String sql = "SELECT 1 FROM PreRegistrations WHERE email = ? OR phone = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, phone);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // chỉ cần có 1 dòng trùng là trả về true
+            }
+        } catch (Exception e) {
+            System.out.println("isEmailOrPhoneExists: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public List<PreRegistration> filterPreRegistrations(String keyword, String courseName, String status) {
+        List<PreRegistration> list = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            pr.id, 
+            pr.full_name, 
+            pr.email, 
+            pr.phone, 
+            pr.birth_date, 
+            pr.gender, 
+            pr.address, 
+            c.name AS course_name, 
+            pr.status, 
+            pr.note 
+        FROM PreRegistrations pr 
+        JOIN Course c ON pr.course_id = c.id 
+        WHERE 
+            (? IS NULL OR pr.full_name LIKE ?) 
+            AND (? IS NULL OR c.name = ?) 
+            AND (? IS NULL OR pr.status = ?)
+        ORDER BY 
+            CASE 
+                WHEN LOWER(LTRIM(RTRIM(pr.status))) = N'đang chờ' THEN 0 
+                WHEN LOWER(LTRIM(RTRIM(pr.status))) = N'chưa xếp được lớp' THEN 1 
+                ELSE 2 
+            END, 
+            pr.status;
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // full_name filter
+            ps.setString(1, isEmpty(keyword) ? null : keyword);
+            ps.setString(2, isEmpty(keyword) ? null : "%" + keyword + "%");
+
+            // course_name filter
+            ps.setString(3, isEmpty(courseName) ? null : courseName);
+            ps.setString(4, isEmpty(courseName) ? null : courseName);
+
+            // status filter
+            ps.setString(5, isEmpty(status) ? null : status);
+            ps.setString(6, isEmpty(status) ? null : status);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PreRegistration pr = new PreRegistration();
+                    pr.setId(rs.getInt("id"));
+                    pr.setFull_name(rs.getString("full_name"));
+                    pr.setEmail(rs.getString("email"));
+                    pr.setPhone(rs.getString("phone"));
+                    pr.setBirth_date(rs.getString("birth_date"));
+                    pr.setGender(rs.getString("gender"));
+                    pr.setAddress(rs.getString("address"));
+                    pr.setCourseName(rs.getString("course_name"));
+                    pr.setStatus(rs.getString("status"));
+                    pr.setNote(rs.getString("note"));
+                    list.add(pr);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("filterPreRegistrations: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+    private boolean isEmpty(String s) {
+        return s == null || s.trim().isEmpty();
+    }
+
+    public PreRegistration getPreRegistrationById(int id) {
+        String sql = "SELECT * FROM PreRegistrations WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    PreRegistration p = new PreRegistration();
+                    p.setId(rs.getInt("id"));
+                    p.setFull_name(rs.getString("full_name"));
+                    p.setEmail(rs.getString("email"));
+                    p.setPhone(rs.getString("phone"));
+                    p.setBirth_date(rs.getString("birth_date"));
+                    p.setGender(rs.getString("gender"));
+                    p.setAddress(rs.getString("address"));
+                    return p;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("getPreRegistrationById: " + e.getMessage());
+        }
+        return null;
+    }
 
 }

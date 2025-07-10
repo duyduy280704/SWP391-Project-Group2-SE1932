@@ -11,8 +11,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import models.NotificationDAO;
+import models.PreRegistration;
+import models.Students;
 
 /**
  *
@@ -24,6 +27,8 @@ public class SendNotificationController extends HttpServlet {
             throws ServletException, IOException {
         NotificationDAO dao = new NotificationDAO();
         request.setAttribute("classList", dao.getAllClasses());
+        request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
+        request.setAttribute("preList", dao.getApprovedRegistrations());
         request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
     }
 
@@ -46,6 +51,7 @@ public class SendNotificationController extends HttpServlet {
                 if (email != null && !email.isEmpty()) {
                     SendMail.send(email, subject, message);
                 }
+                request.setAttribute("message", "📬 Đã gửi thông báo cá nhân tới ID: " + receiverId);
             }
 
             case "role" -> {
@@ -56,6 +62,7 @@ public class SendNotificationController extends HttpServlet {
                         SendMail.send(entry.getValue(), subject, message);
                     }
                 }
+                request.setAttribute("message", "📬 Đã gửi thông báo đến tất cả " + roleAll);
             }
 
             case "class" -> {
@@ -67,10 +74,51 @@ public class SendNotificationController extends HttpServlet {
                             SendMail.send(entry.getValue(), subject, message);
                         }
                     }
+                    request.setAttribute("message", "📬 Đã gửi thông báo đến học viên trong các lớp đã chọn.");
                 }
-            }
-        }
 
+            }
+
+            case "unpaid" -> {
+                List<Students> unpaidList = dao.getStudentsWithUnpaidPaymentsDetailed();
+                for (Students s : unpaidList) {
+                    dao.insertNotificationForOne("student", String.valueOf(s.getId()),
+                            "Bạn chưa hoàn tất học phí cho khóa học: " + s.getCourseName());
+
+                    SendMail.send(s.getEmail(),
+                            "Nhắc nhở thanh toán học phí",
+                            "Xin chào " + s.getName()+ ",\n\n"
+                            + message +": " + s.getCourseName() + ". "
+                            + "Vui lòng thanh toán sớm để không ảnh hưởng đến việc học.\n\n"
+                            + "Trân trọng.");
+                }
+                request.setAttribute("message", "💰 Đã gửi thông báo đến " + unpaidList.size() + " sinh viên chưa đóng tiền.");
+            }
+
+            case "preapproved" -> {
+                List<PreRegistration> preList = dao.getApprovedRegistrationsDetailed();
+                for (PreRegistration p : preList) {
+                    dao.insertNotificationByEmail(p.getEmail(),
+                            "Chào mừng bạn đã được duyệt tham gia khóa học: " + p.getCourseName());
+
+                    SendMail.send(p.getEmail(),
+                            "Thông báo xác nhận đăng ký khóa học",
+                            "Xin chào " + p.getFull_name() + ",\n\n"
+                            + "Bạn đã được duyệt tham gia khóa học: " + p.getCourseName() + ".\n"
+                            + "Thông tin đăng nhập hệ thống:\n"
+                            + "- Tài Khoản: " + p.getPhone() + "\n\n"
+                            + "- Mật khẩu: " + p.getPhone() + "\n\n"
+                            + "Vui lòng đăng nhập và hoàn tất các bước tiếp theo.\n\n"
+                            + "Trân trọng.");
+
+                    dao.updateStatus(p.getId(), "Đã active");
+                }
+                request.setAttribute("message", "✅ Đã gửi tài khoản và thông báo đến " + preList.size() + " học viên đã duyệt.");
+            }
+
+        }
+        request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
+        request.setAttribute("preList", dao.getApprovedRegistrations());
         request.setAttribute("success", "\u2714\uFE0F Gửi thông báo thành công!");
         request.setAttribute("classList", dao.getAllClasses());
         request.getRequestDispatcher("SendNotification.jsp").forward(request, response);

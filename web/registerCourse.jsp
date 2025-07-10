@@ -290,6 +290,7 @@
                         <h2 class="text-dark font-weight-bold">${course.name}</h2>
                         <p class="text-muted mb-2"><strong>Loại:</strong> ${course.type}</p>
                         <p class="text-muted mb-2"><strong>Cấp độ:</strong> ${course.level}</p>
+                        <p class="text-muted mb-2"><strong>Số lượng buổi học:</strong> ${course.number}</p>
                         <hr>
 
                         <!-- ✅ Học phí + áp dụng mã giảm giá -->

@@ -110,8 +110,12 @@
                                 <option value="individual">👤 Gửi cá nhân</option>
                                 <option value="role">👥 Gửi theo vai trò</option>
                                 <option value="class">🏫 Gửi theo lớp</option>
+                                <option value="unpaid">💰 Gửi cho SV chưa đóng tiền</option>
+                                <option value="preapproved">✅ Gửi đến đăng ký đã duyệt (kích hoạt)</option>
                             </select>
-
+                            <c:if test="${not empty message}">
+                                <div class="alert alert-success">${message}</div>
+                            </c:if>
                             <!-- Nếu chọn gửi cá nhân -->
                             <div id="individualFields" style="display: none; margin-top: 10px;">
                                 <label>Chọn vai trò:</label>
@@ -143,6 +147,36 @@
                                     </label><br>
                                 </c:forEach>
                             </div>
+                            <!-- Nếu chọn gửi sinh viên chưa đóng tiền -->
+                            <div id="unpaidFields" style="display: none; margin-top: 10px;">
+                                <p>📌 Danh sách sinh viên chưa thanh toán:</p>
+                                <c:if test="${empty unpaidList}">
+                                    <p class="text-danger">Không có sinh viên nào cần gửi thông báo.</p>
+                                </c:if>
+                                <c:if test="${not empty unpaidList}">
+                                    <ul>
+                                        <c:forEach var="s" items="${unpaidList}">
+                                            <li>${s.name} (${s.email})</li>
+                                            </c:forEach>
+                                    </ul>
+                                </c:if>
+                            </div>
+
+                            <!-- Nếu chọn gửi tài khoản cho sinh viên --> 
+                            <div id="preapprovedFields" style="display: none; margin-top: 10px;">
+                                <p>📌 Danh sách học viên đã duyệt (sẽ được kích hoạt):</p>
+                                <c:if test="${empty preList}">
+                                    <p class="text-danger">Không có học viên nào ở trạng thái 'Đã duyệt'.</p>
+                                </c:if>
+                                <c:if test="${not empty preList}">
+                                    <ul>
+                                        <c:forEach var="p" items="${preList}">
+                                            <li>${p.full_name} (${p.email})</li>
+                                            </c:forEach>
+                                    </ul>
+                                </c:if>
+                            </div>
+
 
                             <!-- Nội dung thông báo -->
                             <label style="margin-top: 10px;">Nội dung thông báo:</label>
@@ -169,6 +203,8 @@
                                     document.getElementById("individualFields").style.display = (type === "individual") ? "block" : "none";
                                     document.getElementById("roleFields").style.display = (type === "role") ? "block" : "none";
                                     document.getElementById("classFields").style.display = (type === "class") ? "block" : "none";
+                                    document.getElementById("unpaidFields").style.display = (type === "unpaid") ? "block" : "none";
+                                    document.getElementById("preapprovedFields").style.display = (type === "preapproved") ? "block" : "none";
                                 }
                 </script>
             </div>

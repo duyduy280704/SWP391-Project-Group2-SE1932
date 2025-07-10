@@ -8,6 +8,7 @@ import dal.DBContext;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -46,35 +47,37 @@ public class StudentDAO extends DBContext {
         }
         return data;
     }
+
     //Huyen
     public Students checkLogin(String phone, String password) {
-        try{
-           String strSQL="select id,password,full_name,email,birth_date,gender,picture,address,Role_id,phone"
-                   + " from Student"
-                   + " where phone =? and password=?";
-                   stm=connection.prepareStatement(strSQL);
-                   stm.setString(1, phone);
-                   stm.setString(2, password);
-                   rs=stm.executeQuery();
-            while(rs.next()){
-                   String id=String.valueOf(rs.getString("id"));
-                   String pwd = rs.getString("password");
+        try {
+            String strSQL = "select id,password,full_name,email,birth_date,gender,picture,address,Role_id,phone"
+                    + " from Student"
+                    + " where phone =? and password=?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            stm.setString(2, password);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getString("id"));
+                String pwd = rs.getString("password");
                 String fullName = rs.getString("full_name");
                 String emailFromDB = rs.getString("email");
-                String birthDate = rs.getString("birth_date"); 
+                String birthDate = rs.getString("birth_date");
                 String gender = rs.getString("gender");
                 String address = rs.getString("address");
-                String roleId =rs.getString("Role_id");
-                String phones=rs.getString("phone");
-                 byte[] pic=rs.getBytes("picture");
-                Students student = new Students(id, fullName, emailFromDB, pwd, birthDate, gender, pic, address, roleId,phones);
+                String roleId = rs.getString("Role_id");
+                String phones = rs.getString("phone");
+                byte[] pic = rs.getBytes("picture");
+                Students student = new Students(id, fullName, emailFromDB, pwd, birthDate, gender, pic, address, roleId, phones);
                 return student;
-            }                   
-        }catch(Exception e){
-            System.out.println("checklogin" +e.getMessage());
+            }
+        } catch (Exception e) {
+            System.out.println("checklogin" + e.getMessage());
         }
-       return null; 
+        return null;
     }
+
     //Quang
     public Students getStudentById(String id) {
         try {
@@ -358,6 +361,7 @@ public class StudentDAO extends DBContext {
         }
     }
 // lấy ảnh của học sinh theo id
+
     public byte[] getPicById(String studentId) throws SQLException {
         if (studentId == null || studentId.isEmpty()) {
             return null;
@@ -378,7 +382,8 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
-   // tìm kiếm học sinh theo tên 
+    // tìm kiếm học sinh theo tên 
+
     public ArrayList<Students> getStudentByName(String name1) {
         ArrayList<Students> data = new ArrayList<>();
         try {
@@ -407,6 +412,7 @@ public class StudentDAO extends DBContext {
         }
         return data;
     }
+
     // tìm kiếm học sinh theo giới tính
     public ArrayList<Students> getStudentsByGender(String gender) {
         ArrayList<Students> data = new ArrayList<>();
@@ -435,4 +441,42 @@ public class StudentDAO extends DBContext {
         }
         return data;
     }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT 1 FROM Student WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // true nếu có tồn tại
+            }
+        } catch (Exception e) {
+            System.out.println("existsByEmail: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean insert(Students student) {
+        String sql = "INSERT INTO Student (password, full_name, email, birth_date, gender, address, Role_id, phone) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, student.getPassword());
+            ps.setString(2, student.getName());
+            ps.setString(3, student.getEmail());
+            ps.setString(4, student.getBirthdate());
+            ps.setString(5, student.getGender());
+            ps.setString(6, student.getAddress());
+            ps.setString(7, student.getRole());
+            ps.setString(8, student.getPhone());
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0; // true nếu có ít nhất 1 dòng được chèn
+        } catch (Exception e) {
+            System.out.println("insert Student: " + e.getMessage());
+            return false; // lỗi thì trả về false
+        }
+    }
+    
+    
+
 }
