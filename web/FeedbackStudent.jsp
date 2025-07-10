@@ -422,43 +422,69 @@
 
             <!-- Main Content -->
             <div class="main-content" id="main-content">
-        <h2 class="text-center mb-4">Phản hồi về lớp học bạn giảng dạy</h2>
+            <div class="container">
+                <h2 class="text-center mb-4">Đánh giá học sinh trong lớp</h2>
 
-        <c:if test="${empty feedbackList}">
-            <div class="alert alert-warning text-center">Không có phản hồi nào.</div>
-        </c:if>
-        <form method="get" action="feedback" class="search-container">
-            <input type="hidden" name="mode" value="viewAll" />
-            <input type="text" name="keyword" class="search-input" placeholder="Tìm kiếm..." value="${param.keyword}">
-            <button type="submit" class="search-button">Tìm kiếm</button>
-        </form>
+                <!-- Form tìm kiếm -->
+                <form method="get" action="feedbackByTeacher" class="search-container">
+                    <input type="hidden" name="mode" value="students">
+                    <input type="hidden" name="classId" value="${classId}">
+                    <input type="text" name="keyword" class="search-input" placeholder="Tìm kiếm..."
+                           value="${param.keyword}">
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i> Tìm kiếm</button>
+                </form>
 
+                <c:if test="${not empty param.keyword}">
+                    <div class="alert alert-info text-center">
+                        Kết quả tìm kiếm cho từ khóa: <strong>"${param.keyword}"</strong>
+                    </div>
+                </c:if>
 
-        <c:if test="${not empty feedbackList}">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên học sinh</th>
-                        <th>Lớp</th>
-                        <th>Thời gian</th>
-                        <th>Nội dung phản hồi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="f" items="${feedbackList}" varStatus="loop">
-                        <tr>
-                            <td>${loop.index + 1}</td>
-                            <td>${f.studentName}</td>
-                            <td>${f.className}</td>
-                            <td>${f.feedbackDate}</td>
-                            <td>${f.feedbackText}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-    </div>
+                <c:if test="${not empty students}">
+                    <!-- Form Gửi đánh giá toàn lớp -->
+                    <form action="feedbackByTeacher" method="post">
+                        <input type="hidden" name="classId" value="${classId}" />
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">STT</th>
+                                    <th>Họ tên</th>
+                                    <th style="width: 40%;">Đánh giá</th>
+                                    <th style="width: 160px;">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="s" items="${students}" varStatus="loop">
+                                    <tr>
+                                        <td>${loop.index + 1}</td>
+                                        <td>${s.name}</td>
+
+                                        <td>
+                                            <textarea name="feedbacks" class="form-control" rows="1" placeholder="Nhập đánh giá...">${feedbackMap[s.id]}</textarea>
+                                            <input type="hidden" name="studentIds" value="${s.id}" />
+                                        </td>
+
+                                        <td>
+                                            <form action="feedbackByTeacher" method="post" class="d-flex justify-content-center">
+                                                <input type="hidden" name="classId" value="${classId}" />
+                                                <input type="hidden" name="studentId" value="${s.id}" />
+                                                <input type="hidden" name="feedback" />
+                                                <button type="submit" class="btn btn-warning btn-sm"
+                                                        onclick="this.form.feedback.value = this.closest('tr').querySelector('textarea[name=feedbacks]').value;"> Sửa</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-success px-4">Gửi đánh giá tất cả học sinh</button>
+                        </div>
+                    </form>
+                </c:if>
+            </div>
+        </div>
 
 
             <!-- Back to Top -->

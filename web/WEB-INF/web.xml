@@ -140,6 +140,18 @@
         <servlet-name>NoticeToStaffController</servlet-name>
         <servlet-class>Controllers.NoticeToStaffController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateClassController</servlet-name>
+        <servlet-class>Controllers.CreateClassController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackByTeacherController</servlet-name>
+        <servlet-class>Controllers.FeedbackByTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassTransferController</servlet-name>
+        <servlet-class>Controllers.ClassTransferController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -275,5 +287,17 @@
     <servlet-mapping>
         <servlet-name>NoticeToStaffController</servlet-name>
         <url-pattern>/noticetostaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateClassController</servlet-name>
+        <url-pattern>/createClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackByTeacherController</servlet-name>
+        <url-pattern>/feedbackByTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassTransferController</servlet-name>
+        <url-pattern>/classTransfer</url-pattern>
     </servlet-mapping>
 </web-app>

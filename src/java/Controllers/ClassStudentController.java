@@ -69,7 +69,7 @@ public class ClassStudentController extends HttpServlet {
             // Xem danh sách lớp
             if (mode == null || mode.equals("teacherView")) {
                 List<Courses> teacherClasses = (keyword != null && !keyword.isEmpty())
-                        ? dao.searchTeacherClassesByName(teacher.getId(), keyword)
+                        ? dao.search(teacher.getId(), keyword)
                         : dao.getClassesByTeacher(teacher.getId());
 
                 request.setAttribute("keyword", keyword);

@@ -422,44 +422,54 @@
 
             <!-- Main Content -->
             <div class="main-content" id="main-content">
-        <h2 class="text-center mb-4">Phản hồi về lớp học bạn giảng dạy</h2>
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Danh sách lớp bạn đang giảng dạy</h2>
 
-        <c:if test="${empty feedbackList}">
-            <div class="alert alert-warning text-center">Không có phản hồi nào.</div>
-        </c:if>
-        <form method="get" action="feedback" class="search-container">
-            <input type="hidden" name="mode" value="viewAll" />
-            <input type="text" name="keyword" class="search-input" placeholder="Tìm kiếm..." value="${param.keyword}">
-            <button type="submit" class="search-button">Tìm kiếm</button>
-        </form>
+                <form method="get" action="feedbackByTeacher" class="search-container">
+                    <input type="hidden" name="mode" value="teacherView"/>
+                    <input type="text" name="keyword" class="search-input" placeholder="Tìm tên lớp học..."
+                           value="${keyword}">
+
+                    <button type="submit" class="search-button">Tìm kiếm</button>
+                </form>
+                <c:if test="${not empty keyword}">
+                    <div class="alert alert-info mt-3 text-center">
+                        Đang hiển thị kết quả tìm kiếm cho: <strong>"${keyword}"</strong>
+                    </div>
+                </c:if>
+
+                <c:if test="${not empty classes}">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên lớp</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="c" items="${classes}" varStatus="loop">
+                                <tr>
+                                    <td>${loop.index + 1}</td>
+                                    <td>${c.name_class}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                           href="feedbackByTeacher?mode=students&classId=${c.id_class}">Đánh giá học sinh</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:if>
+
+                <c:if test="${empty classes}">
+                    <p class="text-danger mt-4">Không tìm thấy lớp nào phù hợp.</p>
+                </c:if>
 
 
-        <c:if test="${not empty feedbackList}">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên học sinh</th>
-                        <th>Lớp</th>
-                        <th>Thời gian</th>
-                        <th>Nội dung phản hồi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="f" items="${feedbackList}" varStatus="loop">
-                        <tr>
-                            <td>${loop.index + 1}</td>
-                            <td>${f.studentName}</td>
-                            <td>${f.className}</td>
-                            <td>${f.feedbackDate}</td>
-                            <td>${f.feedbackText}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-    </div>
-
+            </div>
+        </div>
+   
 
             <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>

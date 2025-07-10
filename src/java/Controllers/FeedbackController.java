@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.*;
-// Thủy _ sử lí guier feedback, xem
+// Thủy _ sử lí gửi feedback, xem
 public class FeedbackController extends HttpServlet {
 
     @Override

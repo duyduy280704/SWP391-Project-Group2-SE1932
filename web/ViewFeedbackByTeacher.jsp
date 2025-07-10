@@ -1,28 +1,25 @@
-//Thủy_ viewfeedback  staff xem
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
-        <title>Danh sách phản hồi từ học sinh</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <title>Đánh giá học sinh trong lớp</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin@7.0.5/dist/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
 
+        <!-- Top nav -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand ps-3" href="#">BIG DREAM</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
-        </nav>
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand ps-3" href="staffhome">BIG DREAM</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+                    <a class="nav-link" href="#"><i class="fas fa-bell"></i> Thông báo</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
@@ -36,16 +33,19 @@
                 </li>
             </ul>
         </nav>
+
+        <!-- Side nav -->
         <div id="layoutSidenav">
-            <!-- Sidebar đầy đủ -->
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Staff</div>
-                            <a class="nav-link" href="staffhome"><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Trang Chủ</a>
+                            <a class="nav-link" href="staffhome">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Trang Chủ
+                            </a>
                             <a class="nav-link" href="#"><div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>Biểu Đồ</a>
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý người dùng
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -57,7 +57,8 @@
                                     <a class="nav-link" href="staff">Nhân Viên</a>
                                 </nav>
                             </div>
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                                 Quản lý lớp học
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -82,7 +83,6 @@
                                 </nav>
                             </div>
                             <a href="classTransfer" class="nav-link">Gửi đơn chuyển lớp  </a>
-
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -91,63 +91,50 @@
                     </div>
                 </nav>
             </div>
+
+            <!-- MAIN CONTENT -->
             <div id="layoutSidenav_content">
-                <main class="container-fluid px-4 mt-4">
-                    <h2 class="mb-4">Danh sách phản hồi từ học sinh</h2>
-
-                    <c:if test="${empty feedbackList}">
-                        <div class="alert alert-info">Không có phản hồi nào.</div>
-                    </c:if>
-
-                    <c:if test="${not empty feedbackList}">
-                        <div class="card mb-4">
-                            <form class="row mb-3" method="get" action="feedback">
-                                <input type="hidden" name="mode" value="viewAll"/>
-                                <div class="col-md-4">
-                                    <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm ..." value="${param.keyword}">
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search me-1"></i> Tìm kiếm</button>
-                                </div>
-                            </form>
-
-                            <div class="card-header"><i class="fas fa-comments me-1"></i>Danh sách phản hồi</div>
-                            <div class="card-body">
-                                <table class="table table-bordered table-hover">
-                                    <thead class="table-light">
+                <main class="p-4">
+                    <div class="container-fluid px-4">
+                        <h2 class="text-center mb-4">Đánh giá học sinh -  ${className}</h2>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-success text-center">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Họ tên học sinh</th>
+                                        <th>Nội dung đánh giá</th>
+                                        <th>Ngày đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="fb" items="${feedbackList}" varStatus="status">
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Học sinh</th>
-                                            <th>Lớp</th>
-                                            <th>Nội dung</th>
-                                            <th>Ngày phản hồi</th>
+                                            <td class="text-center">${status.index + 1}</td>
+                                            <td>${fb.studentName}</td>
+                                            <td>${fb.text}</td>
+                                            <td>
+                                                <fmt:formatDate value="${fb.date}" pattern="dd/MM/yyyy" />
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="fb" items="${feedbackList}" varStatus="loop">
-                                            <tr>
-                                                <td>${loop.index + 1}</td>
-                                                <td>${fb.studentName}</td>
-                                                <td>${fb.className}</td>
-                                                <td>${fb.feedbackText}</td>
-                                                <td>${fb.feedbackDate}</td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </c:forEach>
+                                    <c:if test="${empty feedbackList}">
+                                        <tr>
+                                            <td colspan="4" class="text-center text-danger">Không có đánh giá nào cho lớp này.</td>
+                                        </tr>
+                                    </c:if>
+                                </tbody>
+                            </table>
                         </div>
-                    </c:if>
-                </main>
 
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4 text-center">
-                        <div class="text-muted">Copyright &copy; BIG DREAM 2025</div>
+                        <div class="text-end">
+                        </div>
                     </div>
-                </footer>
+                </main>
             </div>
         </div>
 
+        <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
     </body>

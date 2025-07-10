@@ -7,7 +7,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>BIGDREAM</title>
+        <title>Yêu cầu chuyển lớp</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free JSP Templates" name="keywords">
         <meta content="Free JSP Templates" name="description">
@@ -28,6 +28,26 @@
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <style>
+            body {
+                font-family: Arial;
+                margin: 30px;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .error {
+                color: red;
+            }
             body {
                 margin: 0;
                 padding: 0;
@@ -61,7 +81,7 @@
             }
             .main-content {
                 margin-left: 220px;
-                padding: 0px;
+                padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
             .main-content.full {
@@ -118,99 +138,32 @@
                 height: 100%;
                 object-fit: cover;
             }
-             <style>
-            body {
-                margin: 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f4f7fb;
-                color: #333;
-            }
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                width: 220px;
-                background-color: #ffffff;
-                padding-top: 60px;
-                display: flex;
-                flex-direction: column;
-                z-index: 1000;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            }
-            .sidebar a {
-                color: #000;
-                padding: 15px 20px;
-                text-decoration: none;
-            }
-            .sidebar a:hover,
-            .sidebar a.active {
-                background-color: #FF6600;
-                color: white;
-            }
-            .topbar {
-                background-color: #f8f9fa;
-                padding: 10px 30px;
-                border-bottom: 1px solid #ddd;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 60px;
-                z-index: 999;
-            }
-            .topbar .logo img {
-                height: 40px;
-            }
-            .topbar .contact-info {
-                display: flex;
-                gap: 20px;
-            }
-            h2 {
-                text-align: center;
-                color: #2c3e50;
-                margin-bottom: 25px;
-                margin-top: 80px;
-            }
-            .selector-container {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                margin-bottom: 20px;
-            }
-            .selector-container select {
-                padding: 10px;
-                font-size: 16px;
+            .main-box {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+                background: #fff;
                 border-radius: 8px;
-                border: 1px solid #ccc;
-                background-color: #fff;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                padding: 14px;
-                text-align: center;
-                border: 1px solid #ddd;
-            }
-            th {
-                background-color: #3498db;
-                color: white;
-            }
-            .error-message {
-                color: #e74c3c;
-                text-align: center;
-                margin: 20px 0;
             }
             .main-content {
                 margin-left: 220px;
-                padding: 0x 30px 30px;
+                padding: 20px;
+                transition: margin-left 0.3s ease-in-out;
             }
-        </style>
+
+            .main-content.full {
+                margin-left: 0;
+            }
+
+            .main-box {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            }
+
         </style>
     </head>
     <body>
@@ -273,103 +226,79 @@
             <a href="feedback" class="nav-link">Phản hồi khóa học </a>
         </div>
         <!-- sidebar End -->
+        <div class="main-content" id="main-content">
+            <div class="main-box">
+                <h2>Gửi yêu cầu chuyển lớp</h2>
 
-        <div class="main-content">
-            <h2>Thời khóa biểu học sinh</h2>
-            <div class="selector-container">
-                <form action="scheduleStudent" method="get">
-                    <label for="year">Chọn năm: </label>
-                    <select name="year" id="year" onchange="this.form.submit()">
-                        <c:forEach var="year" items="${years}">
-                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
+                <c:if test="${not empty error}">
+                    <p class="error">${error}</p>
+                </c:if>
+
+                <form method="post" action="classTransfer">
+                    <p><strong>Lớp hiện tại:</strong> ${currentClass.name_class}</p>
+                    <input type="hidden" name="fromClassId" value="${currentClass.id_class}" />
+
+                    <label for="toClassId">Lớp muốn chuyển đến:</label>
+                    <select name="toClassId" required>
+                        <option value="" disabled selected>-- Chọn lớp --</option>
+                        <c:forEach var="cls" items="${availableClasses}">
+                            <option value="${cls.id_class}">${cls.name_class}</option>
                         </c:forEach>
-                    </select>
-                    <label for="week">Chọn tuần: </label>
-                    <select name="week" id="week" onchange="this.form.submit()">
-                        <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
-                        </c:forEach>
-                    </select>
+                    </select><br><br>
+
+                    <label>Lý do chuyển lớp:</label><br>
+                    <textarea name="reason" rows="4" cols="50" required></textarea><br><br>
+
+                    <button type="submit">Gửi đơn</button>
                 </form>
-            </div>
 
-            <c:if test="${empty scheduleStudent}">
-                <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
-            </c:if>
-
-            <c:if test="${not empty scheduleStudent}">
+                <h3>Danh sách đơn đã gửi</h3>
                 <table>
-                    <thead>
+                    <tr>
+                        <th>Lớp hiện tại</th>
+                        <th>Lớp muốn chuyển</th>
+                        <th>Lý do</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày xử lý</th>
+                        <th>Ghi chú khi xét đơn</th>
+                    </tr>
+                    <c:forEach var="r" items="${requests}">
                         <tr>
-                            <th>Thứ</th>
-                            <th>Ngày</th>
-                            <th>Lớp</th>
-                            <th>Bắt đầu</th>
-                            <th>Kết thúc</th>
-                            <th>Phòng học</th>
-                            <th>Điểm danh</th>
-                            <th>Lý do</th>
+                            <td>${r.fromClassName}</td>
+                            <td>${r.toClassName}</td>
+                            <td>${r.reason}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${r.status == 'approved'}">Đã đồng ý</c:when>
+                                    <c:when test="${r.status == 'rejected'}">Đã từ chối</c:when>
+                                    <c:otherwise>Đang chờ xử lý</c:otherwise>
+                                </c:choose>
+                            </td>
+
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty r.responseDate}">
+                                        <fmt:formatDate value="${r.responseDate}" pattern="dd-MM-yyyy" />
+                                    </c:when>
+                                    <c:otherwise>Chưa xử lý</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty r.staffNote}">
+                                        ${r.staffNote}
+                                    </c:when>
+
+                                </c:choose>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="count" value="0" />
-                            <c:forEach var="s" items="${scheduleStudent}">
-                                <c:if test="${s.dayVN == day}">
-                                    <c:set var="count" value="${count + 1}" />
-                                </c:if>
-                            </c:forEach>
-
-                            <c:if test="${count > 0}">
-                                <c:set var="printed" value="false" />
-                                <c:forEach var="s" items="${scheduleStudent}">
-                                    <c:if test="${s.dayVN == day}">
-                                        <tr>
-                                            <c:if test="${not printed}">
-                                                <td rowspan="${count}">${day}</td>
-                                                <c:set var="printed" value="true" />
-                                            </c:if>
-                                            <td>
-                                                <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
-                                            </td>
-                                            <td>${s.nameClass}</td>
-                                            <td>${fn:substring(s.startTime, 0, 5)}</td>
-                                            <td>${fn:substring(s.endTime, 0, 5)}</td>
-                                            <td>${s.room}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${s.attendanceStatus == 'present'}">Có mặt</c:when>
-                                                    <c:when test="${s.attendanceStatus == 'absent'}">Vắng mặt</c:when>
-                                                    <c:otherwise>Chưa điểm danh</c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty s.reason}">
-                                                        ${s.reason}
-                                                    </c:when>
-                                                    <c:otherwise>-</c:otherwise>
-                                                </c:choose>
-                                            </td>
-
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-
-                            <c:if test="${count == 0}">
-                                <tr>
-                                    <td>${day}</td>
-                                    <td colspan="6"></td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </tbody>
+                    </c:forEach>
                 </table>
-            </c:if>
+
+            </div>
         </div>
-    
+
+
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>

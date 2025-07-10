@@ -646,5 +646,56 @@ public class ScheduleDAO extends DBContext {
 
         return list;
     }
+// lấy thời khóa biểu gần nhất khi sửa toàn bộ 
+    public Schedules getFirstScheduleFromToday(String id_class) {
+    try {
+        String sql = """
+            SELECT TOP 1 * FROM schedule
+            WHERE id_class = ? AND day >= CAST(GETDATE() AS DATE)
+            ORDER BY day ASC, start_time ASC
+        """;
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, id_class);
+        rs = stm.executeQuery();
+
+        if (rs.next()) {
+            return new Schedules(
+                rs.getString("id"),
+                rs.getString("id_class"),
+                rs.getString("start_time"),
+                rs.getString("end_time"),
+                rs.getString("day"),
+                rs.getString("id_teacher"),
+                rs.getString("room")
+            );
+        }
+
+    } catch (Exception e) {
+        System.out.println("getFirstScheduleFromToday: " + e.getMessage());
+    }
+    return null;
+}
+// sủa thời khóa biểu từ ngày dc chọn
+public void updateSchedulesFromDate(String classId, String dateFrom, String teacherId, String startTime, String endTime, String room) {
+    try {
+        String sql = """
+            UPDATE schedule 
+            SET id_teacher = ?, start_time = ?, end_time = ?, room = ?
+            WHERE id_class = ? AND day >= ?
+        """;
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, teacherId);
+        stm.setString(2, startTime);
+        stm.setString(3, endTime);
+        stm.setString(4, room);
+        stm.setString(5, classId);
+        stm.setString(6, dateFrom);
+
+        stm.executeUpdate();
+    } catch (Exception e) {
+        System.out.println("updateSchedulesFromDate: " + e.getMessage());
+    }
+}
+
 
 }

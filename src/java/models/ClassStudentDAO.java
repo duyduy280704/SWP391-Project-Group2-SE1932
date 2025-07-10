@@ -153,8 +153,8 @@ public class ClassStudentDAO extends DBContext {
         }
         return list;
     }
-
-    public List<Courses> searchTeacherClassesByName(String teacherId, String keyword) {
+// tìm kiếm 
+    public List<Courses> search(String teacherId, String keyword) {
         List<Courses> list = new ArrayList<>();
         String sql = """
         SELECT DISTINCT c.id, c.name
