@@ -11,12 +11,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.ResultMessage;
 import models.Staff;
 import models.StaffDAO;
-import models.Teachers;
 
 /**
  *
@@ -60,8 +61,7 @@ public class StaffController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffDAO sd = new StaffDAO();
-        HttpSession session = request.getSession();
-        Staff staff =(Staff) session.getAttribute("account");
+        
         if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
             //tìm Product tương ứng cùng với code truyền sang
             String id = request.getParameter("id");
@@ -79,8 +79,6 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("error", "ID không hợp lệ!");
             }
         }
-          request.setAttribute("profile", staff); // Truyền thông tin giáo viên
-        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         
         ArrayList<Staff> data = sd.getStaff();
         request.setAttribute("data", data);
@@ -104,10 +102,26 @@ public class StaffController extends HttpServlet {
         String birthdate =request.getParameter("birthdate");
         String gender =request.getParameter("gender");
         String role =request.getParameter("role");
-        String phone=request.getParameter("phone");
+        String phone =request.getParameter("phone");
+        String nameSearch = request.getParameter("nameSearch");
+        String genderFilter = request.getParameter("genderFilter");
+        
+        
         ResultMessage result = null;
         StaffDAO sd = new StaffDAO();
-        Staff s = new Staff(id, name, email, password, birthdate, gender, role,phone);
+        Staff s = new Staff(id, name, email, password, birthdate, gender, role, phone);
+        
+        ArrayList<Staff> data;
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = sd.getStaffByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = sd.getStaffsByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = sd.getStaff();
+        }
+        request.setAttribute("data", data);
         
         try {
 
@@ -118,16 +132,18 @@ public class StaffController extends HttpServlet {
                 // Thêm học sinh
                 result = sd.add(s);
             } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
+                result = new ResultMessage(true, "Đã tìm nhân viên");
             }
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        ArrayList<Staff> data = sd.getStaff();
+        
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("data", data);
+        request.setAttribute("s", s);
         request.getRequestDispatcher("listStaff.jsp").forward(request, response);
     }
 

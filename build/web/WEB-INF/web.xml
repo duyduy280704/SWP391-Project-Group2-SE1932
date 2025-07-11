@@ -17,10 +17,6 @@
         <servlet-class>Controllers.StaffController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>HomePageController</servlet-name>
-        <servlet-class>Controllers.HomePageController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>Controllers.ForgotPasswordServlet</servlet-class>
     </servlet>
@@ -72,16 +68,48 @@
         <servlet-class>Controllers.LogoutController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>TeacherHome</servlet-name>
-        <servlet-class>Controllers.TeacherHome</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>BlogController</servlet-name>
         <servlet-class>Controllers.BlogController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>FeedbackController</servlet-name>
         <servlet-class>Controllers.FeedbackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BlogImageController</servlet-name>
+        <servlet-class>Controllers.BlogImageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HomePageController</servlet-name>
+        <servlet-class>Controllers.HomePageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StaffHomeController</servlet-name>
+        <servlet-class>Controllers.StaffHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherHomeController</servlet-name>
+        <servlet-class>Controllers.TeacherHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentHomeController</servlet-name>
+        <servlet-class>Controllers.StudentHomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BlogStudentController</servlet-name>
+        <servlet-class>Controllers.BlogStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendMail</servlet-name>
+        <servlet-class>Controllers.SendMail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AssignClassController</servlet-name>
+        <servlet-class>Controllers.AssignClassController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SaleController</servlet-name>
+        <servlet-class>Controllers.SaleController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
@@ -98,10 +126,6 @@
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/staff</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>HomePageController</servlet-name>
-        <url-pattern>/HomePage</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
@@ -144,15 +168,47 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>TeacherHome</servlet-name>
-        <url-pattern>/teacherHome</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>BlogController</servlet-name>
         <url-pattern>/Blog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/Feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogImageController</servlet-name>
+        <url-pattern>/BlogImageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomePageController</servlet-name>
+        <url-pattern>/HomePage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffHomeController</servlet-name>
+        <url-pattern>/staffhome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherHomeController</servlet-name>
+        <url-pattern>/teacherHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentHomeController</servlet-name>
+        <url-pattern>/StudentHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogStudentController</servlet-name>
+        <url-pattern>/BlogStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendMail</servlet-name>
+        <url-pattern>/SendMail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AssignClassController</servlet-name>
+        <url-pattern>/AssignClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaleController</servlet-name>
+        <url-pattern>/Sale</url-pattern>
     </servlet-mapping>
 </web-app>

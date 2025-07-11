@@ -56,7 +56,7 @@ public class HomePageController extends HttpServlet {
         getServletContext().setAttribute("feedbackList", feedbackList);
         List<Teachers> teacherlist = dao.getTeachers();
         getServletContext().setAttribute("teacherlist", teacherlist);
-        List<Blog> bloglist = blogDAO.getLatestBlogs();
+        List<Blog> bloglist = blogDAO.getLatest3Blogs();
         getServletContext().setAttribute("bloglist", bloglist);
     }
 

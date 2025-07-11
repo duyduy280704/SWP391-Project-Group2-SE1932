@@ -1,14 +1,23 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package models;
 
+/**
+ *
+ * @author Quang
+ */
 public class Teachers {
 
-    String id, name, email, password, birthdate, gender, exp, role, idtypecourse, yearofcourse, phone;
-    byte[] pic; 
+    String id, name, email, password, birthdate, gender, exp, role, course, year, phone;
+
+    byte[] pic;
 
     public Teachers() {
     }
 
-    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, byte[] pic, String role, String idtypecourse, String yearofcourse, String phone) {
+    public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, byte[] pic, String role, String course, String year, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -16,10 +25,10 @@ public class Teachers {
         this.birthdate = birthdate;
         this.gender = gender;
         this.exp = exp;
-        this.pic = pic; // Thay đổi từ String thành byte[]
+        this.pic = pic;
         this.role = role;
-        this.idtypecourse = idtypecourse;
-        this.yearofcourse = yearofcourse;
+        this.course = course;
+        this.year = year;
         this.phone = phone;
     }
 
@@ -79,11 +88,11 @@ public class Teachers {
         this.exp = exp;
     }
 
-    public byte[] getPic() { // Thay đổi từ String thành byte[]
+    public byte[] getPic() {
         return pic;
     }
 
-    public void setPic(byte[] pic) { // Thay đổi từ String thành byte[]
+    public void setPic(byte[] pic) {
         this.pic = pic;
     }
 
@@ -95,20 +104,20 @@ public class Teachers {
         this.role = role;
     }
 
-    public String getIdtypecourse() {
-        return idtypecourse;
+    public String getCourse() {
+        return course;
     }
 
-    public void setIdtypecourse(String idtypecourse) {
-        this.idtypecourse = idtypecourse;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
-    public String getYearofcourse() {
-        return yearofcourse;
+    public String getYear() {
+        return year;
     }
 
-    public void setYearofcourse(String yearofcourse) {
-        this.yearofcourse = yearofcourse;
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getPhone() {
@@ -118,4 +127,5 @@ public class Teachers {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

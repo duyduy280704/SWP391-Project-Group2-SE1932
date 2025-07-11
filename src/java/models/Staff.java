@@ -7,9 +7,9 @@ package models;
 /**
  *
  * @author Quang
- *///quang - quản lý nhân viên
+ */
 public class Staff {
-    String id, name, email, password, birthdate, gender, role,phone;
+     String id, name, email, password, birthdate, gender, role, phone;
 
     public Staff() {
     }
@@ -89,5 +89,5 @@ public class Staff {
         this.phone = phone;
     }
 
-  
+    
 }

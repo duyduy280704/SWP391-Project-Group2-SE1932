@@ -19,10 +19,10 @@ public class ProfileDAO extends DBContext {
                         rs.getString("password"),
                         rs.getString("birth_date"),
                         rs.getString("gender"),
+                        rs.getBytes("picture"),
                         rs.getString("address"),
                         String.valueOf(rs.getInt("Role_id")),
-                        rs.getString("phone"),
-                        rs.getBytes("picture")
+                        rs.getString("phone")
                 );
             }
         } catch (Exception e) {
@@ -44,10 +44,10 @@ public class ProfileDAO extends DBContext {
                         rs.getString("password"),
                         rs.getString("birth_date"),
                         rs.getString("gender"),
+                        rs.getBytes("picture"),
                         rs.getString("address"),
                         String.valueOf(rs.getInt("Role_id")),
-                        rs.getString("phone"),
-                        rs.getBytes("picture")
+                        rs.getString("phone")
                 );
             }
         } catch (Exception e) {
@@ -150,8 +150,8 @@ public class ProfileDAO extends DBContext {
             ps.setString(3, t.getBirthdate());
             ps.setString(4, t.getGender());
             ps.setString(5, t.getExp());
-            ps.setString(6, t.getIdtypecourse());
-            ps.setString(7, t.getYearofcourse());
+            ps.setString(6, t.getCourse());
+            ps.setString(7, t.getYear());
             ps.setBytes(8, t.getPic());
             ps.setString(9, t.getPhone());
             ps.executeUpdate();

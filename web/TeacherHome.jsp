@@ -379,26 +379,33 @@
                     </a>
                 </div>
                 <div class="profile-container">
-                    <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
                     <c:choose>
-                        <c:when test="${not empty picturePath}">
+                        <c:when test="${not empty profile and not empty profile.pic}">
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
                             </a>
-                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                         </c:when>
                         <c:otherwise>
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
                             </a>
-                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                         </c:otherwise>
                     </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
 
 
-                <a href="HomePage" class="nav-link">Trang Chủ</a>
-                <a href="scheduleTeacher" class="nav-link active">Lịch dạy</a>
+                <a href="teacherHome" class="nav-link active">Trang Chủ</a>
+                <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
                 <a href="attendance" class="nav-link">Điểm danh</a>
                 <a href="classStudent" class="nav-link">Danh sách lớp học</a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
@@ -432,11 +439,11 @@
                                 <p>No notifications found.</p>
                             </c:if>
                             <div class="col-12 mt-3">
-                            <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                                <a href="scheduleTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                            </div>
                         </div>
-                        </div>
-                            <div class="text-center.mb-5.lich-day">  <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;"></h5>
-                                <h1>Lịch dạy tuần này</h1></div>
+                        <div class="text-center.mb-5.lich-day">  <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;"></h5>
+                            <h1>Lịch dạy tuần này</h1></div>
                         <div class="selector-container">
                             <form action="${pageContext.request.contextPath}/teacherHome" method="get">
                                 <label for="year">Chọn năm: </label>

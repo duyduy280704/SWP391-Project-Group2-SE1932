@@ -122,38 +122,29 @@
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
-
                             <p>
                                 <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
                             </p>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Topbar End -->
 
         <!-- Navbar Start -->
         <div class="container-fluid">
             <div class="row border-top px-xl-6">
-                <div class="col-lg-9 mx-auto"> <!-- Thêm mx-auto ở đây để container con vào giữa -->
+                <div class="col-lg-9 mx-auto">
                     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
-                        <!-- Logo cho mobile -->
                         <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
                             <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                         </a>
-
-                        <!-- Nút toggle cho mobile -->
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-
-                        <!-- Menu -->
                         <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
                             <div class="navbar-nav">
                                 <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
-                                <!-- Thêm các mục menu khác ở đây nếu có -->
                             </div>
                         </div>
                     </nav>
@@ -165,23 +156,22 @@
         <section class="reset-password-container">
             <div class="reset-password-form">
                 <h2>Đặt Lại Mật Khẩu</h2>
-                <form action="ResetPasswordServlet" method="post">
-                    <input type="hidden" name="email" value="${email}">
-                    <input type="hidden" name="table" value="${table}">
-
+                <c:if test="${not empty message}">
+                    <p class="${fn:contains(message, 'thành công') ? 'success-message' : 'error-message'}">${message}</p>
+                </c:if>
+                <form action="ResetPasswordServlet" method="post" onsubmit="return validateForm()">
+                    <input type="hidden" name="phone" value="${phone}">
+                    <input type="hidden" name="role" value="${role}">
                     <div class="form-group">
                         <label for="newPassword">Mật khẩu mới:</label>
-                        <input type="password" id="newPassword" name="newPassword" >
+                        <input type="password" id="newPassword" name="newPassword" required>
                     </div>
                     <div class="form-group">
                         <label for="confirmPassword">Nhập lại mật khẩu:</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" >
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
                     </div>
                     <input type="submit" value="Đổi mật khẩu">
-                    
                 </form>
-                    <p class="error-message text-center mt-3 text-danger">${message}</p>
-                
             </div>
         </section>
 
@@ -189,8 +179,6 @@
         <footer class="bg-dark text-white pt-5 pb-4">
             <div class="container text-md-left">
                 <div class="row text-md-left">
-
-                    <!-- Liên hệ -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
                         <p><i class="fa fa-map-marker-alt mr-2"></i> 
@@ -214,8 +202,6 @@
                             </a>
                         </div>
                     </div>
-
-                    <!-- Khoá học -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
                         <ul class="list-unstyled">
@@ -228,17 +214,12 @@
                             </c:forEach>
                         </ul>
                     </div>
-
-                    <!-- Thông tin thêm -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
                         <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
                     </div>
                 </div>
-
                 <hr class="mb-4">
-
-                <!-- Bản quyền -->
                 <div class="row align-items-center">
                     <div class="col-md-7 col-lg-8">
                         <p class="text-white">
@@ -263,5 +244,33 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
+
+        <!-- JavaScript để kiểm tra form -->
+        <script>
+            function validateForm() {
+                var phone = document.forms[0]["phone"].value;
+                var role = document.forms[0]["role"].value;
+                var newPassword = document.getElementById("newPassword").value;
+                var confirmPassword = document.getElementById("confirmPassword").value;
+
+                if (!phone || phone.trim() === "") {
+                    alert("Số điện thoại không hợp lệ.");
+                    return false;
+                }
+                if (!role || role.trim() === "") {
+                    alert("Vai trò không hợp lệ.");
+                    return false;
+                }
+                if (newPassword !== confirmPassword) {
+                    alert("Mật khẩu nhập lại không khớp với mật khẩu mới.");
+                    return false;
+                }
+                if (newPassword.length < 6) {
+                    alert("Mật khẩu mới phải có ít nhất 6 ký tự.");
+                    return false;
+                }
+                return true;
+            }
+        </script>
     </body>
 </html>

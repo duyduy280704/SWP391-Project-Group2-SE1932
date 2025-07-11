@@ -62,6 +62,19 @@ public class BlogDAO extends DBContext {
 
         return list;
     }
+    public byte[] getBlogImageById(int id) {
+        String sql = "SELECT img FROM blog WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("img");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Blog getBlogById(int id) {
         String sql = "SELECT * FROM blog WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

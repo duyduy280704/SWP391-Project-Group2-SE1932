@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package models;
 
 /**
@@ -6,12 +10,27 @@ package models;
  */
 public class Students {
     String id, name, email, password, birthdate, gender, address, role, phone;
+    
     byte[] pic;
 
     public Students() {
     }
 
-    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role, String phone, byte[] pic) { // Thay đổi từ String thành byte[]
+    public Students(String id, String name, String email, String password, String birthdate, String gender, byte[] pic, String address, String role, String phone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.pic = pic;
+        this.address = address;
+        this.role = role;
+        this.phone = phone;
+        
+    }
+
+    public Students(String id, String name, String email, String password, String birthdate, String gender, String address, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -20,9 +39,9 @@ public class Students {
         this.gender = gender;
         this.address = address;
         this.role = role;
-        this.phone = phone;
-        this.pic = pic; // Thay đổi từ String thành byte[]
     }
+    
+    
 
     public String getId() {
         return id;
@@ -72,6 +91,16 @@ public class Students {
         this.gender = gender;
     }
 
+    public byte[] getPic() {
+        return pic;
+    }
+
+    public void setPic(byte[] pic) {
+        this.pic = pic;
+    }
+    
+    
+
     public String getAddress() {
         return address;
     }
@@ -95,12 +124,6 @@ public class Students {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public byte[] getPic() { 
-        return pic;
-    }
-
-    public void setPic(byte[] pic) { 
-        this.pic = pic;
-    }
+    
+    
 }

@@ -417,13 +417,13 @@
                                     <select name="idTypeCourse" required>
                                         <option value="">-- Chọn loại khóa học --</option>
                                         <c:forEach var="type" items="${applicationScope.typeList}">
-                                            <option value="${type.id}" ${profile.idtypecourse == type.id ? 'selected' : ''}>${type.name}</option>
+                                            <option value="${type.id}" ${profile.course == type.id ? 'selected' : ''}>${type.name}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Kinh Nghiệm (Năm):</label>
-                                    <input type="number" name="yearsOfExperience" value="${profile.yearofcourse}" required>
+                                    <input type="number" name="yearsOfExperience" value="${profile.year}" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Ảnh Đại Diện:</label>

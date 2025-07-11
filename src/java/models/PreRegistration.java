@@ -11,13 +11,16 @@ import java.sql.Date;
  * @author Dwight
  */
 //Dương_Homepage
-    public class PreRegistration {
+public class PreRegistration {
+
     private int id;
     private String full_name;
     private String email;
+    private String phone;
     private String birth_date;
     private String gender;
     private String address;
+    private String courseName;
     private int course_id;
     private String status;
 
@@ -32,6 +35,29 @@ import java.sql.Date;
         this.gender = gender;
         this.address = address;
         this.course_id = course_id;
+        this.status = status;
+    }
+
+    public PreRegistration(String full_name, String email, String phone, String birth_date, String gender, String address, int course_id, String status) {
+
+        this.full_name = full_name;
+        this.email = email;
+        this.phone = phone;
+        this.birth_date = birth_date;
+        this.gender = gender;
+        this.address = address;
+        this.course_id = course_id;
+        this.status = status;
+    }
+
+    public PreRegistration(int id, String full_name, String email, String birth_date, String gender, String address, String courseName, String status) {
+        this.id = id;
+        this.full_name = full_name;
+        this.email = email;
+        this.birth_date = birth_date;
+        this.gender = gender;
+        this.address = address;
+        this.courseName = courseName;
         this.status = status;
     }
 
@@ -98,5 +124,21 @@ import java.sql.Date;
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 }

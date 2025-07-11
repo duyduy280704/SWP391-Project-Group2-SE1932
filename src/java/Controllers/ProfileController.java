@@ -206,8 +206,8 @@ public class ProfileController extends HttpServlet {
                 t.setGender(gender);
                 t.setBirthdate(birthdate);
                 t.setExp(expertise);
-                t.setIdtypecourse(idTypeCourse);
-                t.setYearofcourse(years);
+                t.setCourse(idTypeCourse);
+                t.setYear(years);
                 if (picture != null) {
                     t.setPic(picture);
                 }

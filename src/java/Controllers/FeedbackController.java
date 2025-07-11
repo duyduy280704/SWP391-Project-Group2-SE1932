@@ -31,7 +31,7 @@ public class FeedbackController extends HttpServlet {
         ArrayList<FeedBack> feedbackList = dao.getFeedbacks();
 
         request.setAttribute("feedbackList", feedbackList);
-        request.getRequestDispatcher("feedback.jsp").forward(request, response);
+        request.getRequestDispatcher("feedback1.jsp").forward(request, response);
     
     }
 

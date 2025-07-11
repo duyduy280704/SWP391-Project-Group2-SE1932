@@ -9,7 +9,8 @@ package models;
  * @author HP
  */
 public class Event {
-    String id,name,content,date,courseid;
+
+    String id, name, content, date, courseid;
     byte[] img;
 
     public Event() {
@@ -22,6 +23,12 @@ public class Event {
         this.date = date;
         this.courseid = courseid;
         this.img = img;
+    }
+
+    public Event(String id, String name, String date) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
     }
 
     public String getId() {
@@ -71,5 +78,5 @@ public class Event {
     public void setImg(byte[] img) {
         this.img = img;
     }
-    
+
 }

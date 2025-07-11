@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>BIGDREAM</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="width=device-width, initial-scale=QN1.0" name="viewport">
         <meta content="Free JSP Templates" name="keywords">
         <meta content="Free JSP Templates" name="description">
 
@@ -26,6 +27,48 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <!-- Custom CSS for Blog Modal -->
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.5);
+            }
+            .modal-content {
+                background-color: #fff;
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 700px;
+                border-radius: 10px;
+            }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            .blog-image {
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+                margin-bottom: 15px;
+            }
+        </style>
     </head>
     <body>
         <!-- Topbar Start -->
@@ -93,7 +136,6 @@
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
-                                
                             </div>
                         </div>
                     </nav>
@@ -117,120 +159,48 @@
         </div>
         <!-- Header End -->
 
-        <!-- Blog Management Start -->
+        <!-- Blog Start -->
         <div class="container pt-5 pb-3">
             <div class="text-center mb-5">
-                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Quản Lý Tin Tức</h5>
-                <h1>Danh Sách Bài Viết</h1>
+                <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
+                <h1>Các tin gần đây</h1>
             </div>
-
-            <!-- Search Form -->
-            <!-- Search Form -->
-           <form action="Blog" method="post" class="form-inline mb-3 justify-content-center">
-    <input type="text" name="title" class="form-control mr-2" placeholder="Tìm tiêu đề" value="${searchTitle}">
-    <input type="date" name="fromDate" class="form-control mr-2" value="${fromDate}">
-    <input type="date" name="toDate" class="form-control mr-2" value="${toDate}">
-    <input type="hidden" name="search" value="true">
-    <button type="submit" class="btn btn-secondary">Tìm Kiếm</button>
-</form>
-
-            <!-- Search Message -->
-            <c:if test="${not empty searchMessage}">
-                <div class="alert alert-info text-center">${searchMessage}</div>
-            </c:if>
-
-            <!-- Add Blog Form -->
-            <div class="mb-5">
-                <h3 class="text-uppercase mb-3">Thêm Bài Viết Mới</h3>
-                <form action="Blog" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="add" value="true">
-                    <div class="form-group">
-                        <label>Tiêu Đề</label>
-                        <input type="text" name="title" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nội Dung</label>
-                        <textarea name="content" class="form-control" rows="4" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Hình Ảnh</label>
-                        <input type="file" name="img" class="form-control-file" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày Đăng</label>
-                        <input type="date" name="publishDate" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Thêm Bài Viết</button>
-                </form>
-            </div>
-
-            <!-- Edit Blog Form (shown when mode=1) -->
-            <c:if test="${blog != null}">
-                <div class="mb-5">
-                    <h3 class="text-uppercase mb-3">Chỉnh Sửa Bài Viết</h3>
-                    <form action="Blog" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="update" value="true">
-                        <input type="hidden" name="id" value="${blog.id}">
-                        <div class="form-group">
-                            <label>Tiêu Đề</label>
-                            <input type="text" name="title" class="form-control" value="${blog.title}" required>
+            <div class="row pb-3">
+                <c:if test="${not empty applicationScope.bloglist}">
+                    <c:forEach var="n" items="${applicationScope.bloglist}">
+                        <div class="col-lg-4 mb-4">
+                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
+                                <a class="blog-overlay text-decoration-none" href="javascript:void(0)" onclick="showBlogDetails('${n.id}', '${fn:escapeXml(n.title)}', '${fn:escapeXml(n.content)}', '<fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />', 'BlogImageController?id=${n.id}')">                                    <h5 class="text-white mb-3">${n.title}</h5>
+                                    <p class="text-primary m-0">
+                                        <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                                    </p>
+                                </a>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Nội Dung</label>
-                            <textarea name="content" class="form-control" rows="4" required>${blog.content}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Hình Ảnh</label>
-                            <input type="file" name="img" class="form-control-file" accept="image/*">
-                            <c:if test="${blog.img != null}">
-                                <img src="Blog?mode=image&id=${blog.id}" alt="Blog Image" class="img-fluid mt-2" style="max-width: 100px;"/>
-                                <small class="form-text text-muted">Để trống để giữ hình ảnh hiện tại</small>
-                            </c:if>
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày Đăng</label>
-                            <input type="date" name="publishDate" class="form-control" value="${blog.publishDate}" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Cập Nhật Bài Viết</button>
-                    </form>
-                </div>
-            </c:if>
-
-            <!-- Blog List -->
-            <h3 class="text-uppercase mb-3">${search == 'true' ? 'Kết Quả Tìm Kiếm' : 'Danh Sách Bài Viết'}</h3>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tiêu Đề</th>
-                            <th>Ngày Đăng</th>
-                            <th>Hình Ảnh</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="blog" items="${data}">
-                            <tr>
-                                <td>${blog.id}</td>
-                                <td>${blog.title}</td>
-                                <td>${fn:substring(blog.publishDate, 0, 10)}</td>
-                                <td>
-                                    <c:if test="${blog.img != null}">
-                                        <img src="Blog?mode=image&id=${blog.id}" alt="Blog Image" class="img-fluid" style="max-width: 100px;"/>
-                                    </c:if>
-                                </td>
-                                <td>
-                                    <a href="Blog?mode=1&id=${blog.id}" class="btn btn-info btn-sm">Chỉnh Sửa</a>
-                                    <a href="Blog?mode=2&id=${blog.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty applicationScope.bloglist}">
+                    <div class="col-12 text-center">
+                        <p>Không có bài viết nào gần đây.</p>
+                    </div>
+                </c:if>
             </div>
         </div>
-        <!-- Blog Management End -->
+        <!-- Blog End -->
+
+        <!-- Blog Details Modal -->
+        <div id="blogModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeBlogModal()">×</span>
+                <h2 id="blogTitle"></h2>
+                <p id="blogDate" class="text-muted"></p>
+                <img id="blogImage" class="blog-image" src="" alt="Blog Image">
+                <p id="blogContent"></p>
+                <a href="javascript:void(0)" onclick="closeBlogModal()" class="btn btn-primary mt-3">Quay lại danh sách</a>
+            </div>
+        </div>
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
@@ -260,7 +230,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khóa học</h5>
                         <ul class="list-unstyled">
                             <c:forEach var="t" items="${applicationScope.typeList}">
                                 <li>
@@ -305,5 +275,41 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
+
+        <!-- JavaScript for Blog Modal -->
+        <script>
+                    function showBlogDetails(id, title, content, date, imageSrc) {
+                        document.getElementById('blogTitle').innerText = title;
+                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + date;
+                        document.getElementById('blogContent').innerText = content;
+                        document.getElementById('blogImage').src = imageSrc;
+                        document.getElementById('blogModal').style.display = 'block';
+                    }
+
+                    function closeBlogModal() {
+                        document.getElementById('blogModal').style.display = 'none';
+                    }
+
+                    // Close modal when clicking outside of it
+                    window.onclick = function (event) {
+                        var modal = document.getElementById('blogModal');
+                        if (event.target == modal) {
+                            closeBlogModal();
+                        }
+                    }
+                    function showBlogDetails(id, title, content, date, imageSrc) {
+                        document.getElementById('blogTitle').innerText = title;
+                        // Định dạng ngày trong JavaScript
+                        const formattedDate = new Date(date).toLocaleDateString('vi-VN', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + formattedDate;
+                        document.getElementById('blogContent').innerText = content;
+                        document.getElementById('blogImage').src = imageSrc;
+                        document.getElementById('blogModal').style.display = 'block';
+                    }
+        </script>
     </body>
 </html>
