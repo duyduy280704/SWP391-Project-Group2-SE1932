@@ -122,7 +122,7 @@ public class StudentHomeController extends HttpServlet {
         }
 
         ScheduleStudentDAO dao1 = new ScheduleStudentDAO();
-        List<ScheduleStudent> scheduleStudent = dao1.getScheduleStudent(id, baseDate.format(dbFormatter));
+        List<ScheduleStudent> scheduleStudent = dao1.getScheduleStudentAll(id, baseDate.format(dbFormatter));
 
         List<Integer> years = new ArrayList<>();
         for (int i = year - 2; i <= year + 2; i++) {

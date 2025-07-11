@@ -10,12 +10,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import models.ChartDAO;
 import models.CourseDAO;
 import models.Revenue;
+import models.StudentRegistration;
 import models.TypeCourseCount;
+import models.TypeStudentCount;
 
 /**
  *
@@ -61,21 +66,37 @@ public class AdminHomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ChartDAO dao = new ChartDAO();
+         ChartDAO dao = new ChartDAO();
         try {
             int student = dao.getStudentCount();
             int teacher = dao.getTeacherCount();
             int staff = dao.getAdminStaffCount();
             int course = dao.getCourseCount();
             List<Revenue> revenueData = dao.getMonthlyRevenue();
-
-        
-        
+            List<StudentRegistration> studentData = dao.getStudentRegistrationByMonth();
+            List<TypeStudentCount> studentCountByType = dao.getStudentCountByType();
             List<TypeCourseCount> chartData = dao.getCourseCountByType();
-            List<Map<String, Object>> roleCounts = dao.getRoleCounts();
+
+            // Lấy danh sách năm từ revenueData và studentData
+            Set<Integer> years = new TreeSet<>();
+            for (Revenue revenue : revenueData) {
+                String[] parts = revenue.getMonth().split("-");
+                if (parts.length > 0) {
+                    years.add(Integer.valueOf(parts[0]));
+                }
+            }
+            for (StudentRegistration registration : studentData) {
+                String[] parts = registration.getMonth().split("-");
+                if (parts.length > 0) {
+                    years.add(Integer.valueOf(parts[0]));
+                }
+            }
+
+            request.setAttribute("years", new ArrayList<>(years));
             request.setAttribute("revenueData", revenueData);
+            request.setAttribute("studentData", studentData);
             request.setAttribute("chartData", chartData);
-            request.setAttribute("roleCounts", roleCounts);
+            request.setAttribute("studentCountByType", studentCountByType);
             request.setAttribute("student", student);
             request.setAttribute("teacher", teacher);
             request.setAttribute("staff", staff);

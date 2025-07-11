@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleTeacherDAO extends DBContext {
-
+// Thủy lịch học giáo viên
     // Lấy thời khóa biểu của giáo viên theo tuần
     public List<ScheduleTeacher> getScheduleTeacher(int teacherId, String startDate) {
         List<ScheduleTeacher> schedules = new ArrayList<>();
@@ -74,10 +74,10 @@ public class ScheduleTeacherDAO extends DBContext {
                         rs.getString("id"),
                         rs.getString("full_name"),
                         rs.getString("email"),
-                        "", // password
+                        "",
                         rs.getString("birth_date"),
                         rs.getString("gender"),
-                        "", // address
+                        "", 
                         "student"
                 );
                 students.add(student);
@@ -91,7 +91,7 @@ public class ScheduleTeacherDAO extends DBContext {
     // Lưu điểm danh (bao gồm lý do nếu có)
     public void saveAttendance(String scheduleId, List<StudentAttendance> list, String date) {
         try {
-            // Lấy id_class từ scheduleId
+           
             String classId = null;
             String sqlGetClass = "SELECT id_class FROM schedule WHERE id = ?";
             try (PreparedStatement stmClass = connection.prepareStatement(sqlGetClass)) {
@@ -102,9 +102,7 @@ public class ScheduleTeacherDAO extends DBContext {
                 } else {
                     return;
                 }
-            }
-
-            // Xóa dữ liệu cũ
+            }          
             String sqlDelete = "DELETE FROM attendance WHERE id_class = ? AND date = ? AND id_student = ?";
             try (PreparedStatement stmDelete = connection.prepareStatement(sqlDelete)) {
                 for (StudentAttendance sa : list) {
@@ -115,8 +113,6 @@ public class ScheduleTeacherDAO extends DBContext {
                 }
                 stmDelete.executeBatch();
             }
-
-            // Thêm mới
             String sqlInsert = "INSERT INTO attendance (id_student, id_class, date, status, reason) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmInsert = connection.prepareStatement(sqlInsert)) {
                 for (StudentAttendance sa : list) {
@@ -135,7 +131,7 @@ public class ScheduleTeacherDAO extends DBContext {
         }
     }
 
-    // Lấy danh sách điểm danh theo lớp và ngày (status + reason)
+    // Lấy danh sách điểm danh theo lớp và ngày 
     public List<StudentAttendance> getStudentAttendanceList(String classId, String date) {
         List<StudentAttendance> attendanceList = new ArrayList<>();
         String sql = "SELECT a.id_student, a.status, a.reason, s.full_name, s.email, s.birth_date, s.gender " +
@@ -153,10 +149,10 @@ public class ScheduleTeacherDAO extends DBContext {
                         rs.getString("id_student"),
                         rs.getString("full_name"),
                         rs.getString("email"),
-                        "", // password
+                        "", 
                         rs.getString("birth_date"),
                         rs.getString("gender"),
-                        "", // address
+                        "", 
                         "student"
                 );
                 StudentAttendance sa = new StudentAttendance(

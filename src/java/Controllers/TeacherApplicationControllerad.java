@@ -20,7 +20,7 @@ import models.TypeCourse;
  *
  * @author Dwight
  */
-public class TeacherApplicationController extends HttpServlet {
+public class TeacherApplicationControllerad extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -108,6 +108,69 @@ public List<Students> searchStudentName(String classId, String keyword) {
     }
     return list;
 }
+// Kiểm tra giáo viên có dạy lớp này không
+
+    public boolean studentByTeacher(String teacherId, String classId) {
+        String sql = """
+        SELECT 1
+        FROM Schedule
+        WHERE teacher_id = ? AND class_id = ?
+        LIMIT 1
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ps.setString(2, classId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // nếu có bản ghi => giáo viên có dạy lớp đó
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+// Lấy danh sách lớp mà giáo viên đang dạy
+    public List<Courses> getClassesByTeacher(String teacherId) {
+        List<Courses> list = new ArrayList<>();
+        String sql = """
+       SELECT DISTINCT c.id, c.name
+                FROM Class c
+                JOIN Schedule s ON c.id = s.id_class
+                WHERE s.id_teacher = ?
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Courses(rs.getString("id"), rs.getString("name")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+// tìm kiếm 
+    public List<Courses> search(String teacherId, String keyword) {
+        List<Courses> list = new ArrayList<>();
+        String sql = """
+        SELECT DISTINCT c.id, c.name
+        FROM Class c
+        JOIN Schedule s ON c.id = s.id_class
+        WHERE s.id_teacher = ? AND c.name LIKE ?
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, teacherId);
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Courses(rs.getString("id"), rs.getString("name")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 
 
 }

@@ -1,23 +1,38 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>Thời khóa biểu giáo viên</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
+        <meta charset="utf-8">
+        <title>BIGDREAM</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Free JSP Templates" name="keywords">
+        <meta content="Free JSP Templates" name="description">
 
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
         <style>
+            /* Sidebar and Main Content Styling */
             body {
                 margin: 0;
                 padding: 0;
-                font-family: 'Poppins', sans-serif;
-                background-color: #f4f7fb;
+                overflow-x: hidden;
             }
 
             .sidebar {
@@ -30,7 +45,12 @@
                 padding-top: 60px;
                 display: flex;
                 flex-direction: column;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+                transition: transform 0.3s ease-in-out;
+                z-index: 1000;
+            }
+
+            .sidebar.hidden {
+                transform: translateX(-220px);
             }
 
             .sidebar a {
@@ -43,35 +63,219 @@
             .sidebar a:hover,
             .sidebar a.active {
                 background-color: #FF6600;
-                color: white;
-            }
-
-            .topbar {
-                width: 100%;
-                background-color: #f8f9fa;
-                padding: 10px 230px 10px 240px;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                gap: 40px;
-                box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-            }
-
-            .topbar-item {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 14px;
-                color: #333;
-            }
-
-            .topbar-item i {
-                color: #007bff;
             }
 
             .main-content {
                 margin-left: 220px;
                 padding: 30px;
+                transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+                width: calc(100% - 220px);
+            }
+
+            .main-content.full {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .toggle-btn {
+                position: fixed;
+                top: 20px;
+                left: 230px;
+                z-index: 1001;
+                background-color: #343a40;
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                transition: left 0.3s ease-in-out;
+            }
+
+            .toggle-btn.hidden {
+                left: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    transform: translateX(-220px);
+                }
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+                .main-content {
+                    margin-left: 0;
+                    width: 100%;
+                }
+                .main-content.full {
+                    margin-left: 0;
+                    width: 100%;
+                }
+                .toggle-btn {
+                    left: 10px;
+                }
+                .toggle-btn.hidden {
+                    left: 230px;
+                }
+            }
+
+            /* Existing table and other styles retained */
+            .table thead th {
+                padding: 12px;
+                text-align: center;
+            }
+
+            .table tbody td {
+                vertical-align: middle;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .testimonial-img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #FF6600;
+            }
+
+            .table-striped tbody tr:nth-of-type(odd) {
+                background-color: #f8f9fa;
+            }
+
+            .table-hover tbody tr:hover {
+                background-color: #e9ecef;
+                transition: background-color 0.3s ease;
+            }
+
+            .profile-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #FF6600;
+                cursor: pointer;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .profile-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .schedule-table {
+                width: 100%;
+                border-collapse: collapse;
+                padding: 0;
+            }
+
+            .schedule-table th,
+            .schedule-table td {
+                padding: 14px;
+                text-align: center;
+                border: none;
+            }
+
+            .schedule-table th {
+                background-color: transparent;
+                color: inherit;
+            }
+
+            .schedule-table .error-message {
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .text-center.mb-5 {
+                text-align: left;
+                margin-bottom: 20px;
+            }
+
+            .text-center.mb-5 h4 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+
+            .text-center.mb-5 p {
+                font-size: 1rem;
+                margin-bottom: 0;
+            }
+
+            .text-center.mb-5.lich-day {
+                text-align: left;
+                margin-bottom: 30px;
+            }
+
+            .text-center.mb-5.lich-day h5 {
+                text-transform: uppercase;
+                letter-spacing: 5px;
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+            .text-center.mb-5.lich-day h1 {
+                font-size: 1.25rem;
+                margin: 0;
+            }
+
+            .schedule-table-container {
+                padding: 20px;
+            }
+
+            .text-center.mb-5.sukien {
+                text-align: left;
+                margin-bottom: 30px;
+            }
+
+            .text-center.mb-5.sukien h5 {
+                text-transform: uppercase;
+                letter-spacing: 5px;
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+            .text-center.mb-5.sukien h1 {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+
+            .event-list {
+                text-align: left;
+                margin: 0;
+                padding: 0;
+            }
+
+            .event-list-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .event-list-item h4 {
+                margin: 0 10px 0 0;
+                font-size: 1.25rem;
+            }
+
+            .event-list-item p {
+                margin: 0;
+                font-size: 1rem;
+            }
+
+            .text-center.mb-5.danh-gia {
+                text-align: left;
+                margin-bottom: 30px;
+            }
+
+            .text-center.mb-5.danh-gia h5 {
+                text-transform: uppercase;
+                letter-spacing: 5px;
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+            .text-center.mb-5.danh-gia h1 {
+                font-size: 2.5rem;
+                margin: 0;
             }
 
             h2 {
@@ -136,124 +340,214 @@
         </style>
     </head>
     <body>
+        <!-- Toggle Button -->
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div style="text-align: center; padding-bottom: 10px;">
-                <h3><span style="color: #FF6600;">BIG</span>DREAM</h3>
+        <!-- Topbar Start -->
+        <div class="container-fluid d-none d-lg-block ">
+            <div class="row align-items-center py-4 px-xl-5 justify-content-end">
+                <div></div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
+                            <p>
+                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Email</h6>
+                            <p>
+                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-2x fa-phone text-primary mr-3"></i>
+                        <div class="text-left">
+                            <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
+                            <p>
+                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
-            <a href="classStudent" class="nav-item nav-link">Danh sách các lớp</a>
-            <a href="scheduleTeacher" class="nav-item nav-link">Lịch dạy</a>
-            <a class="nav-link" href="feedback?mode=viewAll"> Phản hồi học viên </a>>
-        </div>
+            <!-- Topbar End -->
 
-        <!-- Topbar -->
-        <div class="topbar">
-            <div class="topbar-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></span>
+            <!-- Navbar Start -->
+            <div class="sidebar" id="sidebar">
+                <div class="col-lg-3">
+                    <a href="" class="text-decoration-none">
+                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
+                    </a>
+                </div>
+                <div class="profile-container">
+                    <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
+                    <c:choose>
+                        <c:when test="${not empty picturePath}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                            </a>
+                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                            </a>
+                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+
+                <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
+                <a href="classStudent" class="nav-item nav-link">Danh sách các lớp</a>
+                <a href="scheduleTeacher" class="nav-item nav-link">Lịch dạy</a>
+                <a href="feedbackByTeacher" class="nav-item nav-link">Dánh giá sinh viên </a>
+                <a class="nav-link" href="feedback?mode=viewAll"> Xem phản hồi  </a>>
             </div>
-            <div class="topbar-item">
-                <i class="fas fa-envelope"></i>
-                <span><c:out value="${setting.email}" default="Email chưa cập nhật" /></span>
-            </div>
-            <div class="topbar-item">
-                <i class="fas fa-phone"></i>
-                <span><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></span>
-            </div>
-        </div>
+            <!-- Navbar End -->
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <h2>Thời khóa biểu giáo viên</h2>
+            <!-- Main Content -->
+            <div class="main-content" id="main-content">
+                <h2>Thời khóa biểu giáo viên</h2>
 
-            <div class="selector-container">
-                <form action="scheduleTeacher" method="get">
-                    <label for="year">Chọn năm: </label>
-                    <select name="year" id="year" onchange="this.form.submit()">
-                        <c:forEach var="year" items="${years}">
-                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
-                        </c:forEach>
-                    </select>
-
-                    <label for="week">Chọn tuần: </label>
-                    <select name="week" id="week" onchange="this.form.submit()">
-                        <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>
-                                ${week.displayStartDate} - ${week.displayEndDate}
-                            </option>
-
-                        </c:forEach>
-                    </select>
-                </form>
-            </div>
-
-            <c:if test="${empty scheduleTeacher}">
-                <p class="error-message">Không có dữ liệu thời khóa biểu tuần này!</p>
-            </c:if>
-
-            <c:if test="${not empty scheduleTeacher}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Thứ</th>
-                            <th>Ngày</th>
-                            <th>Lớp</th>
-                            <th>Bắt đầu</th>
-                            <th>Kết thúc</th>
-                            <th>Phòng học</th>
-                            <th>Điểm danh</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="hasSchedule" value="false" />
-                            <c:forEach var="s" items="${scheduleTeacher}">
-                                <c:if test="${not empty s.dayVN and s.dayVN == day}">
-                                    <c:set var="hasSchedule" value="true" />
-                                </c:if>
+                <div class="selector-container">
+                    <form action="scheduleTeacher" method="get">
+                        <label for="year">Chọn năm: </label>
+                        <select name="year" id="year" onchange="this.form.submit()">
+                            <c:forEach var="year" items="${years}">
+                                <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
                             </c:forEach>
-                            <c:choose>
-                                <c:when test="${hasSchedule}">
-                                    <c:forEach var="s" items="${scheduleTeacher}">
-                                        <c:if test="${not empty s.dayVN and s.dayVN == day}">
-                                            <tr>
-                                                <td>${s.dayVN}</td>
-                                                <td>
-                                                    <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                                    <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
-                                                </td>
-                                                <td>${s.nameClass}</td>
-                                                <td>${fn:substring(s.startTime, 0, 5)}</td>
-                                                <td>${fn:substring(s.endTime, 0, 5)}</td>
-                                                <td>${s.room}</td>
-                                                <td>
-                                                    <form action="scheduleTeacher" method="get">
-                                                        <input type="hidden" name="action" value="attendance" />
-                                                        <input type="hidden" name="scheduleId" value="${s.id}" />
-                                                        <input type="hidden" name="classId" value="${s.classId}" />
-                                                        <input type="hidden" name="className" value="${s.nameClass}" />
-                                                        <input type="hidden" name="day" value="${s.day}" />
-                                                        <button type="submit" class="btn-attendance">Điểm danh</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </c:if>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td>${day}</td>
-                                        <td colspan="6"></td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
+                        </select>
+
+                        <label for="week">Chọn tuần: </label>
+                        <select name="week" id="week" onchange="this.form.submit()">
+                            <c:forEach var="week" items="${weeks}">
+                                <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>
+                                    ${week.displayStartDate} - ${week.displayEndDate}
+                                </option>
+
+                            </c:forEach>
+                        </select>
+                    </form>
+                </div>
+
+                <c:if test="${empty scheduleTeacher}">
+                    <p class="error-message">Không có dữ liệu thời khóa biểu tuần này!</p>
+                </c:if>
+
+                <c:if test="${not empty scheduleTeacher}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Thứ</th>
+                                <th>Ngày</th>
+                                <th>Lớp</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
+                                <th>Phòng học</th>
+                                <th>Điểm danh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="day" items="${weekDays}">
+                                <c:set var="hasSchedule" value="false" />
+                                <c:forEach var="s" items="${scheduleTeacher}">
+                                    <c:if test="${not empty s.dayVN and s.dayVN == day}">
+                                        <c:set var="hasSchedule" value="true" />
+                                    </c:if>
+                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${hasSchedule}">
+                                        <c:forEach var="s" items="${scheduleTeacher}">
+                                            <c:if test="${not empty s.dayVN and s.dayVN == day}">
+                                                <tr>
+                                                    <td>${s.dayVN}</td>
+                                                    <td>
+                                                        <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
+                                                    </td>
+                                                    <td>${s.nameClass}</td>
+                                                    <td>${fn:substring(s.startTime, 0, 5)}</td>
+                                                    <td>${fn:substring(s.endTime, 0, 5)}</td>
+                                                    <td>${s.room}</td>
+                                                    <td>
+                                                        <form action="scheduleTeacher" method="get">
+                                                            <input type="hidden" name="action" value="attendance" />
+                                                            <input type="hidden" name="scheduleId" value="${s.id}" />
+                                                            <input type="hidden" name="classId" value="${s.classId}" />
+                                                            <input type="hidden" name="className" value="${s.nameClass}" />
+                                                            <input type="hidden" name="day" value="${s.day}" />
+                                                            <button type="submit" class="btn-attendance">Điểm danh</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr>
+                                            <td>${day}</td>
+                                            <td colspan="6"></td>
+                                        </tr>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:if>
+            </div>
+
+
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
         </div>
 
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <!-- Contact Javascript File -->
+        <script src="mail/jqBootstrapValidation.min.js"></script>
+        <script src="mail/contact.js"></script>
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+        <!-- Sidebar Toggle Script -->
+        <script>
+                            function toggleSidebar() {
+                                const sidebar = document.getElementById('sidebar');
+                                const mainContent = document.getElementById('main-content');
+                                const toggleBtn = document.querySelector('.toggle-btn');
+
+                                sidebar.classList.toggle('hidden');
+                                mainContent.classList.toggle('full');
+                                toggleBtn.classList.toggle('hidden');
+
+                                // Change icon based on sidebar state
+                                const icon = toggleBtn.querySelector('i');
+                                if (sidebar.classList.contains('hidden')) {
+                                    icon.classList.remove('fa-times');
+                                    icon.classList.add('fa-bars');
+                                } else {
+                                    icon.classList.remove('fa-bars');
+                                    icon.classList.add('fa-times');
+                                }
+                            }
+        </script>
     </body>
+
 </html>

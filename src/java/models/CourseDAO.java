@@ -307,6 +307,58 @@ public class CourseDAO extends DBContext {
         }
         return null;
     }
+     // tìm kiếm khóa theo tên 
+    public ArrayList<Courses> getCourseByName(String name1) {
+        ArrayList<Courses> data = new ArrayList<>();
+        try {
+            String strSQL = "  SELECT * FROM Course c JOIN type_course t ON c.type_id = t.id WHERE c.name LIKE ? ";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, "%" + name1 + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(2);
+                String type = rs.getString(9);
+                String description = rs.getString(4);
+                String fee = rs.getString(5);
+                byte[] image = rs.getBytes(6);
+                String level = rs.getString(7);
+
+                Courses p = new Courses(id, name, type, description, fee, image, level);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getCourseByName" + e.getMessage());
+
+        }
+        return data;
+    }
+    // tìm kiếm khóa học theo giới tính
+    public ArrayList<Courses> getCoursesByType(String type) {
+        ArrayList<Courses> data = new ArrayList<>();
+        try {
+            String strSQL = "SELECT * FROM Course c JOIN type_course t ON c.type_id = t.id WHERE c.type_id = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, type);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt(1));
+                String name = rs.getString(2);
+                String type_id = rs.getString(9);
+                String description = rs.getString(4);
+                String fee = rs.getString(5);
+                byte[] image = rs.getBytes(6);
+                String level = rs.getString(7);
+
+                Courses p = new Courses(id, name, type_id, description, fee, image, level);
+                data.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("getCoursesByType: " + e.getMessage());
+        }
+        return data;
+    }
+    
 //Dương_Homepage
 
     public ArrayList<Courses> getAllCourses() {

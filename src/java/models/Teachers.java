@@ -9,10 +9,10 @@ package models;
  * @author Quang
  */
 public class Teachers {
-    String id, name, email, password, birthdate, gender, exp, role, course, year, phone;
-    
-        byte[] pic;
 
+    String id, name, email, password, birthdate, gender, exp, role, course, year, phone;
+
+    byte[] pic;
 
     public Teachers() {
     }
@@ -30,6 +30,11 @@ public class Teachers {
         this.course = course;
         this.year = year;
         this.phone = phone;
+    }
+
+    public Teachers(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public String getId() {
@@ -96,8 +101,6 @@ public class Teachers {
         this.pic = pic;
     }
 
-    
-
     public String getRole() {
         return role;
     }
@@ -129,6 +132,5 @@ public class Teachers {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
+
 }

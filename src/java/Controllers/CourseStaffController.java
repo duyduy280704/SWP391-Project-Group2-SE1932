@@ -110,6 +110,9 @@ public class CourseStaffController extends HttpServlet {
         String description = request.getParameter("description");
         String fee = request.getParameter("fee");
         String level = request.getParameter("level");
+        
+        String nameSearch = request.getParameter("nameSearch");
+        String typeFilter = request.getParameter("typeFilter");
 
         // Handle file upload
         Part filePart = request.getPart("image");
@@ -150,7 +153,7 @@ public class CourseStaffController extends HttpServlet {
             } else if (request.getParameter("add") != null) {
                 result = cd.add(p);
             } else {
-                result = new ResultMessage(false, "Hành động không hợp lệ!");
+                result = new ResultMessage(true, "Đã tìm khóa học");
             }
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
@@ -158,12 +161,24 @@ public class CourseStaffController extends HttpServlet {
         
 
         
-        ArrayList<Courses> data = cd.getCourses();
+        ArrayList<Courses> data ;
         ArrayList<TypeCourse> data1 = cd.getCourseType();
-        request.setAttribute("message", result.getMessage());
-        request.setAttribute("success", result.isSuccess());
+        
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = cd.getCourseByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("typeFilter") != null && typeFilter != null && !typeFilter.trim().isEmpty() && !typeFilter.equals("0"))  {
+            data = cd.getCoursesByType(typeFilter);
+            request.setAttribute("typeFilter", typeFilter);
+        } else {
+            data = cd.getCourses();
+        }
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
+        
+        request.setAttribute("message", result.getMessage());
+        request.setAttribute("success", result.isSuccess());
+        
         request.setAttribute("p", p);
         request.getRequestDispatcher("courseStaff.jsp").forward(request, response);
     }

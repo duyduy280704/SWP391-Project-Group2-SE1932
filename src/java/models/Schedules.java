@@ -22,6 +22,7 @@ public class Schedules {
     private String day;
     private String teacher;
     private String room;
+    private String id_class;
 
     public Schedules() {
     }
@@ -34,6 +35,17 @@ public class Schedules {
         this.day = day;
         this.teacher = teacher;
         this.room = room;
+    }
+    
+        public Schedules(String id, String nameClass, String startTime, String endTime, String day, String teacher, String room, String id_class) {
+        this.id = id;
+        this.nameClass = nameClass;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.day = day;
+        this.teacher = teacher;
+        this.room = room;
+        this.id_class = id_class;
     }
 
     public String getId() {
@@ -100,6 +112,14 @@ public class Schedules {
         e.printStackTrace();
         return null;
     }
+    }
+
+    public String getId_class() {
+        return id_class;
+    }
+
+    public void setId_class(String id_class) {
+        this.id_class = id_class;
     }
 
     

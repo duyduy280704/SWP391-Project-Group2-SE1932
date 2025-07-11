@@ -62,14 +62,15 @@
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-bell"></i> Thông báo</a>
+                    <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>
@@ -85,10 +86,6 @@
                             </a>
 
 
-                            <a class="nav-link" href="classStudent">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản lý lớp học
-                            </a>
 
                             <a class="nav-link" href="coursestaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -96,11 +93,11 @@
                             </a>
 
 
-                            <a class="nav-link" href="listClassSchedule">
+                            <a class="nav-link" href="#">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý lịch học
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="eventstaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý sự kiện
                             </a>
@@ -128,11 +125,6 @@
 
                                 </nav>
                             </div>
-                            
-                            <a class="nav-link" href="feedback">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản lý phản hồi
-                            </a>
 
                             <a class="nav-link collapsed" href="#" >
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -140,10 +132,6 @@
 
                             </a>
                         </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Đăng nhập với vai trò:</div>
-                        Staff
                     </div>
                 </nav>
             </div>
@@ -227,6 +215,17 @@
                         </table>
 
                     </div>
+                    <!-- POPUP THÔNG BÁO AJAX -->
+                    <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông báo</h5>
+                                <button class="btn-close" onclick="document.getElementById('noticeContainer').style.display = 'none'"></button>
+                            </div>
+                            <hr>
+                            <div id="noticeContent">Đang tải...</div>
+                        </div>
+                    </div>
                 </main>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
                 <script src="js/scripts.js"></script>
@@ -235,41 +234,61 @@
                 <script src="js/datatables-simple-demo.js"></script>
                 <script src="assets/demo/chart-area-demo.js"></script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const courseCanvas = document.getElementById("courseCountChart");
-                        if (!courseCanvas) {
-                            console.error('Canvas element with id "courseCountChart" not found.');
-                            return;
-                        }
-                        let labels = (courseCanvas.getAttribute("data-labels") || '').split(',').map(l => l.trim());
-                        let values = (courseCanvas.getAttribute("data-values") || '').split(',').map(v => Math.round(Number(v.trim()) || 0));
-                        if (labels.length > 0 && values.length > 0 && labels.length === values.length) {
-                            new Chart(courseCanvas, {
-                                type: 'bar',
-                                data: {
-                                    labels: labels,
-                                    datasets: [{
-                                            label: 'Số khóa học',
-                                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                                            borderColor: 'rgba(75, 192, 192, 1)',
-                                            borderWidth: 1,
-                                            data: values
-                                        }]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {beginAtZero: true, min: 0, ticks: {stepSize: 1, callback: v => Number.isInteger(v) ? v : null}},
-                                        x: {title: {display: true, text: 'Loại khóa học'}}
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    layout: {
-                                        padding: {left: 10, right: 10, top: 10, bottom: 10}
-                                    }
-                                }
-                            });
-                        } else {
-                            console.error('Invalid chart data:', {labels, values});
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const courseCanvas = document.getElementById("courseCountChart");
+                                        if (!courseCanvas) {
+                                            console.error('Canvas element with id "courseCountChart" not found.');
+                                            return;
+                                        }
+                                        let labels = (courseCanvas.getAttribute("data-labels") || '').split(',').map(l => l.trim());
+                                        let values = (courseCanvas.getAttribute("data-values") || '').split(',').map(v => Math.round(Number(v.trim()) || 0));
+                                        if (labels.length > 0 && values.length > 0 && labels.length === values.length) {
+                                            new Chart(courseCanvas, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                            label: 'Số khóa học',
+                                                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                                            borderWidth: 1,
+                                                            data: values
+                                                        }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {beginAtZero: true, min: 0, ticks: {stepSize: 1, callback: v => Number.isInteger(v) ? v : null}},
+                                                        x: {title: {display: true, text: 'Loại khóa học'}}
+                                                    },
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    layout: {
+                                                        padding: {left: 10, right: 10, top: 10, bottom: 10}
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            console.error('Invalid chart data:', {labels, values});
+                                        }
+                                    });
+                </script>
+
+                <script>
+                    document.getElementById("loadNotice").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const container = document.getElementById("noticeContainer");
+                        const content = document.getElementById("noticeContent");
+                        container.style.display = container.style.display === "none" ? "block" : "none";
+
+                        if (container.style.display === "block") {
+                            fetch("noticetostaff")
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        content.innerHTML = data;
+                                    })
+                                    .catch(error => {
+                                        content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
+                                    });
                         }
                     });
                 </script>

@@ -138,7 +138,7 @@
     </servlet>
     <servlet>
         <servlet-name>TeacherApplicationController</servlet-name>
-        <servlet-class>Controllers.TeacherApplicationController</servlet-class>
+        <servlet-class>Controllers.TeacherApplicationControllerad</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NotificationController</servlet-name>
@@ -171,6 +171,54 @@
     <servlet>
         <servlet-name>CancelCourseController</servlet-name>
         <servlet-class>Controllers.CancelCourseController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventStaffController</servlet-name>
+        <servlet-class>Controllers.EventStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageEventController</servlet-name>
+        <servlet-class>Controllers.ImageEventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListApplicationStuController</servlet-name>
+        <servlet-class>Controllers.ListApplicationStuController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListApplicationTeaController</servlet-name>
+        <servlet-class>Controllers.ListApplicationTeaController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <servlet-class>Controllers.NoticeToStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SalaryAdminController</servlet-name>
+        <servlet-class>Controllers.SalaryAdminController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SalaryTeacherController</servlet-name>
+        <servlet-class>Controllers.SalaryTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentApplicationController</servlet-name>
+        <servlet-class>Controllers.StudentApplicationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherapplicationController</servlet-name>
+        <servlet-class>Controllers.TeacherapplicationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassTransferController</servlet-name>
+        <servlet-class>Controllers.ClassTransferController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateClassController</servlet-name>
+        <servlet-class>Controllers.CreateClassController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackByTeacherController</servlet-name>
+        <servlet-class>Controllers.FeedbackByTeacherController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
@@ -339,5 +387,53 @@
     <servlet-mapping>
         <servlet-name>CancelCourseController</servlet-name>
         <url-pattern>/CancelCourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventStaffController</servlet-name>
+        <url-pattern>/eventstaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageEventController</servlet-name>
+        <url-pattern>/imageevent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListApplicationStuController</servlet-name>
+        <url-pattern>/listapplicationStu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListApplicationTeaController</servlet-name>
+        <url-pattern>/listapplicationTea</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NoticeToStaffController</servlet-name>
+        <url-pattern>/noticetostaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SalaryAdminController</servlet-name>
+        <url-pattern>/salaryadmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SalaryTeacherController</servlet-name>
+        <url-pattern>/salaryteacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentApplicationController</servlet-name>
+        <url-pattern>/studentapplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherapplicationController</servlet-name>
+        <url-pattern>/teacherapplication</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassTransferController</servlet-name>
+        <url-pattern>/classTransfer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateClassController</servlet-name>
+        <url-pattern>/createClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackByTeacherController</servlet-name>
+        <url-pattern>/feedbackByTeacher</url-pattern>
     </servlet-mapping>
 </web-app>

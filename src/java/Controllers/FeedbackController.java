@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.*;
-// Mai Thuy _ Học sinh feedback lớp học , staff có thể xem tất cả feddback 
+// Thủy _ sử lí gửi feedback, xem
 public class FeedbackController extends HttpServlet {
 
     @Override
@@ -27,18 +27,51 @@ public class FeedbackController extends HttpServlet {
         }
 
         String mode = request.getParameter("mode");
+        if (mode == null) {
+            mode = "write"; 
+        }
+
         FeedbackCourseDAO dao = new FeedbackCourseDAO();
 
-        // Giáo viên và Staff vào xem
-        if ((account instanceof Teachers || account instanceof AdminStaffs) && "viewAll".equals(mode)) {
-            List<FeedbackByStudent> feedbackList = dao.getAllFeedback(); 
+        //  Staff xem danh sách phản hồi 
+        if (account instanceof AdminStaffs) {
+            AdminStaffs staff = (AdminStaffs) account;
+            if ("3".equals(staff.getRole()) || "4".equals(staff.getRole())) {
+                String keyword = request.getParameter("keyword");
+                List<FeedbackByStudent> feedbackList;
+                if (keyword != null && !keyword.trim().isEmpty()) {
+                    feedbackList = dao.searchFeedback(keyword.trim());
+                } else {
+                    feedbackList = dao.getAllFeedback();
+                }
+                request.setAttribute("feedbackList", feedbackList);
+                request.setAttribute("keyword", keyword);
+                request.getRequestDispatcher("feedbackView.jsp").forward(request, response);
+                return;
+            } else {
+                response.getWriter().println("<h3 style='color:red'>Bạn không có quyền truy cập chức năng này.</h3>");
+                return;
+            }
+        }
+
+        // Giáo viên xem phản hồi lớp mình dạy 
+        if (account instanceof Teachers && "viewAll".equals(mode)) {
+            Teachers teacher = (Teachers) account;
+            String keyword = request.getParameter("keyword");
+            List<FeedbackByStudent> feedbackList;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                feedbackList = dao.searchFeedbacksByTeacher(teacher.getId(), keyword.trim());
+            } else {
+                feedbackList = dao.getFeedbackByTeacher(teacher.getId());
+            }
             request.setAttribute("feedbackList", feedbackList);
-            request.getRequestDispatcher("feedbackView.jsp").forward(request, response);
+            request.setAttribute("keyword", keyword);
+            request.getRequestDispatcher("feedback_teacher.jsp").forward(request, response);
             return;
         }
 
-        // Học sinh ghi Feedback
-        if (account instanceof Students) {
+        // Sinh viên gửi phản hồi
+        if (account instanceof Students && "write".equals(mode)) {
             Students student = (Students) account;
             List<Courses> courseList = dao.getCoursesByStudentId(student.getId());
             request.setAttribute("courseList", courseList);
@@ -46,7 +79,16 @@ public class FeedbackController extends HttpServlet {
             return;
         }
 
-        
+        //  Sinh viên xem lịch sử phản hồi( chưa chạy dc)
+        if (account instanceof Students && "history".equals(mode)) {
+            Students student = (Students) account;
+            List<FeedbackByStudent> feedbackList = dao.getFeedbackByStudent(student.getId());
+            request.setAttribute("feedbackList", feedbackList);
+            request.getRequestDispatcher("feedback_history.jsp").forward(request, response);
+            return;
+        }
+
+        response.getWriter().println("<h3 style='color:red'>Bạn không có quyền truy cập chức năng này.</h3>");
     }
 
     @Override

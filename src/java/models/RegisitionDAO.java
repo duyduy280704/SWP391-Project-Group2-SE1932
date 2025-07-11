@@ -94,7 +94,7 @@ public class RegisitionDAO extends DBContext {
                 Categories_class cls = new Categories_class();
                 cls.setId_class(rs.getString("id"));
                 cls.setName_class(rs.getString("name"));
-                cls.setCourseName(rs.getString("courseName"));
+                cls.setCourse_name(rs.getString("courseName"));
                 list.add(cls);
             }
         } catch (Exception e) {

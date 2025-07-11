@@ -3,7 +3,7 @@ package models;
 //Huyền-adminstaff
 public class AdminStaffs {
 
-    String id, name, email, password, birthdate, gender, role,phone;
+    String id, name, email, password, birthdate, gender, role, phone;
 
     public AdminStaffs() {
     }
