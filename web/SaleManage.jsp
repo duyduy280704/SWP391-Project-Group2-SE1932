@@ -1,8 +1,3 @@
-<%-- 
-    Document   : listStaff
-    Created on : May 31, 2025, 11:53:52 PM
-    Author     : Quang
---%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -227,8 +222,8 @@
                         <form action="Sale" method="get" class="search-filter-form">
                             <div>
                                 <input type="text" name="keyword" placeholder="Search sale code..." value="${keyword != null ? keyword : ''}" />
-                                <button type="submit">Search</button>
-                                <a href="sale">Reset</a>
+                                <button type="submit">Tìm kiếm</button>
+                                <a href="sale">Quay lại</a>
                             </div>
                         </form>
 
@@ -238,11 +233,11 @@
                                 <form action="Sale" method="post">
                                     <table>
                                         <tr>
-                                            <td>Code:</td>
+                                            <td>Mã giảm giá:</td>
                                             <td><input type="text" name="code" value="${sale != null ? sale.code : ''}" ></td>
-                                            <td>Value (%):</td>
+                                            <td>Giá trị giảm (%):</td>
                                             <td><input type="number" step="0.01" name="value" value="${sale != null ? sale.value : ''}" ></td>
-                                            <td>Quantity:</td>
+                                            <td>Số lượng:</td>
                                             <td><input type="number" name="quantity" value="${sale != null ? sale.quantity : ''}" ></td>
                                         </tr>
                                         <tr>
@@ -271,11 +266,11 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Code</th>
-                                            <th>Value</th>
-                                            <th>Created At</th>
-                                            <th>Quantity</th>
-                                            <th>Actions</th>
+                                            <th>Mã giảm giá</th>
+                                            <th>Giá trị giảm</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Số lượng</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

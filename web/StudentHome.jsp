@@ -491,6 +491,9 @@
                         </div>
                     </c:if>
                 </div>
+                 <div class="col-12 mt-3">
+                                <a href="BlogStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                            </div>
             </div>
 
 

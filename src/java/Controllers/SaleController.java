@@ -14,10 +14,7 @@ import java.util.List;
 import models.Sale;
 import models.SaleDAO;
 
-/**
- *
- * @author Dwight
- */
+
 public class SaleController extends HttpServlet {
 
     private SaleDAO dao;

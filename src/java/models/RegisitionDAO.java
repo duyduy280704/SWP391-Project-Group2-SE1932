@@ -103,34 +103,30 @@ public class RegisitionDAO extends DBContext {
         return list;
     }
 
-    public boolean assignToClassSingle(int regisitionId, int classId) {
-        // Kiểm tra trùng
-        String checkSql = "SELECT cs.id FROM Class_Student cs "
-                + "JOIN regisition r ON cs.id_student = r.student_id "
-                + "WHERE r.id = ? AND cs.id_class = ?";
-        try (PreparedStatement check = connection.prepareStatement(checkSql)) {
-            check.setInt(1, regisitionId);
-            check.setInt(2, classId);
-            ResultSet rs = check.executeQuery();
-            if (rs.next()) {
-                return false; // đã tồn tại
+   public boolean assignToClassSingle(int regisitionId, int classId) throws SQLException {
+        try {
+            // Kiểm tra lớp đầy
+            if (isClassFull(classId)) {
+                throw new SQLException("Class " + classId + " is full.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
 
-        // Thêm mới nếu chưa trùng
-        String insertSql = "INSERT INTO Class_Student (id_class, id_student) "
-                + "SELECT ?, student_id FROM regisition WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
-            ps.setInt(1, classId);
-            ps.setInt(2, regisitionId);
-            ps.executeUpdate();
-            return true;
-        } catch (Exception e) {
+            // Thêm mới học viên vào lớp
+            String insertSql = "INSERT INTO Class_Student (class_id, student_id) "
+                    + "SELECT ?, student_id FROM regisition WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+                ps.setInt(1, classId);
+                ps.setInt(2, regisitionId);
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    updateStatus(regisitionId, "đã phân lớp");
+                    return true;
+                } else {
+                    throw new SQLException("No rows affected when assigning student.");
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw e;
         }
     }
 
@@ -303,4 +299,62 @@ public class RegisitionDAO extends DBContext {
     }
     return null;
 }
+     public boolean isClassFull(int classId) {
+        String sql = "SELECT COUNT(*) AS student_count FROM Class_Student WHERE class_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, classId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("student_count") >= 30; // Lớp đầy nếu có 30 học viên trở lên
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getStudentCountInClass(int classId) {
+        String sql = "SELECT COUNT(*) AS student_count FROM Class_Student WHERE class_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, classId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("student_count");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean isStudentInClass(int regisitionId, int classId) {
+        String sql = "SELECT 1 FROM Class_Student cs "
+                + "JOIN regisition r ON r.student_id = cs.student_id "
+                + "WHERE r.id = ? AND cs.class_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ps.setInt(2, classId);
+            return ps.executeQuery().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String getAssignedClassName(int regisitionId) {
+        String sql = "SELECT c.name FROM regisition r "
+                + "JOIN Class_Student cs ON r.student_id = cs.student_id "
+                + "JOIN Class c ON cs.class_id = c.id "
+                + "WHERE r.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

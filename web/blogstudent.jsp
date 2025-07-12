@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -7,8 +8,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>BIGDREAM</title>
-        <meta content="width=device-width, initial-scale=QN1.0" name="viewport">
+        <title>BIGDREAM - Blog</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free JSP Templates" name="keywords">
         <meta content="Free JSP Templates" name="description">
 
@@ -28,45 +29,78 @@
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
-        <!-- Custom CSS for Blog Modal -->
+        <!-- Custom CSS for Blog Display -->
         <style>
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0,0,0,0.5);
+            .blog-section {
+                background-color: #f9f9f9;
+                padding: 50px 0;
             }
-            .modal-content {
+            .blog-card {
                 background-color: #fff;
-                margin: 5% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%;
-                max-width: 700px;
                 border-radius: 10px;
-            }
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+                margin-bottom: 30px;
+                display: flex;
+                flex-wrap: wrap;
             }
             .blog-image {
-                max-width: 100%;
-                height: auto;
-                border-radius: 5px;
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 10px 0 0 10px;
+            }
+            .blog-content {
+                padding: 20px;
+                flex: 1;
+            }
+            .blog-title {
+                font-size: 1.8rem;
+                font-weight: 600;
+                color: #222;
+                margin-bottom: 10px;
+                line-height: 1.3;
+            }
+            .blog-date {
+                font-size: 0.85rem;
+                color: #6c757d;
                 margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+            }
+            .blog-date i {
+                margin-right: 8px;
+                color: #007bff;
+            }
+            .blog-content-text {
+                font-size: 0.95rem;
+                color: #444;
+                line-height: 1.7;
+                margin-bottom: 0;
+            }
+            @media (min-width: 992px) {
+                .blog-card {
+                    flex-wrap: nowrap;
+                }
+                .blog-image {
+                    width: 30%;
+                    height: 200px;
+                }
+                .blog-content {
+                    width: 70%;
+                }
+            }
+            @media (max-width: 991px) {
+                .blog-content {
+                    padding: 15px;
+                }
+            }
+            .no-blog {
+                font-size: 1.2rem;
+                color: #6c757d;
+                text-align: center;
+                padding: 50px 0;
+                font-style: italic;
             }
         </style>
     </head>
@@ -116,91 +150,42 @@
         </div>
         <!-- Topbar End -->
 
-        <!-- Navbar Start -->
-        <div class="container-fluid">
-            <div class="row border-top px-xl-5">
-                <div class="col-lg-9 mx-auto">
-                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
-                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
-                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                        </a>
-                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarCollapse">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
-                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
-                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- Navbar End -->
-
-        <!-- Header Start -->
-        <div class="container-fluid page-header" style="margin-bottom: 90px;">
-            <div class="container">
-                <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Tin Tức</h3>
-                    <div class="d-inline-flex text-white">
-                        <p class="m-0 text-uppercase"><a class="text-white" href="HomePage">Trang Chủ</a></p>
-                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Tin Tức</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Header End -->
-
         <!-- Blog Start -->
-        <div class="container pt-5 pb-3">
+        <div class="container blog-section">
             <div class="text-center mb-5">
                 <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                <h1>Các tin gần đây</h1>
+                <h1>Tất cả bài viết</h1>
             </div>
-            <div class="row pb-3">
-                <c:if test="${not empty applicationScope.bloglist}">
-                    <c:forEach var="n" items="${applicationScope.bloglist}">
-                        <div class="col-lg-4 mb-4">
-                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
-                                <a class="blog-overlay text-decoration-none" href="javascript:void(0)" onclick="showBlogDetails('${n.id}', '${fn:escapeXml(n.title)}', '${fn:escapeXml(n.content)}', '<fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />', 'BlogImageController?id=${n.id}')">                                    <h5 class="text-white mb-3">${n.title}</h5>
-                                    <p class="text-primary m-0">
-                                        <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
+            <div class="row">
+                <c:if test="${not empty blogList}">
+                    <c:forEach var="blog" items="${blogList}">
+                        <div class="col-lg-12 mb-4">
+                            <div class="blog-card">
+                                <img class="blog-image" src="BlogImageController?id=${blog.id}" alt="Ảnh blog">
+                                <div class="blog-content">
+                                    <h2 class="blog-title">${fn:escapeXml(blog.title)}</h2>
+                                    <p class="blog-date">
+                                        <i class="fa fa-calendar-alt"></i>
+                                        <fmt:parseDate value="${blog.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
                                     </p>
-                                </a>
+                                    <div class="blog-content-text">${blog.content}</div>
+                                </div>
                             </div>
                         </div>
                     </c:forEach>
                 </c:if>
-                <c:if test="${empty applicationScope.bloglist}">
-                    <div class="col-12 text-center">
-                        <p>Không có bài viết nào gần đây.</p>
+                <c:if test="${empty blogList}">
+                    <div class="col-12 no-blog">
+                        <p>Không có bài viết nào.</p>
                     </div>
                 </c:if>
             </div>
+            <div class="col-12 mt-3">
+                                <a href="StudentHome" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Quay lại</a>
+                            </div>
         </div>
         <!-- Blog End -->
-
-        <!-- Blog Details Modal -->
-        <div id="blogModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeBlogModal()">×</span>
-                <h2 id="blogTitle"></h2>
-                <p id="blogDate" class="text-muted"></p>
-                <img id="blogImage" class="blog-image" src="" alt="Blog Image">
-                <p id="blogContent"></p>
-                <a href="javascript:void(0)" onclick="closeBlogModal()" class="btn btn-primary mt-3">Quay lại danh sách</a>
-            </div>
-        </div>
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
@@ -275,41 +260,5 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
-
-        <!-- JavaScript for Blog Modal -->
-        <script>
-                    function showBlogDetails(id, title, content, date, imageSrc) {
-                        document.getElementById('blogTitle').innerText = title;
-                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + date;
-                        document.getElementById('blogContent').innerText = content;
-                        document.getElementById('blogImage').src = imageSrc;
-                        document.getElementById('blogModal').style.display = 'block';
-                    }
-
-                    function closeBlogModal() {
-                        document.getElementById('blogModal').style.display = 'none';
-                    }
-
-                    // Close modal when clicking outside of it
-                    window.onclick = function (event) {
-                        var modal = document.getElementById('blogModal');
-                        if (event.target == modal) {
-                            closeBlogModal();
-                        }
-                    }
-                    function showBlogDetails(id, title, content, date, imageSrc) {
-                        document.getElementById('blogTitle').innerText = title;
-                        // Định dạng ngày trong JavaScript
-                        const formattedDate = new Date(date).toLocaleDateString('vi-VN', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric'
-                        });
-                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + formattedDate;
-                        document.getElementById('blogContent').innerText = content;
-                        document.getElementById('blogImage').src = imageSrc;
-                        document.getElementById('blogModal').style.display = 'block';
-                    }
-        </script>
     </body>
 </html>

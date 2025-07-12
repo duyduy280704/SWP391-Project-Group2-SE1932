@@ -3,15 +3,47 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/Students.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/SendNotificationController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/Controllers/ApproveController.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/StudentDAO.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/confirmCourse.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/web/SendNotification.jsp</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/PreRegistration.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/PreRegistrationDAO.java</file>
-            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/new/SWP391-Project-Group2-SE1932/src/java/models/NotificationDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/NoticeToTeacherDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/Blog.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherRegistrationController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/EventDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/StudentHome.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/forgot-password.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/BlogController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/AssignClassController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/BlogImageController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/FeedBackDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/ProfileController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/BlogDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/FeedbackTeacherController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/StudentDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/StaffHome.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/feedback1.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/BlogStudentController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/TeacherRegistion.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/ForgotPasswordServlet.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/ResetPasswordServlet.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/NoticeToTeacher.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/LoginControllers.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/ProfileDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/blogstudent.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/StudentHomeController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/TeacherHome.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/AdminStaffDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/AssignStudentClass.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/FeedbackController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/blog.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/profile.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/SaleManage.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherApplicationControllerad.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/web/blogstaff.jsp</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/RegisitionDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/models/TeacherDAO.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/SaleController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/LogoutController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherHomeController.java</file>
+            <file>file:/D:/main/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherapplicationController.java</file>
         </group>
     </open-files>
 </project-private>

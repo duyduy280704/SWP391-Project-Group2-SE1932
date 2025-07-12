@@ -329,5 +329,21 @@ public class EventDAO extends DBContext {
         }
         return data;
     }
+    //Huyền
+     public byte[] getEventImage(String eventId) {
+        byte[] image = null;
+        try {
+            String sql = "SELECT img FROM event WHERE id = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, eventId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                image = rs.getBytes("img");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return image;
+    }
 
 }

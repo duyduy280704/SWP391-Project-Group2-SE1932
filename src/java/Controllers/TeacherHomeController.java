@@ -5,16 +5,24 @@ import jakarta.servlet.http.*;
 import models.*;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 
 public class TeacherHomeController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Check for eventId parameter to serve image
+        String eventId = request.getParameter("eventId");
+        if (eventId != null && !eventId.trim().isEmpty()) {
+            serveEventImage(request, response, eventId);
+            return;
+        }
+
+        // Existing logic for rendering the page
         HttpSession session = request.getSession();
         Teachers teacher = (Teachers) session.getAttribute("account");
 
@@ -32,6 +40,22 @@ public class TeacherHomeController extends HttpServlet {
         }
 
         handleScheduleView(request, response, teacherId);
+    }
+
+    private void serveEventImage(HttpServletRequest request, HttpServletResponse response, String eventId)
+            throws IOException {
+        EventDAO eventDAO = new EventDAO();
+        byte[] imageBytes = eventDAO.getEventImage(eventId);
+
+        if (imageBytes != null && imageBytes.length > 0) {
+            response.setContentType("image/jpeg"); // Adjust MIME type as needed (e.g., image/png)
+            response.setContentLength(imageBytes.length);
+            try (OutputStream out = response.getOutputStream()) {
+                out.write(imageBytes);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found for event ID: " + eventId);
+        }
     }
 
     private void handleScheduleView(HttpServletRequest request, HttpServletResponse response, int teacherId)
@@ -100,12 +124,18 @@ public class TeacherHomeController extends HttpServlet {
         request.setAttribute("selectedYear", year);
 
         FeedBackDAO dao1 = new FeedBackDAO();
-        ArrayList<FeedBack> feedbackList = dao1.getFeedbacks();
+        ArrayList<FeedBack> feedbackList = dao1.getTop3Feedbacks();
         request.setAttribute("feedbackList", feedbackList);
 
         EventDAO ev = new EventDAO();
         List<Event> events = ev.getRecentEvents(3);
         request.setAttribute("events", events);
+        
+        NoticeToTeacherDAO noticedao = new NoticeToTeacherDAO();
+        int id=Integer.parseInt(teacher.getId());
+        List<NoticeToTeacher> notices = noticedao.getNoticesByTeacherId(id);
+
+        request.setAttribute("notices", notices);
 
         request.getRequestDispatcher("TeacherHome.jsp").forward(request, response);
     }

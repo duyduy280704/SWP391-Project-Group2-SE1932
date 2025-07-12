@@ -6,31 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import models.AdminStaffDAO;
 import models.AdminStaffs;
-import models.CourseDAO;
-import models.Information;
-import models.InformationDAO;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
 import models.Teachers;
-import models.TypeCourse;
 
 public class LoginControllers extends HttpServlet {
-    
-    private CourseDAO courseDAO = new CourseDAO();
-    private InformationDAO daoI = new InformationDAO();
-    
-    
-    public void init() {
-        Information setting = daoI.getSetting();
-        getServletContext().setAttribute("setting", setting);
-        List<TypeCourse> typeList = courseDAO.getType();
-        getServletContext().setAttribute("typeList", typeList);     
-              
-    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,11 +59,12 @@ public class LoginControllers extends HttpServlet {
             HttpSession session = request.getSession();
             if (staff != null) {
                 session.setAttribute("account", staff);
-                session.setAttribute("role", "staff");
                 System.out.println("AdminStaff RoleId: " + staff.getRole());
                 if ("4".equals(staff.getRole())) {
+                    session.setAttribute("role", "admin");
                     response.sendRedirect("adminhome");
                 } else if ("3".equals(staff.getRole())) {
+                    session.setAttribute("role", "staff");
                     response.sendRedirect("staffhome");
                 }
                 return;
@@ -92,8 +76,8 @@ public class LoginControllers extends HttpServlet {
                 return;
             } else if (teacher != null) {
                 session.setAttribute("account", teacher);
-                session.setAttribute("role", "teacher");
                 System.out.println("Teacher RoleId: " + teacher.getRole());
+                 session.setAttribute("role", "teacher");
                 response.sendRedirect("teacherHome");
                 return;
             } else {

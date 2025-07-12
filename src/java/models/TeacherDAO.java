@@ -533,4 +533,113 @@ public class TeacherDAO extends DBContext {
         }
         return data;
     }
+       public Teachers getByPhone(String phone) {
+        try {
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, Expertise, picture, role_id, id_type_course, years_of_experience, phone "
+                    + "FROM Teacher WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String name = rs.getString("full_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String birthdate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String expertise = rs.getString("Expertise");
+                byte[] picture = rs.getBytes("picture");
+                String role = String.valueOf(rs.getInt("role_id"));
+                String idcourse = rs.getString("id_type_course");
+                String yearexp = rs.getString("years_of_experience");
+                String phones = rs.getString("phone");
+                return new Teachers(id, name, email, password, birthdate, gender, expertise, picture, role, idcourse, yearexp, phones);
+            }
+        } catch (Exception e) {
+            System.out.println("getByPhone: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Teachers getByEmail(String email) {
+        try {
+            String strSQL = "SELECT id, full_name, email, password, birth_date, gender, Expertise, picture, role_id, id_type_course, years_of_experience, phone "
+                    + "FROM Teacher WHERE email = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, email);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String name = rs.getString("full_name");
+                String emailFromDB = rs.getString("email");
+                String password = rs.getString("password");
+                String birthdate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String expertise = rs.getString("Expertise");
+                byte[] picture = rs.getBytes("picture");
+                String role = String.valueOf(rs.getInt("role_id"));
+                String idcourse = rs.getString("id_type_course");
+                String yearexp = rs.getString("years_of_experience");
+                String phone = rs.getString("phone");
+                return new Teachers(id, name, emailFromDB, password, birthdate, gender, expertise, picture, role, idcourse, yearexp, phone);
+            }
+        } catch (Exception e) {
+            System.out.println("getByEmail: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean updatePassword(String phone, String newPassword) {
+        if (phone == null || newPassword == null) {
+            System.out.println("updatePassword: Phone hoặc mật khẩu null");
+            return false;
+        }
+        try {
+            String strSQL = "UPDATE Teacher SET password = ? WHERE phone = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, newPassword);
+            stm.setString(2, phone);
+            int rowsAffected = stm.executeUpdate();
+            System.out.println("updatePassword: Cập nhật " + rowsAffected + " hàng cho phone " + phone);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("updatePassword: Lỗi SQL - " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("updatePassword: Lỗi khi đóng statement - " + e.getMessage());
+            }
+        }
+    }
+
+    public boolean isPhoneExists(String phone) {
+        String sql = "SELECT 1 FROM Teacher WHERE phone = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isEmailExist(String email) {
+        String sql = "SELECT 1 FROM Teacher WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
+

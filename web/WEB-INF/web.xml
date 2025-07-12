@@ -220,6 +220,18 @@
         <servlet-name>FeedbackByTeacherController</servlet-name>
         <servlet-class>Controllers.FeedbackByTeacherController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogController</servlet-name>
+        <servlet-class>Controllers.BlogController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BlogStudentController</servlet-name>
+        <servlet-class>Controllers.BlogStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackTeacherController</servlet-name>
+        <servlet-class>Controllers.FeedbackTeacherController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -435,5 +447,17 @@
     <servlet-mapping>
         <servlet-name>FeedbackByTeacherController</servlet-name>
         <url-pattern>/feedbackByTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogController</servlet-name>
+        <url-pattern>/Blog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogStudentController</servlet-name>
+        <url-pattern>/BlogStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackTeacherController</servlet-name>
+        <url-pattern>/Feedback</url-pattern>
     </servlet-mapping>
 </web-app>

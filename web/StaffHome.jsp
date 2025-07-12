@@ -101,11 +101,14 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý sự kiện
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="Blog">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý blog
                             </a>
-
+                            <a class="nav-link" href="">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Quản lý phân lớp
+                            </a>
 
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
