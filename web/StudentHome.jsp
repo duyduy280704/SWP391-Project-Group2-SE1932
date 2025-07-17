@@ -35,10 +35,11 @@
             }
             .sidebar {
                 position: fixed;
+                overflow-y: auto;
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -47,7 +48,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-220px);
+                transform: translateX(-250px);
             }
             .sidebar a {
                 color: #000;
@@ -60,7 +61,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 250px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -256,19 +257,25 @@
             </div>
 
             <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
-            <a href="scheduleStudent" class="nav-item nav-link ">Lịch Học</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
+            <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
             <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="classTransfer" class="nav-link">Xin Chuyển Lớp</a>
             <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
-            <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+            <a href="studentapplication" class="nav-link">Gửi Đơn</a>
+            <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
+            <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+            <a href="#" class="nav-item nav-link">Sự Kiện</a> 
+            <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
+
         </div>
         <!-- sidebar End -->
 
         <!-- Main Content -->
         <div class="main-content" id="main-content">
 
-            <div class="mb-4">
+            <div class="mb-5">
                 <h2>
                     Xin chào, ${name} 👋
                 </h2>
@@ -491,9 +498,9 @@
                         </div>
                     </c:if>
                 </div>
-                 <div class="col-12 mt-3">
-                                <a href="BlogStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
-                            </div>
+                <div class="col-12 mt-3">
+                    <a href="BlogStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                </div>
             </div>
 
 

@@ -101,46 +101,110 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                            <!-- Trang chủ -->
                             <a class="nav-link" href="staffhome">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
+
+                            <!-- Quản lý khóa học -->
                             <a class="nav-link" href="coursestaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Quản lý khóa học
                             </a>
-                            <a class="nav-link" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản lý lịch học
-                            </a>
+
+                            <!-- Quản lý sự kiện -->
                             <a class="nav-link" href="eventstaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
                                 Quản lý sự kiện
                             </a>
-                            <a class="nav-link" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+
+                            <!-- Quản lý blog -->
+                            <a class="nav-link" href="Blog">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
                                 Quản lý blog
                             </a>
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+
+                            <!-- Quản lý phân lớp -->
+                            <a class="nav-link" href="AssignClass">
+                                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                                Quản lý phân lớp
+                            </a>
+
+                            <!-- Quản lý đăng ký -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Quản lý đăng ký
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseRegistration" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    <a class="nav-link" href="Approve">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
                                         Học Sinh
                                     </a>
-                                    <a class="nav-link" href="#">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    <a class="nav-link" href="TeacherApplication">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                                         Giáo Viên
                                     </a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Gửi thông báo
+
+                            <!-- Quản lý đơn -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseApplications" aria-expanded="false" aria-controls="collapseApplications">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                                Quản lý đơn
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseApplications" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="listapplicationStu">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
+                                        Học Sinh
+                                    </a>
+                                    <a class="nav-link" href="listapplicationTea">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                                        Giáo Viên
+                                    </a>
+                                </nav>
+                            </div>
+
+                            <!-- Quản lý lớp học -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
+                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                Quản lý lớp học
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="createClass"><i class="fas fa-plus me-2"></i> Tạo lớp mới</a>
+                                    <a class="nav-link" href="classStudent"><i class="fas fa-users me-2"></i> Danh sách lớp</a>
+                                </nav>
+                            </div>
+
+                            <!-- Thời khóa biểu -->
+                            <a class="nav-link" href="listClassSchedule">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                                Thời khóa biểu
+                            </a>
+
+                            <!-- Đánh giá -->
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
+                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
+                                Đánh giá
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseFeedback">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="feedback?mode=viewAll"><i class="fas fa-comment-dots me-2"></i> Phản hồi của học viên</a>
+                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
+                                </nav>
+                            </div>
+
+                            <!-- Xử lý đơn chuyển lớp -->
+                            <a href="classTransfer" class="nav-link">
+                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                                Xử lý đơn chuyển lớp
                             </a>
                         </div>
                     </div>

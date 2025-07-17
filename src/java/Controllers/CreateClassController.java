@@ -13,7 +13,7 @@ import models.CreateClassDAO;
 /**
  *
  * @author Thuy
- * tạo lớp học từ khóa học đã có 
+ * tạo lớp học từ khóa học  đã có 
  */
 public class CreateClassController extends HttpServlet {
 

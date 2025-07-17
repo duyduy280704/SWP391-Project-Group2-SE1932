@@ -170,8 +170,8 @@
                     <c:forEach var="n" items="${applicationScope.bloglist}">
                         <div class="col-lg-4 mb-4">
                             <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                <img class="img-fluid" src="BlogImageController?id=${n.id}" alt="Ảnh blog">
-                                <a class="blog-overlay text-decoration-none" href="javascript:void(0)" onclick="showBlogDetails('${n.id}', '${fn:escapeXml(n.title)}', '${fn:escapeXml(n.content)}', '<fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />', 'BlogImageController?id=${n.id}')">                                    <h5 class="text-white mb-3">${n.title}</h5>
+                                <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
+                                <a class="blog-overlay text-decoration-none" href="javascript:void(0)" onclick="showBlogDetails('${n.id}', '${fn:escapeXml(n.title)}', '${fn:escapeXml(n.content)}', '<fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />', 'BlogImage?id=${n.id}')">                                    <h5 class="text-white mb-3">${n.title}</h5>
                                     <p class="text-primary m-0">
                                         <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
@@ -196,7 +196,7 @@
                 <span class="close" onclick="closeBlogModal()">×</span>
                 <h2 id="blogTitle"></h2>
                 <p id="blogDate" class="text-muted"></p>
-                <img id="blogImage" class="blog-image" src="" alt="Blog Image">
+                <img id="blogImage" class="blog-image" src="BlogImage?id=${n.id}" alt="Blog Image">
                 <p id="blogContent"></p>
                 <a href="javascript:void(0)" onclick="closeBlogModal()" class="btn btn-primary mt-3">Quay lại danh sách</a>
             </div>

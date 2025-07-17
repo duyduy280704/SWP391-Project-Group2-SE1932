@@ -195,6 +195,7 @@
                 <div class="row">
                     <c:forEach var="t" items="${applicationScope.teacherlist}">
                         <div class="col-md-6 col-lg-3 text-center team mb-4">
+                            
                             <div class="team-item rounded overflow-hidden mb-2">
                                 <div class="team-img position-relative">
                                     <img class="card-img-top w-100" src="picteacher?id=${t.id}" 
@@ -204,8 +205,10 @@
                                     </div>
                                 </div>
                                 <div class="bg-secondary p-4">
+                                    <a href="TeacherDetail?id=${t.id}" style="text-decoration: none; color: inherit;">
                                     <h5>${t.name}</h5>
                                     <p class="m-0">${t.exp}</p>
+                                    </a>
                                 </div>
                             </div>
                         </div>

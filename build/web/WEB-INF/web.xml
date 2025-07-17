@@ -232,6 +232,10 @@
         <servlet-name>FeedbackTeacherController</servlet-name>
         <servlet-class>Controllers.FeedbackTeacherController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TeacherDetailController</servlet-name>
+        <servlet-class>Controllers.TeacherDetailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -459,5 +463,9 @@
     <servlet-mapping>
         <servlet-name>FeedbackTeacherController</servlet-name>
         <url-pattern>/Feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherDetailController</servlet-name>
+        <url-pattern>/TeacherDetail</url-pattern>
     </servlet-mapping>
 </web-app>

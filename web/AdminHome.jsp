@@ -57,43 +57,49 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <a class="nav-link" href="adminhome">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
+
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
                                 Quản lý người dùng
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="student">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
                                         Học Sinh
                                     </a>
                                     <a class="nav-link" href="teacher">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                                         Giáo Viên
                                     </a>
                                     <a class="nav-link" href="staff">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-tie"></i></div>
                                         Nhân Viên
                                     </a>
                                 </nav>
                             </div>
-                            <a class="nav-link" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản lý lương giáo viên
-                            </a>
-                            <a class="nav-link collapsed" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Thông báo
-                            </a>
+
                             <a class="nav-link collapsed" href="setting">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                                 Cài đặt thông tin
                             </a>
+
+                            <a class="nav-link collapsed" href="salaryadmin">
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                Quản lý lương giáo viên
+                            </a>
+
+                            <a class="nav-link collapsed" href="SendNotification">
+                                <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
+                                Thông báo
+                            </a>
                         </div>
+
                     </div>
                 </nav>
             </div>
@@ -161,36 +167,36 @@
                                     id="revenueChart"
                                     data-labels="<c:forEach var='item' items='${revenueData}' varStatus='status'>${not empty revenueData ? (status.index > 0 ? ',' : '') : ''}${item.month}</c:forEach>"
                                     data-values="<c:forEach var='item' items='${revenueData}' varStatus='status'>${not empty revenueData ? (status.index > 0 ? ',' : '') : ''}${item.revenue}</c:forEach>"
-                                    width="800" height="300" style="max-width: 100%;">
-                                </canvas>
+                                        width="800" height="300" style="max-width: 100%;">
+                                    </canvas>
+                                </div>
                             </div>
-                        </div>
-                        <!-- CARD HIỂN THỊ BIỂU ĐỒ SỐ HỌC SINH ĐĂNG KÝ -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Số học sinh đăng ký theo tháng
-                            </div>
-                            <div class="card-body">
-                                <canvas 
-                                    id="studentRegistrationChart"
-                                    data-labels="<c:forEach var='item' items='${studentData}' varStatus='status'>${not empty studentData ? (status.index > 0 ? ',' : '') : ''}${item.month}</c:forEach>"
+                            <!-- CARD HIỂN THỊ BIỂU ĐỒ SỐ HỌC SINH ĐĂNG KÝ -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Số học sinh đăng ký theo tháng
+                                </div>
+                                <div class="card-body">
+                                    <canvas 
+                                        id="studentRegistrationChart"
+                                        data-labels="<c:forEach var='item' items='${studentData}' varStatus='status'>${not empty studentData ? (status.index > 0 ? ',' : '') : ''}${item.month}</c:forEach>"
                                     data-approved="<c:forEach var='item' items='${studentData}' varStatus='status'>${not empty studentData ? (status.index > 0 ? ',' : '') : ''}${item.approvedCount}</c:forEach>"
                                     data-pending="<c:forEach var='item' items='${studentData}' varStatus='status'>${not empty studentData ? (status.index > 0 ? ',' : '') : ''}${item.pendingCount}</c:forEach>"
-                                    width="800" height="300" style="max-width: 100%;">
-                                </canvas>
+                                        width="800" height="300" style="max-width: 100%;">
+                                    </canvas>
+                                </div>
                             </div>
-                        </div>
-                        <!-- CARD HIỂN THỊ BIỂU ĐỒ SỐ HỌC SINH THEO THỂ LOẠI -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Số học sinh theo thể loại khóa học
-                            </div>
-                            <div class="card-body">
-                                <canvas 
-                                    id="studentByTypeChart"
-                                    data-type-names="<c:forEach var='item' items='${studentCountByType}' varStatus='status'>${not empty studentCountByType ? (status.index > 0 ? ',' : '') : ''}${item.typeName}</c:forEach>"
+                            <!-- CARD HIỂN THỊ BIỂU ĐỒ SỐ HỌC SINH THEO THỂ LOẠI -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Số học sinh theo thể loại khóa học
+                                </div>
+                                <div class="card-body">
+                                    <canvas 
+                                        id="studentByTypeChart"
+                                        data-type-names="<c:forEach var='item' items='${studentCountByType}' varStatus='status'>${not empty studentCountByType ? (status.index > 0 ? ',' : '') : ''}${item.typeName}</c:forEach>"
                                     data-student-counts="<c:forEach var='item' items='${studentCountByType}' varStatus='status'>${not empty studentCountByType ? (status.index > 0 ? ',' : '') : ''}${item.studentCount}</c:forEach>"
                                     width="800" height="300" style="max-width: 100%;">
                                 </canvas>
@@ -234,21 +240,22 @@
 
                         // Hàm vẽ biểu đồ doanh thu
                         function drawRevenueChart(labels, values) {
-                            if (revenueChartInstance) revenueChartInstance.destroy();
+                            if (revenueChartInstance)
+                                revenueChartInstance.destroy();
                             if (labels.length > 0 && values.length > 0) {
                                 revenueChartInstance = new Chart(revenueCanvas, {
                                     type: 'bar',
                                     data: {
                                         labels: labels,
                                         datasets: [{
-                                            label: 'Tổng doanh thu (VND)',
-                                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                                            borderColor: 'rgba(75, 192, 192, 1)',
-                                            borderWidth: 1,
-                                            data: values,
-                                            barPercentage: 0.8,
-                                            categoryPercentage: 0.9
-                                        }]
+                                                label: 'Tổng doanh thu (VND)',
+                                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                                borderColor: 'rgba(75, 192, 192, 1)',
+                                                borderWidth: 1,
+                                                data: values,
+                                                barPercentage: 0.8,
+                                                categoryPercentage: 0.9
+                                            }]
                                     },
                                     options: {
                                         scales: {
@@ -257,31 +264,31 @@
                                                 min: 0,
                                                 ticks: {
                                                     stepSize: 50000000,
-                                                    callback: function(value) {
+                                                    callback: function (value) {
                                                         return value.toLocaleString('vi-VN') + ' VND';
                                                     }
                                                 },
-                                                title: { display: true, text: 'Doanh thu (VND)' }
+                                                title: {display: true, text: 'Doanh thu (VND)'}
                                             },
                                             x: {
-                                                title: { display: true, text: 'Tháng' },
-                                                ticks: { font: { size: 14 } }
+                                                title: {display: true, text: 'Tháng'},
+                                                ticks: {font: {size: 14}}
                                             }
                                         },
                                         responsive: true,
                                         maintainAspectRatio: false,
                                         layout: {
-                                            padding: { left: 20, right: 20, top: 40, bottom: 20 }
+                                            padding: {left: 20, right: 20, top: 40, bottom: 20}
                                         },
                                         plugins: {
-                                            legend: { labels: { font: { size: 14 } } },
+                                            legend: {labels: {font: {size: 14}}},
                                             datalabels: {
                                                 anchor: 'end',
                                                 align: 'top',
-                                                formatter: function(value) {
+                                                formatter: function (value) {
                                                     return value > 0 ? value.toLocaleString('vi-VN') + ' VND' : '';
                                                 },
-                                                font: { weight: 'bold', size: 12 },
+                                                font: {weight: 'bold', size: 12},
                                                 color: '#000'
                                             }
                                         }
@@ -294,11 +301,15 @@
 
                         // Hàm vẽ biểu đồ học sinh đăng ký
                         function drawStudentChart(labels, approved, pending) {
-                            if (studentChartInstance) studentChartInstance.destroy();
+                            if (studentChartInstance)
+                                studentChartInstance.destroy();
                             const maxLength = Math.max(labels.length, approved.length, pending.length);
-                            while (labels.length < maxLength) labels.push('');
-                            while (approved.length < maxLength) approved.push(0);
-                            while (pending.length < maxLength) pending.push(0);
+                            while (labels.length < maxLength)
+                                labels.push('');
+                            while (approved.length < maxLength)
+                                approved.push(0);
+                            while (pending.length < maxLength)
+                                pending.push(0);
 
                             if (labels.length > 0) {
                                 studentChartInstance = new Chart(studentCanvas, {
@@ -306,18 +317,18 @@
                                     data: {
                                         labels: labels,
                                         datasets: [
-                                            { label: 'Đã duyệt', backgroundColor: 'rgba(54, 162, 235, 0.6)', borderColor: 'rgba(54, 162, 235, 1)', data: approved, barPercentage: 0.8, categoryPercentage: 0.9 },
-                                            { label: 'Đang chờ', backgroundColor: 'rgba(255, 99, 132, 0.6)', borderColor: 'rgba(255, 99, 132, 1)', data: pending, barPercentage: 0.8, categoryPercentage: 0.9 }
+                                            {label: 'Đã duyệt', backgroundColor: 'rgba(54, 162, 235, 0.6)', borderColor: 'rgba(54, 162, 235, 1)', data: approved, barPercentage: 0.8, categoryPercentage: 0.9},
+                                            {label: 'Đang chờ', backgroundColor: 'rgba(255, 99, 132, 0.6)', borderColor: 'rgba(255, 99, 132, 1)', data: pending, barPercentage: 0.8, categoryPercentage: 0.9}
                                         ]
                                     },
                                     options: {
-                                        scales: { y: { beginAtZero: true, min: 0, ticks: { stepSize: 1 }, title: { display: true, text: 'Số học sinh' } }, x: { title: { display: true, text: 'Tháng' }, ticks: { font: { size: 14 } } } },
+                                        scales: {y: {beginAtZero: true, min: 0, ticks: {stepSize: 1}, title: {display: true, text: 'Số học sinh'}}, x: {title: {display: true, text: 'Tháng'}, ticks: {font: {size: 14}}}},
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        layout: { padding: { left: 20, right: 20, top: 40, bottom: 20 } },
+                                        layout: {padding: {left: 20, right: 20, top: 40, bottom: 20}},
                                         plugins: {
-                                            legend: { labels: { font: { size: 14 } } },
-                                            datalabels: { anchor: 'end', align: 'top', formatter: (value) => value > 0 ? value : '', font: { weight: 'bold', size: 12 }, color: '#000' }
+                                            legend: {labels: {font: {size: 14}}},
+                                            datalabels: {anchor: 'end', align: 'top', formatter: (value) => value > 0 ? value : '', font: {weight: 'bold', size: 12}, color: '#000'}
                                         }
                                     }
                                 });
@@ -339,7 +350,8 @@
                                 filteredRevenueValues = [];
                                 originalRevenueData.labels.forEach((label, index) => {
                                     const [dataYear, dataMonth] = label.split('-');
-                                    if ((year && dataYear !== year) || (month && dataMonth !== month)) return;
+                                    if ((year && dataYear !== year) || (month && dataMonth !== month))
+                                        return;
                                     filteredRevenueLabels.push(label);
                                     filteredRevenueValues.push(originalRevenueData.values[index]);
                                 });
@@ -356,7 +368,8 @@
                                 filteredPending = [];
                                 originalStudentData.labels.forEach((label, index) => {
                                     const [dataYear, dataMonth] = label.split('-');
-                                    if ((year && dataYear !== year) || (month && dataMonth !== month)) return;
+                                    if ((year && dataYear !== year) || (month && dataMonth !== month))
+                                        return;
                                     filteredStudentLabels.push(label);
                                     filteredApproved.push(originalStudentData.approved[index]);
                                     filteredPending.push(originalStudentData.pending[index]);
@@ -387,40 +400,40 @@
                                     data: {
                                         labels: typeNames,
                                         datasets: [{
-                                            label: 'Số học sinh',
-                                            backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                                            borderColor: 'rgba(153, 102, 255, 1)',
-                                            borderWidth: 1,
-                                            data: studentCounts,
-                                            barPercentage: 0.8,
-                                            categoryPercentage: 0.9
-                                        }]
+                                                label: 'Số học sinh',
+                                                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                                                borderColor: 'rgba(153, 102, 255, 1)',
+                                                borderWidth: 1,
+                                                data: studentCounts,
+                                                barPercentage: 0.8,
+                                                categoryPercentage: 0.9
+                                            }]
                                     },
                                     options: {
                                         scales: {
                                             y: {
                                                 beginAtZero: true,
                                                 min: 0,
-                                                ticks: { stepSize: 1, callback: (value) => value },
-                                                title: { display: true, text: 'Số học sinh' }
+                                                ticks: {stepSize: 1, callback: (value) => value},
+                                                title: {display: true, text: 'Số học sinh'}
                                             },
                                             x: {
-                                                title: { display: true, text: 'Thể loại' },
-                                                ticks: { font: { size: 14 } }
+                                                title: {display: true, text: 'Thể loại'},
+                                                ticks: {font: {size: 14}}
                                             }
                                         },
                                         responsive: true,
                                         maintainAspectRatio: false,
                                         layout: {
-                                            padding: { left: 20, right: 20, top: 40, bottom: 20 }
+                                            padding: {left: 20, right: 20, top: 40, bottom: 20}
                                         },
                                         plugins: {
-                                            legend: { labels: { font: { size: 14 } } },
+                                            legend: {labels: {font: {size: 14}}},
                                             datalabels: {
                                                 anchor: 'end',
                                                 align: 'top',
                                                 formatter: (value) => value > 0 ? value : '',
-                                                font: { weight: 'bold', size: 12 },
+                                                font: {weight: 'bold', size: 12},
                                                 color: '#000'
                                             }
                                         }

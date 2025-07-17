@@ -3,8 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/PRJ_SRC/Inter3_SWP_V2/SWP391-Project-Group2-SE1932/src/java/dal/DBContext.java</file>
-            <file>file:/C:/PRJ_SRC/Inter3_SWP_V2/SWP391-Project-Group2-SE1932/nbproject/build-impl.xml</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/web/teacher.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/web/blog.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/models/SalaryTeacherDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/models/Teachers.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/Controllers/SalaryAdminController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/models/TeacherDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherDetailController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/web/teacherDetail.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/src/java/Controllers/CreateClassController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/13_7/SWP391-Project-Group2-SE1932/web/course.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -1,3 +1,4 @@
+<!-- Dương_homepage -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -26,6 +27,67 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+            /* Animation */
+            .wow {
+                animation-duration: 1s;
+                animation-fill-mode: both;
+            }
+            .fadeInLeft {
+                animation-name: fadeInLeft;
+            }
+            .fadeInRight {
+                animation-name: fadeInRight;
+            }
+            @keyframes fadeInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            @keyframes fadeInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Button Hover */
+            .btn-light:hover {
+                background-color: #fff3cd;
+                color: #d63384;
+                transform: scale(1.05);
+                transition: all 0.3s ease;
+            }
+            
+            
+            .profile-card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+
+        .profile-img {
+            max-height: 400px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .profile-info {
+            padding: 30px;
+        }
+        </style>
+
+
     </head>
     <body>
         <!-- Topbar Start -->
@@ -97,8 +159,8 @@
                                 <div class="navbar-nav mx-auto">
                                     <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
-                                    <a href="course.jsp" class="nav-item nav-link active">Khóa Học</a>
-                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link active">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
                                 <!-- Nút hành động về phía phải -->
@@ -115,113 +177,49 @@
         <div class="container-fluid page-header" style="margin-bottom: 90px;">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-                    <h3 class="display-4 text-white text-uppercase">Khóa Học</h3>
+                    <h3 class="display-4 text-white text-uppercase">Giáo Viên</h3>
                     <div class="d-inline-flex text-white">
                         <p class="m-0 text-uppercase"><a class="text-white" href="HomePage">Trang Chủ</a></p>
                         <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                        <p class="m-0 text-uppercase">Khóa Học</p>
+                        <p class="m-0 text-uppercase">Giáo Viên</p>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Header End -->
 
+        <div class="container py-5">
+    <a href="teacher.jsp" class="btn btn-secondary mb-4">← Quay về danh sách giáo viên</a>
+    <div class="row justify-content-center">
+        <div class="col-md-10 profile-card bg-white d-flex">
+            <div class="col-md-5 p-0">
+                <img src="picteacher?id=${teacher.id}" alt="Ảnh giáo viên" class="img-fluid profile-img w-100">
+            </div>
+            <div class="col-md-7 profile-info">
+                <h2 class="text-primary mb-3">${teacher.name}</h2>
+                <h5 class="text-muted">Kinh nghiệm: ${teacher.year}</h5>
+                <hr>
+                <p><strong>Giới thiệu:</strong></p>
+                
 
-        <div class="container px-4">
-            <form method="get" action="Course" class="mb-4">
-                <!-- Dòng 1: Tìm kiếm -->
-                <div class="row mb-3">
-                    <div class="col-md-6 offset-md-3">
-                        <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
-                    </div>
-                </div>
-
-                <!-- Dòng 2: Bộ lọc -->
-                <div class="row g-2 justify-content-center">
-                    <div class="col-md-2">
-                        <select name="type" class="form-control">
-                            <option value="">Tất cả loại</option>
-                            <c:forEach var="t" items="${typeList}">
-                                <option value="${t.name}" ${t.name == param.type ? 'selected' : ''}>${t.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <input name="minPrice" type="number" step="0.01" class="form-control" placeholder="Giá từ" value="${param.minPrice}">
-                    </div>
-                    <div class="col-md-2">
-                        <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
-                    </div>
-                    
-                    <div class="col-md-2 d-flex gap-2">
-                        <button class="btn btn-primary w-100">Lọc</button>
-                        <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
-
-
-
-        <hr>
-
-        <!-- Display Courses -->
-        <div class="container-fluid py-4 bg-light">
-            <div class="container py-4">                
-                    <div class="row justify-content-center">
-                        <c:forEach var="c" items="${courseList}">
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
-                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
-
-
-                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
-                                        <c:choose>
-                                            <c:when test="${not empty c.image}">
-                                                <img src="image?id=${c.id}" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="Course Picture"
-                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img src="images/no-image.png" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="No Image">
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </a>
-
-
-                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
-                                        <div class="text-muted small mb-1">
-                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
-                                        </div>
-                                        <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
-                                            <h6 class="mb-0">${c.name}</h6>
-                                        </a>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
-                                            ${c.description}
-                                        </p>
-                                    </div>
-
-
-                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
-                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                    </div>
-                                </div>
-                            </div>
+                <c:if test="${not empty teacher.exp}">
+                    <p><strong>Kỹ năng / Môn dạy:</strong></p>
+                    <ul>
+                        <c:forEach var="exp" items="${teacher.exp}">
+                            <li>${exp}</li>
                         </c:forEach>
-                    </div>     
+                    </ul>
+                </c:if>
             </div>
         </div>
+    </div>
+</div>
 
 
-        <!-- Courses End -->
 
 
 
-
+        <!-- Team End -->
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
@@ -294,10 +292,8 @@
         </footer>
         <!-- Footer End -->
 
-
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -311,6 +307,15 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-    </body>
 
+        <!-- Form Submission Script -->
+        <script>
+            function submitNewsletter() {
+                var email = document.getElementById('newsletter-email').value;
+                // Add logic to handle newsletter submission
+                console.log('Newsletter subscribed:', {email: email});
+                // Example: window.location.href = 'newsletter?email=' + encodeURIComponent(email);
+            }
+        </script>
+    </body>
 </html>
