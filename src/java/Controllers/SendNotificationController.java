@@ -13,9 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import models.AdminStaffs;
 import models.NotificationDAO;
 import models.PreRegistration;
 import models.Students;
+import models.Teachers;
+import models.UserBasic;
 
 /**
  *
@@ -23,13 +26,28 @@ import models.Students;
  */
 public class SendNotificationController extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         NotificationDAO dao = new NotificationDAO();
+
+        String role = request.getParameter("role");
+        if (role == null || role.trim().isEmpty()) {
+        request.setAttribute("error", "Vui lòng chọn vai trò cần tra cứu.");
+        request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
+        return;
+    }
+        
+        List<UserBasic> list = dao.getUsersByRole(role);
+        request.setAttribute("userList", list);
         request.setAttribute("classList", dao.getAllClasses());
         request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
         request.setAttribute("preList", dao.getApprovedRegistrations());
+
+        // Forward sang trang gửi thông báo
         request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
+
     }
 
     @Override
@@ -87,8 +105,8 @@ public class SendNotificationController extends HttpServlet {
 
                     SendMail.send(s.getEmail(),
                             "Nhắc nhở thanh toán học phí",
-                            "Xin chào " + s.getName()+ ",\n\n"
-                            + message +": " + s.getCourseName() + ". "
+                            "Xin chào " + s.getName() + ",\n\n"
+                            + message + ": " + s.getCourseName() + ". "
                             + "Vui lòng thanh toán sớm để không ảnh hưởng đến việc học.\n\n"
                             + "Trân trọng.");
                 }

@@ -6,6 +6,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -100,93 +102,146 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h2>📬 Gửi thông báo</h2>
-                        <form method="post" action="SendNotification">
-                            <label>Hình thức gửi:</label>
-                            <select name="sendType" id="sendType" onchange="toggleFields()">
-                                <option >chọn chức năng gửi</option>
-                                <option value="individual">👤 Gửi cá nhân</option>
-                                <option value="role">👥 Gửi theo vai trò</option>
-                                <option value="class">🏫 Gửi theo lớp</option>
-                                <option value="unpaid">💰 Gửi cho SV chưa đóng tiền</option>
-                                <option value="preapproved">✅ Gửi đến đăng ký đã duyệt (kích hoạt)</option>
-                            </select>
-                            <c:if test="${not empty message}">
-                                <div class="alert alert-success">${message}</div>
-                            </c:if>
-                            <!-- Nếu chọn gửi cá nhân -->
-                            <div id="individualFields" style="display: none; margin-top: 10px;">
+                        <div class="card shadow-sm p-4 mt-4">
+                            <h2 class="mb-4">📬 Gửi thông báo</h2>
+                            <form method="post" action="SendNotification">
+                                <div class="mb-3 d-flex align-items-center gap-3">
+                                    <label class="form-label mb-0">Hình thức gửi:</label>
+                                    <select name="sendType" id="sendType" onchange="toggleFields()" class="form-select w-auto">
+                                        <option selected disabled>-- Chọn hình thức --</option>
+                                        <option value="individual">👤 Gửi cá nhân</option>
+                                        <option value="role">👥 Gửi theo vai trò</option>
+                                        <option value="class">🏫 Gửi theo lớp</option>
+                                        <option value="unpaid">💰 Gửi SV chưa đóng tiền</option>
+                                        <option value="preapproved">✅ Gửi đến đăng ký đã duyệt</option>
+                                    </select>
+
+                                    <button type="button" class="btn btn-outline-secondary" onclick="showUserLookup()">🔍 Tra cứu người dùng</button>
+                                </div>
+
+                                <c:if test="${not empty message}">
+                                    <div class="alert alert-success">${message}</div>
+                                </c:if>
+
+                                <!-- Gửi cá nhân -->
+                                <div id="individualFields" class="mb-3" style="display: none;">
+                                    <label class="form-label">Chọn vai trò:</label>
+                                    <select name="role" class="form-select mb-2 w-50">
+                                        <option value="student">Học sinh</option>
+                                        <option value="teacher">Giáo viên</option>
+                                        <option value="staff">Nhân viên</option>
+                                    </select>
+                                    <label class="form-label">Nhập ID người nhận:</label>
+                                    <input type="text" name="receiverId" class="form-control w-50" placeholder="VD: ST001">
+                                </div>
+
+                                <!-- Gửi theo vai trò -->
+                                <div id="roleFields" class="mb-3" style="display: none;">
+                                    <label class="form-label">Chọn vai trò muốn gửi:</label>
+                                    <select name="roleAll" class="form-select w-50">
+                                        <option value="student">Toàn bộ học sinh</option>
+                                        <option value="teacher">Toàn bộ giáo viên</option>
+                                        <option value="staff">Toàn bộ nhân viên</option>
+                                    </select>
+                                </div>
+
+                                <!-- Gửi theo lớp -->
+                                <div id="classFields" class="mb-3" style="display: none;">
+                                    <label class="form-label">Chọn lớp muốn gửi:</label>
+                                    <div class="row">
+                                        <c:forEach var="cls" items="${classList}">
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="classIds" value="${cls.id_class}" id="class_${cls.id_class}">
+                                                    <label class="form-check-label" for="class_${cls.id_class}">
+                                                        ${cls.name_class}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+
+                                <!-- Gửi cho SV chưa đóng tiền -->
+                                <div id="unpaidFields" class="mb-3" style="display: none;">
+                                    <p class="fw-bold">📌 Danh sách sinh viên chưa thanh toán:</p>
+                                    <c:choose>
+                                        <c:when test="${empty unpaidList}">
+                                            <p class="text-danger">Không có sinh viên nào cần gửi thông báo.</p>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <ul class="list-group">
+                                                <c:forEach var="s" items="${unpaidList}">
+                                                    <li class="list-group-item">${s.name} (${s.email})</li>
+                                                    </c:forEach>
+                                            </ul>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+
+                                <!-- Gửi cho học viên đã duyệt -->
+                                <div id="preapprovedFields" class="mb-3" style="display: none;">
+                                    <p class="fw-bold">📌 Danh sách học viên đã duyệt:</p>
+                                    <c:choose>
+                                        <c:when test="${empty preList}">
+                                            <p class="text-danger">Không có học viên nào ở trạng thái 'Đã duyệt'.</p>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <ul class="list-group">
+                                                <c:forEach var="p" items="${preList}">
+                                                    <li class="list-group-item">${p.full_name} (${p.email})</li>
+                                                    </c:forEach>
+                                            </ul>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+
+                                <!-- Nội dung thông báo -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nội dung thông báo:</label>
+                                    <textarea name="message" rows="4" class="form-control" required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">📨 Gửi thông báo</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="userLookupModal" class="modal" style="display: none; position: fixed; top: 0; left: 0;
+                         width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                        <div style="background: white; padding: 20px; border-radius: 8px; width: 600px; max-height: 80%; overflow-y: auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h5>🔍 Tra cứu người dùng</h5>
+                                <button onclick="closeUserLookup()" class="btn btn-sm btn-danger">❌</button>
+                            </div>
+
+                            <form method="get" action="SendNotification">
                                 <label>Chọn vai trò:</label>
-                                <select name="role">
+                                <select name="role" class="form-select mb-3" onchange="this.form.submit()">
+                                    <option value="">-- Chọn vai trò --</option>
                                     <option value="student">Học sinh</option>
                                     <option value="teacher">Giáo viên</option>
                                     <option value="staff">Nhân viên</option>
                                 </select>
-                                <label>Nhập ID người nhận:</label>
-                                <input type="text" name="receiverId" placeholder="Mã người nhận (VD: ST001)">
-                            </div>
+                            </form>
 
-                            <!-- Nếu chọn gửi theo vai trò -->
-                            <div id="roleFields" style="display: none; margin-top: 10px;">
-                                <label>Chọn vai trò muốn gửi:</label>
-                                <select name="roleAll">
-                                    <option value="student">Toàn bộ học sinh</option>
-                                    <option value="teacher">Toàn bộ giáo viên</option>
-                                    <option value="staff">Toàn bộ nhân viên</option>
-                                </select>
-                            </div>
+                            <input type="text" id="searchNameInput" class="form-control mb-3" placeholder="Nhập tên cần tìm..." oninput="filterLookupUsers()">
 
-                            <!-- Nếu chọn gửi theo lớp -->
-                            <div id="classFields" style="display: none; margin-top: 10px;">
-                                <label>Chọn lớp muốn gửi:</label><br>
-                                <c:forEach var="cls" items="${classList}">
-                                    <label>
-                                        <input type="checkbox" name="classIds" value="${cls.id_class}"> ${cls.name_class}
-                                    </label><br>
-                                </c:forEach>
-                            </div>
-                            <!-- Nếu chọn gửi sinh viên chưa đóng tiền -->
-                            <div id="unpaidFields" style="display: none; margin-top: 10px;">
-                                <p>📌 Danh sách sinh viên chưa thanh toán:</p>
-                                <c:if test="${empty unpaidList}">
-                                    <p class="text-danger">Không có sinh viên nào cần gửi thông báo.</p>
-                                </c:if>
-                                <c:if test="${not empty unpaidList}">
-                                    <ul>
-                                        <c:forEach var="s" items="${unpaidList}">
-                                            <li>${s.name} (${s.email})</li>
-                                            </c:forEach>
-                                    </ul>
-                                </c:if>
-                            </div>
-
-                            <!-- Nếu chọn gửi tài khoản cho sinh viên --> 
-                            <div id="preapprovedFields" style="display: none; margin-top: 10px;">
-                                <p>📌 Danh sách học viên đã duyệt (sẽ được kích hoạt):</p>
-                                <c:if test="${empty preList}">
-                                    <p class="text-danger">Không có học viên nào ở trạng thái 'Đã duyệt'.</p>
-                                </c:if>
-                                <c:if test="${not empty preList}">
-                                    <ul>
-                                        <c:forEach var="p" items="${preList}">
-                                            <li>${p.full_name} (${p.email})</li>
-                                            </c:forEach>
-                                    </ul>
-                                </c:if>
-                            </div>
-
-
-                            <!-- Nội dung thông báo -->
-                            <label style="margin-top: 10px;">Nội dung thông báo:</label>
-                            <textarea name="message" rows="4" class="form-control" required></textarea>
-
-                            <br>
-                            <button type="submit" class="btn btn-primary">Gửi thông báo</button>
-                        </form>
-
-
-
+                            <table class="table table-bordered table-sm">
+                                <thead><tr><th>Họ tên</th><th>Mã người dùng</th></tr></thead>
+                                <tbody id="lookupUserTableBody">
+                                    <c:forEach var="u" items="${userList}">
+                                        <tr>
+                                            <td>${u.fullName}</td>
+                                            <td>${u.id}</td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+
                 </main>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
                 <script src="js/scripts.js"></script>
@@ -196,15 +251,38 @@
                 <script src="assets/demo/chart-area-demo.js"></script>
 
                 <script>
-                                function toggleFields() {
-                                    const type = document.getElementById("sendType").value;
-                                    document.getElementById("individualFields").style.display = (type === "individual") ? "block" : "none";
-                                    document.getElementById("roleFields").style.display = (type === "role") ? "block" : "none";
-                                    document.getElementById("classFields").style.display = (type === "class") ? "block" : "none";
-                                    document.getElementById("unpaidFields").style.display = (type === "unpaid") ? "block" : "none";
-                                    document.getElementById("preapprovedFields").style.display = (type === "preapproved") ? "block" : "none";
-                                }
+                                    function toggleFields() {
+                                        const type = document.getElementById("sendType").value;
+                                        document.getElementById("individualFields").style.display = (type === "individual") ? "block" : "none";
+                                        document.getElementById("roleFields").style.display = (type === "role") ? "block" : "none";
+                                        document.getElementById("classFields").style.display = (type === "class") ? "block" : "none";
+                                        document.getElementById("unpaidFields").style.display = (type === "unpaid") ? "block" : "none";
+                                        document.getElementById("preapprovedFields").style.display = (type === "preapproved") ? "block" : "none";
+                                    }
                 </script>
+                <script>
+                    function showUserLookup() {
+                        document.getElementById('userLookupModal').style.display = 'flex';
+                    }
+
+                    function closeUserLookup() {
+                        document.getElementById('userLookupModal').style.display = 'none';
+                    }
+
+                    function filterLookupUsers() {
+                        var input = document.getElementById("searchNameInput").value.toLowerCase();
+                        var rows = document.querySelectorAll("#lookupUserTableBody tr");
+                        rows.forEach(function (row) {
+                            var name = row.cells[0].innerText.toLowerCase();
+                            row.style.display = name.includes(input) ? "" : "none";
+                        });
+                    }
+                </script>
+
+
+
+
+
             </div>
         </div>
     </body>

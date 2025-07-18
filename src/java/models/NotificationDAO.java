@@ -402,4 +402,37 @@ public class NotificationDAO extends DBContext {
         return list;
     }
 
+    public List<UserBasic> getUsersByRole(String role) {
+        List<UserBasic> list = new ArrayList<>();
+        String sql = "";
+
+        switch (role) {
+            case "student":
+                sql = "SELECT id, full_name FROM Student";
+                break;
+            case "teacher":
+                sql = "SELECT id, full_name FROM Teacher";
+                break;
+            case "staff":
+                sql = "SELECT id, full_name FROM Admin_staff";
+                break;
+            default:
+                return list;
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                UserBasic user = new UserBasic();
+                user.setId(rs.getInt("id"));
+                user.setFullName(rs.getString("full_name"));
+                list.add(user);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }

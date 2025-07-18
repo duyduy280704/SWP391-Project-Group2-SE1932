@@ -95,18 +95,11 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <!-- Menu căn giữa -->
                                 <div class="navbar-nav mx-auto">
-                                    <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
-                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
-                                    <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
-                                    <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="classTransfer" class="nav-link">Xin Chuyển Lớp</a>
-                                    <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
-                                    <a href="studentapplication" class="nav-link">Gửi Đơn</a>
-                                    <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
-                                    <a href="Notification" class="nav-item nav-link">Thông Báo</a>
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
+                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
+                                    <a href="course.jsp" class="nav-item nav-link active">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-                                    <a href="#" class="nav-item nav-link">Sự Kiện</a> 
-                                    <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
                                 </div>
                                 <!-- Nút hành động về phía phải -->
                                 <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>

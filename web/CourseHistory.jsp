@@ -37,8 +37,9 @@
                 position: fixed;
                 top: 0;
                 left: 0;
+                overflow-y: auto;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -47,7 +48,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-220px);
+                transform: translateX(-250px);
             }
             .sidebar a {
                 color: #000;
@@ -60,7 +61,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 250px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
