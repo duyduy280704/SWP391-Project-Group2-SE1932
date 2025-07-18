@@ -14,10 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.sql.SQLException;
+
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
 import models.ResultMessage;
 import models.TeacherDAO;
 import models.Teachers;
@@ -117,6 +117,7 @@ public class TeacherController extends HttpServlet {
         String course = request.getParameter("course");
         String years = request.getParameter("years");
         String phone = request.getParameter("phone");
+        String offerSalary = request.getParameter("offerSalary");
         String role = "2"; // Mặc định role là giáo viên
         String nameSearch = request.getParameter("nameSearch");
         String genderFilter = request.getParameter("genderFilter");
@@ -160,8 +161,22 @@ public class TeacherController extends HttpServlet {
 
         ResultMessage result = null;
         TeacherDAO teacherDAO = new TeacherDAO();
-        Teachers teacher = new Teachers(id, name, email, password, birthdate, gender, exp, imageBytes, role, course, years, phone);
+        Teachers teacher = new Teachers(id, name, email, password, birthdate, gender, exp, imageBytes, role, course, years, phone, offerSalary);
         
+        
+
+        try {
+            if (request.getParameter("update") != null) {
+                result = teacherDAO.update(teacher);
+            } else if (request.getParameter("add") != null) {
+                result = teacherDAO.add(teacher);
+            } else {
+                result = new ResultMessage(true, "Đã tìm giáo viên");
+            }
+        } catch (NumberFormatException e) {
+            result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
+        }
+
         ArrayList<Teachers> data;
         ArrayList<TypeCourse> data1 = teacherDAO.getCourseType();
         if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
@@ -175,23 +190,6 @@ public class TeacherController extends HttpServlet {
         }
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
-
-        try {
-            if (request.getParameter("update") != null) {
-                result = teacherDAO.update(teacher);
-            } else if (request.getParameter("add") != null) {
-                result = teacherDAO.add(teacher);
-            } else {
-                result = new ResultMessage(true, "Đã tìm giáo viên");
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(TeacherController.class.getName()).log(Level.SEVERE, null, e);
-            result = new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
-        }
-
-        
         
         
         request.setAttribute("message", result.getMessage());

@@ -20,10 +20,12 @@ public class TeacherDAO extends DBContext {
     //Quang
     // lấy toàn bộ danh sách giáo viên
     public ArrayList<Teachers> getTeachers() {
-
         ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String strSQL = "select * from Teacher s join Role r on s.role_id = r.id join type_course t on s.id_type_course = t.id";
+            String strSQL = "SELECT s.id, s.password, s.full_name, s.email, s.birth_date, s.gender, s.Expertise, " +
+                           "s.picture, s.role_id, s.id_type_course, s.years_of_experience, s.phone, s.offer_salary, " +
+                           "r.name AS role_name, t.name AS course_name " +
+                           "FROM Teacher s JOIN Role r ON s.role_id = r.id JOIN type_course t ON s.id_type_course = t.id";
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -36,82 +38,48 @@ public class TeacherDAO extends DBContext {
                 String exp = rs.getString(7);
                 byte[] pic = rs.getBytes(8);
                 String role = rs.getString(14);
-                String course = rs.getString(16);
+                String course = rs.getString(15);
                 String years = String.valueOf(rs.getInt(11));
                 String phone = rs.getString(12);
+                String offerSalary = rs.getString(13);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone, offerSalary);
                 data.add(p);
             }
-        } catch (Exception e) {
-            System.out.println("getTeachers" + e.getMessage());
-
+        } catch (SQLException e) {
+            System.err.println("getTeachers: " + e.getMessage());
         }
         return data;
     }
-    
-    //Huyền-checklogin của teacher
-    public Teachers checkLogin(String phone, String password) {
-        try {
-            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id,id_type_course,years_of_experience,phone "
-                    + "FROM Teacher "
-                    + "WHERE phone = ? AND password = ?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, phone);
-            stm.setString(2, password);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                String id = String.valueOf(rs.getInt("id"));
-                String pwd = rs.getString("password");
-                String fullName = rs.getString("full_name");
-                String emailFromDB = rs.getString("email");
-                String birthDate = rs.getString("birth_date");
-                String gender = rs.getString("gender");
-                String expertise = rs.getString("Expertise");
-                byte[] picture = rs.getBytes("picture");
-                String roleId = String.valueOf(rs.getInt("role_id")); 
-                String idcourse=rs.getString("id_type_course");
-                String yearexp=rs.getString("years_of_experience");
-                String phones=rs.getString("phone");
-                Teachers teacher = new Teachers(id, fullName, emailFromDB, pwd, birthDate, gender, expertise, picture, roleId,idcourse, yearexp,phones);
-                return teacher;
-            }
-        } catch (Exception e) {
-            System.out.println("checkLogin: " + e.getMessage());
-        }
-        return null;
-    }
-    
-// lấy kiểu khóa học
 
+    // lấy kiểu khóa học
     public ArrayList<TypeCourse> getCourseType() {
         ArrayList<TypeCourse> data = new ArrayList<>();
         try {
-            String strSQL = "select * from type_course";
+            String strSQL = "SELECT * FROM type_course";
             stm = connection.prepareStatement(strSQL);
             rs = stm.executeQuery();
             while (rs.next()) {
                 String code = String.valueOf(rs.getInt(1));
                 String name = rs.getString(2);
-
                 TypeCourse c = new TypeCourse(code, name);
                 data.add(c);
             }
-        } catch (Exception e) {
-            System.out.println("getCourseType" + e.getMessage());
-
+        } catch (SQLException e) {
+            System.err.println("getCourseType: " + e.getMessage());
         }
         return data;
     }
 
+    // lấy giáo viên theo id
     public Teachers getTeacherById(String id) {
         try {
-            String strSQL = "select * from Teacher where id=?";
+            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id, " +
+                           "id_type_course, years_of_experience, phone, offer_salary FROM Teacher WHERE id = ?";
             stm = connection.prepareStatement(strSQL);
             stm.setString(1, id);
             rs = stm.executeQuery();
             while (rs.next()) {
-
                 String name = rs.getString(3);
                 String password = rs.getString(2);
                 String email = rs.getString(4);
@@ -123,18 +91,18 @@ public class TeacherDAO extends DBContext {
                 String course = rs.getString(10);
                 String years = String.valueOf(rs.getInt(11));
                 String phone = rs.getString(12);
+                String offerSalary = rs.getString(13);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone, offerSalary);
                 return p;
             }
-        } catch (Exception e) {
-            System.out.println("getTeachers" + e.getMessage());
-
+        } catch (SQLException e) {
+            System.err.println("getTeacherById: " + e.getMessage());
         }
         return null;
     }
-    // Sửa thông tin giáo viên
 
+    // sửa thông tin giáo viên
     public ResultMessage update(Teachers s) {
         // Kiểm tra đầu vào
         if (s == null) {
@@ -171,7 +139,10 @@ public class TeacherDAO extends DBContext {
             return new ResultMessage(false, "Số năm kinh nghiệm không được để trống.");
         }
         try {
-            Integer.parseInt(s.year);
+            int years = Integer.parseInt(s.year);
+            if (years < 0) {
+                return new ResultMessage(false, "Số năm kinh nghiệm không được âm.");
+            }
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
         }
@@ -181,11 +152,21 @@ public class TeacherDAO extends DBContext {
         if (!s.phone.matches("^\\+?[0-9]{10,11}$")) {
             return new ResultMessage(false, "Định dạng số điện thoại không hợp lệ: " + s.phone);
         }
+        if (s.offerSalary == null || s.offerSalary.isEmpty()) {
+            return new ResultMessage(false, "Mức lương đề xuất không được để trống.");
+        }
+        try {
+            double salary = Double.parseDouble(s.offerSalary);
+            if (salary < 0) {
+                return new ResultMessage(false, "Mức lương đề xuất không được âm.");
+            }
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "Mức lương đề xuất phải là một số hợp lệ: " + s.offerSalary);
+        }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
         }
 
-        // Kiểm tra định dạng ID
         int teacherId;
         try {
             teacherId = Integer.parseInt(s.id);
@@ -193,13 +174,19 @@ public class TeacherDAO extends DBContext {
             return new ResultMessage(false, "ID giáo viên phải là một số hợp lệ: " + s.id);
         }
 
+        int courseId;
+        try {
+            courseId = Integer.parseInt(s.course);
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "ID loại khóa học phải là một số hợp lệ: " + s.course);
+        }
+
         try (PreparedStatement stm = connection.prepareStatement(
-                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, picture = ?, id_type_course = ?, years_of_experience = ?, phone = ? WHERE id = ?")) {
-            // Kiểm tra email trùng với giáo viên khác (ngoại trừ chính nó)
+                "UPDATE Teacher SET password = ?, full_name = ?, email = ?, birth_date = ?, gender = ?, Expertise = ?, " +
+                "picture = ?, id_type_course = ?, years_of_experience = ?, phone = ?, offer_salary = ? WHERE id = ?")) {
             if (isEmailExistForOther(s.email, teacherId)) {
                 return new ResultMessage(false, "Email '" + s.email + "' đã được sử dụng bởi giáo viên khác.");
             }
-            // Kiểm tra số điện thoại trùng với giáo viên khác (ngoại trừ chính nó)
             if (isPhoneExistForOther(s.phone, teacherId)) {
                 return new ResultMessage(false, "Số điện thoại '" + s.phone + "' đã được sử dụng bởi giáo viên khác.");
             }
@@ -214,71 +201,58 @@ public class TeacherDAO extends DBContext {
             } else {
                 stm.setNull(7, Types.BLOB);
             }
-            stm.setString(8, s.course);
+            stm.setInt(8, courseId);
             stm.setString(9, s.year);
             stm.setString(10, s.phone);
-            stm.setInt(11, teacherId);
+            stm.setDouble(11, Double.parseDouble(s.offerSalary));
+            stm.setInt(12, teacherId);
             int rowsAffected = stm.executeUpdate();
-            if (rowsAffected > 0) {
-                return new ResultMessage(true, "Cập nhật giáo viên thành công!");
-            } else {
-                return new ResultMessage(false, "Không tìm thấy giáo viên với ID: " + s.id);
-            }
+            return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Cập nhật giáo viên thành công!" : "Không tìm thấy giáo viên với ID: " + s.id);
         } catch (SQLException e) {
-            System.err.println("Lỗi SQL trong update: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            System.err.println("Lỗi SQL trong update: " + e.getMessage());
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
 
-    // Kiểm tra email đã tồn tại cho giáo viên khác chưa
+    // kiểm tra email đã tồn tại cho giáo viên khác chưa
     private boolean isEmailExistForOther(String email, int excludeId) throws SQLException {
-        if (connection == null) {
-            throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
-        }
         try (PreparedStatement stm = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Teacher WHERE email = ? AND id != ?")) {
             stm.setString(1, email);
             stm.setInt(2, excludeId);
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Kiểm tra email: " + email + " (ngoại trừ ID: " + excludeId + ") - Kết quả: " + count);
-                    return count > 0;
+                    return rs.getInt(1) > 0;
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("Lỗi SQL trong isEmailExistForOther: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
-            throw e;
         }
         return false;
     }
 
-    // Kiểm tra số điện thoại đã tồn tại cho giáo viên khác chưa
+    // kiểm tra số điện thoại đã tồn tại cho giáo viên khác chưa
     private boolean isPhoneExistForOther(String phone, int excludeId) throws SQLException {
-        if (connection == null) {
-            throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
-        }
         try (PreparedStatement stm = connection.prepareStatement(
                 "SELECT COUNT(*) FROM Teacher WHERE phone = ? AND id != ?")) {
             stm.setString(1, phone);
             stm.setInt(2, excludeId);
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Kiểm tra số điện thoại: " + phone + " (ngoại trừ ID: " + excludeId + ") - Kết quả: " + count);
-                    return count > 0;
+                    return rs.getInt(1) > 0;
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("Lỗi SQL trong isPhoneExistForOther: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
-            throw e;
         }
         return false;
     }
 
-    // Thêm giáo viên
-    public ResultMessage add(Teachers s) throws SQLException {
-        if (s == null || s.email == null || s.email.isEmpty()) {
+    // thêm giáo viên
+    public ResultMessage add(Teachers s) {
+        if (s == null) {
+            return new ResultMessage(false, "Dữ liệu giáo viên không hợp lệ.");
+        }
+        if (s.name == null || s.name.isEmpty()) {
+            return new ResultMessage(false, "Tên không được để trống.");
+        }
+        if (s.email == null || s.email.isEmpty()) {
             return new ResultMessage(false, "Email không được để trống.");
         }
         if (!s.email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
@@ -290,8 +264,8 @@ public class TeacherDAO extends DBContext {
         if (s.gender != null && !s.gender.matches("Nam|Nữ")) {
             return new ResultMessage(false, "Giới tính không hợp lệ (phải là 'Nam' hoặc 'Nữ'): " + s.gender);
         }
-        if (s.name == null || s.name.isEmpty()) {
-            return new ResultMessage(false, "Tên không được để trống.");
+        if (s.password == null || s.password.isEmpty()) {
+            return new ResultMessage(false, "Mật khẩu không được để trống.");
         }
         if (s.exp == null || s.exp.isEmpty()) {
             return new ResultMessage(false, "Kinh nghiệm không được để trống.");
@@ -303,7 +277,10 @@ public class TeacherDAO extends DBContext {
             return new ResultMessage(false, "Số năm kinh nghiệm không được để trống.");
         }
         try {
-            Integer.parseInt(s.year);
+            int years = Integer.parseInt(s.year);
+            if (years < 0) {
+                return new ResultMessage(false, "Số năm kinh nghiệm không được âm.");
+            }
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "Số năm kinh nghiệm phải là một số hợp lệ: " + s.year);
         }
@@ -312,6 +289,17 @@ public class TeacherDAO extends DBContext {
         }
         if (!s.phone.matches("^\\+?[0-9]{10,11}$")) {
             return new ResultMessage(false, "Định dạng số điện thoại không hợp lệ: " + s.phone);
+        }
+        if (s.offerSalary == null || s.offerSalary.isEmpty()) {
+            return new ResultMessage(false, "Mức lương đề xuất không được để trống.");
+        }
+        try {
+            double salary = Double.parseDouble(s.offerSalary);
+            if (salary < 0) {
+                return new ResultMessage(false, "Mức lương đề xuất không được âm.");
+            }
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "Mức lương đề xuất phải là một số hợp lệ: " + s.offerSalary);
         }
         if (connection == null) {
             return new ResultMessage(false, "Kết nối cơ sở dữ liệu chưa được khởi tạo.");
@@ -324,8 +312,17 @@ public class TeacherDAO extends DBContext {
             return new ResultMessage(false, "Giá trị role_id không hợp lệ: " + s.role);
         }
 
+        int courseId;
+        try {
+            courseId = Integer.parseInt(s.course);
+        } catch (NumberFormatException e) {
+            return new ResultMessage(false, "ID loại khóa học phải là một số hợp lệ: " + s.course);
+        }
+
         try (PreparedStatement stm = connection.prepareStatement(
-                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, picture, role_id, id_type_course, years_of_experience, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                "INSERT INTO Teacher (full_name, email, password, Expertise, birth_date, gender, picture, role_id, id_type_course, years_of_experience, phone, offer_salary) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                Statement.RETURN_GENERATED_KEYS)) {
             if (isAccountExist(s.email)) {
                 return new ResultMessage(false, "Tài khoản '" + s.email + "' đã tồn tại.");
             }
@@ -344,72 +341,60 @@ public class TeacherDAO extends DBContext {
                 stm.setNull(7, Types.BLOB);
             }
             stm.setInt(8, roleId);
-            stm.setString(9, s.course);
+            stm.setInt(9, courseId);
             stm.setString(10, s.year);
             stm.setString(11, s.phone);
+            stm.setDouble(12, Double.parseDouble(s.offerSalary));
             int rowsAffected = stm.executeUpdate();
-            return new ResultMessage(true, "Thêm giáo viên thành công!");
+            if (rowsAffected > 0) {
+                ResultSet rs = stm.getGeneratedKeys();
+                if (rs.next()) {
+                    s.id = String.valueOf(rs.getInt(1)); // Set generated ID
+                }
+                return new ResultMessage(true, "Thêm giáo viên thành công!");
+            } else {
+                return new ResultMessage(false, "Không thể thêm giáo viên. Vui lòng thử lại.");
+            }
         } catch (SQLException e) {
-            System.err.println("SQL Error in add: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            System.err.println("Lỗi SQL trong add: " + e.getMessage());
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         }
     }
 
-    // Kiểm tra email đã tồn tại chưa
+    // kiểm tra email đã tồn tại chưa
     public boolean isAccountExist(String email) throws SQLException {
-        if (connection == null) {
-            throw new SQLException("Database connection is not initialized.");
-        }
         try (PreparedStatement stm = connection.prepareStatement("SELECT COUNT(*) FROM Teacher WHERE email = ?")) {
             stm.setString(1, email);
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Check email: " + email + " - Kết quả: " + count);
-                    return count > 0;
+                    return rs.getInt(1) > 0;
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("SQL Error: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
-            throw e;
         }
         return false;
     }
 
-    // Kiểm tra số điện thoại đã tồn tại chưa
+    // kiểm tra số điện thoại đã tồn tại chưa
     private boolean isPhoneExist(String phone) throws SQLException {
-        if (connection == null) {
-            throw new SQLException("Kết nối cơ sở dữ liệu chưa được khởi tạo.");
-        }
-        try (PreparedStatement stm = connection.prepareStatement(
-                "SELECT COUNT(*) FROM Teacher WHERE phone = ?")) {
+        try (PreparedStatement stm = connection.prepareStatement("SELECT COUNT(*) FROM Teacher WHERE phone = ?")) {
             stm.setString(1, phone);
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    int count = rs.getInt(1);
-                    System.out.println("Kiểm tra số điện thoại: " + phone + " - Kết quả: " + count);
-                    return count > 0;
+                    return rs.getInt(1) > 0;
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("Lỗi SQL trong isPhoneExist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
-            throw e;
         }
         return false;
     }
-// xóa thông tin giáo viên
 
+    // xóa thông tin giáo viên
     public ResultMessage delete(String id) {
         try (PreparedStatement stm = connection.prepareStatement("DELETE FROM Teacher WHERE id = ?")) {
             stm.setInt(1, Integer.parseInt(id));
             int rowsAffected = stm.executeUpdate();
-            if (rowsAffected > 0) {
-                return new ResultMessage(true, "Xóa giáo viên thành công!");
-            } else {
-                return new ResultMessage(false, "Không tìm thấy giáo viên với ID: " + id);
-            }
+            return new ResultMessage(rowsAffected > 0, rowsAffected > 0 ? "Xóa giáo viên thành công!" : "Không tìm thấy giáo viên với ID: " + id);
         } catch (SQLException e) {
-            System.err.println("SQL Error in delete: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            System.err.println("Lỗi SQL trong delete: " + e.getMessage());
             return new ResultMessage(false, "Lỗi cơ sở dữ liệu: " + e.getMessage());
         } catch (NumberFormatException e) {
             return new ResultMessage(false, "ID không hợp lệ: " + id);
@@ -437,12 +422,13 @@ public class TeacherDAO extends DBContext {
         }
         return null;
     }
-    
-    // tìm kiếm giáo viên theo tên 
+
+    // tìm kiếm giáo viên theo tên
     public ArrayList<Teachers> getTeacherByName(String name1) {
         ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String strSQL = "  SELECT * FROM Teacher WHERE full_name LIKE ? ";
+            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id, " +
+                           "id_type_course, years_of_experience, phone, offer_salary FROM Teacher WHERE full_name LIKE ?";
             stm = connection.prepareStatement(strSQL);
             stm.setString(1, "%" + name1 + "%");
             rs = stm.executeQuery();
@@ -459,21 +445,23 @@ public class TeacherDAO extends DBContext {
                 String course = rs.getString(10);
                 String years = String.valueOf(rs.getInt(11));
                 String phone = rs.getString(12);
+                String offerSalary = rs.getString(13);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone);
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone, offerSalary);
                 data.add(p);
             }
-        } catch (Exception e) {
-            System.out.println("getProducts" + e.getMessage());
-
+        } catch (SQLException e) {
+            System.err.println("getTeacherByName: " + e.getMessage());
         }
         return data;
     }
+
     // tìm kiếm giáo viên theo giới tính
     public ArrayList<Teachers> getTeachersByGender(String gender) {
         ArrayList<Teachers> data = new ArrayList<>();
         try {
-            String strSQL = "SELECT * FROM Teacher WHERE gender = ?";
+            String strSQL = "SELECT id, password, full_name, email, birth_date, gender, Expertise, picture, role_id, " +
+                           "id_type_course, years_of_experience, phone, offer_salary FROM Teacher WHERE gender = ?";
             stm = connection.prepareStatement(strSQL);
             stm.setString(1, gender);
             rs = stm.executeQuery();
@@ -490,15 +478,18 @@ public class TeacherDAO extends DBContext {
                 String course = rs.getString(10);
                 String years = String.valueOf(rs.getInt(11));
                 String phone = rs.getString(12);
+                String offerSalary = rs.getString(13);
 
-                Teachers p = new Teachers(id, name, email, password, birthdate, teacherGender, exp, pic, role, course, years, phone);
+                Teachers p = new Teachers(id, name, email, password, birthdate, teacherGender, exp, pic, role, course, years, phone, offerSalary);
                 data.add(p);
             }
-        } catch (Exception e) {
-            System.out.println("getStudentsByGender: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("getTeachersByGender: " + e.getMessage());
         }
         return data;
     }
+    
+    //duong
     public ArrayList<Teachers> get4Teachers() {
         ArrayList<Teachers> data = new ArrayList<>();
         try {
@@ -639,6 +630,10 @@ public class TeacherDAO extends DBContext {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Teachers checkLogin(String phone, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

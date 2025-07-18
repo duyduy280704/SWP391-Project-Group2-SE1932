@@ -32,12 +32,11 @@
             .course-list-table th {
                 background-color: #f2f2f2;
             }
-            form input[type="text"] {
+            form input[type="text"], form input[type="number"] {
                 width: 100%;
                 padding: 6px;
                 box-sizing: border-box;
             }
-
             form input[type="submit"] {
                 padding: 6px 12px;
                 margin-right: 5px;
@@ -48,40 +47,35 @@
             .error {
                 color: red;
             }
-
             .search-filter-form {
                 display: flex;
                 gap: 20px;
                 margin: 20px 0;
                 align-items: center;
                 flex-wrap: wrap;
-                background-color: #f8f9fa; /* Nền nhẹ để nổi bật */
+                background-color: #f8f9fa;
                 padding: 15px;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
-
             .search-filter-form div {
                 display: flex;
                 align-items: center;
                 gap: 12px;
             }
-
-            .search-filter-form input[type="text"] {
+            .search-filter-form input[type="text"], .search-filter-form input[type="number"] {
                 padding: 10px;
                 border: 2px solid #ced4da;
                 border-radius: 6px;
                 font-size: 16px;
-                width: 250px; /* Kích thước cố định để đồng nhất */
+                width: 250px;
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
-
-            .search-filter-form input[type="text"]:focus {
+            .search-filter-form input[type="text"]:focus, .search-filter-form input[type="number"]:focus {
                 border-color: #007bff;
                 box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
                 outline: none;
             }
-
             .search-filter-form select {
                 padding: 10px;
                 border: 2px solid #ced4da;
@@ -89,18 +83,15 @@
                 font-size: 16px;
                 background-color: #fff;
                 cursor: pointer;
-                width: 150px; /* Kích thước cố định */
+                width: 150px;
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
-
             .search-filter-form select:focus {
                 border-color: #007bff;
                 box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
                 outline: none;
             }
-
-            .search-filter-form button,
-            .search-filter-form input[type="submit"] {
+            .search-filter-form button, .search-filter-form input[type="submit"] {
                 padding: 10px 20px;
                 background-color: #007bff;
                 color: white;
@@ -110,32 +101,24 @@
                 cursor: pointer;
                 transition: background-color 0.3s ease, transform 0.2s ease;
             }
-
-            .search-filter-form button:hover,
-            .search-filter-form input[type="submit"]:hover {
+            .search-filter-form button:hover, .search-filter-form input[type="submit"]:hover {
                 background-color: #0056b3;
-                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+                transform: translateY(-2px);
             }
-
             @media (max-width: 768px) {
                 .search-filter-form {
                     flex-direction: column;
                     align-items: stretch;
                     padding: 10px;
                 }
-
                 .search-filter-form div {
                     width: 100%;
                 }
-
-                .search-filter-form input[type="text"],
-                .search-filter-form select {
+                .search-filter-form input[type="text"], .search-filter-form input[type="number"], .search-filter-form select {
                     width: 100%;
                     font-size: 14px;
                 }
-
-                .search-filter-form button,
-                .search-filter-form input[type="submit"] {
+                .search-filter-form button, .search-filter-form input[type="submit"] {
                     width: 100%;
                     font-size: 14px;
                 }
@@ -144,21 +127,14 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.html">BIG DREAM</a>
-            <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-
-            </form>
-            <!-- Navbar-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
-
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
                     </ul>
@@ -226,7 +202,7 @@
 
                         <form action="teacher" method="post" enctype="multipart/form-data" class="search-filter-form">
                             <div>
-                                <input type="text" name="nameSearch" placeholder="Tìm kiếm giáo viên...">
+                                <input type="text" name="nameSearch" placeholder="Tìm kiếm giáo viên..." value="${nameSearch}">
                                 <button type="submit" name="search">Tìm kiếm</button> 
                             </div>
                             <div>
@@ -242,7 +218,6 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="teacher" method="post" enctype="multipart/form-data">
-                                    <!-- input fields table -->
                                     <table>
                                         <tr>
                                             <td>Họ và tên: </td>
@@ -252,53 +227,54 @@
                                             <td>Mật khẩu: </td>
                                             <td><input type="text" name="password" value="${s.getPassword()}"></td>
                                             <td>Ngày sinh: </td>
-                                            <td><input type="text" name="birthdate" value="${s.getBirthdate()}"></td>
+                                            <td><input type="text" name="birthdate" value="${s.getBirthdate()}" placeholder="yyyy-MM-dd"></td>
                                         </tr>
                                         <tr>
                                             <td>Giới tính: </td>
                                             <td>
                                                 <select name="gender">
-                                                    <option value="Nam" ${s.getGender().equals("Nam") ? "selected" : ""}>Nam</option>
-                                                    <option value="Nữ" ${s.getGender().equals("Nữ") ? "selected" : ""}>Nữ</option>
+                                                    <option value="Nam" ${s.getGender() == 'Nam' ? 'selected' : ''}>Nam</option>
+                                                    <option value="Nữ" ${s.getGender() == 'Nữ' ? 'selected' : ''}>Nữ</option>
                                                 </select>
                                             </td>
                                             <td>Kinh nghiệm: </td>
                                             <td><input type="text" name="exp" value="${s.getExp()}"></td>
                                             <td>Ảnh: </td>
                                             <td>
-                                                <input type="file" name="pic" value="${p.getPic()}">
-
+                                                <input type="file" name="pic">
+                                                <c:if test="${not empty s.id and not empty s.pic}">
+                                                    <div style="margin-top: 10px;">
+                                                        <img src="picteacher?id=${s.id}" alt="Teacher Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                                    </div>
+                                                </c:if>
                                             </td>
                                             <td>Chuyên môn: </td>
                                             <td>
                                                 <select name="course">
                                                     <option value="0">Tất cả thể loại</option>
-                                                    <c:forEach items= "${data1}" var="c">
-                                                        <option value="${c.getId()}"
-                                                                <c:if test="${s.getCourse()==c.getId()}">
-                                                                    selected 
-                                                                </c:if>
-                                                                > ${c.getName()}</option>
-
+                                                    <c:forEach items="${data1}" var="c">
+                                                        <option value="${c.getId()}" ${s.getCourse() == c.getId() ? 'selected' : ''}>${c.getName()}</option>
                                                     </c:forEach>
                                                 </select>
                                             </td>
-
                                         </tr>
-
                                         <tr>
                                             <td>Năm kinh nghiệm: </td>
-                                            <td><input type="text" name="years" value="${s.getYear()}"></td>
-                                            <td>Số điện thoại:</td>
+                                            <td><input type="number" name="years" value="${s.getYear()}" min="0"></td>
+                                            <td>Số điện thoại: </td>
                                             <td><input type="text" name="phone" value="${s.getPhone()}"></td>
+                                            <td>Mức lương (VND): </td>
+                                            <td><input type="number" name="offerSalary" value="${s.getOfferSalary()}"></td>
                                             <td><input type="hidden" name="id" value="${s.getId()}"></td>
+                                        </tr>
+                                        <tr>
                                             <td><input type="submit" name="add" value="Thêm"></td>
                                             <td><input type="submit" name="update" value="Lưu"></td>
                                         </tr>
                                         <tr>
                                             <c:if test="${not empty message}">
-                                            <p class="${success ? 'success' : 'error'}">${message}</p>
-                                        </c:if>
+                                                <td colspan="8" class="${success ? 'success' : 'error'}">${message}</td>
+                                            </c:if>
                                         </tr>
                                     </table>
                                 </form>
@@ -324,12 +300,11 @@
                                             <th>Chuyên môn</th>
                                             <th>Năm kinh nghiệm</th>
                                             <th>Số điện thoại</th>
+                                            <th>Mức lương (VND)</th>
                                             <th>Chức năng</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
-
                                         <c:forEach items="${data}" var="item">
                                             <tr>
                                                 <td>${item.id}</td>
@@ -349,10 +324,14 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
-                                                <td>${item.course}</td>
+                                                <td>
+                                                    <c:forEach items="${data1}" var="type">
+                                                        <c:if test="${type.getId() == item.course}">${type.getName()}</c:if>
+                                                    </c:forEach>
+                                                </td>
                                                 <td>${item.year}</td>
                                                 <td>${item.phone}</td>
-
+                                                <td>${item.offerSalary}</td>
                                                 <td>
                                                     <a href="teacher?id=${item.id}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="teacher?id=${item.id}&mode=2" class="btn btn-delete"
@@ -360,15 +339,12 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </main>
-
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
