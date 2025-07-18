@@ -1,12 +1,10 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
@@ -28,53 +26,35 @@ import models.TypeCourse;
  */
 @MultipartConfig
 public class CourseStaffController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+        try (var out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet CourseStaffController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CourseStaffController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CourseStaffController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         CourseDAO cd = new CourseDAO();
 
         if (request.getParameter("mode") != null && request.getParameter("mode").equals("1")) {
-            //tìm Product tương ứng cùng với code truyền sang
             String id = request.getParameter("id");
             Courses p = cd.getCoursesById(id);
             request.setAttribute("p", p);
         }
-        
-        if (request.getParameter("mode") != null && request.getParameter("mode").equals("2")) {
 
+        if (request.getParameter("mode") != null && request.getParameter("mode").equals("2")) {
             String id = request.getParameter("id");
             if (id != null && !id.isEmpty()) {
                 cd.delete(id);
@@ -90,29 +70,22 @@ public class CourseStaffController extends HttpServlet {
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
         request.getRequestDispatcher("courseStaff.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
-
         String id = request.getParameter("id");
         String name = request.getParameter("name");
         String type = request.getParameter("type");
         String description = request.getParameter("description");
         String fee = request.getParameter("fee");
         String level = request.getParameter("level");
-        
+        String numberOfSessions = request.getParameter("number_of_sessions");
         String nameSearch = request.getParameter("nameSearch");
         String typeFilter = request.getParameter("typeFilter");
+
+        
 
         // Handle file upload
         Part filePart = request.getPart("image");
@@ -145,9 +118,8 @@ public class CourseStaffController extends HttpServlet {
         ResultMessage result = null;
         CourseDAO cd = new CourseDAO();
 
-        Courses p = new Courses(id, name, type, description, fee, imageBytes, level);
+        Courses p = new Courses(id, name, type, description, fee, imageBytes, level, numberOfSessions);
         try {
-            
             if (request.getParameter("update") != null) {
                 result = cd.update(p);
             } else if (request.getParameter("add") != null) {
@@ -158,16 +130,14 @@ public class CourseStaffController extends HttpServlet {
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
-        
 
-        
-        ArrayList<Courses> data ;
+        ArrayList<Courses> data;
         ArrayList<TypeCourse> data1 = cd.getCourseType();
-        
+
         if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
             data = cd.getCourseByName(nameSearch);
             request.setAttribute("nameSearch", nameSearch);
-        } else if (request.getParameter("typeFilter") != null && typeFilter != null && !typeFilter.trim().isEmpty() && !typeFilter.equals("0"))  {
+        } else if (request.getParameter("typeFilter") != null && typeFilter != null && !typeFilter.trim().isEmpty() && !typeFilter.equals("0")) {
             data = cd.getCoursesByType(typeFilter);
             request.setAttribute("typeFilter", typeFilter);
         } else {
@@ -175,15 +145,11 @@ public class CourseStaffController extends HttpServlet {
         }
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
-        
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        
         request.setAttribute("p", p);
         request.getRequestDispatcher("courseStaff.jsp").forward(request, response);
     }
-
-    
 
     private void forwardRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -195,13 +161,9 @@ public class CourseStaffController extends HttpServlet {
         request.setAttribute("p", new Courses());
         request.getRequestDispatcher("courseStaff.jsp").forward(request, response);
     }
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

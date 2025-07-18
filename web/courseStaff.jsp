@@ -20,7 +20,6 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-
         <style>
             .course-list-table {
                 border-collapse: collapse;
@@ -140,6 +139,7 @@
                     width: 100%;
                     font-size: 14px;
                 }
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -147,11 +147,9 @@
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.html">BIG DREAM</a>
             <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><雷0; <i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-
-            </form>
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item">
@@ -176,15 +174,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Trang Chủ
                             </a>
-
-
-
                             <a class="nav-link" href="coursestaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý khóa học
                             </a>
-
-
                             <a class="nav-link" href="#">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý lịch học
@@ -197,8 +190,6 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý blog
                             </a>
-
-
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Quản lý đăng ký
@@ -214,18 +205,14 @@
                                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                         Giáo Viên
                                     </a>
-
                                 </nav>
                             </div>
-
-                            <a class="nav-link collapsed" href="#" >
+                            <a class="nav-link collapsed" href="#">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Gửi thông báo
-
                             </a>
                         </div>
                     </div>
-
                 </nav>
             </div>
             <div id="layoutSidenav_content">
@@ -250,7 +237,6 @@
                                                     selected 
                                                 </c:if>
                                                 > ${c.getName()}</option>
-
                                     </c:forEach>
                                     <input type="submit" name="filterGender" value="Lọc theo thể loại"/>
                             </div>
@@ -259,10 +245,8 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="coursestaff" method="post" enctype="multipart/form-data">
-
                                     <table>
                                         <tr>
-
                                             <td>Tên khóa học: </td>
                                             <td><input type="text" name="name" value="${p.getName()}"></td>
                                             <td>Thể loại: </td>
@@ -274,7 +258,6 @@
                                                                     selected 
                                                                 </c:if>
                                                                 > ${c.getName()}</option>
-
                                                     </c:forEach>
                                                 </select></td>
                                             <td>Giá (VND): </td>
@@ -289,33 +272,25 @@
                                                     <option value="Nâng cao" ${p.getLevel() == 'Nâng cao' ? 'selected' : ''}>Nâng cao</option>
                                                 </select>
                                             </td>
-
+                                            <td>Số buổi học: </td>
+                                            <td><input type="number" name="number_of_sessions" value="${p.getNumberOfSessions()}"></td>
                                             <td>Ảnh: </td>
                                             <td><input type="file" name="image" value="${p.getImage()}">
-
                                                 <c:if test="${not empty p.id and not empty p.image}">
                                                     <div style="margin-top: 10px;">
                                                         <img src="image?id=${p.id}" alt="Current Course Image" style="max-width: 100px; max-height: 100px;" onerror="this.src='images/no-image.png'; this.alt='Image not available';">
                                                     </div>
                                                 </c:if>
                                             </td>
-
-
-
                                         </tr>
                                         <tr>
                                             <td>Mô tả: </td>
                                             <td><textarea name="description" id="description" cols="60" rows="5" >${p.getDescription()}</textarea></td>
-
                                         </tr>
-
                                         <tr>
-
                                             <td><input type="submit" name="add" value="Thêm"></td>
                                             <td><input type="submit" name="update" value="Lưu"></td>
-
                                             <td><input type="hidden" name="id" value="${p.getId()}"></td>
-
                                         </tr>
                                         <tr>
                                             <c:if test="${not empty message}">
@@ -326,7 +301,6 @@
                                 </form>
                             </div>
                         </div>
-
 
                         <div class="card mb-4">
                             <div class="card-header">
@@ -341,14 +315,13 @@
                                             <th>Tên khóa học</th>
                                             <th>Thể loại</th>
                                             <th>Mô tả</th>
-                                            <th>giá</th>
+                                            <th>Giá</th>
                                             <th>Ảnh</th>
                                             <th>Mức độ</th>
+                                            <th>Số buổi học</th>
                                             <th>Chức năng</th>
-
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         <c:forEach items="${data}" var="item">
                                             <tr>
@@ -357,33 +330,31 @@
                                                 <td>${item.getType()}</td>
                                                 <td>${item.getDescription()}</td>
                                                 <td>${item.getFee()} VND</td>
-
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${not empty item.image}">
-                                                            <img src="image?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='/ProjectSWP_personal/images/no-image.png'; this.alt='Image not available';">                                                        </c:when>
+                                                            <img src="image?id=${item.id}" alt="Course Picture" style="max-width: 100px; max-height: 100px;" onerror="this.src='/ProjectSWP_personal/images/no-image.png'; this.alt='Image not available';">
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <span>No Image</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                                 <td>${item.getLevel()}</td>
+                                                <td>${item.getNumberOfSessions()}</td>
                                                 <td>
                                                     <a href="coursestaff?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
                                                     <a href="coursestaff?id=${item.id}&mode=2" class="btn btn-delete" 
                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a>
                                                 </td>
-
                                             </tr>
                                         </c:forEach>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </main>
-
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -405,12 +376,9 @@
                                                                // Initialize CKEditor
                                                                const descriptionTextarea = document.getElementById('description');
                                                                if (descriptionTextarea && typeof CKEDITOR !== 'undefined') {
-                                                                   // Destroy existing CKEditor instance if it exists
                                                                    if (CKEDITOR.instances.description) {
                                                                        CKEDITOR.instances.description.destroy(true);
                                                                    }
-
-                                                                   // Initialize CKEditor
                                                                    CKEDITOR.replace('description', {
                                                                        height: 200,
                                                                        toolbar: [
@@ -420,8 +388,6 @@
                                                                            {name: 'colors', items: ['TextColor', 'BGColor']}
                                                                        ]
                                                                    });
-
-                                                                   // Set description value safely
                                                                    const descriptionValue = '${p.description != null ? fn:escapeXml(p.description) : ''}';
                                                                    CKEDITOR.instances.description.setData(descriptionValue);
                                                                    console.log('CKEditor initialized with description:', descriptionValue);
@@ -438,4 +404,3 @@
         </script>
     </body>
 </html>
-

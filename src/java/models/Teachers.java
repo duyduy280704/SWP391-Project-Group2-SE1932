@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
 
@@ -9,12 +9,27 @@ package models;
  * @author Quang
  */
 public class Teachers {
-    String id, name, email, password, birthdate, gender, exp, role, course, year, phone;
-    
-        byte[] pic;
-
+    String id, name, email, password, birthdate, gender, exp, role, course, year, phone, offerSalary;
+    byte[] pic;
 
     public Teachers() {
+    }
+
+    public Teachers(String id, String name, String email, String password, String birthdate, String gender, 
+                    String exp, byte[] pic, String role, String course, String year, String phone, String offerSalary) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.exp = exp;
+        this.pic = pic;
+        this.role = role;
+        this.course = course;
+        this.year = year;
+        this.phone = phone;
+        this.offerSalary = offerSalary;
     }
 
     public Teachers(String id, String name, String email, String password, String birthdate, String gender, String exp, byte[] pic, String role, String course, String year, String phone) {
@@ -31,13 +46,13 @@ public class Teachers {
         this.year = year;
         this.phone = phone;
     }
+    
+    
 
     public Teachers(String id, String name) {
         this.id = id;
         this.name = name;
     }
-    
-    
 
     public String getId() {
         return id;
@@ -103,8 +118,6 @@ public class Teachers {
         this.pic = pic;
     }
 
-    
-
     public String getRole() {
         return role;
     }
@@ -136,6 +149,12 @@ public class Teachers {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
+
+    public String getOfferSalary() {
+        return offerSalary;
+    }
+
+    public void setOfferSalary(String offerSalary) {
+        this.offerSalary = offerSalary;
+    }
 }

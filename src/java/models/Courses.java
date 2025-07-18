@@ -9,14 +9,13 @@ package models;
  * @author Quang
  */
 public class Courses {
-    String id, name, type, description, fee, level;
-    
+    String id, name, type, description, fee, level, numberOfSessions;
     byte[] image;
 
     public Courses() {
     }
 
-    public Courses(String id, String name, String type, String description, String fee, byte[] image, String level) {
+    public Courses(String id, String name, String type, String description, String fee, byte[] image, String level, String numberOfSessions) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -24,15 +23,13 @@ public class Courses {
         this.fee = fee;
         this.image = image;
         this.level = level;
-        
+        this.numberOfSessions = numberOfSessions;
     }
 
     public Courses(String id, String name) {
         this.id = id;
         this.name = name;
     }
-    
-    
 
     public String getId() {
         return id;
@@ -82,8 +79,6 @@ public class Courses {
         this.level = level;
     }
 
-    
-
     public byte[] getImage() {
         return image;
     }
@@ -92,7 +87,11 @@ public class Courses {
         this.image = image;
     }
 
-   
-    
-    
+    public String getNumberOfSessions() {
+        return numberOfSessions;
+    }
+
+    public void setNumberOfSessions(String numberOfSessions) {
+        this.numberOfSessions = numberOfSessions;
+    }
 }
