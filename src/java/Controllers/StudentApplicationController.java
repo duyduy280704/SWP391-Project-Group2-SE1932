@@ -18,6 +18,7 @@ import models.ApplicationDAO;
 import models.ResultMessage;
 import models.Students;
 import models.TeacherApplicationType;
+import models.listClass;
 
 
 /**
@@ -63,6 +64,7 @@ public class StudentApplicationController extends HttpServlet {
     throws ServletException, IOException {
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
+        int studentId = Integer.parseInt( student.getId());
 
         if (student == null) {
             response.sendRedirect("login.jsp");
@@ -72,8 +74,10 @@ public class StudentApplicationController extends HttpServlet {
         ApplicationDAO ad = new ApplicationDAO();
 
         ArrayList<TeacherApplicationType> data = ad.getStudentApplicationTypeList();
+        ArrayList<listClass> data1 = ad.getClassOfStudent(studentId);
 
         request.setAttribute("data", data);
+        request.setAttribute("data1", data1);
         request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("profile", student);
         request.getRequestDispatcher("StudentApplication.jsp").forward(request, response);
@@ -90,15 +94,17 @@ public class StudentApplicationController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String application = request.getParameter("application");
+        String className = request.getParameter("className");
         String content = request.getParameter("content");
 
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
 
         String studentId = student.getId();
+        int studentNum = Integer.parseInt( studentId);
 
         String status = "Đang chờ";
-        Application a = new Application(null, studentId, application, content, null, status);
+        Application a = new Application(null, studentId, application, content, null, status, className);
 
         ResultMessage result = null;
         ApplicationDAO ad = new ApplicationDAO();
@@ -108,7 +114,10 @@ public class StudentApplicationController extends HttpServlet {
         
         ArrayList<TeacherApplicationType> data = ad.getStudentApplicationTypeList();
 
+        ArrayList<listClass> data1 = ad.getClassOfStudent(studentNum);
+
         request.setAttribute("data", data);
+        request.setAttribute("data1", data1);
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
         request.setAttribute("picturePath", session.getAttribute("picturePath"));

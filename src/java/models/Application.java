@@ -10,7 +10,7 @@ package models;
  */
 public class Application {
 
-    String id, name, applicationType, content, date, status;
+    String id, name, applicationType, content, date, status, className;
 
     public Application() {
     }
@@ -23,6 +23,25 @@ public class Application {
         this.date = date;
         this.status = status;
     }
+
+    public Application(String id, String name, String applicationType, String content, String date, String status, String className) {
+        this.id = id;
+        this.name = name;
+        this.applicationType = applicationType;
+        this.content = content;
+        this.date = date;
+        this.status = status;
+        this.className = className;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+    
 
     public String getId() {
         return id;
@@ -72,5 +91,9 @@ public class Application {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    
+    
+    
 
 }

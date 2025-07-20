@@ -75,6 +75,98 @@
             .error {
                 color: red;
             }
+            
+            .search-filter-form {
+                display: flex;
+                gap: 20px;
+                margin: 20px 0;
+                align-items: center;
+                flex-wrap: wrap;
+                background-color: #f8f9fa; /* Nền nhẹ để nổi bật */
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-filter-form div {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .search-filter-form input[type="text"] {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                width: 250px; /* Kích thước cố định để đồng nhất */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form input[type="text"]:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form select {
+                padding: 10px;
+                border: 2px solid #ced4da;
+                border-radius: 6px;
+                font-size: 16px;
+                background-color: #fff;
+                cursor: pointer;
+                width: 150px; /* Kích thước cố định */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .search-filter-form select:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+
+            .search-filter-form button,
+            .search-filter-form input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .search-filter-form button:hover,
+            .search-filter-form input[type="submit"]:hover {
+                background-color: #0056b3;
+                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+            }
+
+            @media (max-width: 768px) {
+                .search-filter-form {
+                    flex-direction: column;
+                    align-items: stretch;
+                    padding: 10px;
+                }
+
+                .search-filter-form div {
+                    width: 100%;
+                }
+
+                .search-filter-form input[type="text"],
+                .search-filter-form select {
+                    width: 100%;
+                    font-size: 14px;
+                }
+
+                .search-filter-form button,
+                .search-filter-form input[type="submit"] {
+                    width: 100%;
+                    font-size: 14px;
+                }
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -89,7 +181,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
@@ -101,46 +193,110 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                            <!-- Trang chủ -->
                             <a class="nav-link" href="staffhome">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
+
+                            <!-- Quản lý khóa học -->
                             <a class="nav-link" href="coursestaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Quản lý khóa học
                             </a>
-                            <a class="nav-link" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Quản lý lịch học
-                            </a>
+
+                            <!-- Quản lý sự kiện -->
                             <a class="nav-link" href="eventstaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
                                 Quản lý sự kiện
                             </a>
-                            <a class="nav-link" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+
+                            <!-- Quản lý blog -->
+                            <a class="nav-link" href="Blog">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
                                 Quản lý blog
                             </a>
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+
+                            <!-- Quản lý phân lớp -->
+                            <a class="nav-link" href="AssignClass">
+                                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                                Quản lý phân lớp
+                            </a>
+
+                            <!-- Quản lý đăng ký -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Quản lý đăng ký
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseRegistration" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    <a class="nav-link" href="Approve">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
                                         Học Sinh
                                     </a>
-                                    <a class="nav-link" href="#">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    <a class="nav-link" href="TeacherApplication">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                                         Giáo Viên
                                     </a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Gửi thông báo
+
+                            <!-- Quản lý đơn -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseApplications" aria-expanded="false" aria-controls="collapseApplications">
+                                <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                                Quản lý đơn
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseApplications" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="listapplicationStu">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
+                                        Học Sinh
+                                    </a>
+                                    <a class="nav-link" href="listapplicationTea">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                                        Giáo Viên
+                                    </a>
+                                </nav>
+                            </div>
+
+                            <!-- Quản lý lớp học -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
+                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                Quản lý lớp học
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="createClass"><i class="fas fa-plus me-2"></i> Tạo lớp mới</a>
+                                    <a class="nav-link" href="classStudent"><i class="fas fa-users me-2"></i> Danh sách lớp</a>
+                                </nav>
+                            </div>
+
+                            <!-- Thời khóa biểu -->
+                            <a class="nav-link" href="listClassSchedule">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                                Thời khóa biểu
+                            </a>
+
+                            <!-- Đánh giá -->
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
+                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
+                                Đánh giá
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseFeedback">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="feedback?mode=viewAll"><i class="fas fa-comment-dots me-2"></i> Phản hồi của học viên</a>
+                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
+                                </nav>
+                            </div>
+
+                            <!-- Xử lý đơn chuyển lớp -->
+                            <a href="classTransfer" class="nav-link">
+                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                                Xử lý đơn chuyển lớp
                             </a>
                         </div>
                     </div>
@@ -155,6 +311,25 @@
                         </ol>
 
                         <h2>Danh Sách Đơn Từ Của Học Sinh</h2>
+                        
+                        <form action="listapplicationStu" method="get" enctype="multipart/form-data" class="search-filter-form">
+                            <div>
+                                <input type="text" name="nameSearch" placeholder="Tìm kiếm theo tên học sinh...">
+                                <button type="submit" name="search">Tìm kiếm</button> 
+                            </div>
+                            <div>
+                                <select name="typeFilter">
+                                    <option value="0">Tất cả thể loại</option>
+                                    <c:forEach items= "${data1}" var="c">
+                                        <option value="${c.getId()}"
+                                                <c:if test="${p.getType()==c.getId()}">
+                                                    selected 
+                                                </c:if>
+                                                > ${c.getName()}</option>
+                                    </c:forEach>
+                                    <input type="submit" name="filter" value="Lọc theo loại đơn"/>
+                            </div>
+                        </form>
 
                         <c:if test="${not empty sessionScope.message}">
                             <p class="${sessionScope.success ? 'success' : 'error'}">${sessionScope.message}</p>
@@ -167,6 +342,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Họ và tên</th>
+                                    <th>Tên lớp</th>
                                     <th>Tên đơn</th>
                                     <th>Nội dung</th>
                                     <th>Ngày gửi</th>
@@ -179,13 +355,15 @@
                                     <tr>
                                         <td>${item.getId()}</td>
                                         <td>${item.getName()}</td>
+                                        <td>${item.getClassName()}</td>
                                         <td>${item.getApplicationType()}</td>
                                         <td>${item.getContent()}</td>
                                         <td>${item.getDate()}</td>
                                         <td>${item.getStatus()}</td>
                                         <td>
-                                            <c:if test="${item.getStatus() != 'Đã xử lý'}">
-                                                <a href="listapplicationStu?processId=${item.getId()}" class="btn btn-edit">✏️ Xử lý</a>
+                                            <c:if test="${item.getStatus() != 'Đã xử lý' && item.getStatus() != 'Đã từ chối'}">
+                                                <a href="listapplicationStu?processId=${item.getId()}&action=approve" class="btn btn-edit">✏️ Xác nhận</a>
+                                                <a href="listapplicationStu?processId=${item.getId()}&action=reject" class="btn btn-edit">✏️ Từ chối</a>
                                             </c:if>
                                         </td>
                                     </tr>
