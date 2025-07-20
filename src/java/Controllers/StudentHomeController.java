@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import models.Blog;
 import models.BlogDAO;
@@ -25,6 +26,8 @@ import models.ScheduleStudent;
 import models.ScheduleStudentDAO;
 import models.StudentDAO;
 import models.Students;
+import models.TeacherDAO;
+import models.Teachers;
 
 /**
  *
@@ -104,6 +107,9 @@ public class StudentHomeController extends HttpServlet {
         BlogDAO blogDAO = new BlogDAO();
         List<Blog> blogList = blogDAO.getLatest3Blogs();
         request.setAttribute("blogList", blogList);
+        TeacherDAO teacherDao= new TeacherDAO();
+        ArrayList<Teachers> teacherList=teacherDao.get4Teachers();
+        request.setAttribute("teacherList", teacherList);
         request.getRequestDispatcher("StudentHome.jsp").forward(request, response);
 
     }

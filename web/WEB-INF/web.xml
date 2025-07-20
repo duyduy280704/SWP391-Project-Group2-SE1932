@@ -111,6 +111,30 @@
         <servlet-name>SaleController</servlet-name>
         <servlet-class>Controllers.SaleController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EventController</servlet-name>
+        <servlet-class>Controllers.EventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageEventController</servlet-name>
+        <servlet-class>Controllers.ImageEventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PicTeacherController</servlet-name>
+        <servlet-class>Controllers.PicTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeacherListController</servlet-name>
+        <servlet-class>Controllers.TeacherListController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BlogTeacherController</servlet-name>
+        <servlet-class>Controllers.BlogTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventStudentController</servlet-name>
+        <servlet-class>Controllers.EventStudentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -210,5 +234,29 @@
     <servlet-mapping>
         <servlet-name>SaleController</servlet-name>
         <url-pattern>/Sale</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventController</servlet-name>
+        <url-pattern>/Event</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageEventController</servlet-name>
+        <url-pattern>/imageevent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PicTeacherController</servlet-name>
+        <url-pattern>/picteacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeacherListController</servlet-name>
+        <url-pattern>/TeacherList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogTeacherController</servlet-name>
+        <url-pattern>/BlogTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventStudentController</servlet-name>
+        <url-pattern>/EventStudent</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -548,7 +548,9 @@
 
                         </c:if>
                     </div>
-                </div>
+                    <div class="col-12 mt-3">
+                            <a href="Event" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                        </div>
                 <!-- Recent Events End -->
                 <!-- Event Details Modal -->
                 <div id="eventModal" class="modal">
@@ -561,6 +563,39 @@
                         <p id="eventCourseId" class="text-muted"></p>
                     </div>
                 </div>
+                            <div class="container pt-5 pb-3">
+                <div class="text-center mb-5">
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
+                    <h1>Các tin gần đây</h1>
+                </div>
+
+                <div class="row pb-3">
+                    <c:if test="${not empty blogList}">
+                        <c:forEach var="n" items="${blogList}">
+                            <div class="col-lg-4 mb-4">
+                                <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                    <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
+
+                                    <a class="blog-overlay text-decoration-none" href="#">
+                                        <h5 class="text-white mb-3">${n.title}</h5>
+                                        <p class="text-primary m-0">
+                                            ${fn:substring(n.publishDate, 0, 10)}
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${empty blogList}">
+                        <div class="col-12 text-center">
+                            <p>Không có bài viết nào gần đây.</p>
+                        </div>
+                    </c:if>
+                </div>
+                 <div class="col-12 mt-3">
+                                <a href="BlogTeacher" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                            </div>
+            </div>
 
                 <div class="container-fluid py-5">
                     <div class="container py-5">

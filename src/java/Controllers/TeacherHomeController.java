@@ -130,6 +130,9 @@ public class TeacherHomeController extends HttpServlet {
         EventDAO ev = new EventDAO();
         List<Event> events = ev.getRecentEvents(3);
         request.setAttribute("events", events);
+        BlogDAO blogDAO = new BlogDAO();
+        List<Blog> blogList = blogDAO.getLatest3Blogs();
+        request.setAttribute("blogList", blogList);
         
         NoticeToTeacherDAO noticedao = new NoticeToTeacherDAO();
         int id=Integer.parseInt(teacher.getId());

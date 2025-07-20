@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
 import java.io.IOException;
@@ -49,14 +45,19 @@ public class AssignClassController extends HttpServlet {
             int cId = r.getCourseId();
             if (!classByCourse.containsKey(cId)) {
                 List<Categories_class> classList = dao.getClassesByCourse(String.valueOf(cId));
+                // Lọc chỉ lấy lớp có status "chưa bắt đầu"
+                List<Categories_class> filteredClassList = new ArrayList<>();
                 for (Categories_class cls : classList) {
-                    int classId = Integer.parseInt(cls.getId_class());
-                    boolean isFull = dao.isClassFull(classId);
-                    int studentCount = dao.getStudentCountInClass(classId);
-                    classFullStatus.put(cls.getId_class(), isFull);
-                    classStudentCount.put(cls.getId_class(), studentCount);
+                    if ("chưa bắt đầu".equalsIgnoreCase(cls.getStatus())) {
+                        filteredClassList.add(cls);
+                        int classId = Integer.parseInt(cls.getId_class());
+                        boolean isFull = dao.isClassFull(classId);
+                        int studentCount = dao.getStudentCountInClass(classId);
+                        classFullStatus.put(cls.getId_class(), isFull);
+                        classStudentCount.put(cls.getId_class(), studentCount);
+                    }
                 }
-                classByCourse.put(cId, classList);
+                classByCourse.put(cId, filteredClassList);
             }
         }
 
@@ -75,6 +76,31 @@ public class AssignClassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String[]> paramMap = request.getParameterMap();
         List<String> messages = new ArrayList<>();
+        String action = request.getParameter("action");
+
+        if ("unassign".equals(action)) {
+            try {
+                int regisitionId = Integer.parseInt(request.getParameter("regisitionId"));
+                String studentName = dao.getStudentNameByRegisitionId(regisitionId);
+                int courseId = dao.getCourseIdByRegisitionId(regisitionId);
+                String studentId = dao.getStudentIdByRegisitionId(regisitionId);
+
+                // Xoá khỏi bảng Class_Student
+                dao.removeFromClass(studentId, courseId);
+
+                // Cập nhật trạng thái đăng ký
+                dao.updateStatus(regisitionId, "chưa phân lớp");
+
+                messages.add("🗑 Đã huỷ phân lớp học viên <strong>" + studentName + "</strong> thành công.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                messages.add("❌ Lỗi khi huỷ phân lớp: " + e.getMessage());
+            }
+
+            request.getSession().setAttribute("messages", messages);
+            response.sendRedirect("AssignClass");
+            return;
+        }
 
         for (String key : paramMap.keySet()) {
             if (key.startsWith("regisitionId_")) {
@@ -87,19 +113,19 @@ public class AssignClassController extends HttpServlet {
                         int classId = Integer.parseInt(classIdStr.trim());
                         String studentName = dao.getStudentNameByRegisitionId(regisitionId);
 
-                        // ⚠️ Check lớp đã phân
+                        // ️ Check lớp đã phân
                         if (dao.isStudentInClass(regisitionId, classId)) {
                             messages.add("❌ Lỗi khi phân lớp: Học viên <strong>" + studentName + "</strong> đã có trong lớp " + classId);
                             continue;
                         }
 
-                        // ⚠️ Check lớp đầy
+                        // ️ Check lớp đầy
                         if (dao.isClassFull(classId)) {
                             messages.add("⚠️ Lớp đã đủ 30 học viên, không thể phân <strong>" + studentName + "</strong> vào lớp này.");
                             continue;
                         }
 
-                        // ✅ Phân lớp
+                        //  Phân lớp
                         boolean assigned = dao.assignToClassSingle(regisitionId, classId);
                         if (assigned) {
                             messages.add("✅ Đã phân lớp thành công cho học viên <strong>" + studentName + "</strong>.");

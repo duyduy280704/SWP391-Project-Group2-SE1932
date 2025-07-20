@@ -328,6 +328,33 @@
                                 <a href="BlogStudent" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
                             </div>
             </div>
+             <div class="container-fluid py-5">
+            <div class="container pt-5 pb-3">
+                <div class="text-center mb-5">
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Giáo Viên</h5>
+                    <h1>Một số thầy cô của trung tâm</h1>
+                </div>
+                <div class="row">
+                    <c:forEach var="t" items="${applicationScope.teacherlist}">
+                        <div class="col-md-6 col-lg-3 text-center team mb-4">
+                            <div class="team-item rounded overflow-hidden mb-2">
+                                <div class="team-img position-relative">
+                                    <img class="card-img-top w-100" src="picteacher?id=${t.id}" 
+                                         alt="image" style="height: 200px; object-fit: cover;">
+                                </div>
+                                <div class="bg-secondary p-4">
+                                    <h5>${t.name}</h5>
+                                    <p class="m-0">${t.exp}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+                 <div class="col-12 mt-3">
+                    <a href="TeacherList" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Xem Thêm</a>
+                </div>
+        </div>
 
 
 

@@ -161,7 +161,7 @@ public class ScheduleDAO extends DBContext {
             while (rs.next()) {
                 String id_class = String.valueOf(rs.getInt(1));
                 String name_class = rs.getString(2);
-                Categories_class s = new Categories_class(id_class, name_class);
+                Categories_class s = new Categories_class(id_class, name_class, name_class, strSQL);
                 data1.add(s);
             }
         } catch (Exception e) {

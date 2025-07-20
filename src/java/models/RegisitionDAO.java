@@ -84,7 +84,7 @@ public class RegisitionDAO extends DBContext {
     // Lấy danh sách lớp theo id khóa học
     public List<Categories_class> getClassesByCourse(String courseId) {
         List<Categories_class> list = new ArrayList<>();
-        String sql = "SELECT c.id, c.name, tc.name AS courseName "
+        String sql = "SELECT c.id, c.name, tc.name AS courseName, c.status "
                 + "FROM Class c JOIN Course tc ON c.course_id = tc.id "
                 + "WHERE c.course_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -94,7 +94,8 @@ public class RegisitionDAO extends DBContext {
                 Categories_class cls = new Categories_class();
                 cls.setId_class(rs.getString("id"));
                 cls.setName_class(rs.getString("name"));
-                cls.setCourseName(rs.getString("courseName"));
+                cls.setCourse_name(rs.getString("courseName"));
+                cls.setStatus(rs.getString("status"));
                 list.add(cls);
             }
         } catch (Exception e) {
@@ -128,6 +129,19 @@ public class RegisitionDAO extends DBContext {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    public boolean isAlreadyAssigned(int studentId, int classId) {
+        String sql = "SELECT 1 FROM Class_Student WHERE student_id = ? AND class_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setInt(2, classId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // Cập nhật trạng thái phân lớp cho từng học viên
@@ -340,7 +354,7 @@ public class RegisitionDAO extends DBContext {
         String sql = "SELECT c.name FROM regisition r "
                 + "JOIN Class_Student cs ON r.student_id = cs.student_id "
                 + "JOIN Class c ON cs.class_id = c.id "
-                + "WHERE r.id = ?";
+                + "WHERE r.id = ? AND c.course_id = r.course_id";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, regisitionId);
             ResultSet rs = ps.executeQuery();
@@ -351,6 +365,45 @@ public class RegisitionDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getStudentIdByRegisitionId(int regisitionId) {
+        String sql = "SELECT student_id FROM regisition WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("student_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Integer getCourseIdByRegisitionId(int regisitionId) {
+        String sql = "SELECT course_id FROM regisition WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("course_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean unassignClassForStudent(int regisitionId) {
+        String studentId = getStudentIdByRegisitionId(regisitionId);
+        Integer courseId = getCourseIdByRegisitionId(regisitionId);
+        if (studentId != null && courseId != null) {
+            removeFromClass(studentId, courseId);
+            updateStatus(regisitionId, "chưa phân lớp");
+            return true;
+        }
+        return false;
     }
 
 }

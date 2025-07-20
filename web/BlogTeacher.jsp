@@ -339,7 +339,7 @@
                 </c:if>
             </div>
             <div class="col-12 mt-3">
-                <a href="StudentHome" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Quay lại</a>
+                <a href="teacherHome" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Quay lại</a>
             </div>
         </div>
     </div>

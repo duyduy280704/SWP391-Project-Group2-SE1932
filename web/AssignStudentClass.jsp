@@ -152,60 +152,70 @@
                                     <c:remove var="messages" scope="session" />
                                 </c:if>
 
-                                <!-- Danh sách -->
-                                <form class="assign-form" method="post" action="AssignClass">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Học viên</th>
-                                                    <th>Khóa học</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Ghi chú</th>
-                                                    <th>Phân lớp</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="r" items="${regisitions}">
-                                                    <tr>
-                                                        <td>${r.studentName}</td>
-                                                        <td>${r.courseName}</td>
-                                                        <td>${r.status}</td>
-                                                        <td>${r.note}</td>
-                                                        <td>
-                                                            <c:set var="assignedClass" value="${assignedClassNames[r.id]}" />
-                                                            <c:choose>
-                                                                <c:when test="${not empty assignedClass}">
-                                                                    <span class="badge bg-success">${assignedClass}</span>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <select name="regisitionId_${r.id}" class="form-control">
-                                                                        <option value="">-- Chọn lớp --</option>
-                                                                        <c:forEach var="cls" items="${classByCourse[r.courseId]}">
-                                                                            <c:choose>
-                                                                                <c:when test="${classFullStatus[cls.id_class]}">
-                                                                                    <option value="${cls.id_class}" disabled class="disabled-option">
-                                                                                        ${cls.name_class} (${classStudentCount[cls.id_class]}/30 - Đã đầy)
-                                                                                    </option>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <option value="${cls.id_class}">
-                                                                                        ${cls.name_class} (${classStudentCount[cls.id_class]}/30)
-                                                                                    </option>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </c:forEach>
-                                                                    </select>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">✅ Phân lớp</button>
-                                </form>
+                               <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Học viên</th>
+            <th>Khóa học</th>
+            <th>Trạng thái</th>
+            <th>Ghi chú</th>
+            <th>Phân lớp / Huỷ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="r" items="${regisitions}">
+            <tr>
+                <td>${r.studentName}</td>
+                <td>${r.courseName}</td>
+                <td>${r.status}</td>
+                <td>${r.note}</td>
+                <td>
+                    <c:set var="assignedClass" value="${assignedClassNames[r.id]}" />
+                    <c:choose>
+                        <c:when test="${not empty assignedClass}">
+                            <!-- Form HUỶ riêng biệt -->
+                            <form method="post" action="AssignClass">
+                                <input type="hidden" name="action" value="unassign"/>
+                                <input type="hidden" name="regisitionId" value="${r.id}"/>
+                                <span class="badge bg-success">${assignedClass}</span><br/>
+                                <button type="submit" class="btn btn-danger btn-sm mt-2"
+                                        onclick="return confirm('Xác nhận huỷ phân lớp học viên này?')">
+                                    🗑 Huỷ phân lớp
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Vẫn hiển thị select, không có form ở đây -->
+                            <select name="regisitionId_${r.id}" form="assignFormMain" class="form-control">
+                                <option value="">-- Chọn lớp --</option>
+                                <c:forEach var="cls" items="${classByCourse[r.courseId]}">
+                                    <c:choose>
+                                        <c:when test="${classFullStatus[cls.id_class]}">
+                                            <option value="${cls.id_class}" disabled>
+                                                ${cls.name_class} (${classStudentCount[cls.id_class]}/30 - Đã đầy)
+                                            </option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${cls.id_class}">
+                                                ${cls.name_class} (${classStudentCount[cls.id_class]}/30)
+                                            </option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </select>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+
+<!-- Nút phân lớp nằm ngoài bảng -->
+<form id="assignFormMain" method="post" action="AssignClass">
+    <button type="submit" class="btn btn-primary mt-3">✅ Phân lớp</button>
+</form>
+
                             </div>
                         </div>
                         <!-- Student Class Assignment End -->
