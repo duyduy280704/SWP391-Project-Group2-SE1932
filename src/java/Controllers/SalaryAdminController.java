@@ -1,11 +1,10 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +13,8 @@ import java.util.ArrayList;
 import models.ResultMessage;
 import models.SalaryTeacher;
 import models.SalaryTeacherDAO;
-import models.TeacherClass;
 import models.Teachers;
+import java.time.Year;
 
 /**
  *
@@ -23,189 +22,153 @@ import models.Teachers;
  */
 public class SalaryAdminController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SalaryAdminController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SalaryAdminController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SalaryTeacherDAO sd = new SalaryTeacherDAO();
+        SalaryTeacherDAO dao = new SalaryTeacherDAO();
 
-        ArrayList<TeacherClass> classList = new ArrayList<>();
-        ArrayList<TeacherClass> allClassList = sd.getAllClasses();
-        
-        SalaryTeacher s = null;
-        String teacherId = request.getParameter("teacher");
-        String className = request.getParameter("class");
+        // Lấy danh sách giáo viên
+        ArrayList<Teachers> teacherList = dao.getTeacherList();
+        request.setAttribute("data1", teacherList);
+
+        // Đặt năm hiện tại mặc định
+        int currentYear = Year.now().getValue();
+        request.setAttribute("currentYear", currentYear);
+
+        // Lấy tham số teacher và month từ request
+        String teacherIdRaw = request.getParameter("teacher");
+        String monthYearRaw = request.getParameter("month");
         String id = request.getParameter("id");
         String mode = request.getParameter("mode");
 
-        if (teacherId != null && !teacherId.equals("0")) {
+        int selectedTeacher = 0;
+        String selectedMonthYear = currentYear + "-01"; // Mặc định là tháng 1 của năm hiện tại
+
+        // Xử lý chọn giáo viên
+        if (teacherIdRaw != null && !teacherIdRaw.equals("0")) {
             try {
-                int parsedTeacherId = Integer.parseInt(teacherId);
-                classList = sd.getClassesByTeacher(parsedTeacherId);
+                selectedTeacher = Integer.parseInt(teacherIdRaw);
+                String offerSalary = dao.getTeacherOfferSalary(selectedTeacher);
+                request.setAttribute("teacherOfferSalary", offerSalary);
+                request.setAttribute("selectedTeacher", selectedTeacher);
             } catch (NumberFormatException e) {
-                request.setAttribute("message", "Lỗi: Mã giáo viên không hợp lệ.");
+                System.err.println("Lỗi parse teacherId: " + e.getMessage());
+                request.setAttribute("message", "ID giáo viên không hợp lệ!");
                 request.setAttribute("success", false);
             }
         }
 
-        if ("1".equals(mode) && id != null && !id.isEmpty()) {
-            s = sd.getSalaryById(id);
-            if (s != null) {
-                teacherId = s.getTeacher();
-                className = s.getClassName();
+        // Xử lý chọn tháng/năm
+        if (monthYearRaw != null && !monthYearRaw.equals("0")) {
+            try {
+                // Kiểm tra định dạng YYYY-MM
+                if (!monthYearRaw.matches("\\d{4}-\\d{2}")) {
+                    throw new IllegalArgumentException("Định dạng tháng/năm không hợp lệ!");
+                }
+                String[] parts = monthYearRaw.split("-");
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                if (year < 2000 || year > currentYear) {
+                    throw new IllegalArgumentException("Năm phải từ 2000 đến " + currentYear + "!");
+                }
+                if (month < 1 || month > 12) {
+                    throw new IllegalArgumentException("Tháng phải từ 1 đến 12!");
+                }
+                selectedMonthYear = monthYearRaw;
+                request.setAttribute("selectedMonthYear", selectedMonthYear);
+            } catch (Exception e) {
+                System.err.println("Lỗi parse monthYear: " + e.getMessage());
+                request.setAttribute("message", e.getMessage());
+                request.setAttribute("success", false);
+            }
+        }
 
-                try {
-                    classList = sd.getClassesByTeacher(Integer.parseInt(teacherId));
-                } catch (NumberFormatException e) {
-                    request.setAttribute("message", "Lỗi: Mã giáo viên từ lương không hợp lệ.");
+        // Lấy số buổi dạy nếu đã chọn cả giáo viên và tháng/năm
+        if (selectedTeacher > 0 && selectedMonthYear != null) {
+            int sessionCount = dao.getSessionCountByTeacherMonth(selectedTeacher, selectedMonthYear);
+            request.setAttribute("sessionCount", sessionCount);
+        }
+
+        // Xử lý chế độ chỉnh sửa hoặc xóa
+        if (id != null && mode != null) {
+            if ("1".equals(mode)) { // Chế độ chỉnh sửa
+                SalaryTeacher salary = dao.getSalaryById(id);
+                if (salary != null) {
+                    request.setAttribute("s", salary);
+                    request.setAttribute("selectedTeacher", salary.getTeacher());
+                    request.setAttribute("selectedMonthYear", salary.getMonth());
+                } else {
+                    request.setAttribute("message", "Không tìm thấy bản ghi lương!");
                     request.setAttribute("success", false);
                 }
-            } else {
-                request.setAttribute("message", "Lỗi: Không tìm thấy lương với mã " + id);
-                request.setAttribute("success", false);
+            } else if ("2".equals(mode)) { // Chế độ xóa
+                ResultMessage result = dao.deleteSalary(id);
+                request.setAttribute("message", result.getMessage());
+                request.setAttribute("success", result.isSuccess());
             }
         }
 
-        if ("2".equals(mode) && id != null && !id.isEmpty()) {
-            ResultMessage result = sd.deleteSalary(id);
-            request.setAttribute("message", result.getMessage());
-            request.setAttribute("success", result.isSuccess());
-        }
+        // Lấy tham số tìm kiếm và lọc từ session
+        String searchTeacherName = (String) request.getSession().getAttribute("searchTeacherName");
+        String filterMonthYear = (String) request.getSession().getAttribute("filterMonthYear");
 
-        String cost = null;
-        if (className != null && !className.equals("0")) {
-            if (s == null) {
-                cost = sd.getCourseCost(className);
-                s = new SalaryTeacher(id, teacherId, className, cost, null, null, null, null, null, null);
-            }
-        }
+        // Lấy danh sách lương theo tìm kiếm và lọc
+        ArrayList<SalaryTeacher> salaries = dao.getSalariesBySearchAndFilter(searchTeacherName, filterMonthYear);
+        request.setAttribute("data", salaries);
+        request.setAttribute("searchTeacherName", searchTeacherName);
+        request.setAttribute("filterMonthYear", filterMonthYear);
 
-        ArrayList<SalaryTeacher> data = sd.getSalaryList();
-        ArrayList<Teachers> data1 = sd.getTeacherList();
-
-        request.setAttribute("data", data);
-        request.setAttribute("data1", data1);
-        request.setAttribute("classList", classList);
-        request.setAttribute("allClassList", allClassList);
-        request.setAttribute("s", s);
-        request.setAttribute("selectedTeacher", teacherId);
+        // Chuyển tiếp đến JSP
         request.getRequestDispatcher("salaryAdmin.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String teacherId = request.getParameter("teacher");
-        String className = request.getParameter("class");
-        String per = request.getParameter("per");
-        String bonus = request.getParameter("bonus");
-        String penalty = request.getParameter("penalty");
-        String note = request.getParameter("note");
-        String id = request.getParameter("id");
-
+        SalaryTeacherDAO dao = new SalaryTeacherDAO();
+        String search = request.getParameter("search");
         String searchTeacherName = request.getParameter("searchTeacherName");
-        String filterClassName = request.getParameter("filterClassName");
+        String filterMonthYear = request.getParameter("filterMonthYear");
 
-        SalaryTeacherDAO sd = new SalaryTeacherDAO();
-        ResultMessage result = null;
+        // Xử lý tìm kiếm
+        if (search != null) {
+            // Lưu tham số tìm kiếm và lọc vào session để giữ trạng thái
+            request.getSession().setAttribute("searchTeacherName", searchTeacherName);
+            request.getSession().setAttribute("filterMonthYear", filterMonthYear);
 
-        String cost = null;
-        if (className != null && !className.equals("0")) {
-            cost = sd.getCourseCost(className);
-        }
-        SalaryTeacher s = new SalaryTeacher(id, teacherId, className, cost, per, bonus, penalty, note, null, null);
-
-        if (request.getParameter("add") != null) {
-            result = sd.addSalary(s);
-        } else if (request.getParameter("update") != null) {
-            result = sd.updateSalary(s);
-        }
-
-        ArrayList<SalaryTeacher> data;
-        ArrayList<Teachers> data1 = sd.getTeacherList();
-
-        ArrayList<TeacherClass> classList = new ArrayList<>();
-        ArrayList<TeacherClass> allClassList = sd.getAllClasses();
-        
-        if (teacherId != null && !teacherId.equals("0")) {
-            classList = sd.getClassesByTeacher(Integer.parseInt(teacherId));
-        }
-
-        if (searchTeacherName != null && !searchTeacherName.isEmpty()) {
-            data = sd.getSalaryByTeacherName(searchTeacherName);
-        } else if (filterClassName != null && !filterClassName.equals("0")) {
-            data = sd.getSalaryByClassName(filterClassName);
+            // Lấy danh sách lương theo tìm kiếm và lọc
+            ArrayList<SalaryTeacher> salaries = dao.getSalariesBySearchAndFilter(searchTeacherName, filterMonthYear);
+            request.setAttribute("data", salaries);
+            request.setAttribute("searchTeacherName", searchTeacherName);
+            request.setAttribute("filterMonthYear", filterMonthYear);
         } else {
-            data = sd.getSalaryList();
-        }
+            // Xử lý thêm hoặc cập nhật
+            String action = request.getParameter("add") != null ? "add" : "update";
+            String teacherId = request.getParameter("teacher");
+            String monthYear = request.getParameter("month");
+            String bonus = request.getParameter("bonus");
+            String penalty = request.getParameter("penalty");
+            String note = request.getParameter("note");
+            String id = request.getParameter("id");
 
-        request.setAttribute("data", data);
-        request.setAttribute("data1", data1);
-        request.setAttribute("classList", classList);
-        request.setAttribute("allClassList", allClassList);
-        request.setAttribute("selectedTeacher", teacherId);
+            // Thêm log để kiểm tra
+            System.out.println("doPost: action = " + action + ", teacherId = " + teacherId + ", monthYear = " + monthYear + 
+                              ", searchTeacherName = " + searchTeacherName + ", filterMonthYear = " + filterMonthYear);
 
-        if (result != null) {
+            // Gọi phương thức processSalary để kiểm tra dữ liệu và tính toán
+            ResultMessage result = dao.processSalary(action, id, teacherId, monthYear, bonus, penalty, note);
+
+            // Đặt thông báo và trạng thái
             request.setAttribute("message", result.getMessage());
             request.setAttribute("success", result.isSuccess());
-            if (result.isSuccess()) {
-                s = null; // reset form khi thêm/sửa thành công
-            }
         }
-        request.setAttribute("s", s);
-        request.getRequestDispatcher("salaryAdmin.jsp").forward(request, response);
+
+        // Load lại dữ liệu và chuyển tiếp
+        doGet(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet quản lý lương giáo viên";
+    }
 }

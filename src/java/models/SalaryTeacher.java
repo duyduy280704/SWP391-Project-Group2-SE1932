@@ -9,22 +9,22 @@ package models;
  * @author Quang
  */
 public class SalaryTeacher {
-    String id, teacher, className, cost, per, bonus, penalty, note, salary, date;
+
+    String id, teacher, offer_salary, number_of_sessions, bonus, penalty, amount, note, month;
 
     public SalaryTeacher() {
     }
 
-    public SalaryTeacher(String id, String teacher, String className, String cost, String per, String bonus, String penalty, String note, String salary, String date) {
+    public SalaryTeacher(String id, String teacher, String offer_salary, String number_of_sessions, String bonus, String penalty, String amount, String note, String month) {
         this.id = id;
         this.teacher = teacher;
-        this.className = className;
-        this.cost = cost;
-        this.per = per;
+        this.offer_salary = offer_salary;
+        this.number_of_sessions = number_of_sessions;
         this.bonus = bonus;
         this.penalty = penalty;
+        this.amount = amount;
         this.note = note;
-        this.salary = salary;
-        this.date = date;
+        this.month = month;
     }
 
     public String getId() {
@@ -43,28 +43,20 @@ public class SalaryTeacher {
         this.teacher = teacher;
     }
 
-    public String getClassName() {
-        return className;
+    public String getOffer_salary() {
+        return offer_salary;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setOffer_salary(String offer_salary) {
+        this.offer_salary = offer_salary;
     }
 
-    public String getCost() {
-        return cost;
+    public String getNumber_of_sessions() {
+        return number_of_sessions;
     }
 
-    public void setCost(String cost) {
-        this.cost = cost;
-    }
-
-    public String getPer() {
-        return per;
-    }
-
-    public void setPer(String per) {
-        this.per = per;
+    public void setNumber_of_sessions(String number_of_sessions) {
+        this.number_of_sessions = number_of_sessions;
     }
 
     public String getBonus() {
@@ -83,6 +75,14 @@ public class SalaryTeacher {
         this.penalty = penalty;
     }
 
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
     public String getNote() {
         return note;
     }
@@ -91,21 +91,12 @@ public class SalaryTeacher {
         this.note = note;
     }
 
-    public String getSalary() {
-        return salary;
+    public String getMonth() {
+        return month;
     }
 
-    public void setSalary(String salary) {
-        this.salary = salary;
+    public void setMonth(String month) {
+        this.month = month;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-    
-    
 }
