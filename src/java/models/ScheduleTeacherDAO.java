@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleTeacherDAO extends DBContext {
-// Thủy lịch học giáo viên
+
     // Lấy thời khóa biểu của giáo viên theo tuần
     public List<ScheduleTeacher> getScheduleTeacher(int teacherId, String startDate) {
         List<ScheduleTeacher> schedules = new ArrayList<>();
@@ -38,23 +38,30 @@ public class ScheduleTeacherDAO extends DBContext {
                     rs.getString("room")
                 );
 
-                // Kiểm tra đã điểm danh chưa
-                String sqlCheck = "SELECT COUNT(*) FROM attendance WHERE id_class = ? AND date = ?";
-                try (PreparedStatement checkStm = connection.prepareStatement(sqlCheck)) {
-                    checkStm.setString(1, st.getClassId());
-                    checkStm.setString(2, st.getDay());
-                    ResultSet checkRs = checkStm.executeQuery();
-                    if (checkRs.next()) {
-                        st.setAttendanceTaken(checkRs.getInt(1) > 0);
-                    }
-                }
-
+                st.setAttendanceTaken(isAttendanceTaken(st.getClassId(), st.getDay()));
                 schedules.add(st);
             }
         } catch (Exception e) {
             System.err.println("Lỗi getScheduleTeacher: " + e.getMessage());
         }
         return schedules;
+    }
+
+    // kiểm tra đã điểm danh chưa
+    private boolean isAttendanceTaken(String classId, String date) {
+        String sqlCheck = "SELECT COUNT(*) FROM attendance WHERE id_class = ? AND date = ?";
+        try (PreparedStatement checkStm = connection.prepareStatement(sqlCheck)) {
+            checkStm.setString(1, classId);
+            checkStm.setString(2, date);
+            try (ResultSet checkRs = checkStm.executeQuery()) {
+                if (checkRs.next()) {
+                    return checkRs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi kiểm tra attendance: " + e.getMessage());
+        }
+        return false;
     }
 
     // Lấy danh sách học sinh theo scheduleId
@@ -88,10 +95,9 @@ public class ScheduleTeacherDAO extends DBContext {
         return students;
     }
 
-    // Lưu điểm danh (bao gồm lý do nếu có)
+    // Lưu điểm danh
     public void saveAttendance(String scheduleId, List<StudentAttendance> list, String date) {
         try {
-           
             String classId = null;
             String sqlGetClass = "SELECT id_class FROM schedule WHERE id = ?";
             try (PreparedStatement stmClass = connection.prepareStatement(sqlGetClass)) {

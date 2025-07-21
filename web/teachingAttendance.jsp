@@ -1,10 +1,16 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.time.LocalDate"%>
+<%@ page import="java.time.format.DateTimeFormatter"%>
+<%
+    LocalDate today = LocalDate.now();
+    String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Tạo lớp học</title>
+        <title>Chấm công giáo viên </title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin@7.0.5/dist/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -124,6 +130,18 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                                 Thời khóa biểu
                             </a>
+                            <!-- Điểm danh -->
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
+                                Điểm danh
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseAttendance">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="teachingAttendance"><i class="fas fa-comment-dots me-2"></i> Chấm công giáo viên</a>
+                                    <a class="nav-link" href="#"><i class="fas fa-star-half-alt me-2"></i> Điểm danh của học sinh</a>
+                                </nav>
+                            </div>
 
                             <!-- Đánh giá -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
@@ -137,6 +155,7 @@
                                     <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
                                 </nav>
                             </div>
+
 
                             <!-- Xử lý đơn chuyển lớp -->
                             <a href="classTransfer" class="nav-link">
@@ -155,105 +174,95 @@
             <!-- Nội dung chính -->
             <div id="layoutSidenav_content">
                 <main class="container-fluid px-4 mt-4">
-                    <h2 class="mb-4">
-                        <c:choose>
-                            <c:when test="${not empty edit_id}">Chỉnh sửa lớp học</c:when>
-                            <c:otherwise>Tạo lớp học mới</c:otherwise>
-                        </c:choose>
-                    </h2>
+                    <h2 class="mb-4">Danh sách chấm công giảng dạy</h2>
+                    <form method="get" action="teachingAttendance" class="row g-2 mb-3">
+                        <div class="col-auto">
+                            <input type="date" name="day" class="form-control" value="${selectedDay}" />
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" name="keyword" class="form-control" placeholder="Tìm giáo viên hoặc lớp..." value="${param.keyword}">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Tìm</button>
+                        </div>
+                    </form>
 
-                    <c:if test="${not empty success}">
-                        <div class="alert alert-success">${success}</div>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger">
+                            <c:choose>
+                                <c:when test="${error == 'future_date_not_allowed'}">
+                                    Không thể cập nhật cho ngày trong tương lai.
+                                </c:when>
+                                <c:when test="${error == 'edit_not_allowed'}">
+                                    Chỉ được chỉnh sửa trong vòng 2 ngày.
+                                </c:when>
+                                <c:when test="${error == 'invalid_date'}">
+                                    Ngày không hợp lệ.
+                                </c:when>
+                                <c:otherwise>
+                                    Đã xảy ra lỗi không xác định.
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </c:if>
 
-                    <!-- Form tạo hoặc sửa lớp -->
-                    <form action="createClass" method="post" class="w-50">
-                        <c:if test="${not empty edit_id}">
-                            <input type="hidden" name="edit_id" value="${edit_id}" />
-                        </c:if>
-
-                        <div class="mb-3">
-                            <label for="class_name" class="form-label">Tên lớp:</label>
-                            <input type="text" id="class_name" name="class_name" class="form-control"
-                                   value="${edit_name != null ? edit_name : ''}" required>
+                    <c:if test="${not empty success}">
+                        <div class="alert alert-success">
+                            Cập nhật thành công.
                         </div>
+                    </c:if>
 
-                        <c:if test="${empty edit_id}">
-                            <div class="mb-3">
-                                <label for="course_id" class="form-label">Chọn khóa học:</label>
-                                <select id="course_id" name="course_id" class="form-select" required>
-                                    <option value="" disabled selected>-- Chọn khóa học --</option>
-                                    <c:forEach var="c" items="${courses}">
-                                        <option value="${c.id}">${c.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </c:if>
 
-                        <button type="submit" class="btn btn-primary">
-                            <c:choose>
-                                <c:when test="${not empty edit_id}">
-                                    <input type="hidden" name="submit_edit" value="true" />
-                                    Lưu thay đổi
-                                </c:when>
-
-                                <c:otherwise>Tạo lớp</c:otherwise>
-                            </c:choose>
-                        </button>
-                    </form>
-                    <form action="createClass" method="get" class="mb-3 w-50 mt-4">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Tìm theo tên lớp hoặc khóa học"
-                                   value="${search != null ? search : ''}">
-                            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                        </div>
-                    </form>
-
-                    <h4 class="mt-5">Danh sách lớp hiện có</h4>
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped mt-3">
                         <thead class="table-dark">
                             <tr>
                                 <th>STT</th>
-                                <th>Tên lớp</th>
+                                <th>Giáo viên</th>
+                                <th>Lớp</th>
                                 <th>Khóa học</th>
-                                <th>Hành động</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
+                                <th>Phòng</th>
+                                <th>Trạng thái</th>
+                                <th>Ghi chú</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="c" items="${classes}" varStatus="loop">
+                            <c:forEach var="item" items="${list}" varStatus="loop">
                                 <tr>
                                     <td>${loop.index + 1}</td>
-                                    <td>${c.name_class}</td>
-                                    <td>${c.course_name}</td>
+                                    <td>${item.teacherName}</td>
+                                    <td>${item.className}</td>
+                                    <td>${item.courseName}</td>
+                                    <td>${item.startTime}</td>
+                                    <td>${item.endTime}</td>
+                                    <td>${item.room}</td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <form action="createClass" method="post" class="d-inline">
-                                                <input type="hidden" name="edit_id" value="${c.id_class}" />
-                                                <input type="hidden" name="class_name" value="${c.name_class}" />
-                                                <button type="submit" class="btn btn-sm btn-warning">
-                                                    <i class="fas fa-edit"></i> Sửa
-                                                </button>
-                                            </form>
-                                            <!-- Nút Xóa -->
-                                            <form action="createClass" method="post" class="d-inline"
-                                                  onsubmit="return confirm('Bạn chắc chắn muốn xóa lớp này?');">
-                                                <input type="hidden" name="delete_id" value="${c.id_class}" />
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash-alt"></i> Xóa
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <form method="post" action="teachingAttendance">
+                                            <input type="hidden" name="confirmationId" value="${item.id}" />
+                                            <input type="hidden" name="classId" value="${item.classId}" />
+                                            <input type="hidden" name="teacherId" value="${item.teacherId}" />
+                                            <input type="hidden" name="day" value="${selectedDay}" />
+                                            <input type="hidden" name="keyword" value="${param.keyword}" />
+                                            <input type="hidden" name="scheduleId" value="${item.scheduleId}" />
+
+                                            <select name="status" class="form-select form-select-sm w-auto d-inline">
+                                                <option value="pending" ${item.status == null ? 'selected' : ''}>⏳ Chưa chấm công</option>
+                                                <option value="present" ${item.status eq 'present' ? 'selected' : ''}>✅ Có mặt</option>
+                                                <option value="absent" ${item.status eq 'absent' ? 'selected' : ''}>❌ Vắng mặt</option>
+                                            </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="note" value="${item.note}" class="form-control form-control-sm" placeholder="Ghi chú (nếu có)">
+                                        <button type="submit" class="btn btn-primary btn-sm mt-1">Cập nhật</button>
+                                        </form>
                                     </td>
                                 </tr>
                             </c:forEach>
-                            <c:if test="${empty classes}">
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted">Chưa có lớp học nào.</td>
-                                </tr>
-                            </c:if>
                         </tbody>
                     </table>
                 </main>
+
 
                 <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">

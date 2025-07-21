@@ -2,6 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
     <head>
         <title>Quản lý đơn chuyển lớp</title>
@@ -46,6 +48,45 @@
             h2 {
                 text-align: center;
                 margin-top: 30px;
+            }
+            .form-control-sm,
+            .btn-sm {
+                height: 38px !important; /* Đồng bộ chiều cao */
+            }
+
+            .form-label {
+                margin-right: 5px;
+                margin-left: 10px;
+                line-height: 38px;
+            }
+
+            .date-group {
+                display: flex;
+                align-items: center;
+            }
+
+            .date-group input {
+                margin-right: 10px;
+            }
+            .filter-form .form-control-sm,
+            .filter-form .btn-sm {
+                height: 38px !important;
+            }
+
+            .filter-form {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .filter-form input[type="text"],
+            .filter-form input[type="date"] {
+                width: 200px;
+            }
+
+            .filter-form .btn {
+                white-space: nowrap;
             }
 
         </style>
@@ -197,85 +238,132 @@
             <!-- Main content -->
             <div id="layoutSidenav_content">
                 <main class="container-fluid px-4">
-                    <h2 class="mt-4">Danh sách yêu cầu chuyển lớp</h2>
-                    <form method="get" action="classTransfer" class="mb-3">
-                        <div class="input-group" style="max-width: 400px;" class="ms-3">
-                            <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm" placeholder="Tìm kiếm theo tên học sinh">
-                            <button type="submit" class="btn btn-primary btn-sm">🔍</button>
+                    <h2 class="mt-4"> Xử lí yêu cầu chuyển lớp</h2>
+
+
+                    <!-- Hiển thị thông báo thành công -->
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-success text-center">
+                            ${message}
                         </div>
+                    </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger">${error}</div>
+                    </c:if>
+                    <form id="transferForm" method="get" action="classTransfer" class="bg-light p-3 rounded">
+
+                        <input type="hidden" name="action" id="formAction" value="" />
+
+                        <!-- KHÓA HỌC -->
+                        <div class="mb-3">
+                            <label>Chọn khóa học</label>
+                            <select name="courseId" class="form-select"
+                                    onchange="document.getElementById('formAction').value = 'selectCourse'; this.form.submit();">
+                                <option value="">-- Chọn khóa học --</option>
+                                <c:forEach items="${courses}" var="c">
+                                    <option value="${c.IDCourse}" <c:if test="${c.IDCourse == selectedCourseId}">selected</c:if>>
+                                        ${c.nameCourse}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <!-- LỚP -->
+                        <div class="mb-3">
+                            <label>Chọn lớp</label>
+                            <select name="classId" class="form-select"
+                                    onchange="document.getElementById('formAction').value = 'selectClass'; this.form.submit();">
+                                <option value="">-- Chọn lớp --</option>
+                                <c:forEach items="${classes}" var="cl">
+                                    <option value="${cl.id_class}" <c:if test="${cl.id_class == selectedClassId}">selected</c:if>>
+                                        ${cl.name_class}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                            <input type="hidden" name="courseId" value="${selectedCourseId}" />
+                        </div>
+                        <!-- HỌC SINH -->
+                        <div class="mb-3">
+                            <label>Chọn học sinh</label>
+                            <select name="studentId" class="form-select"
+                                    onchange="submitWithAction('selectStudent')">
+                                <option value="">-- Chọn học sinh --</option>
+                                <c:forEach var="s" items="${students}">
+                                    <option value="${s.id}" <c:if test="${s.id == selectedStudentId}">selected</c:if>>
+                                        ${s.name}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                            <input type="hidden" name="courseId" value="${selectedCourseId}" />
+                            <input type="hidden" name="classId" value="${selectedClassId}" />
+                        </div>
+
+                    </form>
+
+                    <!-- FORM POST CHUYỂN LỚP -->
+
+
+                    <form method="post" action="classTransfer" class="bg-light p-3 rounded mt-3">
+
+                        <input type="hidden" name="courseId" value="${selectedCourseId}" />
+                        <input type="hidden" name="classId" value="${selectedClassId}" />
+                        <input type="hidden" name="studentId" value="${selectedStudentId}" />
+
+
+                        <div class="mb-3">
+                            <label>Chuyển đến lớp</label>
+                            <select name="toClassId" class="form-select" required>
+                                <option value="">-- Chọn lớp --</option>
+                                <c:forEach var="cl" items="${targetClasses}">
+                                    <option value="${cl.id_class}" <c:if test="${cl.id_class == toClassId}">selected</c:if>>
+                                        ${cl.name_class}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Chuyển lớp</button>
                     </form>
 
 
-                    <c:if test="${not empty param.keyword}">
-                        <c:choose>
-                            <c:when test="${empty requests}">
-                                <div class="alert alert-warning text-center">
-                                    Không tìm thấy kết quả phù hợp với từ khóa: "<strong>${param.keyword}</strong>"
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="alert alert-info text-center">
-                                    Kết quả tìm kiếm cho từ khóa: "<strong>${param.keyword}</strong>"
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:if>
+                    <h4 class="mt-5">Lịch sử chuyển lớp</h4>
+                    
+                    <form method="get" action="classTransfer" class="mb-4 filter-form">
+                        <input type="text" name="keyword" class="form-control form-control-sm"
+                               placeholder="Tìm học sinh hoặc lớp..." value="${keyword}">
+                        <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
+                        <a href="classTransfer" class="btn btn-primary btn-sm">Hiển thị tất cả</a>
+                        <label for="fromDate" class="form-label mb-0">Từ ngày:</label>
+                        <input type="date" class="form-control form-control-sm" name="fromDate" value="${fromDate}">
+                        <label for="toDate" class="form-label mb-0">Đến ngày:</label>
+                        <input type="date" class="form-control form-control-sm" name="toDate" value="${toDate}">
+                        <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
 
-
-
-                    <table class="table table-bordered mt-4">
+                    </form>
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th>STT</th>
                                 <th>Học sinh</th>
-                                <th>Từ lớp</th>
-                                <th>Đến lớp</th>
-                                <th>Lý do</th>
-                                <th>Ngày gửi đơn</th>
-                                <th>Trạng thái</th>
-                                <th>Ghi chú khi xét đơn</th>
-                                <th>Hành động</th>
+                                <th>Lớp hiện tại</th>
+                                <th>Chuyển đến lớp</th>
+                                <th>Ngày chuyển</th>
+                                <th>Số lần chuyển</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="r" items="${requests}">
+                            <c:forEach items="${history}" var="h" varStatus="status">
                                 <tr>
-                                    <td>${r.studentName}</td>
-                                    <td>${r.fromClassName}</td>
-                                    <td>${r.toClassName}</td>
-                                    <td>${r.reason}</td>
-                                    <td><fmt:formatDate value="${r.requestDate}" pattern="dd/MM/yyyy" /></td>
-
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${r.status == 'approved'}">️ Đã đồng ý</c:when>
-                                            <c:when test="${r.status == 'rejected'}"> Đã từ chối</c:when>
-                                            <c:otherwise> Đang chờ</c:otherwise>
-                                        </c:choose>
-                                    </td>
-
-                                    <td>
-                                        <form method="post" action="classTransfer">
-                                            <input type="hidden" name="requestId" value="${r.id}">
-                                            <textarea name="staffNote" placeholder="Ghi chú xét đơn...">${r.staffNote}</textarea>
-                                    </td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${r.status == 'approved' || r.status == 'rejected'}">
-                                                <button class="btn btn-success btn-sm" disabled>✔️ Duyệt</button>
-                                                <button class="btn btn-danger btn-sm" disabled>❌ Từ chối</button>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <button class="btn btn-success btn-sm" name="action" value="approve">✔️ Duyệt</button>
-                                                <button class="btn btn-danger btn-sm" name="action" value="reject">❌ Từ chối</button>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        </form>
-                                    </td>
+                                    <td>${status.index + 1}</td>
+                                    <td>${h.student.name}</td>
+                                    <td>${h.fromClass.name_class}</td>
+                                    <td>${h.toClass.name_class}</td>
+                                    <td><fmt:formatDate value="${h.transferDate}" pattern="dd/MM/yyyy"/></td>
+                                    <td>${h.transferCount}</td>
                                 </tr>
                             </c:forEach>
+
                         </tbody>
                     </table>
+
                 </main>
             </div>
         </div>
@@ -283,5 +371,15 @@
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
+        <script>
+                                        function submitWithAction(actionValue) {
+                                            // Gửi đúng form theo id thay vì forms[0] để tránh lỗi nếu có nhiều form
+                                            document.getElementById('formAction').value = actionValue;
+                                            document.getElementById('transferForm').submit();
+                                        }
+        </script>
+
+
+
     </body>
 </html>

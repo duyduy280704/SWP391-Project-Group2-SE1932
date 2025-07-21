@@ -56,44 +56,42 @@ public class ScheduleDAO extends DBContext {
     }
 
     // timf kiếm 
-    public ArrayList<Schedules> getScheduleByName(String keyword) {
-        ArrayList<Schedules> data = new ArrayList<>();
+ public ArrayList<Schedules> getScheduleByName(String keyword) {
+    ArrayList<Schedules> data = new ArrayList<>();
+    try {
+        String strSQL = "SELECT s.id, s.id_class, s.start_time, s.end_time, s.day, s.id_teacher, s.room, c.name AS class_name, t.full_name AS teacher_name "
+                + "FROM schedule s "
+                + "JOIN Class c ON s.id_class = c.id "
+                + "JOIN Teacher t ON s.id_teacher = t.id "
+                + "WHERE c.name LIKE ?";
+        stm = connection.prepareStatement(strSQL);
+        stm.setString(1, "%" + keyword + "%");
+        rs = stm.executeQuery();
 
-        try {
-            String strSQL = "SELECT \n"
-                    + "*\n"
-                    + "FROM \n"
-                    + "    schedule s\n"
-                    + "JOIN \n"
-                    + "    Class c ON s.id_class = c.id\n"
-                    + "JOIN \n"
-                    + "    Teacher t ON s.id_teacher = t.id\n"
-                    + "	WHERE c.name like ?";
-
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, "%" + keyword + "%");
-            rs = stm.executeQuery();
-
-            while (rs.next()) {
-
-                String id = String.valueOf(rs.getInt(1));
-                String nameClass = rs.getString(9);
-                String start = rs.getString(4);
-                String end = rs.getString(5);
-                String day = rs.getString(6);
-                String nameTeacher = rs.getString(13);
-                String room = rs.getString(7);
-                Schedules s = new Schedules(id, nameClass, start, end, day, nameTeacher, room);
-                data.add(s);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Lỗi getAllSchedules: " + e.getMessage());
+        while (rs.next()) {
+            String id = String.valueOf(rs.getInt("id"));
+            String nameClass = rs.getString("class_name");
+            String start = rs.getString("start_time");
+            String end = rs.getString("end_time");
+            String day = rs.getString("day");
+            String nameTeacher = rs.getString("teacher_name");
+            String room = rs.getString("room");
+            Schedules s = new Schedules(id, nameClass, start, end, day, nameTeacher, room);
+            data.add(s);
         }
-
-        System.out.println("Tìm thấy " + data.size() + " lịch học.");
-        return data;
+        System.out.println("Tìm thấy " + data.size() + " lịch học với từ khóa: " + keyword);
+    } catch (SQLException e) {
+        System.out.println("Lỗi getScheduleByName: " + e.getMessage());
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stm != null) stm.close();
+        } catch (SQLException e) {
+            System.out.println("Lỗi đóng tài nguyên: " + e.getMessage());
+        }
     }
+    return data;
+}
 // lấy thời khóa biểu theo id
 
     public Schedules getSchedulesById(String id) {
@@ -202,10 +200,10 @@ public class ScheduleDAO extends DBContext {
 
     public void update(Schedules s) {
         try {
-            String strSQL = "Update schedule set id_class=?, start_time=?,end_time=?,day=?,id_teacher=?, room=?  where id = ?";
+            String strSQL = "UPDATE schedule SET id_class = ?, start_time = ?, end_time = ?, day = ?, id_teacher = ?, room = ? WHERE id = ?";
             stm = connection.prepareStatement(strSQL);
 
-            stm.setString(1, s.getNameClass());
+            stm.setString(1, s.getId_class());
             stm.setString(2, s.getStartTime());
             stm.setString(3, s.getEndTime());
             stm.setString(4, s.getDay());
@@ -220,33 +218,41 @@ public class ScheduleDAO extends DBContext {
     }
 // tạo thời khóa biểu
 
-    public void add(Schedules s) {
+    public void add(Schedules s, int totalSessions, List<Integer> selectedDays) {
         try {
-            String sql = "INSERT INTO schedule(id_class, start_time, end_time, day, id_teacher, room) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO schedule (id_class, start_time, end_time, day, id_teacher, room) VALUES (?, ?, ?, ?, ?, ?)";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar cal = Calendar.getInstance();
-
             cal.setTime(sdf.parse(s.getDay()));
 
-            for (int i = 0; i < 10; i++) {
-                stm = connection.prepareStatement(sql);
-                stm.setString(1, s.getNameClass());
-                stm.setString(2, s.getStartTime());
-                stm.setString(3, s.getEndTime());
-                String newDay = sdf.format(cal.getTime());
-                stm.setString(4, newDay);
-                stm.setString(5, s.getTeacher());
-                stm.setString(6, s.getRoom());
+            int sessionsAdded = 0;
+            int maxWeeks = (int) Math.ceil((double) totalSessions / selectedDays.size()); // Số tuần cần lặp
+            int maxAttempts = maxWeeks * 7; // Giới hạn số ngày để tránh vòng lặp vô hạn
 
-                stm.execute();
-                cal.add(Calendar.DAY_OF_MONTH, 7);
+            while (sessionsAdded < totalSessions && maxAttempts-- > 0) {
+                int dow = cal.get(Calendar.DAY_OF_WEEK) - 1; // 0=Chủ nhật, 1=Thứ 2,..., 6=Thứ 7
+                if (selectedDays.contains(dow)) {
+                    PreparedStatement stm = connection.prepareStatement(sql);
+                    stm.setString(1, s.getId_class()); // Sử dụng id_class
+                    stm.setString(2, s.getStartTime());
+                    stm.setString(3, s.getEndTime());
+                    String scheduleDate = sdf.format(cal.getTime());
+                    stm.setString(4, scheduleDate);
+                    stm.setString(5, s.getTeacher());
+                    stm.setString(6, s.getRoom());
+                    stm.executeUpdate();
+                    sessionsAdded++;
+                }
+                cal.add(Calendar.DAY_OF_MONTH, 1); // Tăng từng ngày
             }
+
+            System.out.println("Đã thêm " + sessionsAdded + " buổi học cho lớp " + s.getId_class());
         } catch (Exception e) {
             System.out.println("add: " + e.getMessage());
         }
     }
-// lọc thời gian 
 
+// lọc thời gian 
     public ArrayList<Schedules> filterSchedulesByDate(String date) {
         ArrayList<Schedules> data = new ArrayList<>();
         try {
@@ -286,7 +292,7 @@ public class ScheduleDAO extends DBContext {
             }
 
             stm = connection.prepareStatement(strSQL);
-            stm.setString(1, s.getNameClass());
+            stm.setString(1, s.getId_class()); // Sửa: Dùng id_class
             stm.setString(2, s.getStartTime());
             stm.setString(3, s.getEndTime());
             stm.setString(4, s.getDay());
@@ -298,7 +304,7 @@ public class ScheduleDAO extends DBContext {
 
             rs = stm.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Trả về true nếu tìm thấy lịch trùng
+                return rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
             System.out.println("Lỗi isScheduleExist: " + e.getMessage());
@@ -324,28 +330,29 @@ public class ScheduleDAO extends DBContext {
     }
 // tìm kiếm 
 
-    public List<Categories_class> searchClass(String keyword) {
-        List<Categories_class> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT c.id, c.name "
-                + "FROM schedule s JOIN Class c ON s.id_class = c.id "
-                + "WHERE c.name LIKE ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%" + keyword + "%");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Categories_class(rs.getString("id"), rs.getString("name")));
-            }
-        } catch (Exception e) {
-            System.out.println("searchClassesWithSchedule: " + e.getMessage());
+   public List<Categories_class> searchClass(String keyword) {
+    List<Categories_class> list = new ArrayList<>();
+    String sql = "SELECT DISTINCT c.id, c.name "
+               + "FROM schedule s JOIN Class c ON s.id_class = c.id "
+               + "WHERE LOWER(c.name) LIKE LOWER(?)";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + keyword.trim().toLowerCase() + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Categories_class(rs.getString("id"), rs.getString("name")));
         }
-        return list;
+    } catch (Exception e) {
+        System.out.println("searchClass: " + e.getMessage());
     }
+    return list;
+}
+
 // xóa toàn bộ lịch 
 
     public void deleteScheduleByClassId(String classId) {
         try {
-            String sql = "DELETE FROM schedule WHERE id_class = ?";
+            String sql = "DELETE FROM schedule WHERE id_class =  ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, classId);
             ps.executeUpdate();
@@ -355,34 +362,7 @@ public class ScheduleDAO extends DBContext {
     }
 //lấy lịch theo id lớp
 
-    public ArrayList<Schedules> getSchedulesByClassId(String classId) {
-        ArrayList<Schedules> data = new ArrayList<>();
-        try {
-            String strSQL = "SELECT s.*, c.name AS class_name, t.full_name AS teacher_name "
-                    + "FROM schedule s "
-                    + "JOIN Class c ON s.id_class = c.id "
-                    + "JOIN Teacher t ON s.id_teacher = t.id "
-                    + "WHERE s.id_class = ?";
-            stm = connection.prepareStatement(strSQL);
-            stm.setString(1, classId);
-            rs = stm.executeQuery();
-
-            while (rs.next()) {
-                String id = String.valueOf(rs.getInt("id"));
-                String nameClass = rs.getString("class_name");
-                String start = rs.getString("start_time");
-                String end = rs.getString("end_time");
-                String day = rs.getString("day");
-                String nameTeacher = rs.getString("teacher_name");
-                String room = rs.getString("room");
-                Schedules s = new Schedules(id, nameClass, start, end, day, nameTeacher, room);
-                data.add(s);
-            }
-        } catch (Exception e) {
-            System.out.println("getSchedulesByClassId: " + e.getMessage());
-        }
-        return data;
-    }
+   
 
     // Lấy danh sách lịch học theo id_class
     public ArrayList<Schedules> getScheduleByClassId(String classId) {
@@ -447,6 +427,7 @@ public class ScheduleDAO extends DBContext {
         return list;
     }
 // xóa lịch  theo id
+
     public void deleteScheduleById(String id) {
         try {
             String sql = "DELETE FROM schedule WHERE id = ?";
@@ -598,7 +579,7 @@ public class ScheduleDAO extends DBContext {
             stm.setString(1, s.getStartTime());
             stm.setString(2, s.getEndTime());
             stm.setString(3, s.getRoom());
-            stm.setString(4, s.getNameClass());
+            stm.setString(4, s.getId_class()); // Sửa: Dùng id_class
             stm.setString(5, s.getTeacher());
             stm.setString(6, s.getDay());
             stm.setString(7, s.getStartTime());
@@ -636,7 +617,7 @@ public class ScheduleDAO extends DBContext {
                 s.setNameClass(rs.getString("class_name"));
                 s.setTeacher(rs.getString("teacher_name"));
                 s.setRoom(rs.getString("room"));
-                s.setDay(rs.getString("day")); 
+                s.setDay(rs.getString("day"));
                 list.add(s);
             }
 
@@ -647,55 +628,73 @@ public class ScheduleDAO extends DBContext {
         return list;
     }
 // lấy thời khóa biểu gần nhất khi sửa toàn bộ 
+
     public Schedules getFirstScheduleFromToday(String id_class) {
-    try {
-        String sql = """
+        try {
+            String sql = """
             SELECT TOP 1 * FROM schedule
             WHERE id_class = ? AND day >= CAST(GETDATE() AS DATE)
             ORDER BY day ASC, start_time ASC
         """;
-        stm = connection.prepareStatement(sql);
-        stm.setString(1, id_class);
-        rs = stm.executeQuery();
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id_class);
+            rs = stm.executeQuery();
 
-        if (rs.next()) {
-            return new Schedules(
-                rs.getString("id"),
-                rs.getString("id_class"),
-                rs.getString("start_time"),
-                rs.getString("end_time"),
-                rs.getString("day"),
-                rs.getString("id_teacher"),
-                rs.getString("room")
-            );
+            if (rs.next()) {
+                return new Schedules(
+                        rs.getString("id"),
+                        rs.getString("id_class"),
+                        rs.getString("start_time"),
+                        rs.getString("end_time"),
+                        rs.getString("day"),
+                        rs.getString("id_teacher"),
+                        rs.getString("room")
+                );
+            }
+
+        } catch (Exception e) {
+            System.out.println("getFirstScheduleFromToday: " + e.getMessage());
         }
-
-    } catch (Exception e) {
-        System.out.println("getFirstScheduleFromToday: " + e.getMessage());
+        return null;
     }
-    return null;
-}
 // sủa thời khóa biểu từ ngày dc chọn
-public void updateSchedulesFromDate(String classId, String dateFrom, String teacherId, String startTime, String endTime, String room) {
-    try {
-        String sql = """
+
+    public void updateSchedulesFromDate(String classId, String dateFrom, String teacherId, String startTime, String endTime, String room) {
+        try {
+            String sql = """
             UPDATE schedule 
             SET id_teacher = ?, start_time = ?, end_time = ?, room = ?
             WHERE id_class = ? AND day >= ?
         """;
-        stm = connection.prepareStatement(sql);
-        stm.setString(1, teacherId);
-        stm.setString(2, startTime);
-        stm.setString(3, endTime);
-        stm.setString(4, room);
-        stm.setString(5, classId);
-        stm.setString(6, dateFrom);
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, teacherId);
+            stm.setString(2, startTime);
+            stm.setString(3, endTime);
+            stm.setString(4, room);
+            stm.setString(5, classId);
+            stm.setString(6, dateFrom);
 
-        stm.executeUpdate();
-    } catch (Exception e) {
-        System.out.println("updateSchedulesFromDate: " + e.getMessage());
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateSchedulesFromDate: " + e.getMessage());
+        }
     }
-}
 
+    public int getNumberOfSessionsByClassId(String classId) {
+        String sql = "SELECT c.number_of_sessions "
+                + "FROM class cl "
+                + "JOIN course c ON cl.course_id = c.id "
+                + "WHERE cl.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

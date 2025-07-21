@@ -1,3 +1,4 @@
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -147,59 +148,71 @@
             };
         </script>
     </head>
-    <body>
-        <div class="form-container">
-            <h2>Tạo thời khóa biểu</h2>
+        <body>
+            <div class="form-container">
+                <h2>Tạo thời khóa biểu</h2>
 
 
-            <c:choose>
-                <c:when test="${not empty err}">
-                    <div class="alert alert-error">${err}</div>
-                </c:when>
-                <c:when test="${not empty msg}">
-                    <div class="alert alert-success">${msg}</div>
-                </c:when>
-                <c:when test="${not empty sessionScope.msg}">
-                    <div class="alert alert-success">${sessionScope.msg}</div>
-                    <c:remove var="msg" scope="session" />
-                </c:when>
-            </c:choose>
+                <c:choose>
+                    <c:when test="${not empty err}">
+                        <div class="alert alert-error">${err}</div>
+                    </c:when>
+                    <c:when test="${not empty msg}">
+                        <div class="alert alert-success">${msg}</div>
+                    </c:when>
+                    <c:when test="${not empty sessionScope.msg}">
+                        <div class="alert alert-success">${sessionScope.msg}</div>
+                        <c:remove var="msg" scope="session" />
+                    </c:when>
+                </c:choose>
 
 
 
-            <form action="schedule" method="post">
-                <label for="classname">Tên lớp:</label>
-                <select name="id_class" id="classname" onchange="loadTeachersByClass()">
-                    <option value="0">Chọn lớp</option>
-                    <c:forEach items="${data1}" var="c">
-                        <option value="${c.id_class}" <c:if test="${param.id_class == c.id_class}">selected</c:if>>
-                            ${c.name_class}
-                        </option>
-                    </c:forEach>
-                </select>
+                <form action="schedule" method="post">
+                    <label for="classname">Tên lớp:</label>
+                    <select name="id_class" id="classname" onchange="loadTeachersByClass()">
+                        <option value="0">Chọn lớp</option>
+                        <c:forEach items="${data1}" var="c">
+                            <option value="${c.id_class}" <c:if test="${param.id_class == c.id_class}">selected</c:if>>
+                                ${c.name_class}
+                            </option>
+                        </c:forEach>
+                    </select>
 
-                <label for="teacher">Giáo viên:</label>
-                <select name="id_teacher" id="teacher">
-                    <option value="0">Chọn giáo viên</option>
-                </select>
+                    <label for="teacher">Giáo viên:</label>
+                    <select name="id_teacher" id="teacher">
+                        <option value="0">Chọn giáo viên</option>
+                    </select>
 
-                <label for="date">Ngày học:</label>
-                <input type="date" id="date" name="date" value="${param.date}">
+                    <label for="date">Ngày học:</label>
+                    <input type="date" id="date" name="date" value="${param.date}">
+                    <c:set var="selectedDays" value="${param.days}" />
 
-                <label for="startTime">Giờ bắt đầu:</label>
-                <input type="time" id="startTime" name="startTime" value="${param.startTime}">
+                    <label><input type="checkbox" name="days" value="1" <c:if test="${fn:contains(paramValues.days, '1')}">checked</c:if>> Thứ 2</label>
+                    <label><input type="checkbox" name="days" value="2" <c:if test="${fn:contains(paramValues.days, '2')}">checked</c:if>> Thứ 3</label>
+                    <label><input type="checkbox" name="days" value="3" <c:if test="${fn:contains(paramValues.days, '3')}">checked</c:if>> Thứ 4</label>
+                    <label><input type="checkbox" name="days" value="4" <c:if test="${fn:contains(paramValues.days, '4')}">checked</c:if>> Thứ 5</label>
+                    <label><input type="checkbox" name="days" value="5" <c:if test="${fn:contains(paramValues.days, '5')}">checked</c:if>> Thứ 6</label>
+                    <label><input type="checkbox" name="days" value="6" <c:if test="${fn:contains(paramValues.days, '6')}">checked</c:if>> Thứ 7</label>
+                    <label><input type="checkbox" name="days" value="7" <c:if test="${fn:contains(paramValues.days, '7')}">checked</c:if>> Chủ nhật</label>
 
-                <label for="endTime">Giờ kết thúc:</label>
-                <input type="time" id="endTime" name="endTime" value="${param.endTime}">
 
-                <label for="room">Phòng học:</label>
-                <input type="text" id="room" name="room" value="${param.room}">
 
-                <div class="buttons">
-                    <button type="submit" class="save" name="add">Lưu</button>
-                    <button type="button" class="cancel" onclick="window.location.href = 'listClassSchedule'">Hủy</button>
-                </div>
-            </form>
-        </div>
-    </body>
+
+                        <label for="startTime">Giờ bắt đầu:</label>
+                        <input type="time" id="startTime" name="startTime" value="${param.startTime}">
+
+                    <label for="endTime">Giờ kết thúc:</label>
+                    <input type="time" id="endTime" name="endTime" value="${param.endTime}">
+
+                    <label for="room">Phòng học:</label>
+                    <input type="text" id="room" name="room" value="${param.room}">
+
+                    <div class="buttons">
+                        <button type="submit" class="save" name="add">Lưu</button>
+                        <button type="button" class="cancel" onclick="window.location.href = 'listClassSchedule'">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </body>
 </html>

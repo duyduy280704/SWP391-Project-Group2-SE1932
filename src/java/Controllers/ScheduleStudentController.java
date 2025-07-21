@@ -20,6 +20,8 @@ public class ScheduleStudentController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
+        System.out.println(">> Đăng nhập với học sinh ID: " + (student != null ? student.getId() : "null"));
+
 // dang nhap
         if (student == null) {
             response.sendRedirect("login.jsp");
@@ -61,21 +63,37 @@ public class ScheduleStudentController extends HttpServlet {
 
         // chuyển lớp của học sinh lớp cũ hiện lịch đến ngày chuyển , lớp mới hiện lịch  mới từ ngày chuyển đi 
         ClassTransferRequest transfer = transferDAO.getLastApprovedRequest(student.getId());
-        if (transfer != null && transfer.getResponseDate() != null) {
-            LocalDate approvedDate = new java.sql.Date(transfer.getResponseDate().getTime())
-                    .toLocalDate();
+        if (transfer != null) {
+            System.out.println(">> Học sinh đã chuyển lớp, từ lớp " + transfer.getFromClass().getName_class()
+                    + " đến lớp " + transfer.getToClass().getName_class()
+                    + " vào ngày " + transfer.getTransferDate());
+        } else {
+            System.out.println(">> Học sinh chưa từng chuyển lớp");
+        }
 
-            List<ScheduleStudent> oldList = dao.getScheduleBefore(transfer.getFromClassId(), approvedDate);
-            List<ScheduleStudent> newList = dao.getScheduleAfter(transfer.getToClassId(), approvedDate);
+        if (transfer != null && transfer.getTransferDate() != null) {
+            LocalDate transferDate = new java.sql.Date(transfer.getTransferDate().getTime()).toLocalDate();
 
-            scheduleStudent.addAll(oldList);
-            scheduleStudent.addAll(newList);
+            List<ScheduleStudent> oldList = dao.getScheduleBefore(transfer.getFromClass().getId_class(), transferDate, studentId);
+            System.out.println(">> oldList (lớp cũ) size = " + oldList.size());
+            for (ScheduleStudent s : oldList) {
+                System.out.println("   - " + s.getDay() + " | " + s.getNameClass() + " | " + s.getStartTime());
+            }
 
+            List<ScheduleStudent> newList = dao.getScheduleAfter(transfer.getToClass().getId_class(), transferDate, studentId);
+            System.out.println(">> Học sinh đã từng chuyển lớp");
+            System.out.println(">> oldList.size(): " + oldList.size());
+
+            List<ScheduleStudent> merged = new ArrayList<>();
+            merged.addAll(oldList);
+            merged.addAll(newList);
+
+            // Lọc theo tuần
             LocalDate weekStart = baseDate;
             LocalDate weekEnd = baseDate.plusDays(6);
-            List<ScheduleStudent> filtered = new ArrayList<>();
 
-            for (ScheduleStudent s : scheduleStudent) {
+            List<ScheduleStudent> filtered = new ArrayList<>();
+            for (ScheduleStudent s : merged) {
                 LocalDate day = LocalDate.parse(s.getDay());
                 if (!day.isBefore(weekStart) && !day.isAfter(weekEnd)) {
                     filtered.add(s);
@@ -84,8 +102,10 @@ public class ScheduleStudentController extends HttpServlet {
             scheduleStudent = filtered;
 
         } else {
+            // Lấy lịch lớp hiện tại nếu chưa chuyển
             Categories_class currentClass = transferDAO.getClassByStudentId(student.getId());
             if (currentClass != null) {
+                System.out.println(">> Học sinh đang thuộc lớp: " + currentClass.getName_class());
                 List<ScheduleStudent> allSchedules = dao.getScheduleStudentAll(studentId, currentClass.getId_class());
 
                 LocalDate weekStart = baseDate;
@@ -98,7 +118,6 @@ public class ScheduleStudentController extends HttpServlet {
                         filtered.add(s);
                     }
                 }
-
                 scheduleStudent = filtered;
             }
         }
@@ -129,6 +148,18 @@ public class ScheduleStudentController extends HttpServlet {
 
         request.setAttribute("weekDays", weekDays);
         request.setAttribute("scheduleStudent", scheduleStudent);
+        System.out.println("==== Danh sách thời khóa biểu học sinh ====");
+        for (ScheduleStudent s : scheduleStudent) {
+            System.out.println("Ngày: " + s.getDay()
+                    + " | Thứ: " + s.getDayVN()
+                    + " | Lớp: " + s.getNameClass()
+                    + " | Bắt đầu: " + s.getStartTime()
+                    + " | Phòng: " + s.getRoom()
+                    + " | Điểm danh: " + s.getAttendanceStatus()
+                    + " | Lý do: " + s.getReason());
+        }
+        System.out.println("===> Tổng số buổi học: " + scheduleStudent.size());
+
         request.setAttribute("weeks", weeks);
         request.setAttribute("years", years);
         request.setAttribute("selectedWeek", baseDate.format(dbFormatter));

@@ -63,16 +63,28 @@ public class ListClassScheduleController extends HttpServlet {
 
         String action = request.getParameter("action");
 //tìm kiếm 
+       try {
+      
+        System.out.println("Action: " + action); // Debug
+        
         if ("search".equals(action)) {
             String keyword = request.getParameter("search");
+            System.out.println("Search keyword: " + keyword); // Debug
             List<Categories_class> classList = (keyword != null && !keyword.trim().isEmpty())
                     ? dao.searchClass(keyword)
                     : dao.getClassesHaveSchedule();
-
+            System.out.println("Class list size: " + classList.size()); // Debug
+            
             request.setAttribute("classList", classList);
             request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);
             return;
         }
+        // ... các phần còn lại của doPost ...
+    } catch (Exception e) {
+        e.printStackTrace(); // Ghi log lỗi
+        request.setAttribute("error", "Lỗi xử lý yêu cầu: " + e.getMessage());
+       
+    }
 //xóa
         if ("delete".equals(action)) {
             String classId = request.getParameter("classId");
@@ -168,21 +180,25 @@ public class ListClassScheduleController extends HttpServlet {
             }
 //  thêm lịch 
         } else if (request.getParameter("add") != null) {
-            if (classID == null || classID.isEmpty()
+            String[] days = request.getParameterValues("days");
+            boolean missing = classID == null || classID.isEmpty()
                     || startTime == null || startTime.isEmpty()
                     || endTime == null || endTime.isEmpty()
                     || day == null || day.isEmpty()
                     || teacherID == null || teacherID.isEmpty()
-                    || room == null || room.isEmpty()) {
+                    || room == null || room.isEmpty()
+                    || days == null || days.length == 0;
 
+            if (missing) {
                 request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để thêm lịch học.");
                 request.setAttribute("s", s);
                 request.setAttribute("data1", dao.getCategories_class());
                 request.setAttribute("data3", dao.getCategoriesTeacher());
                 request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
                 return;
+            }
 
-            } else if (startTime.compareTo(endTime) >= 0) {
+            if (startTime.compareTo(endTime) >= 0) {
                 request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
                 request.setAttribute("s", s);
                 request.setAttribute("data1", dao.getCategories_class());
@@ -211,6 +227,27 @@ public class ListClassScheduleController extends HttpServlet {
                 return;
             }
 
+            // Chuyển days[] sang List<Integer>
+            List<Integer> selectedDays = new ArrayList<>();
+            for (String d : days) {
+                try {
+                    int dayValue = Integer.parseInt(d);
+                    selectedDays.add(dayValue % 7); // Chủ nhật = 0
+                } catch (NumberFormatException ex) {
+                    // Bỏ qua giá trị không hợp lệ
+                }
+            }
+
+            int totalSessions = dao.getNumberOfSessionsByClassId(classID);
+            if (totalSessions <= 0) {
+                request.setAttribute("err", "Số buổi học không hợp lệ hoặc không tồn tại.");
+                request.setAttribute("s", s);
+                request.setAttribute("data1", dao.getCategories_class());
+                request.setAttribute("data3", dao.getCategoriesTeacher());
+                request.getRequestDispatcher("schedule_add.jsp").forward(request, response);
+                return;
+            }
+
             if (dao.isScheduleExist(s, false)) {
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
                 request.setAttribute("s", s);
@@ -220,7 +257,7 @@ public class ListClassScheduleController extends HttpServlet {
                 return;
             }
 
-            dao.add(s);
+            dao.add(s, totalSessions, selectedDays);
             response.sendRedirect("listClassSchedule");
             return;
         }

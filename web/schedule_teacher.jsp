@@ -496,9 +496,15 @@
                                                             <input type="hidden" name="classId" value="${s.classId}" />
                                                             <input type="hidden" name="className" value="${s.nameClass}" />
                                                             <input type="hidden" name="day" value="${s.day}" />
-                                                            <button type="submit" class="btn-attendance">Điểm danh</button>
+                                                            <button type="submit"
+                                                                    class="btn-attendance"
+                                                                    style="background-color: ${s.attendanceTaken ? '#28a745' : '#dc3545'};">
+                                                                ${s.attendanceTaken ? ' Đã điểm danh' : ' Chưa điểm danh'}
+                                                            </button>
                                                         </form>
                                                     </td>
+
+
                                                 </tr>
                                             </c:if>
                                         </c:forEach>

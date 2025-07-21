@@ -10,7 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin@7.0.5/dist/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-   
+
     <body class="sb-nav-fixed">
 
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -127,6 +127,18 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                                 Thời khóa biểu
                             </a>
+                            <!-- Điểm danh -->
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
+                                Điểm danh
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseAttendance">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="teachingAttendance"><i class="fas fa-comment-dots me-2"></i> Chấm công giáo viên</a>
+                                    <a class="nav-link" href="#"><i class="fas fa-star-half-alt me-2"></i> Điểm danh của học sinh</a>
+                                </nav>
+                            </div>
 
                             <!-- Đánh giá -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
@@ -140,6 +152,7 @@
                                     <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
                                 </nav>
                             </div>
+
 
                             <!-- Xử lý đơn chuyển lớp -->
                             <a href="classTransfer" class="nav-link">
