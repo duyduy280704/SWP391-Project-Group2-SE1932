@@ -34,7 +34,7 @@ public class CancelCourseController extends HttpServlet {
         HttpSession session = request.getSession();
         
         Students student = (Students) session.getAttribute("account");
-
+        
         if (student == null) {
             response.sendRedirect("login.jsp");
             return;
@@ -42,12 +42,12 @@ public class CancelCourseController extends HttpServlet {
         
         
            String studentId = student.getId();
-       
-        
 
         List<Regisition> list = dao.getRegisteredCourses(studentId);
         request.setAttribute("list", list);
         request.getRequestDispatcher("CourseHistory.jsp").forward(request, response);
+        
+        
     }
 
     @Override

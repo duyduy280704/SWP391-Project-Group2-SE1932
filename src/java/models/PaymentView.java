@@ -20,6 +20,8 @@ public class PaymentView {
     private String nameStudent;
     private String idStudent;
     private String email;
+    private String method;
+    
 
     public PaymentView() {
     }
@@ -126,6 +128,14 @@ public class PaymentView {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
 }

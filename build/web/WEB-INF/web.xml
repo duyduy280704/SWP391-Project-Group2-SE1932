@@ -236,6 +236,10 @@
         <servlet-name>TeacherDetailController</servlet-name>
         <servlet-class>Controllers.TeacherDetailController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RefundController</servlet-name>
+        <servlet-class>Controllers.RefundController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -467,5 +471,9 @@
     <servlet-mapping>
         <servlet-name>TeacherDetailController</servlet-name>
         <url-pattern>/TeacherDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RefundController</servlet-name>
+        <url-pattern>/Refund</url-pattern>
     </servlet-mapping>
 </web-app>

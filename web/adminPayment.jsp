@@ -183,46 +183,51 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <a class="nav-link" href="adminhome">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Biểu Đồ
-                            </a>
-
 
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
                                 Quản lý người dùng
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="student">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
                                         Học Sinh
                                     </a>
                                     <a class="nav-link" href="teacher">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                                         Giáo Viên
                                     </a>
                                     <a class="nav-link" href="staff">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                        <div class="sb-nav-link-icon"><i class="fas fa-user-tie"></i></div>
                                         Nhân Viên
                                     </a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Thông báo
 
+                            <a class="nav-link collapsed" href="setting">
+                                <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                                Cài đặt thông tin
                             </a>
 
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Cài đặt thông tin
+                            <a class="nav-link collapsed" href="AdminPayment">
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                Quản lý thanh toán
+                            </a>
 
+                            <a class="nav-link collapsed" href="salaryadmin">
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                Quản lý lương giáo viên
+                            </a>
+
+                            <a class="nav-link collapsed" href="SendNotification">
+                                <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
+                                Thông báo
                             </a>
                         </div>
                     </div>
@@ -269,6 +274,7 @@
                                                 <th>📅 Ngày</th>
                                                 <th>💰 Số tiền</th>
                                                 <th>📌 Trạng thái</th>
+                                                <th>💳 Phương thức</th>
                                                 <th>⚙️ Hành động</th>
                                             </tr>
                                         </thead>
@@ -288,17 +294,30 @@
                                                               </span>
                                                         </td>
                                                         <td>
+                                                            <form action="AdminPayment" method="post" style="margin: 0;">
+                                                                <input type="hidden" name="orderCode" value="${p.orderCode}">
+
+                                                                <select name="method" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                                    <c:if test="${empty p.method}">
+                                                                        <option value="" selected>Chọn phương thức</option>
+                                                                    </c:if>
+                                                                    <option value="Tiền mặt" ${p.method == 'Tiền mặt' ? 'selected' : ''}>Tiền mặt</option>
+                                                                    <option value="Chuyển khoản" ${p.method == 'Chuyển khoản' ? 'selected' : ''}>Chuyển khoản</option>
+                                                                </select>
+                                                            </form>
+                                                        </td>
+                                                        <td>
                                                             <form method="post" style="display:inline;">
                                                                 <input type="hidden" name="orderCode" value="${p.orderCode}">
                                                                 <input type="hidden" name="idStudent" value="${p.idStudent}">
                                                                 <input type="hidden" name="email" value="${p.email}">
-                                                                <button name="action" value="approve" class="btn btn-success btn-sm">✅ Duyệt</button>
+                                                                <button name="action" value="approve" class="btn btn-success btn-sm">✅ Đã thanh toán  </button>
                                                             </form>
                                                             <form method="post" style="display:inline;">
                                                                 <input type="hidden" name="orderCode" value="${p.orderCode}">
                                                                 <input type="hidden" name="idStudent" value="${p.idStudent}">
                                                                 <input type="hidden" name="email" value="${p.email}">
-                                                                <button name="action" value="reject" class="btn btn-danger btn-sm">❌ Trả lại</button>
+                                                                <button name="action" value="reject" class="btn btn-danger btn-sm">❌Chưa thanh toán</button>
                                                             </form>
                                                         </td>
                                                     </tr>

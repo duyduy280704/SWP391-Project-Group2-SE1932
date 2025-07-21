@@ -50,7 +50,7 @@ public class AdminPaymentController extends HttpServlet {
         String orderCode = request.getParameter("orderCode");
         String idStudent = request.getParameter("idStudent");
         String email = request.getParameter("email");
-
+        String method = request.getParameter("method");
         PaymentDAO paymentDAO = new PaymentDAO();
         NotificationDAO notiDAO = new NotificationDAO();
 
@@ -59,14 +59,18 @@ public class AdminPaymentController extends HttpServlet {
 
         if ("approve".equals(action)) {
             status = "Hoàn tất";
+            
             message = "Admin đã duyệt thanh toán cho đơn hàng: " + orderCode;
+            paymentDAO.updateStatusByOrderCode(orderCode, status);
         } else if ("reject".equals(action)) {
             status = "Chưa thanh toán";
             message = "Thanh toán đơn hàng " + orderCode + " đã bị chuyển về chưa thanh toán.";
+            paymentDAO.updateStatusByOrderCode(orderCode, status);
         }
 
-        paymentDAO.updateStatusByOrderCode(orderCode, status);
-
+        if (method != null){
+        paymentDAO.updatePaymentMethod(orderCode, method);}
+        
         // Gửi mail (bạn cần sửa để lấy email từ studentId nếu cần)
         try {
             SendMail.send(email, "Thông báo thanh toán", message);

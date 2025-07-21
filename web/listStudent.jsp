@@ -202,6 +202,11 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                                 Cài đặt thông tin
                             </a>
+                            
+                            <a class="nav-link collapsed" href="AdminPayment">
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                Quản lý thanh toán
+                            </a>
 
                             <a class="nav-link collapsed" href="salaryadmin">
                                 <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
