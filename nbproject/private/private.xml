@@ -2,6 +2,28 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/TeacherApprove.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherRegistrationController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/RegisitionDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/TeacherApplicationControllerad.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/RegistrationCourseController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/PaymentDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/TeacherApplicationDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/forgot-password.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/TeacherRegistion.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/Teachers.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/AssignClassController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/RefundInfo.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/CourseDAO.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/ResetPasswordServlet.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/models/TeacherApplications.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/AssignStudentClass.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/CourseHistory.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/CancelCourseController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/src/java/Controllers/RefundController.java</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/changePassword.jsp</file>
+            <file>file:/C:/Kỳ5_SU25/SWP391/ProjectEdu_Swp/final/SWP391-Project-Group2-SE1932/web/CancelCourseAdmin.jsp</file>
+        </group>
     </open-files>
 </project-private>

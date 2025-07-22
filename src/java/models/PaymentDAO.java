@@ -156,30 +156,34 @@ public class PaymentDAO extends DBContext {
         List<RefundInfo> list = new ArrayList<>();
         String sql = """
             SELECT 
-                r.student_id,
-                r.course_id,
-                r.status AS regisition_status,
-                c.fee AS original_price,
-                ISNULL(s.value, 0) AS discount_percent,
-                ROUND(
-                    (c.fee * (1 - ISNULL(s.value, 0) / 100.0)) * 0.8, 
-                    2
-                ) AS refund_amount,
-                p.id, 
-                p.method,
-                p.status, 
-                p.order_code,
-                p.date AS payment_date
-            FROM 
-                regisition r
-            JOIN 
-                payment p ON r.student_id = p.id_student AND r.course_id = p.id_course
-            JOIN 
-                Course c ON p.id_course = c.id
-            LEFT JOIN 
-                Sale s ON p.id_sale = s.id
-            WHERE 
-                r.status = N'Đã hủy'
+                    r.student_id,
+                    s.full_name AS student_name,       
+                    r.course_id,
+                    c.name AS course_name,             
+                    r.status AS regisition_status,
+                    c.fee AS original_price,
+                    ISNULL(sa.value, 0) AS discount_percent,
+                    ROUND(
+                        (c.fee * (1 - ISNULL(sa.value, 0) / 100.0)) * 0.8, 
+                        2
+                    ) AS refund_amount,
+                    p.id, 
+                    p.method,
+                    p.status, 
+                    p.order_code,
+                    p.date AS payment_date
+                FROM 
+                    regisition r
+                JOIN 
+                    payment p ON r.student_id = p.id_student AND r.course_id = p.id_course
+                JOIN 
+                    Course c ON p.id_course = c.id
+                JOIN 
+                    Student s ON r.student_id = s.id            
+                LEFT JOIN 
+                    Sale sa ON p.id_sale = sa.id
+                WHERE 
+                    r.status = N'Đã hủy'
         """;
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -194,6 +198,8 @@ public class PaymentDAO extends DBContext {
                 ri.setOrderCode(rs.getString("order_code"));
                 ri.setPaymentDate(rs.getString("payment_date"));
                 ri.setPaymentStatus(rs.getString("status"));
+                ri.setCourseName(rs.getString("course_name"));
+                ri.setStudentName(rs.getString("student_name"));
                 ri.setPaymentId(rs.getInt("id"));
                 list.add(ri);
             }
@@ -225,4 +231,76 @@ public class PaymentDAO extends DBContext {
         }
     }
 
+    public List<RefundInfo> searchRefunds(String orderCode, String studentName, String courseName) {
+        List<RefundInfo> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            p.id AS payment_id,
+            s.id AS student_id,
+            s.full_name AS student_name,
+            c.id AS course_id,
+            c.name AS course_name,
+            r.status AS regisition_status,
+            c.fee AS original_price,
+            ISNULL(sa.value, 0) AS discount_percent,
+            ROUND((c.fee * (1 - ISNULL(sa.value, 0)/100.0)) * 0.8, 2) AS refund_amount,
+            p.method,
+            p.status AS payment_status,
+            p.order_code,
+            p.date AS payment_date
+        FROM 
+            regisition r
+        JOIN payment p ON r.student_id = p.id_student AND r.course_id = p.id_course
+        JOIN Student s ON r.student_id = s.id
+        JOIN Course c ON r.course_id = c.id
+        LEFT JOIN Sale sa ON p.id_sale = sa.id
+        WHERE r.status = N'Đã hủy'
+    """;
+
+        List<Object> params = new ArrayList<>();
+
+        if (orderCode != null && !orderCode.trim().isEmpty()) {
+            sql += " AND p.order_code LIKE ?";
+            params.add("%" + orderCode.trim() + "%");
+        }
+
+        if (studentName != null && !studentName.trim().isEmpty()) {
+            sql += " AND s.full_name LIKE ?";
+            params.add("%" + studentName.trim() + "%");
+        }
+
+        if (courseName != null && !courseName.trim().isEmpty()) {
+            sql += " AND c.name = ?";
+            params.add(courseName.trim());
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                RefundInfo r = new RefundInfo();
+                r.setPaymentId(rs.getInt("payment_id"));
+                r.setStudentId(rs.getInt("student_id"));
+                r.setStudentName(rs.getString("student_name"));
+                r.setCourseId(rs.getInt("course_id"));
+                r.setCourseName(rs.getString("course_name"));
+                r.setRegisitionStatus(rs.getString("regisition_status"));
+                r.setOriginalPrice(rs.getDouble("original_price"));
+                r.setDiscountPercent(rs.getInt("discount_percent"));
+                r.setRefundAmount(rs.getDouble("refund_amount"));
+                r.setMethod(rs.getString("method"));
+                r.setPaymentStatus(rs.getString("payment_status"));
+                r.setOrderCode(rs.getString("order_code"));
+                r.setPaymentDate(rs.getString("payment_date"));
+                list.add(r);
+            }
+        } catch (Exception e) {
+            System.out.println("searchRefunds: " + e.getMessage());
+        }
+
+        return list;
+    }
 }

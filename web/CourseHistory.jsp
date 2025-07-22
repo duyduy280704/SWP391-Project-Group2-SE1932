@@ -308,13 +308,12 @@
                                     </p>
 
                                     <c:if test="${r.status ne 'đã hủy'}">
-                                        <form action="CancelCourse" method="post" onsubmit="return confirm('Bạn có chắc muốn hủy đăng ký không?');">
-                                            <input type="hidden" name="regisId" value="${r.id}" />
-                                            <input type="hidden" name="studentId" value="${sessionScope.account.id}" />
-                                            <input type="hidden" name="courseId" value="${r.courseId}" />
-                                            <button type="submit" class="btn btn-outline-danger w-100">Hủy đăng ký</button>
-                                        </form>
+                                        <button type="button" class="btn btn-outline-danger w-100"
+                                                onclick="openCancelModal('${r.id}', '${sessionScope.account.id}', '${r.courseId}')">
+                                            Hủy đăng ký
+                                        </button>
                                     </c:if>
+
                                     <c:if test="${r.status eq 'đã hủy'}">
                                         <span class="text-muted">Bạn đã hủy đăng ký khóa học này.</span>
                                     </c:if>
@@ -330,6 +329,29 @@
                     </c:if>
                 </div>
             </div>
+            <div id="cancelModal" class="modal" style="display: none;">
+                <div class="modal-content p-4" style="max-width: 500px; margin: auto; background: white; border-radius: 8px;">
+                    <span class="close" onclick="closeCancelModal()" style="float: right; cursor: pointer;">×</span>
+                    <h5 class="mb-3">Lý do hủy đăng ký</h5>
+
+                    <!-- ⚠️ Cảnh báo hoàn tiền -->
+                    <div class="alert alert-warning" role="alert">
+                        ⚠️ Khi hủy đăng ký, bạn chỉ được hoàn lại <strong>80% học phí</strong>.
+                    </div>
+
+                    <form action="CancelCourse" method="post" onsubmit="return validateCancelForm()">
+                        <input type="hidden" name="regisId" id="cancelRegisId">
+                        <input type="hidden" name="studentId" id="cancelStudentId">
+                        <input type="hidden" name="courseId" id="cancelCourseId">
+
+                        <textarea name="cancelReason" id="cancelReason" class="form-control mb-3"
+                                  placeholder="Nhập lý do hủy..." required></textarea>
+
+                        <button type="submit" class="btn btn-danger w-100">Xác nhận hủy</button>
+                    </form>
+                </div>
+            </div>
+
 
 
 
@@ -416,25 +438,57 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-                                            function toggleSidebar() {
-                                                const sidebar = document.getElementById('sidebar');
-                                                const mainContent = document.getElementById('main-content');
-                                                const toggleBtn = document.querySelector('.toggle-btn');
+                        function toggleSidebar() {
+                            const sidebar = document.getElementById('sidebar');
+                            const mainContent = document.getElementById('main-content');
+                            const toggleBtn = document.querySelector('.toggle-btn');
 
-                                                sidebar.classList.toggle('hidden');
-                                                mainContent.classList.toggle('full');
-                                                toggleBtn.classList.toggle('hidden');
+                            sidebar.classList.toggle('hidden');
+                            mainContent.classList.toggle('full');
+                            toggleBtn.classList.toggle('hidden');
 
-                                                // Change icon based on sidebar state
-                                                const icon = toggleBtn.querySelector('i');
-                                                if (sidebar.classList.contains('hidden')) {
-                                                    icon.classList.remove('fa-times');
-                                                    icon.classList.add('fa-bars');
-                                                } else {
-                                                    icon.classList.remove('fa-bars');
-                                                    icon.classList.add('fa-times');
-                                                }
-                                            }
+                            // Change icon based on sidebar state
+                            const icon = toggleBtn.querySelector('i');
+                            if (sidebar.classList.contains('hidden')) {
+                                icon.classList.remove('fa-times');
+                                icon.classList.add('fa-bars');
+                            } else {
+                                icon.classList.remove('fa-bars');
+                                icon.classList.add('fa-times');
+                            }
+                        }
         </script>
+        <script>
+            function openCancelModal(regisId, studentId, courseId) {
+                document.getElementById('cancelRegisId').value = regisId;
+                document.getElementById('cancelStudentId').value = studentId;
+                document.getElementById('cancelCourseId').value = courseId;
+                document.getElementById('cancelReason').value = "";
+                document.getElementById('cancelModal').style.display = "block";
+            }
+
+            function closeCancelModal() {
+                document.getElementById('cancelModal').style.display = "none";
+            }
+
+            function validateCancelForm() {
+                const reason = document.getElementById('cancelReason').value.trim();
+                if (!reason) {
+                    alert("Vui lòng nhập lý do hủy.");
+                    return false;
+                }
+                return confirm("Bạn sẽ chỉ được hoàn lại 80% học phí. Bạn có chắc muốn hủy không?");
+            }
+
+            window.onclick = function (event) {
+                const modal = document.getElementById('cancelModal');
+                if (event.target === modal) {
+                    closeCancelModal();
+                }
+            };
+        </script>
+
+
+
     </body>
 </html>

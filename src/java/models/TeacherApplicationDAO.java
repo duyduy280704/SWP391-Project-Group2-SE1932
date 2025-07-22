@@ -37,7 +37,7 @@ public class TeacherApplicationDAO extends DBContext {
 
             stm.setInt(8, Integer.parseInt(teacher.getIdTypeCourse()));
             stm.setInt(9, Integer.parseInt(teacher.getYearOfExpertise()));
-            stm.setInt(10, Integer.parseInt(teacher.getPhone()));
+            stm.setString(10, teacher.getPhone());
             stm.executeUpdate();
 
             // Lấy ID tự động tăng
@@ -256,13 +256,13 @@ public class TeacherApplicationDAO extends DBContext {
 
     public void insertTeacher(String fullName, String email, String birthDate, String gender,
             String expertise, String typeId, String yearsExp, String phone,
-            int idApplication) {
+            int idApplication, double salaryOffer) {
 
         String sql = """
         INSERT INTO Teacher
         (password, full_name, email, birth_date, gender, Expertise, 
-         role_id, id_type_course, years_of_experience, phone, id_application)
-        VALUES (?, ?, ?, ?, ?, ?,  2, ?, ?, ?, ?)
+         role_id, id_type_course, years_of_experience, phone, id_application, offer_salary)
+        VALUES (?, ?, ?, ?, ?, ?,  2, ?, ?, ?, ?, ?)
     """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -276,6 +276,7 @@ public class TeacherApplicationDAO extends DBContext {
             ps.setString(8, yearsExp);
             ps.setString(9, phone);
             ps.setInt(10, idApplication);
+            ps.setDouble(11, salaryOffer);
 
             ps.executeUpdate();
             System.out.println("✅ Đã thêm giáo viên thành công: " + fullName);

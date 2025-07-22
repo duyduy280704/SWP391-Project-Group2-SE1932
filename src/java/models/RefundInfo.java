@@ -21,6 +21,8 @@ public class RefundInfo {
     private String paymentDate;
     private int paymentId;
     private String paymentStatus;
+    private String studentName;
+    private String courseName;
 
     public RefundInfo() {
     }
@@ -37,6 +39,22 @@ public class RefundInfo {
         this.paymentDate = paymentDate;
         this.paymentId = paymentId;
         this.paymentStatus = paymentStatus;
+    }
+
+    public RefundInfo(int studentId, int courseId, String regisitionStatus, double originalPrice, int discountPercent, double refundAmount, String method, String orderCode, String paymentDate, int paymentId, String paymentStatus, String studentName, String courseName) {
+        this.studentId = studentId;
+        this.courseId = courseId;
+        this.regisitionStatus = regisitionStatus;
+        this.originalPrice = originalPrice;
+        this.discountPercent = discountPercent;
+        this.refundAmount = refundAmount;
+        this.method = method;
+        this.orderCode = orderCode;
+        this.paymentDate = paymentDate;
+        this.paymentId = paymentId;
+        this.paymentStatus = paymentStatus;
+        this.studentName = studentName;
+        this.courseName = courseName;
     }
 
     
@@ -127,6 +145,22 @@ public class RefundInfo {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
 }

@@ -512,7 +512,7 @@ public class ScheduleDAO extends DBContext {
     }
 
     //  giáo viên không dạy 2 lớp 1 lúc.,phòng học không chứa 2 lớp 1 lúc .1 lớp học không học 2 môn 1 lúc.
-    public String getConflictMessage(Schedules s, boolean isUpdate) {
+        public String getConflictMessage(Schedules s, boolean isUpdate) {
         try {
             String sql = "SELECT id_teacher, room, id_class FROM schedule WHERE day = ? "
                     + "AND (start_time < ? AND end_time > ?)";

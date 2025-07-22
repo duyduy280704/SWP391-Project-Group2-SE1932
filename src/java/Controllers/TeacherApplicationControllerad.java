@@ -77,12 +77,13 @@ public class TeacherApplicationControllerad extends HttpServlet {
                 String typeId = request.getParameter("id_type_course");
                 String yearsExp = request.getParameter("years_of_experience");
                 String phone = request.getParameter("phone");
-
-                dao.insertTeacher(fullName, email3, birthDate, gender, expertise, typeId, yearsExp, phone, id);
+                String salaryStr = request.getParameter("salaryOffer"); // hoặc từ form, modal,...
+                double salary = Double.parseDouble(salaryStr.trim());
+                dao.insertTeacher(fullName, email3, birthDate, gender, expertise, typeId, yearsExp, phone, id, salary);
 
                 // Gửi mail
                 String content = "Chúc mừng bạn đã trở thành giáo viên của trung tâm BIGDREAM!"
-                        + "Tài khoản: " + phone + "Mật khẩu: " + phone ;
+                        + "Tài khoản: " + phone + "Mật khẩu: " + phone+" Hãy truy cập vào hệ thống để đổi mật khẩu localhost:8080/BIGDREAM/ResetPasswordServlet";
                 SendMail.send(email3, "Xác nhận trúng tuyển", content);
                 break;
         }

@@ -118,6 +118,8 @@ public class ScheduleController extends HttpServlet {
                 request.setAttribute("err", "Lịch học này đã tồn tại. Vui lòng kiểm tra lại.");
             } else if (conflictMsg != null) {
                 request.setAttribute("err", conflictMsg);
+            } else if (LocalDate.parse(day).isBefore(LocalDate.now())) {
+                request.setAttribute("err", "Ngày học không được là ngày trong quá khứ.");
             } else {
                 dao.update(s);
                 request.setAttribute("msg", "Đã sửa lịch học thành công.");
@@ -152,6 +154,8 @@ public class ScheduleController extends HttpServlet {
                 request.setAttribute("err", "Vui lòng nhập đầy đủ thông tin để thêm lịch học.");
             } else if (startTime.compareTo(endTime) >= 0) {
                 request.setAttribute("err", "Giờ kết thúc phải sau giờ bắt đầu.");
+            } else if (LocalDate.parse(day).isBefore(LocalDate.now())) {
+                request.setAttribute("err", "Ngày học không được là ngày trong quá khứ.");
             } else {
                 List<Integer> selectedDays = new ArrayList<>();
                 for (String d : days) {
@@ -196,7 +200,7 @@ public class ScheduleController extends HttpServlet {
                     request.setAttribute("err", "Không tìm thấy lịch học với từ khóa: " + keyword);
                 } else {
                     request.setAttribute("msg", "Đã tìm kiếm với từ khóa: " + keyword);
-                        request.setAttribute("scheduleList", scheduleList);
+                    request.setAttribute("scheduleList", scheduleList);
                 }
             }
             request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);

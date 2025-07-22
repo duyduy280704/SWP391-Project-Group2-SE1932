@@ -148,7 +148,7 @@
                 <div class="col-md-6 col-lg-5">
                     <div class="forgot-password-form">
                         <h2 class="mb-4">Quên Mật Khẩu</h2>
-                        <p class="text-center text-muted">Nhập số điện thoại để nhận liên kết đổi mật khẩu qua SMS.</p>
+                        <p class="text-center text-muted">Nhập số điện thoại để nhận liên kết đổi mật khẩu qua Email.</p>
                         <form method="post" action="ForgotPasswordServlet" onsubmit="return validateForm()">
                             <div class="form-group">
                                 <label for="role">Vai trò</label>

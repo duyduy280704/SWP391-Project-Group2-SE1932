@@ -280,7 +280,7 @@
                                         <tr>
                                             <th>Họ tên</th>
                                             <th>Email</th>
-                                            <th>Link CV</th>
+                                            <th>CV</th>
                                             <th>Trạng thái</th>
                                             <th>Ngày sinh</th>
                                             <th>Giới tính</th>
@@ -288,6 +288,7 @@
                                             <th>Loại khóa học</th>
                                             <th>Kinh nghiệm (năm)</th>
                                             <th>SĐT</th>
+                                            <th>Lương Offer</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -306,6 +307,9 @@
                                                 <td>${t.typeCourseName}</td>
                                                 <td>${t.yearOfExpertise}</td>
                                                 <td>${t.phone}</td>
+                                                <td class="salary-offer-cell" contenteditable="true"></td>
+
+
                                                 <td>
                                                     <!-- Nút Pass CV -->
                                                     <button class="btn btn-primary" onclick="openConfirmModal(${t.id})">Pass CV</button>
@@ -314,8 +318,15 @@
                                                     <button class="btn btn-warning" onclick="openRejectModal(${t.id})">Reject CV</button>
 
                                                     <!-- Nút Done -->
+
                                                     <button class="btn btn-success"
-                                                            onclick="openDoneModal(
+                                                            onclick="const row = this.closest('tr');
+                                                                    const salary = row.querySelector('.salary-offer-cell').textContent.trim();
+                                                                    if (!salary) {
+                                                                        alert('Vui lòng nhập lương offer trước!');
+                                                                        return;
+                                                                    }
+                                                                    openDoneModal(
                                                                             '${t.id}',
                                                                             '${t.fullName}',
                                                                             '${t.email}',
@@ -324,10 +335,10 @@
                                                                             '${t.expertise}',
                                                                             '${t.idTypeCourse}',
                                                                             '${t.yearOfExpertise}',
-                                                                            '${t.phone}')">
+                                                                            '${t.phone}',
+                                                                            salary);">
                                                         Pass Phỏng Vấn
                                                     </button>
-
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -384,6 +395,7 @@
                                 <input type="hidden" name="id_type_course" id="doneTypeCourse">
                                 <input type="hidden" name="years_of_experience" id="doneYearsExp">
                                 <input type="hidden" name="phone" id="donePhone">
+                                <input type="hidden" id="salaryOffer" name="salaryOffer">
 
                                 <p>Ghi chú nội bộ (tùy chọn):</p>
                                 <textarea name="reason3" class="form-control" rows="3"></textarea>
@@ -475,7 +487,7 @@
                 document.getElementById("doneModal").style.display = "block";
             }
 
-            function openDoneModal(id, fullName, email, birthDate, gender, expertise, idTypeCourse, yearsExp, phone) {
+            function openDoneModal(id, fullName, email, birthDate, gender, expertise, idTypeCourse, yearsExp, phone, salaryOffer) {
                 document.getElementById('doneId').value = id;
                 document.getElementById('doneFullName').value = fullName;
                 document.getElementById('doneEmail').value = email;
@@ -485,6 +497,7 @@
                 document.getElementById('doneTypeCourse').value = idTypeCourse;
                 document.getElementById('doneYearsExp').value = yearsExp;
                 document.getElementById('donePhone').value = phone;
+                document.getElementById("salaryOffer").value = salaryOffer;
 
                 // Mở modal
                 document.getElementById('doneModal').style.display = 'block';

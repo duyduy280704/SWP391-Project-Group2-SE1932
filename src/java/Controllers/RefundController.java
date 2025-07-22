@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import models.CourseDAO;
 import models.PaymentDAO;
 import models.RefundInfo;
 
@@ -23,9 +24,15 @@ public class RefundController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String orderCode = request.getParameter("orderCode");
+        String studentName = request.getParameter("studentName");
+        String courseName = request.getParameter("courseName");
+        
         PaymentDAO dao = new PaymentDAO();
-        List<RefundInfo> list = dao.getRefundList();
+        CourseDAO dao1 = new CourseDAO();
+        List<RefundInfo> list = dao.searchRefunds(orderCode, studentName, courseName);
         request.setAttribute("refundList", list);
+        request.setAttribute("courseList", dao1.getAllCourses());
         request.getRequestDispatcher("CancelCourseAdmin.jsp").forward(request, response);
     }
 

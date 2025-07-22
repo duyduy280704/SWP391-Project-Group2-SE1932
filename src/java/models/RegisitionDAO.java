@@ -184,10 +184,32 @@ public class RegisitionDAO extends DBContext {
     }
 
     public boolean isAlreadyRegistered(String studentId, int courseId) {
-        String sql = "SELECT COUNT(*) FROM regisition WHERE student_id = ? AND course_id = ?";
+        String sql = """
+                     SELECT COUNT(*) 
+                     FROM regisition r
+                     LEFT JOIN Class_Student cs ON r.student_id = cs.student_id AND r.course_id = ?
+                     LEFT JOIN Schedule s ON cs.class_id = s.id_class
+                     WHERE r.student_id = ?
+                       AND r.course_id = ?
+                       AND r.status != N'đã hủy'
+                       AND (
+                             r.status = N'chưa phân lớp' 
+                             OR (
+                                 r.status = N'đã phân lớp' AND 
+                                 EXISTS (
+                                     SELECT 1 FROM Schedule s2
+                                     JOIN Class_Student cs2 ON cs2.class_id = s2.id_class
+                                     WHERE cs2.student_id = r.student_id AND cs2.class_id = cs.class_id
+                                     GROUP BY cs2.student_id
+                                     HAVING MAX(s2.day) >= CAST(GETDATE() AS DATE)
+                                 )
+                             )
+                         )
+                     """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, studentId);
-            ps.setInt(2, courseId);
+            ps.setInt(1, courseId);
+            ps.setString(2, studentId);
+            ps.setInt(3, courseId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1) > 0;
@@ -264,13 +286,15 @@ public class RegisitionDAO extends DBContext {
     }
 
     // Cập nhật trạng thái hủy đăng ký
-    public void cancelRegistration(int regisId) {
-        String sql = "UPDATE regisition SET status = N'đã hủy' WHERE id = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, regisId);
-            stm.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void cancelRegistration(int regisId, String status, String note) {
+        String sql = "UPDATE regisition SET status = ?, note = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, note);
+            ps.setInt(3, regisId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateStatusAndNote: " + e.getMessage());
         }
     }
 

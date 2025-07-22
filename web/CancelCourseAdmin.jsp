@@ -229,22 +229,23 @@
                         </ol>
 
                         <!-- Search -->
-                        <form action="Sale" method="get" class="search-filter-form">
-                            <div>
-                                <input type="text" name="keyword" placeholder="Search sale code..." value="${keyword != null ? keyword : ''}" />
-                                <button type="submit">Tìm kiếm</button>
-                                <a href="sale">Quay lại</a>
-                            </div>
+                        <form action="Refund" method="get" class="mb-4 d-flex align-items-center flex-wrap gap-2">
+                            <input type="text" name="orderCode" class="form-control" placeholder="Tìm mã đơn" value="${param.orderCode}" />
+
+                            <input type="text" name="studentName" class="form-control" placeholder="Tìm tên học viên" value="${param.studentName}" />
+
+                            <select name="courseName" class="form-select">
+                                <option value="">-- Tất cả khóa học --</option>
+                                <c:forEach var="c" items="${courseList}">
+                                    <option value="${c.name}" ${param.courseName eq c.name ? 'selected' : ''}>${c.name}</option>
+                                </c:forEach>
+                            </select>
+
+                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </form>
 
-                        <!-- Add / Edit Form -->
-                        <div class="card mb-4">
-                            <div class="card-body">
 
-                            </div>
-                        </div>
 
-                        <!-- Sale List -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i> Sale List
@@ -253,8 +254,8 @@
                                 <table class="course-list-table" border="1" cellpadding="5">
                                     <thead>
                                         <tr>
-                                            <th>Student ID</th>
-                                            <th>Course ID</th>
+                                            <th>Họ và Tên</th>
+                                            <th>Khóa học</th>
                                             <th>Trạng thái</th>
                                             <th>Học phí gốc</th>
                                             <th>Giảm giá (%)</th>
@@ -268,8 +269,8 @@
                                     <tbody>
                                         <c:forEach var="r" items="${refundList}">
                                             <tr>
-                                                <td>${r.studentId}</td>
-                                                <td>${r.courseId}</td>
+                                                <td>${r.studentName}</td>
+                                                <td>${r.courseName}</td>
                                                 <td>${r.regisitionStatus}</td>
                                                 <td>${r.originalPrice}</td>
                                                 <td>${r.discountPercent}</td>

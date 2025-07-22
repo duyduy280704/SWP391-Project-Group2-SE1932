@@ -55,11 +55,11 @@ public class CancelCourseController extends HttpServlet {
             int regisId = Integer.parseInt(request.getParameter("regisId"));
             String studentId = request.getParameter("studentId");
             int courseId = Integer.parseInt(request.getParameter("courseId"));
-
+            String cancelReason = request.getParameter("cancelReason");
             String status = dao.getRegistrationStatus(regisId);
 
             if ("Chưa phân lớp".equalsIgnoreCase(status)) {
-                dao.cancelRegistration(regisId);
+                dao.cancelRegistration(regisId,"Đã hủy",cancelReason);
                 request.setAttribute("message", "✅ Đã hủy đăng ký thành công.");
             } else if ("Đã phân lớp".equalsIgnoreCase(status)) {
                 String firstScheduleStr = dao.getFirstScheduleAsString(studentId, courseId);
@@ -72,7 +72,7 @@ public class CancelCourseController extends HttpServlet {
 
                     if (firstSchedule.after(now)) {
                         dao.removeFromClass(studentId, courseId);
-                        dao.cancelRegistration(regisId);
+                        dao.cancelRegistration(regisId,"Đã hủy",cancelReason);
                         request.setAttribute("message", "✅ Hủy đăng ký và rút khỏi lớp thành công.");
                     } else {
                         request.setAttribute("error", "⛔ Khóa học đã bắt đầu, không thể hủy.");
