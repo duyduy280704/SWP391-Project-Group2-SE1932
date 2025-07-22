@@ -416,12 +416,12 @@
                 <a href="teacherHome" class="nav-link active">Trang Chủ</a>
                 <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
                 <a href="classStudent" class="nav-link">Danh sách lớp học</a>
-                <a href="feedbackByTeacher" class="nav-item nav-link">Dánh giá sinh viên </a>
                 <a href="salaryteacher" class="nav-item nav-link">Bảng Lương </a>
                 <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
                 <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
-                <a href="#" class="nav-link"> Tin Tức </a>
-                <a href="#" class="nav-link"> Sự Kiện</a>
+                <a href="Event" class="nav-link"> Tin Tức </a>
+                <a href="BlogTeacher" class="nav-link"> Sự Kiện</a>
+                <a href="feedbackByTeacher" class="nav-item nav-link">Dánh giá sinh viên </a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
             </div>
             <!-- Navbar End -->

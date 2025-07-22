@@ -1,4 +1,3 @@
-```jsp
 <%-- 
     Document   : salaryAdmin
     Created on : Jun 29, 2025, 3:59:56 PM
@@ -120,9 +119,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>
@@ -138,7 +137,7 @@
                             </a>
 
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                 Quản lý người dùng
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -161,19 +160,30 @@
                             </div>
 
                             <a class="nav-link collapsed" href="setting">
-                                <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                                 Cài đặt thông tin
                             </a>
 
                             <a class="nav-link collapsed" href="salaryadmin">
-                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill"></i></div>
                                 Quản lý lương giáo viên
+                            </a>
+
+                            <a class="nav-link collapsed" href="AdminPayment">
+                                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                                Quản lý thanh toán
+                            </a>
+
+                            <a class="nav-link collapsed" href="Refund">
+                                <div class="sb-nav-link-icon"><i class="fas fa-undo"></i></div>
+                                Hủy Đăng ký
                             </a>
 
                             <a class="nav-link collapsed" href="SendNotification">
                                 <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
                                 Thông báo
                             </a>
+
                         </div>
                     </div>
                 </nav>
@@ -186,100 +196,125 @@
                             <li class="breadcrumb-item active">Quản Lý</li>
                         </ol>
 
-                        <form action="salaryadmin" method="post"  class="search-filter-form">
+                        <!-- Search and Filter form -->
+                        <form action="salaryadmin" method="post" class="search-filter-form">
                             <div>
+                                <label>Tên giáo viên: </label>
                                 <input type="text" name="searchTeacherName" placeholder="Tìm kiếm theo tên giáo viên..." value="${searchTeacherName}">
-                                <button type="submit" name="search">Tìm kiếm</button>
                             </div>
                             <div>
-                                <select name="filterClassName" onchange="this.form.submit()">
-                                    <option value="0">Chọn lớp để lọc</option>
-                                    <c:forEach items="${allClassList}" var="z">
-                                        <option value="${z.getClassName()}"
-                                                <c:if test="${filterClassName == z.getClassName()}">selected</c:if>
-                                                >${z.getClassName()}</option>
+                                <label>Tháng/Năm: </label>
+                                <select name="filterMonthYear">
+                                    <option value="">Tất cả</option>
+                                    <c:forEach var="year" begin="2024" end="${currentYear}">
+                                        <c:forEach var="month" begin="1" end="12">
+                                            <c:set var="monthYear" value="${year}-${month < 10 ? '0' : ''}${month}"/>
+                                            <option value="${monthYear}" <c:if test="${filterMonthYear == monthYear}">selected</c:if>>
+                                                Tháng ${month < 10 ? '0' : ''}${month}/${year}
+                                            </option>
+                                        </c:forEach>
                                     </c:forEach>
                                 </select>
-
-                                <input type="hidden" name="action" value="filterClass">
+                            </div>
+                            <div>
+                                <button type="submit" name="search">Tìm kiếm</button>
                             </div>
                         </form>
 
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <!-- Teacher selection form -->
-                                <form action="salaryadmin" method="post" class="teacher-form">
-                                    <div>
-                                        <label>Tên giáo viên: </label>
-                                        <select name="teacher" onchange="this.form.submit()">
-                                            <option value="0">Chọn giáo viên</option>
-                                            <c:forEach items="${data1}" var="c">
-                                                <option value="${c.getId()}"
-                                                        <c:if test="${selectedTeacher == c.getId()}">selected</c:if>
-                                                        >${c.getName()}</option>
-                                            </c:forEach>
-                                        </select>
-                                        <input type="hidden" name="action" value="loadClasses">
-                                        <!-- Hidden fields to retain form data -->
-                                        <input type="hidden" name="class" value="${s.getClassName()}">
-
-                                    </div>
-                                </form>
-
-                                <!-- Class selection form -->
-                                <form action="salaryadmin" method="post" class="class-form">
-                                    <div>
-                                        <label>Tên lớp: </label>
-                                        <select name="class" onchange="this.form.submit()">
-                                            <option value="0">Chọn lớp</option>
-                                            <c:forEach items="${classList}" var="z">
-                                                <option value="${z.getClassName()}"
-                                                        <c:if test="${s.getClassName() == z.getClassName()}">selected</c:if>
-                                                        >${z.getClassName()}</option>
-                                            </c:forEach>
-                                        </select>
-                                        <input type="hidden" name="action" value="loadCost">
-                                        <!-- Hidden fields to retain form data -->
-                                        <input type="hidden" name="teacher" value="${selectedTeacher}">
-
-                                    </div>
-                                </form>
-
-                                <!-- Main form for other fields -->
-                                <form action="salaryadmin" method="post" class="main-form">
-                                    <table>
-                                        <tr>
-                                            <td>Tiền khóa học: </td>
-                                            <td><span>${s.getCost()}  VND</span></td>
-                                            <td>% hoa hồng: </td>
-                                            <td><input type="text" name="per" value="${s.getPer()}"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tiền thưởng: </td>
-                                            <td><input type="text" name="bonus" value="${s.getBonus()}"></td>
-                                            <td>Tiền phạt:</td>
-                                            <td><input type="text" name="penalty" value="${s.getPenalty()}"></td>
-                                            <td>Ghi chú: </td>
-                                            <td><input type="text" name="note" value="${s.getNote()}"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="submit" name="add" value="Thêm"></td>
-                                            <td><input type="submit" name="update" value="Cập nhật"></td>
-                                            <td><input type="hidden" name="id" value="${s.getId()}"></td>
-                                            <td><input type="hidden" name="teacher" value="${selectedTeacher}"></td>
-                                            <td><input type="hidden" name="class" value="${s.getClassName()}"></td>
-                                        </tr>
-                                        <tr>
-                                            <c:if test="${not empty message}">
-                                            <p class="${success ? 'success' : 'error'}">${message}</p>
-                                        </c:if>
-                                        </tr>
-                                    </table>
-                                </form>
+                        <!-- Teacher selection form -->
+                        <form action="salaryadmin" method="get" class="teacher-form">
+                            <div>
+                                <label>Tên giáo viên: </label>
+                                <select name="teacher" onchange="this.form.submit()">
+                                    <option value="0">Chọn giáo viên</option>
+                                    <c:forEach items="${data1}" var="c">
+                                        <option value="${c.getId()}"
+                                                <c:if test="${selectedTeacher == c.getId()}">selected</c:if>
+                                                >${c.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                                <input type="hidden" name="action" value="loadClasses">
                             </div>
-                        </div>
+                        </form>
+
+                        <!-- Month and Year selection form -->
+                        <form action="salaryadmin" method="get" class="class-form">
+                            <div>
+                                <label>Tháng/Năm: </label>
+                                <select name="month" onchange="this.form.submit()">
+                                    <option value="0">Chọn tháng/năm</option>
+                                    <c:forEach var="year" begin="2024" end="${currentYear}">
+                                        <c:forEach var="month" begin="1" end="12">
+                                            <c:set var="monthYear" value="${year}-${month < 10 ? '0' : ''}${month}"/>
+                                            <option value="${monthYear}" <c:if test="${selectedMonthYear == monthYear}">selected</c:if>>
+                                                Tháng ${month < 10 ? '0' : ''}${month}/${year}
+                                            </option>
+                                        </c:forEach>
+                                    </c:forEach>
+                                </select>
+                                <input type="hidden" name="teacher" value="${selectedTeacher}">
+                                <input type="hidden" name="action" value="loadSessions">
+                            </div>
+                        </form>
+
+                        <!-- Main form for other fields -->
+                        <form action="salaryadmin" method="post" class="main-form">
+                            <table>
+                                <tr>
+                                    <td>Lương cứng: </td>
+                                    <td><span>
+                                            <c:choose>
+                                                <c:when test="${not empty s}">
+                                                    ${s.getOffer_salary()} VND
+                                                </c:when>
+                                                <c:when test="${not empty teacherOfferSalary}">
+                                                    ${teacherOfferSalary} VND
+                                                </c:when>
+                                                <c:otherwise>
+                                                    0 VND
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span></td>
+                                    <td>Số buổi dạy: </td>
+                                    <td><span>
+                                            <c:choose>
+                                                <c:when test="${not empty s}">
+                                                    ${s.getNumber_of_sessions()}
+                                                </c:when>
+                                                <c:when test="${not empty sessionCount}">
+                                                    ${sessionCount}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    0
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Tiền thưởng: </td>
+                                    <td><input type="text" name="bonus" value="${s != null ? s.getBonus() : '0'}"></td>
+                                    <td>Tiền phạt:</td>
+                                    <td><input type="text" name="penalty" value="${s != null ? s.getPenalty() : '0'}"></td>
+                                    <td>Ghi chú: </td>
+                                    <td><input type="text" name="note" value="${s != null ? s.getNote() : ''}"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="submit" name="add" value="Thêm"></td>
+                                    <td><input type="submit" name="update" value="Cập nhật"></td>
+                                    <td><input type="hidden" name="id" value="${s != null ? s.getId() : ''}"></td>
+                                    <td><input type="hidden" name="teacher" value="${selectedTeacher}"></td>
+                                    <td><input type="hidden" name="month" value="${selectedMonthYear != null ? selectedMonthYear : currentYear + '-01'}"></td>
+                                </tr>
+                                <tr>
+                                    <c:if test="${not empty message}">
+                                        <p class="${success ? 'success' : 'error'}">${message}</p>
+                                    </c:if>
+                                </tr>
+                            </table>
+                        </form>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -291,14 +326,13 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Tên giáo viên</th>
-                                            <th>Tên lớp</th>
-                                            <th>Tiền khóa học</th>
-                                            <th>% hoa hồng</th>
+                                            <th>Lương cứng</th>
+                                            <th>Số buổi dạy</th>
                                             <th>Tiền thưởng</th>
                                             <th>Tiền phạt</th>
                                             <th>Ghi chú</th>
                                             <th>Tổng lương</th>
-                                            <th>Ngày</th>
+                                            <th>Tháng/Năm</th>
                                             <th>Chức năng</th>
                                         </tr>
                                     </thead>
@@ -307,17 +341,16 @@
                                             <tr>
                                                 <td>${item.getId()}</td>
                                                 <td>${item.getTeacher()}</td>
-                                                <td>${item.getClassName()}</td>
-                                                <td>${item.getCost()}</td>
-                                                <td>${item.getPer()}</td>
+                                                <td>${item.getOffer_salary()}</td>
+                                                <td>${item.getNumber_of_sessions()}</td>
                                                 <td>${item.getBonus()}</td>
                                                 <td>${item.getPenalty()}</td>
                                                 <td>${item.getNote()}</td>
-                                                <td>${item.getSalary()}</td>
-                                                <td>${item.getDate()}</td>
+                                                <td>${item.getAmount()}</td>
+                                                <td>${item.getMonth()}</td>
                                                 <td>
                                                     <a href="salaryadmin?id=${item.getId()}&mode=1" class="btn btn-edit">✏️ Sửa</a>
-                                                    <a href="salaryadmin?id=${item.id}&mode=2" class="btn btn-delete"
+                                                    <a href="salaryadmin?id=${item.getId()}&mode=2" class="btn btn-delete"
                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a>
                                                 </td>
                                             </tr>
@@ -336,4 +369,3 @@
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
-```

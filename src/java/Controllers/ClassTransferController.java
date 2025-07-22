@@ -1,120 +1,148 @@
-package Controllers;
+    package Controllers;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import java.io.IOException;
-import java.util.List;
-import models.*;
-// Thuy_ gửi đon và duyệt đơn điểm danh của học sinh
-public class ClassTransferController extends HttpServlet {
+    import jakarta.servlet.*;
+    import jakarta.servlet.http.*;
+    import java.io.IOException;
+    import models.*;
 
-    private final ClassTransferRequestDAO dao = new ClassTransferRequestDAO();
+    public class ClassTransferController extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        private final ClassTransferRequestDAO dao = new ClassTransferRequestDAO();
 
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+        @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        Object account = session.getAttribute("account");
-// dăng nhap cua hoc sinh
-        if (account instanceof Students) {
-            Students student = (Students) account;
-            Categories_class currentClass = dao.getClassByStudentId(student.getId());
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
 
-            if (currentClass == null) {
-                request.setAttribute("error", "Bạn chưa được phân vào lớp nào.");
-                request.getRequestDispatcher("StudentRequestTransfer.jsp").forward(request, response);
-                return;
-            }
-
-            List<Categories_class> availableClasses = dao.getAllOtherClasses(currentClass.getId_class());
-
-            List<ClassTransferRequest> requests = dao.getRequestsByStudent(student.getId());
-
-            request.setAttribute("currentClass", currentClass);
-            request.setAttribute("availableClasses", availableClasses);
-            request.setAttribute("requests", requests);
-
-            request.getRequestDispatcher("StudentRequestTransfer.jsp").forward(request, response);
-            return;
-        }
-// staff dăng nhập
-        if (account instanceof AdminStaffs) {
+            HttpSession session = request.getSession();
             String keyword = request.getParameter("keyword");
-            List<ClassTransferRequest> requests;
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                requests = dao.searchRequestsByStudentName(keyword);
-            } else {
-                requests = dao.getAllRequests();
-            }
-            request.setAttribute("requests", requests);
-            request.getRequestDispatcher("StaffManageTransfer.jsp").forward(request, response);
+            String fromDateStr = request.getParameter("fromDate");
+            String toDateStr = request.getParameter("toDate");
 
-            return;
+            // Xử lý tìm kiếm
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                request.setAttribute("keyword", keyword);
+                request.setAttribute("history", dao.searchTransferHistory(keyword));
+            } // Xử lý lọc theo ngày
+            else if ((fromDateStr != null && !fromDateStr.isEmpty()) || (toDateStr != null && !toDateStr.isEmpty())) {
+                request.setAttribute("fromDate", fromDateStr);
+                request.setAttribute("toDate", toDateStr);
+
+                try {
+                    java.sql.Date fromDate = fromDateStr != null && !fromDateStr.isEmpty()
+                            ? java.sql.Date.valueOf(fromDateStr) : null;
+                    java.sql.Date toDate = toDateStr != null && !toDateStr.isEmpty()
+                            ? java.sql.Date.valueOf(toDateStr) : null;
+
+                    if (fromDate != null && toDate != null && fromDate.after(toDate)) {
+                        request.setAttribute("error", "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.");
+                        request.setAttribute("history", dao.getTransferHistory()); 
+                    } else {
+                        request.setAttribute("history", dao.filterTransferHistory(fromDateStr, toDateStr));
+                    }
+                } catch (IllegalArgumentException e) {
+                    request.setAttribute("error", "Định dạng ngày không hợp lệ.");
+                    request.setAttribute("history", dao.getTransferHistory());
+                }
+            } else {
+                request.setAttribute("history", dao.getTransferHistory());
+            }
+
+            // Lấy thông báo thành công từ session và chuyển sang request
+            String message = (String) session.getAttribute("message");
+            if (message != null) {
+                request.setAttribute("message", message);
+                session.removeAttribute("message");
+            }
+
+            String error = (String) session.getAttribute("error");
+            if (error != null) {
+                request.setAttribute("error", error);
+                session.removeAttribute("error");
+            }
+
+            String action = request.getParameter("action");
+            String courseId = request.getParameter("courseId");
+            String classId = request.getParameter("classId");
+            String studentId = request.getParameter("studentId");
+
+            String toClassId = request.getParameter("toClassId");
+            request.setAttribute("toClassId", toClassId);
+
+
+            request.setAttribute("courses", dao.getAllCourses());
+
+            if (courseId != null && !courseId.isEmpty()) {
+                request.setAttribute("selectedCourseId", courseId);
+                request.setAttribute("classes", dao.getClassesByCourse(courseId));
+
+                if (classId != null && !classId.isEmpty()) {
+                    request.setAttribute("selectedClassId", classId);
+                    request.setAttribute("students", dao.getStudentsByClass(classId));
+
+                    if (studentId != null && !studentId.isEmpty()) {
+                        request.setAttribute("selectedStudentId", studentId);
+                        request.setAttribute("studentName", dao.getStudentNameById(studentId));
+                        request.setAttribute("transferCount", dao.getTransferCount(studentId, courseId));
+                        request.setAttribute("targetClasses", dao.getTargetClasses(courseId, classId));
+                    }
+                }
+            }
+            request.getRequestDispatcher("StaffManageTransfer.jsp").forward(request, response);
         }
 
-        response.sendRedirect("login.jsp");
-    }
+        @Override
+        protected void doPost(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
 
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+            String courseId = request.getParameter("courseId");
+            String classId = request.getParameter("classId");
+            String studentId = request.getParameter("studentId");
+            String toClassId = request.getParameter("toClassId");
 
-        HttpSession session = request.getSession();
-        Object account = session.getAttribute("account");
+            HttpSession session = request.getSession();
 
-        if (account instanceof Students) {
-            Students student = (Students) account;
+            // Kiểm tra đầu vào
+            if (courseId == null || classId == null || studentId == null || toClassId == null
+                    || courseId.isEmpty() || classId.isEmpty() || studentId.isEmpty() || toClassId.isEmpty()) {
 
-            String fromClass = request.getParameter("fromClassId");
-            String toClass = request.getParameter("toClassId");
-            String reason = request.getParameter("reason");
+                session.setAttribute("error", "Vui lòng chọn đầy đủ thông tin để chuyển lớp.");
+                response.sendRedirect("classTransfer?action=selectStudent&courseId=" + courseId
+                        + "&classId=" + classId + "&studentId=" + studentId + "&toClassId=" + toClassId);
 
-            //  có đơn đang chờ hay k
-            if (dao.hasPendingRequest(student.getId())) {   
-                request.setAttribute("error", "Bạn đã gửi một đơn xin chuyển lớp và đang chờ xử lý.");
-                doGet(request, response); 
                 return;
             }
 
-            if (fromClass != null && toClass != null && reason != null && !reason.trim().isEmpty()) {
-                ClassTransferRequest req = new ClassTransferRequest();
-                req.setStudentId(student.getId());
-                req.setFromClassId(fromClass);
-                req.setToClassId(toClass);
-                req.setReason(reason.trim());
+            // Kiểm tra số lần chuyển lớp trong khóa học
+            int transferCount = dao.getTransferCount(studentId, courseId);
+            if (transferCount >= 2) {
+                session.setAttribute("error", "Học sinh đã chuyển lớp quá 2 lần trong khóa này.");
+                response.sendRedirect("classTransfer?action=selectStudent&courseId=" + courseId
+                        + "&classId=" + classId + "&studentId=" + studentId + "&toClassId=" + toClassId);
 
-                dao.submitRequest(req);
+                return;
             }
-
-            response.sendRedirect("classTransfer");
-            return;
-        }
-// staff sử lí đơn có chấp nhận từ chối và ghi chú
-        if (account instanceof AdminStaffs) {
-            String action = request.getParameter("action");
-            String requestIdStr = request.getParameter("requestId");
-            String staffNote = request.getParameter("staffNote");
 
             try {
-                int requestId = Integer.parseInt(requestIdStr);
-                if ("approve".equals(action)) {
-                    dao.approveRequest(requestId, staffNote);
-                } else if ("reject".equals(action)) {
-                    dao.rejectRequest(requestId, staffNote);
-                }
-            } catch (NumberFormatException e) {
+                dao.processTransfer(studentId, classId, toClassId);
+                System.out.println("processTransfer thành công, chuẩn bị insert lịch sử");
+                dao.insertTransferRequest(studentId, classId, toClassId, "Chuyển lớp theo yêu cầu", "approved");
+                System.out.println("Đã gọi insertTransferRequest");
+                session.removeAttribute("error");
+                session.setAttribute("message", "Chuyển lớp thành công.");
+            } catch (Exception e) {
                 e.printStackTrace();
+                session.setAttribute("error", "Đã xảy ra lỗi trong quá trình chuyển lớp.");
             }
 
-            response.sendRedirect("classTransfer");
+            response.sendRedirect("classTransfer?action=selectStudent&courseId=" + courseId
+                    + "&classId=" + classId + "&studentId=" + studentId + "&toClassId=" + toClassId);
+
         }
 
     }
-}

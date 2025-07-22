@@ -19,15 +19,25 @@ public class LoginControllers extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+            String role = request.getParameter("role");
             String phone = request.getParameter("phone");
             String password = request.getParameter("password");
             String message = "";
 
             // Kiểm tra đầu vào
+            if (role == null || role.trim().isEmpty()) {
+                message = "Vui lòng chọn vai trò!";
+                request.setAttribute("message", message);
+                request.setAttribute("phone", phone);
+                request.setAttribute("role", role);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
             if (phone == null || phone.trim().isEmpty()) {
                 message = "Vui lòng nhập số điện thoại!";
                 request.setAttribute("message", message);
                 request.setAttribute("phone", phone);
+                request.setAttribute("role", role);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
@@ -35,6 +45,7 @@ public class LoginControllers extends HttpServlet {
                 message = "Số điện thoại phải có 10-11 số!";
                 request.setAttribute("message", message);
                 request.setAttribute("phone", phone);
+                request.setAttribute("role", role);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
@@ -42,50 +53,76 @@ public class LoginControllers extends HttpServlet {
                 message = "Vui lòng nhập mật khẩu!";
                 request.setAttribute("message", message);
                 request.setAttribute("phone", phone);
+                request.setAttribute("role", role);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
             // Kiểm tra đăng nhập
-            AdminStaffDAO a = new AdminStaffDAO();
-            AdminStaffs staff = a.checkLogin(phone, password);
-
-            StudentDAO s = new StudentDAO();
-            Students student = s.checkLogin(phone, password);
-
-            TeacherDAO t = new TeacherDAO();
-            Teachers teacher = t.checkLogin(phone, password);
+           
 
             HttpSession session = request.getSession();
-            if (staff != null) {
-                session.setAttribute("account", staff);
-                System.out.println("AdminStaff RoleId: " + staff.getRole());
-                if ("4".equals(staff.getRole())) {
-                    session.setAttribute("role", "admin");
-                    response.sendRedirect("adminhome");
-                } else if ("3".equals(staff.getRole())) {
-                    session.setAttribute("role", "staff");
-                    response.sendRedirect("staffhome");
-                }
-                return;
-            } else if (student != null) {
-                session.setAttribute("account", student);
-                session.setAttribute("role", "student");
-                System.out.println("Student RoleId: " + student.getRole());
-                response.sendRedirect("StudentHome");
-                return;
-            } else if (teacher != null) {
-                session.setAttribute("account", teacher);
-                System.out.println("Teacher RoleId: " + teacher.getRole());
-                 session.setAttribute("role", "teacher");
-                response.sendRedirect("teacherHome");
-                return;
-            } else {
-                message = "Số điện thoại hoặc mật khẩu không đúng!";
-                request.setAttribute("message", message);
-                request.setAttribute("phone", phone);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
+            switch (role) {
+    case "student":
+        StudentDAO s = new StudentDAO();
+        Students student = s.checkLogin(phone, password);
+        if (student != null) {
+            session.setAttribute("account", student);
+            session.setAttribute("role", "student");
+            System.out.println("Student RoleId: " + student.getRole());
+            response.sendRedirect("StudentHome");
+        } else {
+            message = "Số điện thoại hoặc mật khẩu không đúng cho vai trò Học sinh!";
+            request.setAttribute("message", message);
+            request.setAttribute("phone", phone);
+            request.setAttribute("role", role);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+        break;
+    case "staff":
+        AdminStaffDAO a = new AdminStaffDAO();
+        AdminStaffs staff = a.checkLogin(phone, password);
+        if (staff != null) {
+            session.setAttribute("account", staff);
+            System.out.println("AdminStaff RoleId: " + staff.getRole());
+            if ("4".equals(staff.getRole())) {
+                session.setAttribute("role", "admin");
+                response.sendRedirect("adminhome");
+            } else if ("3".equals(staff.getRole())) {
+                session.setAttribute("role", "staff");
+                response.sendRedirect("staffhome");
+            }
+        } else {
+            message = "Số điện thoại hoặc mật khẩu không đúng cho vai trò Cán bộ/Nhân viên!";
+            request.setAttribute("message", message);
+            request.setAttribute("phone", phone);
+            request.setAttribute("role", role);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+        break;
+    case "teacher":
+        TeacherDAO t = new TeacherDAO();
+        Teachers teacher = t.checkLogin(phone, password);
+        if (teacher != null) {
+            session.setAttribute("account", teacher);
+            session.setAttribute("role", "teacher");
+            System.out.println("Teacher RoleId: " + teacher.getRole());
+            response.sendRedirect("teacherHome");
+        } else {
+            message = "Số điện thoại hoặc mật khẩu không đúng cho vai trò Giáo viên!";
+            request.setAttribute("message", message);
+            request.setAttribute("phone", phone);
+            request.setAttribute("role", role);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+        break;
+    default:
+        message = "Vai trò không hợp lệ!";
+        request.setAttribute("message", message);
+        request.setAttribute("phone", phone);
+        request.setAttribute("role", role);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        break;
             }
         } catch (Exception e) {
             e.printStackTrace();

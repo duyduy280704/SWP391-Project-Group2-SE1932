@@ -331,15 +331,24 @@ public class NotificationDAO extends DBContext {
         return list;
     }
 
-    public void insertNotificationByEmail(String email, String content) {
-        String sql = "INSERT INTO Notification (receiver_email, content, date) VALUES (?, ?, GETDATE())";
+    public void insertNotificationById(int id, String content) {
+
+        String sql = "INSERT INTO Notification (id_student, messenge, date) VALUES (?, ?, GETDATE())";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, email);
+
+            ps.setInt(1, id);
+
             ps.setString(2, content);
+
             ps.executeUpdate();
+
         } catch (Exception e) {
+
             System.out.println("insertNotificationByEmail: " + e.getMessage());
+
         }
+
     }
 
     public void updateStatus(int id, String newStatus) {
@@ -368,8 +377,12 @@ public class NotificationDAO extends DBContext {
                 p.setFull_name(rs.getString("full_name"));
                 p.setEmail(rs.getString("email"));
                 p.setPhone(rs.getString("phone"));
-                p.setCourseName(rs.getString("course_name")); // phải có trong bean
-                list.add(p);
+                p.setCourseName(rs.getString("course_name"));
+                p.setNote(rs.getString("note"));
+                p.setCourse_id(rs.getInt("course_id"));
+                p.setId_sale(rs.getInt("id_sale"));
+                list
+                        .add(p);
             }
         } catch (Exception e) {
             System.out.println("getApprovedRegistrationsDetailed: " + e.getMessage());
@@ -434,5 +447,64 @@ public class NotificationDAO extends DBContext {
         }
 
         return list;
+    }
+
+    public void insertPayment(int idStudent, int idCourse, int idSale, String orderCode) {
+        String sql = """
+        INSERT INTO payment (id_student, id_course, status, date, id_sale, order_code)
+        VALUES (?, ?, N'Chưa thanh toán', GETDATE(), ?, ?)
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idStudent);
+            ps.setInt(2, idCourse);
+            ps.setInt(3, idSale);
+            ps.setString(4, orderCode);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insertPayment: " + e.getMessage());
+        }
+    }
+
+    public void insertRegisition(int idStudent, int idCourse, String note) {
+        String sql = """
+        INSERT INTO regisition (student_id, course_id, note, status)
+        VALUES (?, ?, ?, N'Chưa xếp lớp')
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idStudent);
+            ps.setInt(2, idCourse);
+            ps.setString(3, note);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insertRegisition: " + e.getMessage());
+        }
+    }
+
+    public int getStudentIdByEmail(String email) {
+
+        String sql = "SELECT id FROM Student WHERE email = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    return rs.getInt("id");
+
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("getStudentIdByEmail: " + e.getMessage());
+
+        }
+
+        return -1;
+
     }
 }

@@ -1,8 +1,8 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controllers;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ import models.Students;
  * @author Dwight
  */
 public class CancelCourseController extends HttpServlet {
-   
+
     RegisitionDAO dao = new RegisitionDAO();
 
     @Override
@@ -32,22 +32,20 @@ public class CancelCourseController extends HttpServlet {
             throws ServletException, IOException {
         // Lấy studentId từ session
         HttpSession session = request.getSession();
-        
+
         Students student = (Students) session.getAttribute("account");
 
         if (student == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-        
-        
-           String studentId = student.getId();
-       
-        
+
+        String studentId = student.getId();
 
         List<Regisition> list = dao.getRegisteredCourses(studentId);
         request.setAttribute("list", list);
         request.getRequestDispatcher("CourseHistory.jsp").forward(request, response);
+
     }
 
     @Override

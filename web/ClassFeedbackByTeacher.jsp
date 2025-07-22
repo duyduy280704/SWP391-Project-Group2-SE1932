@@ -18,13 +18,16 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
                 <i class="fas fa-bars"></i>
             </button>
-            <ul class="navbar-nav ms-auto me-3 me-lg-4">
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+
+                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user fa-fw"></i>
-                    </a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
@@ -50,27 +53,35 @@
                                 Quản lý khóa học
                             </a>
 
-                            <!-- Quản lý sự kiện -->
-                            <a class="nav-link" href="eventstaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Quản lý sự kiện
+                            <!-- Quản lý lớp học -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
+                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                Quản lý lớp học
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="createClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
+                                        Tạo lớp mới
+                                    </a>
+                                    <a class="nav-link" href="classStudent">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                        Danh sách lớp
+                                    </a>
+                                    <!-- Quản lý phân lớp -->
+                                    <a class="nav-link" href="AssignClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                                        Quản lý phân lớp
+                                    </a>
+                                </nav>
+                            </div>
 
-                            <!-- Quản lý blog -->
-                            <a class="nav-link" href="Blog">
-                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
-                                Quản lý blog
-                            </a>
 
-                            <!-- Quản lý phân lớp -->
-                            <a class="nav-link" href="AssignClass">
-                                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
-                                Quản lý phân lớp
-                            </a>
 
                             <!-- Quản lý đăng ký -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-check"></i></div>
                                 Quản lý đăng ký
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -106,18 +117,11 @@
                                 </nav>
                             </div>
 
-                            <!-- Quản lý lớp học -->
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
-                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
-                                Quản lý lớp học
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <!-- Xử lý đơn chuyển lớp -->
+                            <a class="nav-link" href="classTransfer">
+                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                                Xử lý đơn chuyển lớp
                             </a>
-                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="createClass"><i class="fas fa-plus me-2"></i> Tạo lớp mới</a>
-                                    <a class="nav-link" href="classStudent"><i class="fas fa-users me-2"></i> Danh sách lớp</a>
-                                </nav>
-                            </div>
 
                             <!-- Thời khóa biểu -->
                             <a class="nav-link" href="listClassSchedule">
@@ -125,29 +129,43 @@
                                 Thời khóa biểu
                             </a>
 
+                            <!-- Chấm công giáo viên -->
+                            <a class="nav-link" href="teachingAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
+                                Chấm công giáo viên
+                            </a>
+
+                            <!-- Quản lý sự kiện -->
+                            <a class="nav-link" href="eventstaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                Quản lý sự kiện
+                            </a>
+
+                            <!-- Quản lý blog -->
+                            <a class="nav-link" href="Blog">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý blog
+                            </a>
+
                             <!-- Đánh giá -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback" aria-expanded="false" aria-controls="collapseFeedback">
                                 <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                                 Đánh giá
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseFeedback">
+                            <div class="collapse" id="collapseFeedback" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="feedback?mode=viewAll"><i class="fas fa-comment-dots me-2"></i> Phản hồi của học viên</a>
-                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
+                                    <a class="nav-link" href="feedback?mode=viewAll">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-comment-dots"></i></div>
+                                        Phản hồi của học viên
+                                    </a>
+                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-star-half-alt"></i></div>
+                                        Giáo viên đánh giá học sinh
+                                    </a>
                                 </nav>
                             </div>
-
-                            <!-- Xử lý đơn chuyển lớp -->
-                            <a href="classTransfer" class="nav-link">
-                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
-                                Xử lý đơn chuyển lớp
-                            </a>
                         </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Đăng nhập với vai trò:</div>
-                        Staff
                     </div>
                 </nav>
             </div>
@@ -191,6 +209,17 @@
                             </table>
                         </div>
                     </div>
+                    <!-- POPUP THÔNG BÁO AJAX -->
+                    <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông báo</h5>
+                                <button class="btn-close" onclick="document.getElementById('noticeContainer').style.display = 'none'"></button>
+                            </div>
+                            <hr>
+                            <div id="noticeContent">Đang tải...</div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
@@ -198,5 +227,24 @@
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
+        <script>
+                    document.getElementById("loadNotice").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const container = document.getElementById("noticeContainer");
+                        const content = document.getElementById("noticeContent");
+                        container.style.display = container.style.display === "none" ? "block" : "none";
+
+                        if (container.style.display === "block") {
+                            fetch("noticetostaff")
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        content.innerHTML = data;
+                                    })
+                                    .catch(error => {
+                                        content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
+                                    });
+                        }
+                    });
+                </script>
     </body>
 </html>

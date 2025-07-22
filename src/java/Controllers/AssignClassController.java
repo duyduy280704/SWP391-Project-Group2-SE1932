@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
 import java.io.IOException;
@@ -18,7 +14,7 @@ import models.Categories_class;
 import models.Courses;
 import models.Regisition;
 import models.RegisitionDAO;
-//Huyền
+
 public class AssignClassController extends HttpServlet {
 
     RegisitionDAO dao = new RegisitionDAO();
@@ -49,14 +45,19 @@ public class AssignClassController extends HttpServlet {
             int cId = r.getCourseId();
             if (!classByCourse.containsKey(cId)) {
                 List<Categories_class> classList = dao.getClassesByCourse(String.valueOf(cId));
+                // Lọc chỉ lấy lớp có status "chưa bắt đầu"
+                List<Categories_class> filteredClassList = new ArrayList<>();
                 for (Categories_class cls : classList) {
-                    int classId = Integer.parseInt(cls.getId_class());
-                    boolean isFull = dao.isClassFull(classId);
-                    int studentCount = dao.getStudentCountInClass(classId);
-                    classFullStatus.put(cls.getId_class(), isFull);
-                    classStudentCount.put(cls.getId_class(), studentCount);
+                    if ("chưa bắt đầu".equalsIgnoreCase(cls.getStatus())) {
+                        filteredClassList.add(cls);
+                        int classId = Integer.parseInt(cls.getId_class());
+                        boolean isFull = dao.isClassFull(classId);
+                        int studentCount = dao.getStudentCountInClass(classId);
+                        classFullStatus.put(cls.getId_class(), isFull);
+                        classStudentCount.put(cls.getId_class(), studentCount);
+                    }
                 }
-                classByCourse.put(cId, classList);
+                classByCourse.put(cId, filteredClassList);
             }
         }
 
@@ -75,6 +76,31 @@ public class AssignClassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String[]> paramMap = request.getParameterMap();
         List<String> messages = new ArrayList<>();
+        String action = request.getParameter("action");
+
+        if ("unassign".equals(action)) {
+            try {
+                int regisitionId = Integer.parseInt(request.getParameter("regisitionId"));
+                String studentName = dao.getStudentNameByRegisitionId(regisitionId);
+                int courseId = dao.getCourseIdByRegisitionId(regisitionId);
+                String studentId = dao.getStudentIdByRegisitionId(regisitionId);
+
+                // Xoá khỏi bảng Class_Student
+                dao.removeFromClass(studentId, courseId);
+
+                // Cập nhật trạng thái đăng ký
+                dao.updateStatus(regisitionId, "chưa phân lớp");
+
+                messages.add("🗑 Đã huỷ phân lớp học viên <strong>" + studentName + "</strong> thành công.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                messages.add("❌ Lỗi khi huỷ phân lớp: " + e.getMessage());
+            }
+
+            request.getSession().setAttribute("messages", messages);
+            response.sendRedirect("AssignClass");
+            return;
+        }
 
         for (String key : paramMap.keySet()) {
             if (key.startsWith("regisitionId_")) {

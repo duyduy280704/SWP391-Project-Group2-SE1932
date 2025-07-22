@@ -156,14 +156,15 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-bell"></i> Thông báo</a>
+                    <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>
@@ -185,27 +186,35 @@
                                 Quản lý khóa học
                             </a>
 
-                            <!-- Quản lý sự kiện -->
-                            <a class="nav-link" href="eventstaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Quản lý sự kiện
+                            <!-- Quản lý lớp học -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
+                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                Quản lý lớp học
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="createClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
+                                        Tạo lớp mới
+                                    </a>
+                                    <a class="nav-link" href="classStudent">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                        Danh sách lớp
+                                    </a>
+                                    <!-- Quản lý phân lớp -->
+                                    <a class="nav-link" href="AssignClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                                        Quản lý phân lớp
+                                    </a>
+                                </nav>
+                            </div>
 
-                            <!-- Quản lý blog -->
-                            <a class="nav-link" href="Blog">
-                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
-                                Quản lý blog
-                            </a>
 
-                            <!-- Quản lý phân lớp -->
-                            <a class="nav-link" href="AssignClass">
-                                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
-                                Quản lý phân lớp
-                            </a>
 
                             <!-- Quản lý đăng ký -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-check"></i></div>
                                 Quản lý đăng ký
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -241,18 +250,11 @@
                                 </nav>
                             </div>
 
-                            <!-- Quản lý lớp học -->
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
-                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
-                                Quản lý lớp học
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <!-- Xử lý đơn chuyển lớp -->
+                            <a class="nav-link" href="classTransfer">
+                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                                Xử lý đơn chuyển lớp
                             </a>
-                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="createClass"><i class="fas fa-plus me-2"></i> Tạo lớp mới</a>
-                                    <a class="nav-link" href="classStudent"><i class="fas fa-users me-2"></i> Danh sách lớp</a>
-                                </nav>
-                            </div>
 
                             <!-- Thời khóa biểu -->
                             <a class="nav-link" href="listClassSchedule">
@@ -260,27 +262,44 @@
                                 Thời khóa biểu
                             </a>
 
+                            <!-- Chấm công giáo viên -->
+                            <a class="nav-link" href="teachingAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
+                                Chấm công giáo viên
+                            </a>
+
+                            <!-- Quản lý sự kiện -->
+                            <a class="nav-link" href="eventstaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                Quản lý sự kiện
+                            </a>
+
+                            <!-- Quản lý blog -->
+                            <a class="nav-link" href="Blog">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý blog
+                            </a>
+
                             <!-- Đánh giá -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback" aria-expanded="false" aria-controls="collapseFeedback">
                                 <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                                 Đánh giá
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseFeedback">
+                            <div class="collapse" id="collapseFeedback" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="feedback?mode=viewAll"><i class="fas fa-comment-dots me-2"></i> Phản hồi của học viên</a>
-                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
+                                    <a class="nav-link" href="feedback?mode=viewAll">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-comment-dots"></i></div>
+                                        Phản hồi của học viên
+                                    </a>
+                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-star-half-alt"></i></div>
+                                        Giáo viên đánh giá học sinh
+                                    </a>
                                 </nav>
                             </div>
-
-                            <!-- Xử lý đơn chuyển lớp -->
-                            <a href="classTransfer" class="nav-link">
-                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
-                                Xử lý đơn chuyển lớp
-                            </a>
                         </div>
                     </div>
-
                 </nav>
             </div>
             <div id="layoutSidenav_content">
@@ -290,7 +309,7 @@
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Nhân Viên</li>
                         </ol>
-                        
+
                         <form action="eventstaff" method="post" enctype="multipart/form-data" class="search-filter-form">
                             <div>
                                 <input type="text" name="nameSearch" placeholder="Tìm kiếm sự kiện...">
@@ -300,19 +319,19 @@
                                 <select name="genderFilter">
                                     <option value="0">Khóa học</option>
 
-                                                    <c:forEach items= "${data1}" var="c">
-                                                        <option value="${c.getId()}"
-                                                                <c:if test="${p.courseid==c.getId()}">
-                                                                    selected 
-                                                                </c:if>
-                                                                > ${c.getName()}</option>
+                                    <c:forEach items= "${data1}" var="c">
+                                        <option value="${c.getId()}"
+                                                <c:if test="${p.courseid==c.getId()}">
+                                                    selected 
+                                                </c:if>
+                                                > ${c.getName()}</option>
 
-                                                    </c:forEach>
+                                    </c:forEach>
                                 </select>
                                 <input type="submit" name="filterGender" value="Lọc theo khóa học"/>
                             </div>
                         </form>
-                        
+
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="eventstaff" method="post" enctype="multipart/form-data">
@@ -321,7 +340,7 @@
                                         <tr>
 
                                             <td>Tên sự kiện: </td>
-                                                <td><input type="text" name="name" value="${p.getName()}"></td>
+                                            <td><input type="text" name="name" value="${p.getName()}"></td>
                                             <td>Khóa học: </td>
                                             <td>
                                                 <select name="course">
@@ -427,6 +446,17 @@
                             </div>
                         </div>
                     </div>
+                    <!-- POPUP THÔNG BÁO AJAX -->
+                    <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông báo</h5>
+                                <button class="btn-close" onclick="document.getElementById('noticeContainer').style.display = 'none'"></button>
+                            </div>
+                            <hr>
+                            <div id="noticeContent">Đang tải...</div>
+                        </div>
+                    </div>
                 </main>
 
             </div>
@@ -437,50 +467,69 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
         <script>
-                                                           document.addEventListener('DOMContentLoaded', function () {
-                                                               // Initialize DataTables
-                                                               const dataTable = document.getElementById('datatablesSimple');
-                                                               if (dataTable) {
-                                                                   new simpleDatatables.DataTable(dataTable);
-                                                                   console.log('DataTables initialized for datatablesSimple');
-                                                               } else {
-                                                                   console.error('DataTable element not found');
-                                                               }
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        // Initialize DataTables
+                                        const dataTable = document.getElementById('datatablesSimple');
+                                        if (dataTable) {
+                                            new simpleDatatables.DataTable(dataTable);
+                                            console.log('DataTables initialized for datatablesSimple');
+                                        } else {
+                                            console.error('DataTable element not found');
+                                        }
 
-                                                               // Initialize CKEditor
-                                                               const descriptionTextarea = document.getElementById('description');
-                                                               if (descriptionTextarea && typeof CKEDITOR !== 'undefined') {
-                                                                   // Destroy existing CKEditor instance if it exists
-                                                                   if (CKEDITOR.instances.description) {
-                                                                       CKEDITOR.instances.description.destroy(true);
-                                                                   }
+                                        // Initialize CKEditor
+                                        const descriptionTextarea = document.getElementById('description');
+                                        if (descriptionTextarea && typeof CKEDITOR !== 'undefined') {
+                                            // Destroy existing CKEditor instance if it exists
+                                            if (CKEDITOR.instances.description) {
+                                                CKEDITOR.instances.description.destroy(true);
+                                            }
 
-                                                                   // Initialize CKEditor
-                                                                   CKEDITOR.replace('description', {
-                                                                       height: 200,
-                                                                       toolbar: [
-                                                                           {name: 'basic', items: ['Bold', 'Italic', 'Underline', 'Link', 'Unlink', 'NumberedList', 'BulletedList']},
-                                                                           {name: 'paragraph', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight']},
-                                                                           {name: 'styles', items: ['Font', 'FontSize']},
-                                                                           {name: 'colors', items: ['TextColor', 'BGColor']}
-                                                                       ]
-                                                                   });
+                                            // Initialize CKEditor
+                                            CKEDITOR.replace('description', {
+                                                height: 200,
+                                                toolbar: [
+                                                    {name: 'basic', items: ['Bold', 'Italic', 'Underline', 'Link', 'Unlink', 'NumberedList', 'BulletedList']},
+                                                    {name: 'paragraph', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight']},
+                                                    {name: 'styles', items: ['Font', 'FontSize']},
+                                                    {name: 'colors', items: ['TextColor', 'BGColor']}
+                                                ]
+                                            });
 
-                                                                   // Set description value safely
-                                                                   const descriptionValue = '${fn:escapeXml(p.content)}';
+                                            // Set description value safely
+                                            const descriptionValue = '${fn:escapeXml(p.content)}';
 
-                                                                   CKEDITOR.instances.description.setData(descriptionValue);
-                                                                   console.log('CKEditor initialized with description:', descriptionValue);
-                                                               } else {
-                                                                   console.error('CKEditor not loaded or textarea not found.');
-                                                                   if (!descriptionTextarea) {
-                                                                       console.error('Textarea with id "description" not found.');
-                                                                   }
-                                                                   if (typeof CKEDITOR === 'undefined') {
-                                                                       console.error('CKEDITOR object is undefined. Verify ckeditor.js is loaded.');
-                                                                   }
-                                                               }
-                                                           });
+                                            CKEDITOR.instances.description.setData(descriptionValue);
+                                            console.log('CKEditor initialized with description:', descriptionValue);
+                                        } else {
+                                            console.error('CKEditor not loaded or textarea not found.');
+                                            if (!descriptionTextarea) {
+                                                console.error('Textarea with id "description" not found.');
+                                            }
+                                            if (typeof CKEDITOR === 'undefined') {
+                                                console.error('CKEDITOR object is undefined. Verify ckeditor.js is loaded.');
+                                            }
+                                        }
+                                    });
+        </script>
+        <script>
+            document.getElementById("loadNotice").addEventListener("click", function (e) {
+                e.preventDefault();
+                const container = document.getElementById("noticeContainer");
+                const content = document.getElementById("noticeContent");
+                container.style.display = container.style.display === "none" ? "block" : "none";
+
+                if (container.style.display === "block") {
+                    fetch("noticetostaff")
+                            .then(response => response.text())
+                            .then(data => {
+                                content.innerHTML = data;
+                            })
+                            .catch(error => {
+                                content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
+                            });
+                }
+            });
         </script>
     </body>
 </html>

@@ -40,8 +40,8 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                overflow-y: auto;
                 width: 250px;
+                overflow-y: auto;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -413,8 +413,8 @@
                 </div>
 
 
-                <a href="teacherHome" class="nav-link active">Trang Chủ</a>
-                <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
+                <a href="teacherHome" class="nav-link ">Trang Chủ</a>
+                <a href="scheduleTeacher" class="nav-link active">Lịch dạy</a>
                 <a href="classStudent" class="nav-link">Danh sách lớp học</a>
                 <a href="feedbackByTeacher" class="nav-item nav-link">Dánh giá sinh viên </a>
                 <a href="salaryteacher" class="nav-item nav-link">Bảng Lương </a>
@@ -497,9 +497,15 @@
                                                             <input type="hidden" name="classId" value="${s.classId}" />
                                                             <input type="hidden" name="className" value="${s.nameClass}" />
                                                             <input type="hidden" name="day" value="${s.day}" />
-                                                            <button type="submit" class="btn-attendance">Điểm danh</button>
+                                                            <button type="submit"
+                                                                    class="btn-attendance"
+                                                                    style="background-color: ${s.attendanceTaken ? '#28a745' : '#dc3545'};">
+                                                                ${s.attendanceTaken ? ' Đã điểm danh' : ' Chưa điểm danh'}
+                                                            </button>
                                                         </form>
                                                     </td>
+
+
                                                 </tr>
                                             </c:if>
                                         </c:forEach>

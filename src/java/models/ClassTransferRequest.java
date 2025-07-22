@@ -1,136 +1,72 @@
 package models;
-/**
- *
- * đổi lớp
- */
+
 import java.util.Date;
 
 public class ClassTransferRequest {
 
-    private int id;
-    private String studentId;
-    private String fromClassId;
-    private String toClassId;
-    private String reason;
-    private String status;
-    private Date requestDate;
-    private Date responseDate;
-
-    private String fromClassName;
-    private String toClassName;
-    private String staffNote;
-    private String studentName;
+    private Students student;
+    private Categories_class fromClass;
+    private Categories_class toClass;
+    private Date transferDate;
+    private int transferCount;
 
     public ClassTransferRequest() {
     }
 
-    public ClassTransferRequest(int id, String studentId, String fromClassId, String toClassId,
-            String reason, String status, Date requestDate, Date responseDate, String staffNote) {
-        this.id = id;
-        this.studentId = studentId;
-        this.fromClassId = fromClassId;
-        this.toClassId = toClassId;
-        this.reason = reason;
-        this.status = status;
-        this.requestDate = requestDate;
-        this.responseDate = responseDate;
-        this.staffNote = staffNote;
+    public ClassTransferRequest(Students student, Categories_class fromClass, Categories_class toClass, Date transferDate, int transferCount) {
+        this.student = student;
+        this.fromClass = fromClass;
+        this.toClass = toClass;
+        this.transferDate = transferDate;
+        this.transferCount = transferCount;
     }
 
-    public int getId() {
-        return id;
+    public Students getStudent() {
+        return student;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStudent(Students student) {
+        this.student = student;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public Categories_class getFromClass() {
+        return fromClass;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setFromClass(Categories_class fromClass) {
+        this.fromClass = fromClass;
+    }
+
+    public Categories_class getToClass() {
+        return toClass;
+    }
+
+    public void setToClass(Categories_class toClass) {
+        this.toClass = toClass;
+    }
+
+    public Date getTransferDate() {
+        return transferDate;
+    }
+
+    public void setTransferDate(Date transferDate) {
+        this.transferDate = transferDate;
+    }
+
+    public int getTransferCount() {
+        return transferCount;
+    }
+
+    public void setTransferCount(int transferCount) {
+        this.transferCount = transferCount;
     }
 
     public String getFromClassId() {
-        return fromClassId;
-    }
-
-    public void setFromClassId(String fromClassId) {
-        this.fromClassId = fromClassId;
+        return fromClass != null ? fromClass.getId_class() : null;
     }
 
     public String getToClassId() {
-        return toClassId;
+        return toClass != null ? toClass.getId_class() : null;
     }
 
-    public void setToClassId(String toClassId) {
-        this.toClassId = toClassId;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    public Date getResponseDate() {
-        return responseDate;
-    }
-
-    public void setResponseDate(Date responseDate) {
-        this.responseDate = responseDate;
-    }
-
-    public String getFromClassName() {
-        return fromClassName;
-    }
-
-    public void setFromClassName(String fromClassName) {
-        this.fromClassName = fromClassName;
-    }
-
-    public String getToClassName() {
-        return toClassName;
-    }
-
-    public void setToClassName(String toClassName) {
-        this.toClassName = toClassName;
-    }
-
-    public String getStaffNote() {
-        return staffNote;
-    }
-
-    public void setStaffNote(String staffNote) {
-        this.staffNote = staffNote;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-    
 }

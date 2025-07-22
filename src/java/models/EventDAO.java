@@ -65,14 +65,7 @@ public class EventDAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) {
-        EventDAO ev = new EventDAO();
-        List<Event> events = ev.getRecentEvents(3);
-        for (Event e : events) {
-            System.out.println(e.name);
-        }
-    }
-    
+    //quang
         // lấy dữ liệu bảng event
     public ArrayList<Event> getEvents() {
 

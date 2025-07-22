@@ -95,6 +95,7 @@ public class PaymentDAO extends DBContext {
                 p.order_code, 
                 p.date, 
                 p.status,
+                p.method, 
                 c.name AS course_name, 
                 c.fee, 
                 st.email, 
@@ -137,6 +138,7 @@ public class PaymentDAO extends DBContext {
                 pv.setDate(rs.getString("date"));
                 pv.setStatus(rs.getString("status"));
                 pv.setCourseName(rs.getString("course_name"));
+                pv.setMethod(rs.getString("method"));
                 pv.setCourseFee(rs.getDouble("fee"));
                 double sale = rs.getDouble("sale_percent");
                 pv.setSalePercent(sale);
@@ -149,4 +151,78 @@ public class PaymentDAO extends DBContext {
 
         return list;
     }
+
+    public List<RefundInfo> getRefundList() {
+        List<RefundInfo> list = new ArrayList<>();
+        String sql = """
+            SELECT 
+                r.student_id,
+                r.course_id,
+                r.status AS regisition_status,
+                c.fee AS original_price,
+                ISNULL(s.value, 0) AS discount_percent,
+                ROUND(
+                    (c.fee * (1 - ISNULL(s.value, 0) / 100.0)) * 0.8, 
+                    2
+                ) AS refund_amount,
+                p.id, 
+                p.method,
+                p.status, 
+                p.order_code,
+                p.date AS payment_date
+            FROM 
+                regisition r
+            JOIN 
+                payment p ON r.student_id = p.id_student AND r.course_id = p.id_course
+            JOIN 
+                Course c ON p.id_course = c.id
+            LEFT JOIN 
+                Sale s ON p.id_sale = s.id
+            WHERE 
+                r.status = N'Đã hủy'
+        """;
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                RefundInfo ri = new RefundInfo();
+                ri.setStudentId(rs.getInt("student_id"));
+                ri.setCourseId(rs.getInt("course_id"));
+                ri.setRegisitionStatus(rs.getString("regisition_status"));
+                ri.setOriginalPrice(rs.getDouble("original_price"));
+                ri.setDiscountPercent(rs.getInt("discount_percent"));
+                ri.setRefundAmount(rs.getDouble("refund_amount"));
+                ri.setMethod(rs.getString("method"));
+                ri.setOrderCode(rs.getString("order_code"));
+                ri.setPaymentDate(rs.getString("payment_date"));
+                ri.setPaymentStatus(rs.getString("status"));
+                ri.setPaymentId(rs.getInt("id"));
+                list.add(ri);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void markAsRefunded(int paymentId) {
+        String sql = "UPDATE payment SET status = N'Đã hoàn tiền' WHERE id = ?";
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, paymentId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePaymentMethod(String orderCode, String method) {
+        String sql = "UPDATE payment SET method = ? WHERE order_code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, method);
+            ps.setString(2, orderCode);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

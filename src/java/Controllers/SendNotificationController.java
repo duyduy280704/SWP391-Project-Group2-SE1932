@@ -26,25 +26,25 @@ import models.UserBasic;
  */
 public class SendNotificationController extends HttpServlet {
 
-
-
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         NotificationDAO dao = new NotificationDAO();
 
         String role = request.getParameter("role");
-        if (role == null || role.trim().isEmpty()) {
-        request.setAttribute("error", "Vui lòng chọn vai trò cần tra cứu.");
-        request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
-        return;
-    }
-        
-        List<UserBasic> list = dao.getUsersByRole(role);
-        request.setAttribute("userList", list);
+        if (role != null) {
+            List<UserBasic> list = dao.getUsersByRole(role);
+            request.setAttribute("classList", dao.getAllClasses());
+            request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
+            List<PreRegistration> preList = dao.getApprovedRegistrations();
+            request.setAttribute("preList", preList);
+            request.setAttribute("userList", list);
+            request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
+            return;
+        }
+
         request.setAttribute("classList", dao.getAllClasses());
         request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
-        request.setAttribute("preList", dao.getApprovedRegistrations());
-
+        List<PreRegistration> preList = dao.getApprovedRegistrations();
+        request.setAttribute("preList", preList);
         // Forward sang trang gửi thông báo
         request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
 
@@ -69,7 +69,7 @@ public class SendNotificationController extends HttpServlet {
                 if (email != null && !email.isEmpty()) {
                     SendMail.send(email, subject, message);
                 }
-                request.setAttribute("message", "📬 Đã gửi thông báo cá nhân tới ID: " + receiverId);
+request.setAttribute("message", "📬 Đã gửi thông báo cá nhân tới ID: " + receiverId);
             }
 
             case "role" -> {
@@ -115,8 +115,21 @@ public class SendNotificationController extends HttpServlet {
 
             case "preapproved" -> {
                 List<PreRegistration> preList = dao.getApprovedRegistrationsDetailed();
+                int count = 0;
                 for (PreRegistration p : preList) {
-                    dao.insertNotificationByEmail(p.getEmail(),
+                    int studentId = dao.getStudentIdByEmail(p.getEmail());
+                    if (studentId == -1) {
+                        continue;
+                    }
+
+                    String orderCode = "DKH_" + System.currentTimeMillis();
+
+                    // Insert dữ liệu
+dao.insertPayment(studentId, p.getCourse_id(), p.getId_sale(), orderCode);
+                    dao.insertRegisition(studentId, p.getCourse_id(), p.getNote());
+
+                    // Gửi thông báo
+                    dao.insertNotificationById(studentId,
                             "Chào mừng bạn đã được duyệt tham gia khóa học: " + p.getCourseName());
 
                     SendMail.send(p.getEmail(),
@@ -124,14 +137,15 @@ public class SendNotificationController extends HttpServlet {
                             "Xin chào " + p.getFull_name() + ",\n\n"
                             + "Bạn đã được duyệt tham gia khóa học: " + p.getCourseName() + ".\n"
                             + "Thông tin đăng nhập hệ thống:\n"
-                            + "- Tài Khoản: " + p.getPhone() + "\n\n"
+                            + "- Tài Khoản: " + p.getPhone() + "\n"
                             + "- Mật khẩu: " + p.getPhone() + "\n\n"
                             + "Vui lòng đăng nhập và hoàn tất các bước tiếp theo.\n\n"
                             + "Trân trọng.");
 
                     dao.updateStatus(p.getId(), "Đã active");
+                    count++;
                 }
-                request.setAttribute("message", "✅ Đã gửi tài khoản và thông báo đến " + preList.size() + " học viên đã duyệt.");
+                request.setAttribute("message", "✅ Đã xử lý và gửi thông báo đến " + count + " học viên.");
             }
 
         }

@@ -40,11 +40,12 @@
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
@@ -68,27 +69,35 @@
                                 Quản lý khóa học
                             </a>
 
-                            <!-- Quản lý sự kiện -->
-                            <a class="nav-link" href="eventstaff">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Quản lý sự kiện
+                            <!-- Quản lý lớp học -->
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
+                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                Quản lý lớp học
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="createClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
+                                        Tạo lớp mới
+                                    </a>
+                                    <a class="nav-link" href="classStudent">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                        Danh sách lớp
+                                    </a>
+                                    <!-- Quản lý phân lớp -->
+                                    <a class="nav-link" href="AssignClass">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                                        Quản lý phân lớp
+                                    </a>
+                                </nav>
+                            </div>
 
-                            <!-- Quản lý blog -->
-                            <a class="nav-link" href="Blog">
-                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
-                                Quản lý blog
-                            </a>
 
-                            <!-- Quản lý phân lớp -->
-                            <a class="nav-link" href="AssignClass">
-                                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
-                                Quản lý phân lớp
-                            </a>
 
                             <!-- Quản lý đăng ký -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-check"></i></div>
                                 Quản lý đăng ký
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -124,18 +133,11 @@
                                 </nav>
                             </div>
 
-                            <!-- Quản lý lớp học -->
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
-                                <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
-                                Quản lý lớp học
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <!-- Xử lý đơn chuyển lớp -->
+                            <a class="nav-link" href="classTransfer">
+                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                                Xử lý đơn chuyển lớp
                             </a>
-                            <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="createClass"><i class="fas fa-plus me-2"></i> Tạo lớp mới</a>
-                                    <a class="nav-link" href="classStudent"><i class="fas fa-users me-2"></i> Danh sách lớp</a>
-                                </nav>
-                            </div>
 
                             <!-- Thời khóa biểu -->
                             <a class="nav-link" href="listClassSchedule">
@@ -143,24 +145,42 @@
                                 Thời khóa biểu
                             </a>
 
+                            <!-- Chấm công giáo viên -->
+                            <a class="nav-link" href="teachingAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
+                                Chấm công giáo viên
+                            </a>
+
+                            <!-- Quản lý sự kiện -->
+                            <a class="nav-link" href="eventstaff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                Quản lý sự kiện
+                            </a>
+
+                            <!-- Quản lý blog -->
+                            <a class="nav-link" href="Blog">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý blog
+                            </a>
+
                             <!-- Đánh giá -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback" aria-expanded="false" aria-controls="collapseFeedback">
                                 <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                                 Đánh giá
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseFeedback">
+                            <div class="collapse" id="collapseFeedback" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="feedback?mode=viewAll"><i class="fas fa-comment-dots me-2"></i> Phản hồi của học viên</a>
-                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView"><i class="fas fa-star-half-alt me-2"></i> Giáo viên đánh giá học sinh</a>
+                                    <a class="nav-link" href="feedback?mode=viewAll">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-comment-dots"></i></div>
+                                        Phản hồi của học viên
+                                    </a>
+                                    <a class="nav-link" href="feedbackByTeacher?mode=staffView">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-star-half-alt"></i></div>
+                                        Giáo viên đánh giá học sinh
+                                    </a>
                                 </nav>
                             </div>
-
-                            <!-- Xử lý đơn chuyển lớp -->
-                            <a href="classTransfer" class="nav-link">
-                                <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
-                                Xử lý đơn chuyển lớp
-                            </a>
                         </div>
                     </div>
                 </nav>
@@ -210,66 +230,76 @@
                                         <ul style="margin: 0; padding-left: 20px;">
                                             <c:forEach var="msg" items="${sessionScope.messages}">
                                                 <li>${msg}</li>
-                                            </c:forEach>
+                                                </c:forEach>
                                         </ul>
                                     </div>
                                     <c:remove var="messages" scope="session" />
                                 </c:if>
 
-                                <!-- Danh sách -->
-                                <form class="assign-form" method="post" action="AssignClass">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Học viên</th>
-                                                    <th>Khóa học</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Ghi chú</th>
-                                                    <th>Phân lớp</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="r" items="${regisitions}">
-                                                    <tr>
-                                                        <td>${r.studentName}</td>
-                                                        <td>${r.courseName}</td>
-                                                        <td>${r.status}</td>
-                                                        <td>${r.note}</td>
-                                                        <td>
-                                                            <c:set var="assignedClass" value="${assignedClassNames[r.id]}" />
-                                                            <c:choose>
-                                                                <c:when test="${not empty assignedClass}">
-                                                                    <span class="badge bg-success">${assignedClass}</span>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <select name="regisitionId_${r.id}" class="form-control">
-                                                                        <option value="">-- Chọn lớp --</option>
-                                                                        <c:forEach var="cls" items="${classByCourse[r.courseId]}">
-                                                                            <c:choose>
-                                                                                <c:when test="${classFullStatus[cls.id_class]}">
-                                                                                    <option value="${cls.id_class}" disabled class="disabled-option">
-                                                                                        ${cls.name_class} (${classStudentCount[cls.id_class]}/30 - Đã đầy)
-                                                                                    </option>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <option value="${cls.id_class}">
-                                                                                        ${cls.name_class} (${classStudentCount[cls.id_class]}/30)
-                                                                                    </option>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </c:forEach>
-                                                                    </select>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">✅ Phân lớp</button>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Học viên</th>
+                                            <th>Khóa học</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ghi chú</th>
+                                            <th>Phân lớp / Huỷ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="r" items="${regisitions}">
+                                            <tr>
+                                                <td>${r.studentName}</td>
+                                                <td>${r.courseName}</td>
+                                                <td>${r.status}</td>
+                                                <td>${r.note}</td>
+                                                <td>
+                                                    <c:set var="assignedClass" value="${assignedClassNames[r.id]}" />
+                                                    <c:choose>
+                                                        <c:when test="${not empty assignedClass}">
+                                                            <!-- Form HUỶ riêng biệt -->
+                                                            <form method="post" action="AssignClass">
+                                                                <input type="hidden" name="action" value="unassign"/>
+                                                                <input type="hidden" name="regisitionId" value="${r.id}"/>
+                                                                <span class="badge bg-success">${assignedClass}</span><br/>
+                                                                <button type="submit" class="btn btn-danger btn-sm mt-2"
+                                                                        onclick="return confirm('Xác nhận huỷ phân lớp học viên này?')">
+                                                                    🗑 Huỷ phân lớp
+                                                                </button>
+                                                            </form>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <!-- Vẫn hiển thị select, không có form ở đây -->
+                                                            <select name="regisitionId_${r.id}" form="assignFormMain" class="form-control">
+                                                                <option value="">-- Chọn lớp --</option>
+                                                                <c:forEach var="cls" items="${classByCourse[r.courseId]}">
+                                                                    <c:choose>
+                                                                        <c:when test="${classFullStatus[cls.id_class]}">
+                                                                            <option value="${cls.id_class}" disabled>
+                                                                                ${cls.name_class} (${classStudentCount[cls.id_class]}/30 - Đã đầy)
+                                                                            </option>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <option value="${cls.id_class}">
+                                                                                ${cls.name_class} (${classStudentCount[cls.id_class]}/30)
+                                                                            </option>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+
+                                <!-- Nút phân lớp nằm ngoài bảng -->
+                                <form id="assignFormMain" method="post" action="AssignClass">
+                                    <button type="submit" class="btn btn-primary mt-3">✅ Phân lớp</button>
                                 </form>
+
                             </div>
                         </div>
                         <!-- Student Class Assignment End -->
@@ -294,23 +324,23 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
         <script>
-            document.getElementById("loadNotice").addEventListener("click", function (e) {
-                e.preventDefault();
-                const container = document.getElementById("noticeContainer");
-                const content = document.getElementById("noticeContent");
-                container.style.display = container.style.display === "none" ? "block" : "none";
+                                    document.getElementById("loadNotice").addEventListener("click", function (e) {
+                                        e.preventDefault();
+                                        const container = document.getElementById("noticeContainer");
+                                        const content = document.getElementById("noticeContent");
+                                        container.style.display = container.style.display === "none" ? "block" : "none";
 
-                if (container.style.display === "block") {
-                    fetch("noticetostaff")
-                        .then(response => response.text())
-                        .then(data => {
-                            content.innerHTML = data;
-                        })
-                        .catch(error => {
-                            content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
-                        });
-                }
-            });
+                                        if (container.style.display === "block") {
+                                            fetch("noticetostaff")
+                                                    .then(response => response.text())
+                                                    .then(data => {
+                                                        content.innerHTML = data;
+                                                    })
+                                                    .catch(error => {
+                                                        content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
+                                                    });
+                                        }
+                                    });
         </script>
     </body>
 </html>

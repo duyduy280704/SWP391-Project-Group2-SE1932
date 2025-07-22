@@ -78,23 +78,20 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.html">BIG DREAM</a>
-            <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-
-            </form>
-            <!-- Navbar-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="loadNotice"><i class="fas fa-bell"></i> Thông báo</a>
+
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
-
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>
@@ -324,6 +321,17 @@
                             </form>
                         </div>
                     </div>
+                    <!-- POPUP THÔNG BÁO AJAX -->
+                    <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông báo</h5>
+                                <button class="btn-close" onclick="document.getElementById('noticeContainer').style.display = 'none'"></button>
+                            </div>
+                            <hr>
+                            <div id="noticeContent">Đang tải...</div>
+                        </div>
+                    </div>
                 </main>
 
 
@@ -394,6 +402,25 @@
                     rejectModal.style.display = "none";
                 }
             }
+        </script>
+        <script>
+            document.getElementById("loadNotice").addEventListener("click", function (e) {
+                e.preventDefault();
+                const container = document.getElementById("noticeContainer");
+                const content = document.getElementById("noticeContent");
+                container.style.display = container.style.display === "none" ? "block" : "none";
+
+                if (container.style.display === "block") {
+                    fetch("noticetostaff")
+                            .then(response => response.text())
+                            .then(data => {
+                                content.innerHTML = data;
+                            })
+                            .catch(error => {
+                                content.innerHTML = "<p class='text-danger'>Lỗi khi tải thông báo.</p>";
+                            });
+                }
+            });
         </script>
 
 

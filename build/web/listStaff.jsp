@@ -156,10 +156,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
-
+                        <li><a class="dropdown-item" href="profile">Thông tin cá nhân</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="logout">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>
@@ -168,14 +167,14 @@
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
-                       <div class="nav">
+                        <div class="nav">
                             <a class="nav-link" href="adminhome">
                                 <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
 
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                 Quản lý người dùng
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -198,19 +197,30 @@
                             </div>
 
                             <a class="nav-link collapsed" href="setting">
-                                <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                                 Cài đặt thông tin
                             </a>
 
                             <a class="nav-link collapsed" href="salaryadmin">
-                                <div class="sb-nav-link-icon"><i class="fas fa-money-check-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill"></i></div>
                                 Quản lý lương giáo viên
+                            </a>
+
+                            <a class="nav-link collapsed" href="AdminPayment">
+                                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
+                                Quản lý thanh toán
+                            </a>
+
+                            <a class="nav-link collapsed" href="Refund">
+                                <div class="sb-nav-link-icon"><i class="fas fa-undo"></i></div>
+                                Hủy Đăng ký
                             </a>
 
                             <a class="nav-link collapsed" href="SendNotification">
                                 <div class="sb-nav-link-icon"><i class="fas fa-bell"></i></div>
                                 Thông báo
                             </a>
+
                         </div>
                     </div>
                 </nav>

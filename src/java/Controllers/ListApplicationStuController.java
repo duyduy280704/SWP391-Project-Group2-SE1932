@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import models.Application;
 import models.ApplicationDAO;
 import models.ResultMessage;
+import models.TeacherApplicationType;
 
 /**
  *
@@ -65,10 +66,22 @@ public class ListApplicationStuController extends HttpServlet {
 
         try {
             String processId = request.getParameter("processId");
+            String action = request.getParameter("action");
+
             if (processId != null && !processId.isEmpty()) {
                 try {
                     int id = Integer.parseInt(processId);
-                    result = ad.processApplicationStu(id);
+                    if ("approve".equalsIgnoreCase(action)) {
+                        result = ad.processApplicationStu(id);
+                    } else if ("reject".equalsIgnoreCase(action)) {
+                        result = ad.processApplicationStu2(id);
+                    } else {
+                        errorMessage = "Hành động không hợp lệ.";
+                        request.getSession().setAttribute("message", errorMessage);
+                        request.getSession().setAttribute("success", false);
+                        response.sendRedirect("listapplicationStu");
+                        return;
+                    }
                     request.getSession().setAttribute("message", result.getMessage());
                     request.getSession().setAttribute("success", result.isSuccess());
                     response.sendRedirect("listapplicationStu");
@@ -82,8 +95,33 @@ public class ListApplicationStuController extends HttpServlet {
                 }
             }
 
-            ArrayList<Application> data = ad.getListApplicationStu();
+            // Lấy tham số tìm kiếm và lọc
+            String nameSearch = request.getParameter("nameSearch");
+            String typeFilter = request.getParameter("typeFilter");
+            ArrayList<Application> data = null;
+
+            // Xử lý tìm kiếm và lọc
+            if (nameSearch != null && !nameSearch.trim().isEmpty()) {
+                data = ad.getListApplicationStuByName(nameSearch);
+            } else if (typeFilter != null && !typeFilter.equals("0")) {
+                try {
+                    int typeId = Integer.parseInt(typeFilter);
+                    data = ad.getListApplicationStuByType(typeId);
+                } catch (NumberFormatException e) {
+                    errorMessage = "ID kiểu đơn không hợp lệ.";
+                    request.getSession().setAttribute("message", errorMessage);
+                    request.getSession().setAttribute("success", false);
+                    response.sendRedirect("listapplicationStu");
+                    return;
+                }
+            } else {
+                data = ad.getListApplicationStu();
+            }
+
+            
+            ArrayList<TeacherApplicationType> data1 = ad.getStudentApplicationTypeList();
             request.setAttribute("data", data);
+            request.setAttribute("data1", data1);
 
         } catch (Exception e) {
             errorMessage = "Lỗi khi xử lý yêu cầu: " + e.getMessage();

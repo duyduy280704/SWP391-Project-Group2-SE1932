@@ -281,17 +281,16 @@
                     <div class="profile-name">${sessionScope.account.name}</div>
                 </div>
 
-                <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
+            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
             <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
             <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
-            <a href="classTransfer" class="nav-link">Xin Chuyển Lớp</a>
             <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
-            <a href="studentapplication" class="nav-link">Gửi Đơn</a>
+            <a href="studentapplication" class="nav-link active">Gửi Đơn</a>
             <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
-            <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-            <a href="#" class="nav-item nav-link">Sự Kiện</a> 
+            <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
+            <a href="EventStudent" class="nav-item nav-link">Sự Kiện</a> 
             <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
             </div>
             <!-- Navbar End -->
@@ -310,6 +309,15 @@
                                 <select id="applicationType" name="application" class="form-select">
                                     <option value="0">-- Chọn loại đơn --</option>
                                     <c:forEach items="${data}" var="c">
+                                        <option value="${c.getId()}">${c.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="applicationType" class="form-label">Lớp học</label>
+                                <select id="applicationType" name="className" class="form-select">
+                                    <option value="0">-- Chọn Lớp học --</option>
+                                    <c:forEach items="${data1}" var="c">
                                         <option value="${c.getId()}">${c.getName()}</option>
                                     </c:forEach>
                                 </select>

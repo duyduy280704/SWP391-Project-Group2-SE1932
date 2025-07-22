@@ -1,0 +1,24 @@
+package Controllers;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+import java.io.IOException;
+import java.util.ArrayList;
+import models.Event;
+import models.EventDAO;
+
+
+public class EventStudentController extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+        EventDAO dao = new EventDAO();
+        ArrayList<Event> events = dao.getEvents(); // lấy toàn bộ sự kiện
+
+        request.setAttribute("eventList", events);
+        request.getRequestDispatcher("EventStudent.jsp").forward(request, response);
+    }
+}

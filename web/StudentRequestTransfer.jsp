@@ -58,8 +58,7 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                overflow-y: auto;
-                width: 250px;
+                width: 220px;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -68,7 +67,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-250px);
+                transform: translateX(-220px);
             }
             .sidebar a {
                 color: #000;
@@ -81,7 +80,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 250px;
+                margin-left: 220px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -243,13 +242,29 @@
                     <p class="error">${error}</p>
                 </c:if>
 
+                <!-- Form chọn lớp hiện tại (GET) -->
+                <form method="get" action="classTransfer">
+                    <label for="fromClassId">Chọn lớp hiện tại:</label>
+                    <select name="fromClassId" onchange="this.form.submit()" required>
+                        <option value="">-- Chọn lớp đang học --</option>
+                        <c:forEach var="cls" items="${currentClasses}">
+                            <option value="${cls.id_class}" ${param.fromClassId == cls.id_class ? "selected" : ""}>
+                                ${cls.name_class}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </form>
+
+                <br><br>
+
+                <!-- Form gửi yêu cầu chuyển lớp (POST), chỉ hiển thị khi đã chọn lớp hiện tại -->
+
                 <form method="post" action="classTransfer">
-                    <p><strong>Lớp hiện tại:</strong> ${currentClass.name_class}</p>
-                    <input type="hidden" name="fromClassId" value="${currentClass.id_class}" />
+                    <input type="hidden" name="fromClassId" value="${param.fromClassId}" />
 
                     <label for="toClassId">Lớp muốn chuyển đến:</label>
                     <select name="toClassId" required>
-                        <option value="" disabled selected>-- Chọn lớp --</option>
+                        <option value="">-- Chọn lớp --</option>
                         <c:forEach var="cls" items="${availableClasses}">
                             <option value="${cls.id_class}">${cls.name_class}</option>
                         </c:forEach>
@@ -260,6 +275,7 @@
 
                     <button type="submit">Gửi đơn</button>
                 </form>
+
 
                 <h3>Danh sách đơn đã gửi</h3>
                 <table>
@@ -320,25 +336,25 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('main-content');
-                const toggleBtn = document.querySelector('.toggle-btn');
+                        function toggleSidebar() {
+                            const sidebar = document.getElementById('sidebar');
+                            const mainContent = document.getElementById('main-content');
+                            const toggleBtn = document.querySelector('.toggle-btn');
 
-                sidebar.classList.toggle('hidden');
-                mainContent.classList.toggle('full');
-                toggleBtn.classList.toggle('hidden');
+                            sidebar.classList.toggle('hidden');
+                            mainContent.classList.toggle('full');
+                            toggleBtn.classList.toggle('hidden');
 
-                // Change icon based on sidebar state
-                const icon = toggleBtn.querySelector('i');
-                if (sidebar.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
-            }
+                            // Change icon based on sidebar state
+                            const icon = toggleBtn.querySelector('i');
+                            if (sidebar.classList.contains('hidden')) {
+                                icon.classList.remove('fa-times');
+                                icon.classList.add('fa-bars');
+                            } else {
+                                icon.classList.remove('fa-bars');
+                                icon.classList.add('fa-times');
+                            }
+                        }
         </script>
     </body>
 </html>

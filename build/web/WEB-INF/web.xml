@@ -236,6 +236,26 @@
         <servlet-name>TeacherDetailController</servlet-name>
         <servlet-class>Controllers.TeacherDetailController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RefundController</servlet-name>
+        <servlet-class>Controllers.RefundController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeachingAttendanceController</servlet-name>
+        <servlet-class>Controllers.TeachingAttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BlogTeacherController</servlet-name>
+        <servlet-class>Controllers.BlogTeacherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventController</servlet-name>
+        <servlet-class>Controllers.EventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventStudentController</servlet-name>
+        <servlet-class>Controllers.EventStudentController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -467,5 +487,25 @@
     <servlet-mapping>
         <servlet-name>TeacherDetailController</servlet-name>
         <url-pattern>/TeacherDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RefundController</servlet-name>
+        <url-pattern>/Refund</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeachingAttendanceController</servlet-name>
+        <url-pattern>/teachingAttendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogTeacherController</servlet-name>
+        <url-pattern>/BlogTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventController</servlet-name>
+        <url-pattern>/Event</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EventStudentController</servlet-name>
+        <url-pattern>/EventStudent</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -293,17 +293,16 @@
                     <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                 </a>
             </div>
-            <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
+            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
             <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
             <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
-            <a href="classTransfer" class="nav-link">Xin Chuyển Lớp</a>
             <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
             <a href="studentapplication" class="nav-link">Gửi Đơn</a>
-            <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
+            <a href="feedback" class="nav-link active">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
-            <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
-            <a href="#" class="nav-item nav-link">Sự Kiện</a> 
+            <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
+            <a href="EventStudent" class="nav-item nav-link">Sự Kiện</a> 
             <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
         </div>
         <!-- sidebar End -->

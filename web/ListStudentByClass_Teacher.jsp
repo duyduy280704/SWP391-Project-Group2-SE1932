@@ -40,8 +40,7 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                overflow-y: auto;
-                width: 250px;
+                width: 220px;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -51,7 +50,7 @@
             }
 
             .sidebar.hidden {
-                transform: translateX(-250px);
+                transform: translateX(-220px);
             }
 
             .sidebar a {
@@ -67,7 +66,7 @@
             }
 
             .main-content {
-                margin-left: 250px;
+                margin-left: 220px;
                 padding: 30px;
                 transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
                 width: calc(100% - 220px);
@@ -413,65 +412,65 @@
                 </div>
 
 
-                <a href="teacherHome" class="nav-link active">Trang Chủ</a>
+                <a href="teacherHome" class="nav-link ">Trang Chủ</a>
                 <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
-                <a href="classStudent" class="nav-link">Danh sách lớp học</a>
-                <a href="feedbackByTeacher" class="nav-item nav-link">Dánh giá sinh viên </a>
+                <a href="classStudent" class="nav-link active">Danh sách lớp học</a>
                 <a href="salaryteacher" class="nav-item nav-link">Bảng Lương </a>
                 <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
                 <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
-                <a href="#" class="nav-link"> Tin Tức </a>
-                <a href="#" class="nav-link"> Sự Kiện</a>
+                <a href="Event" class="nav-link"> Tin Tức </a>
+                <a href="BlogTeacher" class="nav-link"> Sự Kiện</a>
+                <a href="feedbackByTeacher" class="nav-item nav-link">Đánh giá sinh viên </a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
             </div>
             <!-- Navbar End -->
 
             <!-- Main Content -->
             <div class="main-content" id="main-content">
-            <h2 class="text-center mb-4">Danh sách học sinh lớp: <span class="text-primary">${className}</span></h2>
+                <h2 class="text-center mb-4">Danh sách học sinh lớp: <span class="text-primary">${className}</span></h2>
 
-            <form method="get" action="classStudent" class="mb-4">
-                <input type="hidden" name="mode" value="students">
-                <input type="hidden" name="classId" value="${classId}">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <input type="text" name="search" class="form-control" placeholder="Tìm tên học sinh..." value="${search}">
+                <form method="get" action="classStudent" class="mb-4">
+                    <input type="hidden" name="mode" value="students">
+                    <input type="hidden" name="classId" value="${classId}">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" name="keyword" class="form-control" placeholder="Tìm tên học sinh..." value="${search}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Họ tên</th>
-                        <th>Giới tính</th>
-                        <th>Ngày sinh</th>
-                        <th>Số điện thoại</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="s" items="${students}" varStatus="loop">
+                <table class="table table-bordered table-hover">
+                    <thead>
                         <tr>
-                            <td>${loop.index + 1}</td>
-                            <td>${s.name}</td>
-                            <td>${s.gender}</td>
-                            <td>${s.birthdate}</td>
-                            <td>${s.phone}</td>
+                            <th>STT</th>
+                            <th>Họ tên</th>
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
                         </tr>
-                    </c:forEach>
-                    <c:if test="${empty students}">
-                        <tr>
-                            <td colspan="6" class="text-center text-danger">Không có học sinh nào trong lớp này.</td>
-                        </tr>
-                    </c:if>
-                </tbody>
-            </table>
-        </div>
-   
+                    </thead>
+                    <tbody>
+                        <c:forEach var="s" items="${students}" varStatus="loop">
+                            <tr>
+                                <td>${loop.index + 1}</td>
+                                <td>${s.name}</td>
+                                <td>${s.gender}</td>
+                                <td>${s.birthdate}</td>
+                                <td>${s.phone}</td>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${empty students}">
+                            <tr>
+                                <td colspan="6" class="text-center text-danger">Không có học sinh nào trong lớp này.</td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+
 
             <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
@@ -489,25 +488,25 @@
         <script src="js/main.js"></script>
         <!-- Sidebar Toggle Script -->
         <script>
-                            function toggleSidebar() {
-                                const sidebar = document.getElementById('sidebar');
-                                const mainContent = document.getElementById('main-content');
-                                const toggleBtn = document.querySelector('.toggle-btn');
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('main-content');
+                const toggleBtn = document.querySelector('.toggle-btn');
 
-                                sidebar.classList.toggle('hidden');
-                                mainContent.classList.toggle('full');
-                                toggleBtn.classList.toggle('hidden');
+                sidebar.classList.toggle('hidden');
+                mainContent.classList.toggle('full');
+                toggleBtn.classList.toggle('hidden');
 
-                                // Change icon based on sidebar state
-                                const icon = toggleBtn.querySelector('i');
-                                if (sidebar.classList.contains('hidden')) {
-                                    icon.classList.remove('fa-times');
-                                    icon.classList.add('fa-bars');
-                                } else {
-                                    icon.classList.remove('fa-bars');
-                                    icon.classList.add('fa-times');
-                                }
-                            }
+                // Change icon based on sidebar state
+                const icon = toggleBtn.querySelector('i');
+                if (sidebar.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            }
         </script>
     </body>
 
