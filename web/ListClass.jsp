@@ -161,7 +161,7 @@
 
                     <form method="get" action="classStudent" class="mb-3">
                         <input type="hidden" name="mode" value="list"/>
-                        <input type="text" name="search" value="${search}" placeholder="Tìm theo tên lớp" class="form-control w-25 d-inline-block me-2"/>
+                        <input type="text" name="keyword" value="${search}" placeholder="Tìm theo tên lớp" class="form-control w-25 d-inline-block me-2"/>
                         <input type="submit" value="Tìm kiếm" class="btn btn-primary"/>
                     </form>
 

@@ -140,6 +140,7 @@
             <h2>Sửa thời khóa biểu</h2>
 
             <form action="schedule" method="post">
+                 <input type="hidden" name="action" value="update"> 
                 <input type="hidden" name="scheduleId" value="${s.id}">
 
                 <label for="id_class">Tên lớp:</label>

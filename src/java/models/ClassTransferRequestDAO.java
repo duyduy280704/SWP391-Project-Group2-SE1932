@@ -289,7 +289,7 @@ public class ClassTransferRequestDAO extends DBContext {
         String sql = "SELECT TOP 1 r.student_id, s.full_name, "
                 + "r.from_class_id, c1.name AS from_class, "
                 + "r.to_class_id, c2.name AS to_class, "
-                   + "r.request_date AS transfer_date, "
+                + "r.request_date AS transfer_date, "
                 + "c1.course_id AS course_id "
                 + "FROM class_transfer_request r "
                 + "JOIN student s ON r.student_id = s.id "
@@ -323,28 +323,35 @@ public class ClassTransferRequestDAO extends DBContext {
     }
 
     // Lấy thông tin lớp học hiện tại của học sinh
-    public Categories_class getClassByStudentId(String studentId) {
+    
+ public Categories_class getClassByStudentId(String studentId) {
         String sql = "SELECT c.id, c.name AS class_name, co.name AS course_name\n"
                 + "FROM class c\n"
                 + "JOIN course co ON c.course_id = co.id\n"
                 + "JOIN Class_Student cs ON cs.class_id = c.id\n"
                 + "JOIN Student s ON cs.student_id = s.id\n"
                 + "WHERE s.id = ?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, studentId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Categories_class clazz = new Categories_class();
-                clazz.setId_class(rs.getString("id"));
+                int classId = rs.getInt("id");
+                if (rs.wasNull()) {
+                    System.out.println(">> Warning: class_id is null for studentId: " + studentId);
+                    return null;
+                }
+                clazz.setId_class(String.valueOf(classId));
                 clazz.setName_class(rs.getString("class_name"));
-                clazz.setCourse_name(rs.getString("course_name"));  // set tên khóa học
+                clazz.setCourse_name(rs.getString("course_name"));
+                System.out.println(">> Found class for studentId " + studentId + ": " + clazz.getName_class() + " (ID: " + clazz.getId_class() + ")");
                 return clazz;
+            } else {
+                System.out.println(">> No class found for studentId: " + studentId);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Err getClassByStudentId: " + e.getMessage());
         }
         return null;
     }
-
 }

@@ -110,7 +110,7 @@ public class ScheduleByClassController extends HttpServlet {
 
         } catch (Exception e) {
             request.setAttribute("err", "Lỗi hệ thống: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+          
         }
     }
 

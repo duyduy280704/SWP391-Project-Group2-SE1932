@@ -127,18 +127,11 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                                 Thời khóa biểu
                             </a>
-                            <!-- Điểm danh -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAttendance">
-                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                                Điểm danh
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="teachingAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                                Chấm công giáo viên
                             </a>
-                            <div class="collapse" id="collapseAttendance">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="teachingAttendance"><i class="fas fa-comment-dots me-2"></i> Chấm công giáo viên</a>
-                                    <a class="nav-link" href="#"><i class="fas fa-star-half-alt me-2"></i> Điểm danh của học sinh</a>
-                                </nav>
-                            </div>
+
 
                             <!-- Đánh giá -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">
@@ -170,12 +163,6 @@
             <div id="layoutSidenav_content">
                 <main class="container-fluid px-4 mt-4">
                     <h2 class="mb-4">Danh sách lớp có thời khóa biểu</h2>
-
-                    <form method="post" action="listClassSchedule" class="d-flex mb-3">
-                        <input type="text" name="search" class="form-control me-2" placeholder="Tìm kiếm lớp...">
-                        <input type="hidden" name="action" value="search">
-                        <button type="submit" class="btn btn-primary">Tìm</button>
-                    </form>
 
                     <a href="listClassSchedule?mode=1" class="btn btn-success mb-3"><i class="fas fa-plus me-1"></i> Tạo thời khóa biểu</a>
 

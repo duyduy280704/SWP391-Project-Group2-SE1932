@@ -35,6 +35,7 @@ public class ListClassScheduleController extends HttpServlet {
             String classId = request.getParameter("id_class");
 
             request.setAttribute("data1", dao.getCategories_class());
+                request.setAttribute("data3", dao.getCategoriesTeacher());
             request.setAttribute("id_class", classId);
 
             if (classId != null && !classId.isEmpty()) {
@@ -62,29 +63,7 @@ public class ListClassScheduleController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-//tìm kiếm 
-       try {
-      
-        System.out.println("Action: " + action); // Debug
-        
-        if ("search".equals(action)) {
-            String keyword = request.getParameter("search");
-            System.out.println("Search keyword: " + keyword); // Debug
-            List<Categories_class> classList = (keyword != null && !keyword.trim().isEmpty())
-                    ? dao.searchClass(keyword)
-                    : dao.getClassesHaveSchedule();
-            System.out.println("Class list size: " + classList.size()); // Debug
-            
-            request.setAttribute("classList", classList);
-            request.getRequestDispatcher("ListClassSchedule.jsp").forward(request, response);
-            return;
-        }
-        // ... các phần còn lại của doPost ...
-    } catch (Exception e) {
-        e.printStackTrace(); // Ghi log lỗi
-        request.setAttribute("error", "Lỗi xử lý yêu cầu: " + e.getMessage());
-       
-    }
+
 //xóa
         if ("delete".equals(action)) {
             String classId = request.getParameter("classId");

@@ -169,7 +169,7 @@
                     <form method="get" action="classStudent" class="mb-4 d-flex">
                         <input type="hidden" name="mode" value="students"/>
                         <input type="hidden" name="classId" value="${classId}"/>
-                        <input type="text" name="search" value="${search}" placeholder="Tìm theo tên học sinh" class="form-control me-2" />
+                        <input type="text" name="keyword" value="${search}" placeholder="Tìm theo tên học sinh" class="form-control me-2" />
                         <input type="submit" value="Tìm kiếm" class="btn btn-primary"/>
                     </form>
 

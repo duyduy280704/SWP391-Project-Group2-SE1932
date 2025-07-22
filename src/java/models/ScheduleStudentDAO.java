@@ -4,6 +4,7 @@ package models;
 import dal.DBContext;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,44 +57,39 @@ public class ScheduleStudentDAO extends DBContext {
     }
 
     // Lịch lớp cũ đến ngày duyệt 
-    
-    
     public List<ScheduleStudent> getScheduleBefore(String classId, LocalDate transferDate, int studentId) {
-    List<ScheduleStudent> list = new ArrayList<>();
-    String sql = "SELECT s.id, s.day, c.name AS class_name, s.start_time, s.end_time, s.room,\n"
-               + "       a.status, a.reason\n"
-               + "FROM schedule s\n"
-               + "JOIN class c ON s.id_class = c.id\n"
-               + "LEFT JOIN attendance a ON a.schedule_id = s.id AND a.id_student = ?\n"
-               + "WHERE s.id_class = ? AND s.day < ?\n"  // <-- đã sửa chỗ này
-               + "ORDER BY s.day, s.start_time;";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, studentId);
-        ps.setString(2, classId);
-        ps.setString(3, transferDate.toString());
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            ScheduleStudent s = new ScheduleStudent(
-                    String.valueOf(rs.getInt("id")),
-                    rs.getString("day"),
-                    rs.getString("class_name"),
-                    rs.getString("start_time"),
-                    rs.getString("end_time"),
-                    rs.getString("room")
-            );
-            s.setAttendanceStatus(rs.getString("status") != null ? rs.getString("status") : "");
-            s.setReason(rs.getString("reason"));
-            list.add(s);
+        List<ScheduleStudent> list = new ArrayList<>();
+        String sql = "SELECT s.id, s.day, c.name AS class_name, s.start_time, s.end_time, s.room,\n"
+                + "       a.status, a.reason\n"
+                + "FROM schedule s\n"
+                + "JOIN class c ON s.id_class = c.id\n"
+                + "LEFT JOIN attendance a ON a.schedule_id = s.id AND a.id_student = ?\n"
+                + "WHERE s.id_class = ? AND s.day < ?\n" // <-- đã sửa chỗ này
+                + "ORDER BY s.day, s.start_time;";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setString(2, classId);
+            ps.setString(3, transferDate.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ScheduleStudent s = new ScheduleStudent(
+                        String.valueOf(rs.getInt("id")),
+                        rs.getString("day"),
+                        rs.getString("class_name"),
+                        rs.getString("start_time"),
+                        rs.getString("end_time"),
+                        rs.getString("room")
+                );
+                s.setAttendanceStatus(rs.getString("status") != null ? rs.getString("status") : "");
+                s.setReason(rs.getString("reason"));
+                list.add(s);
+            }
+        } catch (Exception e) {
+            System.out.println("Err getScheduleStudentBefore: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Err getScheduleStudentBefore: " + e.getMessage());
+        return list;
     }
-    return list;
-}
 
-
-    
-    
     // Lịch lớp mới từ ngày duyệt trở đi
     public List<ScheduleStudent> getScheduleAfter(String classId, LocalDate approvedDate, int studentId) {
         List<ScheduleStudent> list = new ArrayList<>();
@@ -136,18 +132,27 @@ public class ScheduleStudentDAO extends DBContext {
                    a.status, a.reason
             FROM schedule s
             JOIN class c ON s.id_class = c.id
-            LEFT JOIN attendance a ON a.schedule_id = s.id AND a.date = s.day AND a.id_student = ?
+            LEFT JOIN attendance a ON a.schedule_id = s.id AND a.id_student = ?
             WHERE s.id_class = ?
             ORDER BY s.day, s.start_time
         """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, studentId);
-            ps.setString(2, classId);
+            try {
+                ps.setInt(2, Integer.parseInt(classId));
+            } catch (NumberFormatException e) {
+                System.out.println("Err parsing classId: " + classId + " | Error: " + e.getMessage());
+                return list;
+            }
             ResultSet rs = ps.executeQuery();
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             while (rs.next()) {
+                String dayValue = rs.getString("day"); // Lấy day dưới dạng date từ DB
+                System.out.println(">> Raw day value from DB: " + dayValue);
+                String formattedDay = (dayValue != null) ? dayValue : LocalDate.now().format(dateFormatter); // Sử dụng day từ DB
                 ScheduleStudent s = new ScheduleStudent(
                         String.valueOf(rs.getInt("id")),
-                        rs.getString("day"),
+                        formattedDay,
                         rs.getString("class_name"),
                         rs.getString("start_time"),
                         rs.getString("end_time"),
@@ -157,7 +162,7 @@ public class ScheduleStudentDAO extends DBContext {
                 s.setReason(rs.getString("reason"));
                 list.add(s);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Err getScheduleStudentAll: " + e.getMessage());
         }
         return list;

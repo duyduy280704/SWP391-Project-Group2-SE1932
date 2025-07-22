@@ -434,7 +434,7 @@
                 <input type="hidden" name="classId" value="${classId}">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <input type="text" name="search" class="form-control" placeholder="Tìm tên học sinh..." value="${search}">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm tên học sinh..." value="${search}">
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>

@@ -131,17 +131,11 @@
                                 Thời khóa biểu
                             </a>
                             <!-- Điểm danh -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAttendance">
-                                <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                                Điểm danh
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="teachingAttendance">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                                Chấm công giáo viên
                             </a>
-                            <div class="collapse" id="collapseAttendance">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="teachingAttendance"><i class="fas fa-comment-dots me-2"></i> Chấm công giáo viên</a>
-                                    <a class="nav-link" href="#"><i class="fas fa-star-half-alt me-2"></i> Điểm danh của học sinh</a>
-                                </nav>
-                            </div>
+
 
                             <!-- Đánh giá -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFeedback">

@@ -328,25 +328,7 @@ public class ScheduleDAO extends DBContext {
         }
         return list;
     }
-// tìm kiếm 
 
-   public List<Categories_class> searchClass(String keyword) {
-    List<Categories_class> list = new ArrayList<>();
-    String sql = "SELECT DISTINCT c.id, c.name "
-               + "FROM schedule s JOIN Class c ON s.id_class = c.id "
-               + "WHERE LOWER(c.name) LIKE LOWER(?)";
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, "%" + keyword.trim().toLowerCase() + "%");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            list.add(new Categories_class(rs.getString("id"), rs.getString("name")));
-        }
-    } catch (Exception e) {
-        System.out.println("searchClass: " + e.getMessage());
-    }
-    return list;
-}
 
 // xóa toàn bộ lịch 
 
