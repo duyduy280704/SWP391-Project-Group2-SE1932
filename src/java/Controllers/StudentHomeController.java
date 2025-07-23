@@ -11,29 +11,56 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import models.About;
+import models.AboutDAO;
 import models.Blog;
 import models.BlogDAO;
 import models.CourseDAO;
 import models.Courses;
 import models.Event;
 import models.EventDAO;
+import models.FeedBack;
+import models.FeedBackDAO;
+import models.Information;
+import models.InformationDAO;
 import models.Notification;
 import models.NotificationDAO;
 import models.ScheduleDAO;
 import models.ScheduleStudent;
 import models.ScheduleStudentDAO;
+import models.ScheduleWeek;
 import models.StudentDAO;
 import models.Students;
 import models.TeacherDAO;
 import models.Teachers;
+import models.TypeCourse;
 
 /**
  *
  * @author Dwight
  */
 public class StudentHomeController extends HttpServlet {
+    
+    private CourseDAO courseDAO = new CourseDAO();
+    private InformationDAO daoI = new InformationDAO();
+    private TeacherDAO dao = new TeacherDAO();
+    private AboutDAO dao2 = new AboutDAO();
+    
+    public void init() {
+        Information setting = daoI.getSetting();
+        getServletContext().setAttribute("setting", setting);
+        List<TypeCourse> typeList = courseDAO.getType();
+        getServletContext().setAttribute("typeList", typeList);     
+        List<Teachers> teacherlist = dao.getTeachers();
+        getServletContext().setAttribute("teacherlist", teacherlist); 
+        List<About> list = dao2.getAllAbouts();
+        getServletContext().setAttribute("aboutList", list);
+    }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -63,6 +90,8 @@ public class StudentHomeController extends HttpServlet {
         request.setAttribute("courseList", course6);
         EventDAO dao = new EventDAO();
         List<Event> eventList = dao.getUpcomingEvents();
+        List<Event> events = dao.getRecentEvents(3);
+        request.setAttribute("events", events);
         request.setAttribute("eventList", eventList);
         BlogDAO blogDAO = new BlogDAO();
         List<Blog> blogList = blogDAO.getLatest3Blogs();
@@ -71,6 +100,61 @@ public class StudentHomeController extends HttpServlet {
         List<Notification> list = daoo.getLatestNotificationsByStudent(studentId);
 
         request.setAttribute("notifications", list);
+        DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter viewFormatter = DateTimeFormatter.ofPattern("dd/MM");
+
+        // Xử lý năm
+        int year = LocalDate.now().getYear();
+        String selectedYear = request.getParameter("year");
+        if (selectedYear != null && !selectedYear.isEmpty()) {
+            try {
+                year = Integer.parseInt(selectedYear);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        // Xử lý tuần
+        LocalDate baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        String selectedWeek = request.getParameter("week");
+        if (selectedWeek != null && !selectedWeek.isEmpty()) {
+            try {
+                baseDate = LocalDate.parse(selectedWeek, dbFormatter);
+            } catch (Exception ignored) {}
+        }
+
+        ScheduleStudentDAO dao1 = new ScheduleStudentDAO();
+        List<ScheduleStudent> scheduleStudent = dao1.getScheduleStudentAll(id, baseDate.format(dbFormatter));
+
+        List<Integer> years = new ArrayList<>();
+        for (int i = year - 2; i <= year + 2; i++) {
+            years.add(i);
+        }
+
+        // Tạo danh sách tuần trong năm
+        List<ScheduleWeek> weeks = new ArrayList<>();
+        LocalDate startOfYear = LocalDate.of(year, 1, 1).with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        for (int i = 0; i < 52; i++) {
+            LocalDate weekStart = startOfYear.plusWeeks(i);
+            if (weekStart.getYear() == year || weekStart.plusDays(6).getYear() == year) {
+                LocalDate weekEnd = weekStart.plusDays(6);
+                weeks.add(new ScheduleWeek(
+                        weekStart.format(dbFormatter),
+                        weekEnd.format(dbFormatter),
+                        weekStart.format(viewFormatter),
+                        weekEnd.format(viewFormatter),
+                        i + 1
+                ));
+            }
+        }
+
+        List<String> weekDays = Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật");
+
+        request.setAttribute("weekDays", weekDays);
+        request.setAttribute("scheduleStudent", scheduleStudent);
+        request.setAttribute("weeks", weeks);
+        request.setAttribute("years", years);
+        request.setAttribute("selectedWeek", baseDate.format(dbFormatter));
+        request.setAttribute("selectedYear", year);
+
         request.getRequestDispatcher("StudentHome.jsp").forward(request, response);
 
     }

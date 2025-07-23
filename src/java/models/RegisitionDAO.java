@@ -405,5 +405,46 @@ public class RegisitionDAO extends DBContext {
         }
         return false;
     }
+public String getStudentEmailByRegisitionId(int regisitionId) {
+        String sql = "SELECT s.email FROM regisition r "
+         + "JOIN Student s ON r.student_id = s.id WHERE r.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("email");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public String getClassNameById(int classId) {
+        String sql = "SELECT name FROM Class WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, classId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getCourseNameByRegisitionId(int regisitionId) {
+        String sql = "SELECT c.name FROM regisition r JOIN Course c ON r.course_id = c.id WHERE r.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, regisitionId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

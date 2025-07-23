@@ -11,6 +11,7 @@ import models.TeacherApplications;
 import models.TeacherApplicationDAO;
 import models.CourseDAO;
 import models.TypeCourse;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+//Huyền
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
@@ -28,34 +30,36 @@ import java.util.List;
 )
 @WebServlet("/resgiterTeacher")
 public class TeacherRegistrationController extends HttpServlet {
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        CourseDAO courseDAO = new CourseDAO();
-        List<TypeCourse> courseTypes = courseDAO.getCourseType();
-        String message = "";
 
+        CourseDAO courseDAO = new CourseDAO();
+        List<TypeCourse> courseTypes = courseDAO.getCourseType(); // Lấy danh sách loại khóa học
+
+        String message = "";
         if (courseTypes == null || courseTypes.isEmpty()) {
             message = "Không thể tải loại khóa học. Vui lòng kiểm tra kết nối database hoặc dữ liệu.<br>";
         }
 
+        // Gửi dữ liệu sang JSP
         request.setAttribute("message", message);
         request.setAttribute("courseTypes", courseTypes);
         request.getRequestDispatcher("TeacherRegistion.jsp").forward(request, response);
     }
 
- @Override
+    // Xử lý khi người dùng gửi form đăng ký (POST)
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
         TeacherApplicationDAO teacherDAO = new TeacherApplicationDAO();
         CourseDAO courseDAO = new CourseDAO();
-        List<TypeCourse> courseTypes = courseDAO.getCourseType();
+        List<TypeCourse> courseTypes = courseDAO.getCourseType(); // Lấy lại danh sách để gửi về nếu có lỗi
 
-        // Get parameters
+        // Lấy thông tin từ form
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String birthDate = request.getParameter("birthDate");
@@ -64,14 +68,15 @@ public class TeacherRegistrationController extends HttpServlet {
         String idTypeCourse = request.getParameter("idTypeCourse");
         String yearOfExpertise = request.getParameter("yearsOfExperience");
         String phone = request.getParameter("phone");
-        Part filePart = request.getPart("cvFile");
+        Part filePart = request.getPart("cvFile"); // File CV tải lên
         String agreeTerms = request.getParameter("agreeTerms");
 
-       
         String message = "";
         boolean check = true;
 
-       
+        // ==== VALIDATION ====
+
+        // Kiểm tra họ tên
         if (fullName == null || fullName.trim().isEmpty()) {
             message += "Bạn chưa nhập họ và tên<br>";
             check = false;
@@ -83,7 +88,7 @@ public class TeacherRegistrationController extends HttpServlet {
             check = false;
         }
 
-      
+        // Kiểm tra email
         if (email == null || email.trim().isEmpty()) {
             message += "Bạn chưa nhập email<br>";
             check = false;
@@ -102,12 +107,12 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-        
+        // Kiểm tra số điện thoại
         if (phone == null || phone.trim().isEmpty()) {
             message += "Bạn chưa nhập số điện thoại<br>";
             check = false;
         } else if (!phone.trim().matches("^(03|05|07|08|09)[0-9]{8}$")) {
-            message += "Số điện thoại phải là số Việt Nam hợp lệ (bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số)<br>";
+            message += "Số điện thoại không hợp lệ<br>";
             check = false;
         } else {
             try {
@@ -121,12 +126,12 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-        
+        // Kiểm tra ngày sinh
         if (birthDate == null || birthDate.isEmpty()) {
             message += "Bạn chưa nhập ngày sinh<br>";
             check = false;
         } else if (!birthDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            message += "Định dạng ngày sinh không hợp lệ (DD-MM-YYYY)<br>";
+            message += "Định dạng ngày sinh không hợp lệ (YYYY-MM-DD)<br>";
             check = false;
         } else {
             try {
@@ -137,15 +142,14 @@ public class TeacherRegistrationController extends HttpServlet {
                 cal.setTime(parsedDate);
                 Calendar now = Calendar.getInstance();
                 int age = now.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
-                if (now.get(Calendar.DAY_OF_YEAR) < cal.get(Calendar.DAY_OF_YEAR)) {
-                    age--;
-                }
+                if (now.get(Calendar.DAY_OF_YEAR) < cal.get(Calendar.DAY_OF_YEAR)) age--;
+
                 if (age < 18) {
                     message += "Giáo viên phải ít nhất 18 tuổi<br>";
                     check = false;
                 }
                 if (parsedDate.after(new java.util.Date())) {
-                    message += "Ngày sinh không được là ngày trong tương lai<br>";
+                    message += "Ngày sinh không được là ngày tương lai<br>";
                     check = false;
                 }
             } catch (ParseException e) {
@@ -154,13 +158,13 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-        
+        // Kiểm tra giới tính
         if (gender == null || (!gender.equals("Nam") && !gender.equals("Nữ") && !gender.equals("Khác"))) {
             message += "Giới tính không hợp lệ<br>";
             check = false;
         }
 
-      
+        // Kiểm tra chuyên môn
         if (expertise == null || expertise.trim().isEmpty()) {
             message += "Bạn chưa nhập chuyên môn<br>";
             check = false;
@@ -169,7 +173,7 @@ public class TeacherRegistrationController extends HttpServlet {
             check = false;
         }
 
-       
+        // Kiểm tra loại khóa học
         if (idTypeCourse == null || idTypeCourse.trim().isEmpty()) {
             message += "Bạn chưa chọn loại khóa học<br>";
             check = false;
@@ -182,7 +186,7 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-       
+        // Kiểm tra năm kinh nghiệm
         if (yearOfExpertise == null || yearOfExpertise.trim().isEmpty()) {
             message += "Bạn chưa nhập số năm kinh nghiệm<br>";
             check = false;
@@ -199,8 +203,8 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-      
-       byte[] fileData = null;
+        // Kiểm tra file CV
+        byte[] fileData = null;
         String fileName = null;
         String fileExtension = null;
 
@@ -208,8 +212,7 @@ public class TeacherRegistrationController extends HttpServlet {
             message += "Bạn chưa tải lên file CV<br>";
             check = false;
         } else {
-            long maxSize = 10 * 1024 * 1024; // 10MB
-
+            long maxSize = 10 * 1024 * 1024;
             if (filePart.getSize() > maxSize) {
                 message += "File CV không được lớn hơn 10MB<br>";
                 check = false;
@@ -232,13 +235,13 @@ public class TeacherRegistrationController extends HttpServlet {
             }
         }
 
-       
+        // Kiểm tra đã đồng ý điều khoản chưa
         if (agreeTerms == null || !agreeTerms.equals("on")) {
             message += "Bạn chưa đồng ý với các điều khoản và cam kết<br>";
             check = false;
         }
 
-     
+        // Nếu có lỗi, trả lại form cùng dữ liệu đã nhập
         if (!check) {
             request.setAttribute("message", message);
             request.setAttribute("courseTypes", courseTypes);
@@ -250,14 +253,14 @@ public class TeacherRegistrationController extends HttpServlet {
             request.setAttribute("idTypeCourse", idTypeCourse);
             request.setAttribute("yearsOfExperience", yearOfExpertise);
             request.setAttribute("phone", phone);
-            
+            request.getRequestDispatcher("TeacherRegistion.jsp").forward(request, response);
             return;
         }
 
-        // Process registration
+        //  xử lý đăng ký 
         try {
-            // Handle file upload
-             String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+            // Lưu file vào thư mục Uploads
+            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
             String uploadPath = getServletContext().getRealPath("") + File.separator + "Uploads";
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdir();
@@ -265,9 +268,8 @@ public class TeacherRegistrationController extends HttpServlet {
             try (FileOutputStream fos = new FileOutputStream(uploadPath + File.separator + uniqueFileName)) {
                 fos.write(fileData);
             }
-           
 
-            // Set teacher properties
+            // Tạo đối tượng giáo viên
             TeacherApplications teacher = new TeacherApplications();
             teacher.setFullName(fullName.trim());
             teacher.setEmail(email.trim());
@@ -279,7 +281,7 @@ public class TeacherRegistrationController extends HttpServlet {
             teacher.setYearOfExpertise(yearOfExpertise);
             teacher.setPhone(phone.trim());
 
-            teacherDAO.registerTeacher(teacher);
+            teacherDAO.registerTeacher(teacher); // Thêm vào DB
             request.getRequestDispatcher("registSuccesssul.jsp").forward(request, response);
 
         } catch (SQLException | ParseException e) {
@@ -298,6 +300,7 @@ public class TeacherRegistrationController extends HttpServlet {
         }
     }
 
+    // Hàm phụ để lấy tên file từ phần upload
     private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         String[] items = contentDisp.split(";");
@@ -309,7 +312,7 @@ public class TeacherRegistrationController extends HttpServlet {
         return "";
     }
 
-     @Override
+    @Override
     public String getServletInfo() {
         return "Servlet xử lý đăng ký giáo viên";
     }

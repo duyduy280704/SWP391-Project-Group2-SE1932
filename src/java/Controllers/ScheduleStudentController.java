@@ -1,4 +1,3 @@
-// Thuy_thoi khoa bieu học sinh in, xem 
 package Controllers;
 
 import jakarta.servlet.ServletException;
@@ -7,11 +6,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import models.ScheduleStudent;
-import models.ScheduleStudentDAO;
-import models.Students;
-import models.ScheduleWeek;
+import models.*;
 
+/**
+ *
+ * @author Thuy lịch học của học sinh
+ */
 public class ScheduleStudentController extends HttpServlet {
 
     @Override
@@ -20,7 +20,7 @@ public class ScheduleStudentController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
-
+// dang nhap
         if (student == null) {
             response.sendRedirect("login.jsp");
             return;
@@ -36,8 +36,7 @@ public class ScheduleStudentController extends HttpServlet {
 
         DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter viewFormatter = DateTimeFormatter.ofPattern("dd/MM");
-
-        // Xử lý năm
+// lấy năm và tuần 
         int year = LocalDate.now().getYear();
         String selectedYear = request.getParameter("year");
         if (selectedYear != null && !selectedYear.isEmpty()) {
@@ -47,7 +46,6 @@ public class ScheduleStudentController extends HttpServlet {
             }
         }
 
-        // Xử lý tuần
         LocalDate baseDate = LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         String selectedWeek = request.getParameter("week");
         if (selectedWeek != null && !selectedWeek.isEmpty()) {
@@ -58,20 +56,65 @@ public class ScheduleStudentController extends HttpServlet {
         }
 
         ScheduleStudentDAO dao = new ScheduleStudentDAO();
-        List<ScheduleStudent> scheduleStudent = dao.getScheduleStudent(studentId, baseDate.format(dbFormatter));
+        ClassTransferRequestDAO transferDAO = new ClassTransferRequestDAO();
+        List<ScheduleStudent> scheduleStudent = new ArrayList<>();
 
+        // chuyển lớp của học sinh lớp cũ hiện lịch đến ngày chuyển , lớp mới hiện lịch  mới từ ngày chuyển đi 
+        ClassTransferRequest transfer = transferDAO.getLastApprovedRequest(student.getId());
+        if (transfer != null && transfer.getResponseDate() != null) {
+            LocalDate approvedDate = new java.sql.Date(transfer.getResponseDate().getTime())
+                    .toLocalDate();
+
+            List<ScheduleStudent> oldList = dao.getScheduleBefore(transfer.getFromClassId(), approvedDate);
+            List<ScheduleStudent> newList = dao.getScheduleAfter(transfer.getToClassId(), approvedDate);
+
+            scheduleStudent.addAll(oldList);
+            scheduleStudent.addAll(newList);
+
+            LocalDate weekStart = baseDate;
+            LocalDate weekEnd = baseDate.plusDays(6);
+            List<ScheduleStudent> filtered = new ArrayList<>();
+
+            for (ScheduleStudent s : scheduleStudent) {
+                LocalDate day = LocalDate.parse(s.getDay());
+                if (!day.isBefore(weekStart) && !day.isAfter(weekEnd)) {
+                    filtered.add(s);
+                }
+            }
+            scheduleStudent = filtered;
+
+        } else {
+            Categories_class currentClass = transferDAO.getClassByStudentId(student.getId());
+            if (currentClass != null) {
+                List<ScheduleStudent> allSchedules = dao.getScheduleStudentAll(studentId, currentClass.getId_class());
+
+                LocalDate weekStart = baseDate;
+                LocalDate weekEnd = baseDate.plusDays(6);
+
+                List<ScheduleStudent> filtered = new ArrayList<>();
+                for (ScheduleStudent s : allSchedules) {
+                    LocalDate day = LocalDate.parse(s.getDay());
+                    if (!day.isBefore(weekStart) && !day.isAfter(weekEnd)) {
+                        filtered.add(s);
+                    }
+                }
+
+                scheduleStudent = filtered;
+            }
+        }
+
+        // sử lí năm, in tuần để chọn, hiện các thứ
         List<Integer> years = new ArrayList<>();
         for (int i = year - 2; i <= year + 2; i++) {
             years.add(i);
         }
 
-        // Tạo danh sách tuần trong năm
         List<ScheduleWeek> weeks = new ArrayList<>();
         LocalDate startOfYear = LocalDate.of(year, 1, 1).with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         for (int i = 0; i < 52; i++) {
             LocalDate weekStart = startOfYear.plusWeeks(i);
-            if (weekStart.getYear() == year || weekStart.plusDays(6).getYear() == year) {
-                LocalDate weekEnd = weekStart.plusDays(6);
+            LocalDate weekEnd = weekStart.plusDays(6);
+            if (weekStart.getYear() == year || weekEnd.getYear() == year) {
                 weeks.add(new ScheduleWeek(
                         weekStart.format(dbFormatter),
                         weekEnd.format(dbFormatter),
@@ -99,5 +142,4 @@ public class ScheduleStudentController extends HttpServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-
 }

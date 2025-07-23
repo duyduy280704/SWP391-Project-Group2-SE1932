@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import models.Event;
 import models.EventDAO;
 
-
+//Huyền
 public class EventController extends HttpServlet {
 
     @Override
@@ -16,7 +16,7 @@ public class EventController extends HttpServlet {
         throws ServletException, IOException {
 
         EventDAO dao = new EventDAO();
-        ArrayList<Event> events = dao.getEvents(); // lấy toàn bộ sự kiện
+        ArrayList<Event> events = dao.getEvents(); 
 
         request.setAttribute("eventList", events);
         request.getRequestDispatcher("EventDetail.jsp").forward(request, response);

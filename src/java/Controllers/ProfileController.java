@@ -8,11 +8,12 @@ import jakarta.servlet.http.*;
 import java.io.*;
 import models.*;
 
+// Huyền
 @MultipartConfig(maxFileSize = 16177215)
 @WebServlet("/profile")
 public class ProfileController extends HttpServlet {
 
-    ProfileDAO dao = new ProfileDAO();
+    ProfileDAO dao = new ProfileDAO(); 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -20,6 +21,7 @@ public class ProfileController extends HttpServlet {
 
         String mode = request.getParameter("mode");
 
+        // Nếu mode là "image", thì xử lý trả về ảnh đại diện (dùng trong <img src="/profile?mode=image&id=...">)
         if ("image".equals(mode)) {
             String id = request.getParameter("id");
             String role = request.getParameter("role");
@@ -38,29 +40,32 @@ public class ProfileController extends HttpServlet {
                         imageData = t.getPic();
                     }
                     break;
-                            }
+            }
 
             if (imageData != null) {
                 response.setContentType("image/jpeg");
                 response.setContentLength(imageData.length);
                 try (OutputStream os = response.getOutputStream()) {
-                    os.write(imageData);
+                    os.write(imageData); // Gửi ảnh về trình duyệt
                 }
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND); // Không tìm thấy ảnh
             }
-            return;
+            return; // Dừng xử lý ở đây nếu là load ảnh
         }
 
+        // Nếu không phải load ảnh, thì xử lý hiển thị thông tin người dùng
         HttpSession session = request.getSession();
         Object acc = session.getAttribute("account");
         String role = (String) session.getAttribute("role");
 
+        // Nếu chưa đăng nhập, chuyển về trang login
         if (acc == null || role == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
+        // Lấy lại dữ liệu từ DB để đảm bảo thông tin mới nhất
         switch (role) {
             case "student":
                 Students s = (Students) acc;
@@ -77,12 +82,14 @@ public class ProfileController extends HttpServlet {
                 break;
         }
 
+        // Truyền dữ liệu sang profile.jsp để hiển thị
         session.setAttribute("account", acc);
         request.setAttribute("role", role);
         request.setAttribute("profile", acc);
         request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
+    // Xử lý yêu cầu POST - dùng để cập nhật thông tin người dùng
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -91,23 +98,27 @@ public class ProfileController extends HttpServlet {
         Object acc = session.getAttribute("account");
         String role = (String) session.getAttribute("role");
 
+        // Nếu chưa đăng nhập, chuyển về login
         if (acc == null || role == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
+        // Nếu là cập nhật tài khoản (mật khẩu, SĐT), gọi hàm riêng
         String action = request.getParameter("action");
         if ("updateAccount".equals(action)) {
             handleAccountUpdate(request, response, session, role);
             return;
         }
 
+        // Các thông tin cá nhân cần cập nhật
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String gender = request.getParameter("gender");
         String birthdate = request.getParameter("birthDate");
         String phone = request.getParameter("phone");
 
+        // Kiểm tra dữ liệu bắt buộc
         if (fullName == null || fullName.trim().isEmpty()
                 || email == null || email.trim().isEmpty()
                 || gender == null || gender.trim().isEmpty()
@@ -117,21 +128,22 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
+        // Kiểm tra định dạng email
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             request.setAttribute("message", "Địa chỉ email không hợp lệ.");
             doGet(request, response);
             return;
         }
 
+        // Xử lý ảnh upload (nếu có)
         Part filePart = request.getPart("picture");
         byte[] picture = null;
 
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = filePart.getSubmittedFileName();
             String contentType = filePart.getContentType();
             long fileSize = filePart.getSize();
 
-            
+            // Kiểm tra định dạng ảnh hợp lệ
             if (!contentType.equals("image/jpeg")
                     && !contentType.equals("image/png")
                     && !contentType.equals("image/gif")) {
@@ -140,18 +152,20 @@ public class ProfileController extends HttpServlet {
                 return;
             }
 
-            
+            // Kiểm tra kích thước ảnh
             if (fileSize > 5 * 1024 * 1024) {
                 request.setAttribute("message", "Ảnh không được vượt quá 5MB!");
                 doGet(request, response);
                 return;
             }
 
+            // Đọc ảnh vào byte[]
             try (InputStream is = filePart.getInputStream()) {
                 picture = is.readAllBytes();
             }
         }
 
+        // Cập nhật theo vai trò
         switch (role) {
             case "student":
                 String address = request.getParameter("address");
@@ -160,7 +174,6 @@ public class ProfileController extends HttpServlet {
                     doGet(request, response);
                     return;
                 }
-
                 Students s = (Students) acc;
                 s.setName(fullName);
                 s.setEmail(email);
@@ -179,6 +192,7 @@ public class ProfileController extends HttpServlet {
                 String idTypeCourse = request.getParameter("idTypeCourse");
                 String years = request.getParameter("yearsOfExperience");
 
+                // Kiểm tra thông tin chuyên môn
                 if (expertise == null || expertise.trim().isEmpty()
                         || idTypeCourse == null || idTypeCourse.trim().isEmpty()
                         || years == null || years.trim().isEmpty()) {
@@ -228,11 +242,14 @@ public class ProfileController extends HttpServlet {
         }
 
         request.setAttribute("message", "Cập nhật thông tin cá nhân thành công!");
-        doGet(request, response);
+        doGet(request, response); // Sau khi cập nhật, hiển thị lại form
     }
 
+    // Hàm xử lý cập nhật tài khoản (mật khẩu & số điện thoại)
     private void handleAccountUpdate(HttpServletRequest request, HttpServletResponse response, HttpSession session, String role)
             throws ServletException, IOException {
+
+        Object acc = session.getAttribute("account");
 
         String oldPassword = request.getParameter("oldPassword");
         String newPassword = request.getParameter("newPassword");
@@ -251,17 +268,18 @@ public class ProfileController extends HttpServlet {
             doGet(request, response);
             return;
         }
+       
 
-        if (newPassword.length() <= 6 || !newPassword.matches(".*[a-z]*")
-                || !newPassword.matches(".*[A-Z]*") || !newPassword.matches(".*\\d.*") || !newPassword.matches(".*[^a-zA-Z0-9].*")) {
-            request.setAttribute("message", "Mật khẩu phải trên 6 kí tự,có ít nhất 1 chữ thường,1 chữ in hoa, 1 số và 1 ký hiệu đặc biệt");
+        if (newPassword.length() <= 6 || !newPassword.matches(".*[a-z].*")
+                || !newPassword.matches(".*[A-Z].*") || !newPassword.matches(".*\\d.*")
+                || !newPassword.matches(".*[^a-zA-Z0-9].*")) {
+            request.setAttribute("message", "Mật khẩu phải trên 6 kí tự, có ít nhất 1 chữ thường, 1 chữ in hoa, 1 số và 1 ký hiệu đặc biệt.");
             doGet(request, response);
             return;
         }
-
-        Object acc = session.getAttribute("account");
         boolean updated = false;
 
+        // Cập nhật theo vai trò
         switch (role) {
             case "student":
                 Students s = (Students) acc;
@@ -316,6 +334,6 @@ public class ProfileController extends HttpServlet {
             request.setAttribute("message", "Có lỗi khi cập nhật tài khoản!");
         }
 
-        doGet(request, response);
+        doGet(request, response); 
     }
 }
