@@ -147,7 +147,10 @@ public class CourseStaffController extends HttpServlet {
         request.setAttribute("data1", data1);
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("p", p);
+        if (!result.isSuccess()) {
+            request.setAttribute("p", p);
+        }
+        
         request.getRequestDispatcher("courseStaff.jsp").forward(request, response);
     }
 

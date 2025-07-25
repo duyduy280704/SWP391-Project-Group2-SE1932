@@ -151,9 +151,7 @@ public class SalaryAdminController extends HttpServlet {
             String note = request.getParameter("note");
             String id = request.getParameter("id");
 
-            // Thêm log để kiểm tra
-            System.out.println("doPost: action = " + action + ", teacherId = " + teacherId + ", monthYear = " + monthYear + 
-                              ", searchTeacherName = " + searchTeacherName + ", filterMonthYear = " + filterMonthYear);
+            
 
             // Gọi phương thức processSalary để kiểm tra dữ liệu và tính toán
             ResultMessage result = dao.processSalary(action, id, teacherId, monthYear, bonus, penalty, note);

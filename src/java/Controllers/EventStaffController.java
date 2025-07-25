@@ -182,7 +182,9 @@ public class EventStaffController extends HttpServlet {
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
         
-        request.setAttribute("p", p);
+        if (!result.isSuccess()) {
+            request.setAttribute("p", p);
+        }
         request.getRequestDispatcher("eventStaff.jsp").forward(request, response);
 
     }

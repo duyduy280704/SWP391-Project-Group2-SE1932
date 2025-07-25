@@ -57,6 +57,9 @@ public class EventDAO extends DBContext {
         if (event.getDate() == null || event.getDate().trim().isEmpty()) {
             return new ResultMessage(false, "Ngày sự kiện không được để trống.");
         }
+        if (event.getDate() != null && !event.getDate().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày không hợp lệ (yyyy-MM-dd): " + event.getDate());
+        }
         if (event.getCourseid() == null || event.getCourseid().trim().isEmpty()) {
             return new ResultMessage(false, "Khóa học không được để trống.");
         }
@@ -100,6 +103,9 @@ public class EventDAO extends DBContext {
         }
         if (event.getDate() == null || event.getDate().trim().isEmpty()) {
             return new ResultMessage(false, "Ngày sự kiện không được để trống.");
+        }
+        if (event.getDate() != null && !event.getDate().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new ResultMessage(false, "Định dạng ngày không hợp lệ (yyyy-MM-dd): " + event.getDate());
         }
         if (event.getCourseid() == null || event.getCourseid().trim().isEmpty()) {
             return new ResultMessage(false, "Khóa học không được để trống.");

@@ -180,7 +180,9 @@ public class StudentController extends HttpServlet {
 
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("s", student);
+        if (!result.isSuccess()) {
+            request.setAttribute("s", student);
+        }
         request.getRequestDispatcher("listStudent.jsp").forward(request, response);
     }
 

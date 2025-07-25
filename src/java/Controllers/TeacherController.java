@@ -194,7 +194,10 @@ public class TeacherController extends HttpServlet {
         
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("s", teacher);
+        if (!result.isSuccess()) {
+            request.setAttribute("s", teacher);
+        }
+        
         request.getRequestDispatcher("listTeacher.jsp").forward(request, response);
     }
 

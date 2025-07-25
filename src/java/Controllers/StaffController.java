@@ -145,7 +145,10 @@ public class StaffController extends HttpServlet {
         
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("s", s);
+        
+        if (!result.isSuccess()) {
+            request.setAttribute("s", s);
+        }
         request.getRequestDispatcher("listStaff.jsp").forward(request, response);
     }
 
