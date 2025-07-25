@@ -3,7 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<!DOCTYPE html>
+<!DOCTYPE html><%
+    String role = (String) session.getAttribute("role");
+    if (role == null || !"teacher".equals(role)) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <html lang="en">
     <head>
         <meta charset="utf-8">

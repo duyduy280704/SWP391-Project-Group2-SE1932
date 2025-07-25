@@ -1,6 +1,13 @@
 //Thủy_ Danh sách lớp có thời khóa biểu
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String role = (String) session.getAttribute("role");
+    if (role == null || !"staff".equals(role)) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -225,6 +232,17 @@
                                 </tbody>
 
                             </table>
+                        </div>
+                    </div>
+                    <!-- POPUP THÔNG BÁO AJAX -->
+                    <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông báo</h5>
+                                <button class="btn-close" onclick="document.getElementById('noticeContainer').style.display = 'none'"></button>
+                            </div>
+                            <hr>
+                            <div id="noticeContent">Đang tải...</div>
                         </div>
                     </div>
                 </main>

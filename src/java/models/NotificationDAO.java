@@ -15,8 +15,7 @@ import models.Notification;
 
 public class NotificationDAO extends DBContext {
 
-    private PreparedStatement stm;
-    private ResultSet rs;
+   
 
     public List<Notification> getLatestNotificationsByStudent(String studentId) {
         List<Notification> list = new ArrayList<>();

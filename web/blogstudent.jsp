@@ -2,7 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%
+    String role = (String) session.getAttribute("role");
+    if (role == null || !"student".equals(role)) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -324,7 +330,7 @@
                         <c:forEach var="blog" items="${blogList}">
                             <div class="col-lg-12 mb-4">
                                 <div class="blog-card">
-                                    <img class="blog-image" src="BlogImageController?id=${blog.id}" alt="Ảnh blog">
+                                    <img class="blog-image" src="BlogImage?id=${blog.id}" alt="Ảnh blog">
                                     <div class="blog-content">
                                         <h2 class="blog-title" data-toggle="modal" data-target="#blogModal" data-id="${blog.id}" data-title="${fn:escapeXml(blog.title)}" data-date="${blog.publishDate}" data-content="${fn:escapeXml(blog.content)}" data-image="BlogImageController?id=${blog.id}">${fn:escapeXml(blog.title)}</h2>
                                         <p class="blog-date">

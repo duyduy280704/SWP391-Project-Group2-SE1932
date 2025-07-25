@@ -278,8 +278,8 @@ public class StudentHomeController extends HttpServlet {
         request.setAttribute("years", years);
         request.setAttribute("selectedWeek", baseDate.format(dbFormatter));
         request.setAttribute("selectedYear", year);
-        request.setAttribute("profile", stu); // Truyền thông tin giáo viên
-        request.setAttribute("picturePath", session.getAttribute("picturePath"));
+        session.setAttribute("profile", stu); // Truyền thông tin giáo viên
+        session.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("weekDays", weekDays);
         request.setAttribute("scheduleStudent", scheduleStudent);
         request.setAttribute("weeks", weeks);

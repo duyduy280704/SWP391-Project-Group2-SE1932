@@ -1,5 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    String role = (String) session.getAttribute("role");
+    if (role == null || !"staff".equals(role)) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <html>
     <head>
         <meta charset="utf-8" />

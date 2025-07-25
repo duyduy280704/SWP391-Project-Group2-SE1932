@@ -6,6 +6,13 @@
     LocalDate today = LocalDate.now();
     String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 %>
+<%
+    String role = (String) session.getAttribute("role");
+    if (role == null || !"staff".equals(role)) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>

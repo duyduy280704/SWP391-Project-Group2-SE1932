@@ -47,7 +47,7 @@ public class RegistrationCourseController extends HttpServlet {
                 usedSale = sale;
             }
         }
-        request.setAttribute("profile", student);
+         request.setAttribute("profile", student); 
         request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("saleCode", saleCode);
         request.setAttribute("salePercent", salePercent);
@@ -117,9 +117,9 @@ public class RegistrationCourseController extends HttpServlet {
                 RegisitionDAO regDao = new RegisitionDAO();
                 if (regDao.isAlreadyRegistered(student.getId(), courseId)) {
                     request.setAttribute("error", "Bạn đã đăng ký khóa học này rồi.");
-                } else if (agree == null || agree.trim().isEmpty()) {
-                    request.setAttribute("error", "Bạn phải đồng ý với điều khoản.");
-                } else {
+                }else if (agree == null || agree.trim().isEmpty()) {
+                request.setAttribute("error", "Bạn phải đồng ý với điều khoản.");
+            }else {
                     regDao.insert(new Regisition(student.getId(), courseId, note, "chưa phân lớp"));
 
                     PaymentDAO payDao = new PaymentDAO();
@@ -127,6 +127,8 @@ public class RegistrationCourseController extends HttpServlet {
                     double finalFee = fee * (100 - salePercent) / 100;
                     String today = LocalDate.now().toString();
                     String orderCode = "DKH_" + System.currentTimeMillis();
+                    String id_sale = null;
+                    
                     payDao.insert(new Payment(
                             student.getId(),
                             courseId,
@@ -169,7 +171,8 @@ public class RegistrationCourseController extends HttpServlet {
                     request.getRequestDispatcher("course_registration.jsp").forward(request, response);
                     return;
                 }
-                PreRegistration preReg = new PreRegistration(fullName, email, phone, birthDate, gender, address, courseId, "Đang Chờ", note, usedSale.getId());
+                int idSale = (usedSale != null) ? usedSale.getId() : -1;
+                PreRegistration preReg = new PreRegistration(fullName, email, phone, birthDate, gender, address, courseId, "Đang Chờ", note, idSale);
                 boolean success = dao.insertPreRegistration(preReg);
                 if (success) {
                     if (usedSale != null) {

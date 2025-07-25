@@ -237,6 +237,22 @@
                 height: 100%;
                 object-fit: cover;
             }
+            .profile-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #FF6600;
+                cursor: pointer;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .profile-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         </style>
     </head>
     <body>
