@@ -200,12 +200,14 @@ public class ScheduleStudentController extends HttpServlet {
                     + " | Lý do: " + s.getReason());
         }
         System.out.println("===> Tổng số buổi học: " + scheduleStudent.size());
-
+       
+        
         request.setAttribute("weeks", weeks);
         request.setAttribute("years", years);
         request.setAttribute("selectedWeek", baseDate.format(dbFormatter));
         request.setAttribute("selectedYear", year);
-
+        request.setAttribute("profile", student); // Truyền thông tin giáo viên
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.getRequestDispatcher("schedule_student.jsp").forward(request, response);
     }
 

@@ -182,6 +182,29 @@
                     padding: 8px;
                 }
             }
+            /* Thêm vào phần <style> trong file JSP hoặc file CSS riêng */
+            .text-justify {
+                text-align: justify; /* Giữ nguyên thuộc tính hiện tại */
+                max-height: 200px; /* Giới hạn chiều cao tối đa, điều chỉnh theo nhu cầu */
+                overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung vượt quá */
+                padding: 10px; /* Thêm padding để nội dung dễ đọc hơn */
+                border: 1px solid #eee; /* Tùy chọn: thêm viền để phân biệt */
+                border-radius: 5px; /* Tùy chọn: bo góc */
+            }
+
+            /* Responsive cho thiết bị nhỏ */
+            @media (max-width: 768px) {
+                .text-justify {
+                    max-height: 150px; /* Giảm chiều cao trên mobile */
+                    font-size: 14px; /* Giảm kích thước chữ nếu cần */
+                }
+            }
+
+            /* Đảm bảo container không bị tràn */
+            .col-md-6 {
+                word-wrap: break-word; /* Ngắt từ dài */
+                overflow-wrap: break-word; /* Hỗ trợ ngắt từ trên các trình duyệt */
+            }
         </style>
     </head>
     <body>
@@ -239,28 +262,34 @@
                 </a>
             </div>
             <div class="profile-container">
-                <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
-                <c:choose>
-                    <c:when test="${not empty picturePath}">
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.pic}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
-            <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
-            <a href="Course" class="nav-item nav-link">Khóa Học</a>
+            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
+            <a href="Course" class="nav-item nav-link active">Khóa Học</a>
             <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
             <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
-            <a href="classTransfer" class="nav-link">Xin Chuyển Lớp</a>
             <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
             <a href="studentapplication" class="nav-link">Gửi Đơn</a>
             <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
@@ -337,13 +366,14 @@
                         </form>
 
                         <!-- Mô tả -->
-                        <div class="mb-4">
+                        
+                    </div>
+                                <div class="mb-4">
                             <h5 class="font-weight-bold mb-2">Mô tả khóa học</h5>
-                            <div class="text-justify" style="white-space: pre-wrap;">
+                            <div class="text-justify" >
                                 ${course.description}
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -373,7 +403,7 @@
                             </div>
 
                             <div class="form-check mb-4">
-                                <input type="checkbox" class="form-check-input" id="agree" >
+                                <input type="checkbox" class="form-check-input" id="agree" name="agree">
                                 <label class="form-check-label" for="agree">
                                     Tôi đồng ý với
                                     <a href="#" data-toggle="modal" data-target="#termsModal">điều khoản</a>

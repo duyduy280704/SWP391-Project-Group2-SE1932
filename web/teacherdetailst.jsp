@@ -1,16 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>BIGDREAM - Blog</title>
+        <meta charset="UTF-8">
+        <title>Danh sách giáo viên</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="Free JSP Templates" name="keywords">
-        <meta content="Free JSP Templates" name="description">
+        <meta content="Teacher List" name="keywords">
+        <meta content="List of teachers" name="description">
 
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
@@ -25,23 +25,30 @@
         <!-- Libraries Stylesheet -->
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
+        <!-- Bootstrap Stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
-        <!-- Custom CSS for Blog Display and Sidebar -->
+        <!-- Custom CSS for Teacher List and Sidebar -->
         <style>
             .blog-section {
                 background-color: #f9f9f9;
                 padding: 50px 0;
             }
-            .blog-card {
+            .card {
                 background-color: #fff;
                 border-radius: 10px;
                 overflow: hidden;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
                 margin-bottom: 30px;
-                display: flex;
-                flex-wrap: wrap;
+                transition: transform 0.2s;
+                cursor: pointer;
+            }
+            .card:hover {
+                transform: scale(1.05);
             }
             .blog-image {
                 width: 100%;
@@ -51,7 +58,6 @@
             }
             .blog-content {
                 padding: 20px;
-                flex: 1;
             }
             .blog-title {
                 font-size: 1.8rem;
@@ -59,7 +65,6 @@
                 color: #222;
                 margin-bottom: 10px;
                 line-height: 1.3;
-                cursor: pointer;
             }
             .blog-date {
                 font-size: 0.85rem;
@@ -77,35 +82,6 @@
                 color: #444;
                 line-height: 1.7;
                 margin-bottom: 15px;
-            }
-            .btn-details {
-                background-color: #007bff;
-                color: #fff;
-                padding: 8px 16px;
-                border-radius: 5px;
-                text-decoration: none;
-                font-size: 0.9rem;
-            }
-            .btn-details:hover {
-                background-color: #0056b3;
-                color: #fff;
-            }
-            @media (min-width: 992px) {
-                .blog-card {
-                    flex-wrap: nowrap;
-                }
-                .blog-image {
-                    width: 30%;
-                    height: 200px;
-                }
-                .blog-content {
-                    width: 70%;
-                }
-            }
-            @media (max-width: 991px) {
-                .blog-content {
-                    padding: 15px;
-                }
             }
             .no-blog {
                 font-size: 1.2rem;
@@ -139,8 +115,7 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 250px;
-                overflow-y: auto;
+                width: 220px;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -149,7 +124,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-250px);
+                transform: translateX(-220px);
             }
             .sidebar a {
                 color: #000;
@@ -162,7 +137,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 250px;
+                margin-left: 220px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -230,7 +205,7 @@
         <div class="container-fluid d-none d-lg-block">
             <div class="row align-items-center py-4 px-xl-5">
                 <div class="col-lg-3">
-
+                    <!-- Logo placeholder if needed -->
                 </div>
                 <div class="col-lg-3 text-right">
                     <div class="d-inline-flex align-items-center">
@@ -268,7 +243,7 @@
             </div>
         </div>
         <!-- Topbar End -->
-        <!-- Navbar Start -->
+        <!-- Sidebar Start -->
         <div class="sidebar" id="sidebar">
             <div class="col-lg-3">
                 <a href="" class="text-decoration-none">
@@ -276,98 +251,129 @@
                 </a>
             </div>
             <div class="profile-container">
+                <c:choose>
+                    <c:when test="${not empty profile and not empty profile.pic}">
+                        <a href="profile" class="profile-avatar">
+                            <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="profile" class="profile-avatar">
+                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+                <div class="profile-name">
                     <c:choose>
-                        <c:when test="${not empty profile and not empty profile.pic}">
-                            <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
-                            </a>
+                        <c:when test="${not empty profile and not empty profile.name}">
+                            ${profile.name}
                         </c:when>
                         <c:otherwise>
-                            <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
-                            </a>
+                            Tên không xác định
                         </c:otherwise>
                     </c:choose>
-                    <div class="profile-name">
-                        <c:choose>
-                            <c:when test="${not empty profile and not empty profile.name}">
-                                ${profile.name}
-                            </c:when>
-                            <c:otherwise>
-                                Tên không xác định
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
                 </div>
+            </div>
             <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
             <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
-            <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="TeacherList" class="nav-item nav-link active">Giáo Viên</a>
             <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
             <a href="studentapplication" class="nav-link">Gửi Đơn</a>
             <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
-            <a href="BlogStudent" class="nav-item nav-link active">Tin Tức</a>
+            <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
             <a href="EventStudent" class="nav-item nav-link">Sự Kiện</a> 
             <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
         </div>
-        <!-- Navbar End -->
-        <!-- Blog Start -->
+        <!-- Sidebar End -->
+        <!-- Teacher List Start -->
         <div class="main-content" id="main-content">
             <div class="container blog-section">
                 <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                    <h1>Tất cả bài viết</h1>
+                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Giáo Viên</h5>
+                    <h1>Danh sách Giáo viên</h1>
                 </div>
                 <div class="row">
-                    <c:if test="${not empty blogList}">
-                        <c:forEach var="blog" items="${blogList}">
-                            <div class="col-lg-12 mb-4">
-                                <div class="blog-card">
-                                    <img class="blog-image" src="BlogImageController?id=${blog.id}" alt="Ảnh blog">
-                                    <div class="blog-content">
-                                        <h2 class="blog-title" data-toggle="modal" data-target="#blogModal" data-id="${blog.id}" data-title="${fn:escapeXml(blog.title)}" data-date="${blog.publishDate}" data-content="${fn:escapeXml(blog.content)}" data-image="BlogImageController?id=${blog.id}">${fn:escapeXml(blog.title)}</h2>
-                                        <p class="blog-date">
-                                            <i class="fa fa-calendar-alt"></i>
-                                            <fmt:parseDate value="${blog.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                    <c:choose>
+                        <c:when test="${not empty teacherList}">
+                            <c:forEach var="teacher" items="${teacherList}">
+                                <div class="col-lg-4 mb-4">
+                                    <div class="card h-100" data-bs-toggle="modal" data-bs-target="#teacherModal"
+                                         data-id="${teacher.id}"
+                                         data-name="${fn:escapeXml(teacher.name)}"
+                                         data-email="${fn:escapeXml(teacher.email)}"
+                                         data-gender="${teacher.gender}"
+                                         data-birthdate="${teacher.birthdate}"
+                                         data-exp="${fn:escapeXml(teacher.exp)}"
+                                         data-year="${teacher.year}"
+                                         data-course="${fn:escapeXml(teacher.course)}"
+                                         data-phone="${teacher.phone}"
+                                         data-pic="${not empty teacher.pic ? 'picteacher?id=' += teacher.id : ''}">
+                                        <c:choose>
+                                            <c:when test="${not empty teacher.pic}">
+                                                <img src="picteacher?id=${teacher.id}" class="blog-image" alt="Ảnh giáo viên">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="text-center p-5 bg-light text-muted">Không có ảnh</div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div class="blog-content">
+                                            <h2 class="blog-title">${fn:escapeXml(teacher.name)}</h2>
+                                            <p class="blog-date">
+                                                <i class="fa fa-calendar-alt"></i>
+                                            <fmt:parseDate value="${teacher.birthdate}" pattern="yyyy-MM-dd" var="parsedDate" />
                                             <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
-                                        </p>
-                                        <div class="blog-content-text">${fn:substring(blog.content, 0, 150)}...</div>
-                                        <a href="#" class="btn btn-details" data-toggle="modal" data-target="#blogModal" data-id="${blog.id}" data-title="${fn:escapeXml(blog.title)}" data-date="${blog.publishDate}" data-content="${fn:escapeXml(blog.content)}" data-image="BlogImageController?id=${blog.id}">Xem chi tiết</a>
+                                            </p>
+                                            <div class="blog-content-text">
+                                                <p><strong>Email:</strong> ${fn:escapeXml(teacher.email)}</p>
+                                                <p><strong>Giới tính:</strong> ${teacher.gender}</p>
+                                                <p><strong>Kinh nghiệm:</strong> ${fn:escapeXml(teacher.exp)} - ${teacher.year} năm</p>
+                                                <p><strong>Môn dạy:</strong> ${fn:escapeXml(teacher.course)}</p>
+                                                <p><strong>Số điện thoại:</strong> ${teacher.phone}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="col-12 no-blog">
+                                <p>Không có giáo viên nào.</p>
                             </div>
-                        </c:forEach>
-                    </c:if>
-                    <c:if test="${empty blogList}">
-                        <div class="col-12 no-blog">
-                            <p>Không có bài viết nào.</p>
-                        </div>
-                    </c:if>
-                </div>
-                <div class="col-12 mt-3">
-                    <a href="StudentHome" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold">Quay lại</a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
-        <!-- Blog End -->
-        <!-- Blog Modal -->
-        <div class="modal fade" id="blogModal" tabindex="-1" role="dialog" aria-labelledby="blogModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+        <!-- Teacher List End -->
+        <!-- Teacher Modal -->
+        <div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="blogModalLabel"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                        <h5 class="modal-title" id="teacherModalLabel">Chi tiết Giáo viên</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img id="modalImage" src="" alt="Ảnh blog" class="mb-3">
-                        <p class="modal-date" id="modalDate"></p>
-                        <div id="modalContent"></div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img id="modal-pic" src="" class="img-fluid rounded" alt="Ảnh giáo viên" style="height: 100%; object-fit: cover;">
+                                <div id="modal-no-pic" class="text-center p-5 bg-light text-muted d-none">Không có ảnh</div>
+                            </div>
+                            <div class="col-md-8">
+                                <h3 id="modal-name"></h3>
+                                <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                                <p><strong>Giới tính:</strong> <span id="modal-gender"></span></p>
+                                <p class="modal-date" id="modal-birthdate"></p>
+                                <p><strong>Kinh nghiệm:</strong> <span id="modal-exp"></span> - <span id="modal-year"></span> năm</p>
+                                <p><strong>Môn dạy:</strong> <span id="modal-course"></span></p>
+                                <p><strong>Số điện thoại:</strong> <span id="modal-phone"></span></p>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>
@@ -437,26 +443,44 @@
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
-        <!-- JavaScript to handle modal data -->
+        <!-- JavaScript to handle modal and sidebar -->
         <script>
             $(document).ready(function () {
-                $('.blog-title, .btn-details').on('click', function () {
-                    var title = $(this).data('title');
-                    var date = $(this).data('date');
-                    var content = $(this).data('content');
-                    var image = $(this).data('image');
-                    $('#blogModalLabel').text(title);
-                    $('#modalDate').text(new Date(date).toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}));
-                    $('#modalContent').html(content);
-                    $('#modalImage').attr('src', image);
+                $('#teacherModal').on('show.bs.modal', function (event) {
+                    var card = event.relatedTarget;
+                    var modal = $(this);
+
+                    // Populate modal with teacher data
+                    modal.find('#modal-id').text(card.getAttribute('data-id'));
+                    modal.find('#modal-name').text(card.getAttribute('data-name'));
+                    modal.find('#modal-email').text(card.getAttribute('data-email'));
+                    modal.find('#modal-gender').text(card.getAttribute('data-gender'));
+                    var birthdate = card.getAttribute('data-birthdate');
+                    modal.find('#modal-birthdate').text(new Date(birthdate).toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}));
+                    modal.find('#modal-exp').text(card.getAttribute('data-exp'));
+                    modal.find('#modal-year').text(card.getAttribute('data-year'));
+                    modal.find('#modal-course').text(card.getAttribute('data-course'));
+                    modal.find('#modal-phone').text(card.getAttribute('data-phone'));
+
+                    // Handle image
+                    var picSrc = card.getAttribute('data-pic');
+                    var modalPic = modal.find('#modal-pic');
+                    var modalNoPic = modal.find('#modal-no-pic');
+                    if (picSrc) {
+                        modalPic.attr('src', picSrc).removeClass('d-none');
+                        modalNoPic.addClass('d-none');
+                    } else {
+                        modalPic.addClass('d-none');
+                        modalNoPic.removeClass('d-none');
+                    }
                 });
             });
+
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');
                 const mainContent = document.getElementById('main-content');

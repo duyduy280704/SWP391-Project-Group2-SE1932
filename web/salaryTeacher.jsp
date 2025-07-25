@@ -204,6 +204,22 @@
                     font-size: 14px;
                 }
             }
+            .profile-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #FF6600;
+                cursor: pointer;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .profile-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         </style>
     </head>
     <body>
@@ -254,21 +270,29 @@
                 </a>
             </div>
             <div class="profile-container">
-                <c:set var="picturePath" value="${sessionScope.picturePath}" />
-                <c:choose>
-                    <c:when test="${not empty picturePath}">
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
-                        </a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
-                        </a>
-                    </c:otherwise>
-                </c:choose>
-                <div class="profile-name">${sessionScope.account.name}</div>
-            </div>
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.pic}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
             <a href="teacherHome" class="nav-link ">Trang Chủ</a>
             <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
@@ -276,8 +300,8 @@
             <a href="salaryteacher" class="nav-item nav-link active">Bảng Lương </a>
             <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
             <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
-            <a href="Event" class="nav-link"> Tin Tức </a>
-            <a href="BlogTeacher" class="nav-link"> Sự Kiện</a>
+            <a href="BlogTeacher" class="nav-link"> Tin Tức </a>
+            <a href="Event" class="nav-link"> Sự Kiện</a>
             <a href="feedbackByTeacher" class="nav-item nav-link">Đánh giá sinh viên </a>
             <a href="logout" class="logout-btn">Đăng xuất</a>
         </div>

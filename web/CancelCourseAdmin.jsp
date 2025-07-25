@@ -223,9 +223,9 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sale Management</h1>
+                        <h1 class="mt-4">Hủy Đăng ký</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Sale Management</li>
+                            <li class="breadcrumb-item active">Hủy đăng ký</li>
                         </ol>
 
                         <!-- Search -->
@@ -248,7 +248,7 @@
 
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i> Sale List
+                                <i class="fas fa-table me-1"></i> danh sách học viên hủy đăng ký
                             </div>
                             <div class="card-body">
                                 <table class="course-list-table" border="1" cellpadding="5">
@@ -297,11 +297,16 @@
                                                         <c:when test="${r.paymentStatus eq 'Hoàn tất'}">
                                                             <form action="Refund" method="post" style="margin:0;">
                                                                 <input type="hidden" name="paymentId" value="${r.paymentId}" />
+                                                                <input type="hidden" name="status" value="refu" />
                                                                 <button type="submit">Xác nhận hoàn tiền</button>
                                                             </form>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            ⛔ Chưa thanh toán
+                                                            <form action="Refund" method="post" style="margin:0;">
+                                                                <input type="hidden" name="paymentId" value="${r.paymentId}" />
+                                                                <input type="hidden" name="status" value="huy" />
+                                                                <button type="submit">Đã hủy</button>
+                                                            </form>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>

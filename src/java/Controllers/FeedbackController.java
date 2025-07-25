@@ -121,6 +121,7 @@ public class FeedbackController extends HttpServlet {
         }
 
         List<Courses> courseList = dao.getCoursesByStudentId(studentId);
+       
         request.setAttribute("courseList", courseList);
         request.getRequestDispatcher("feedback.jsp").forward(request, response);
     }

@@ -94,8 +94,7 @@ public class ChartDAO extends DBContext {
         String sql = """
                      SELECT DATEPART(year, p.date) AS year, DATEPART(month, p.date) AS month, SUM(c.fee ) AS revenue 
                         FROM payment p 
-                        JOIN Course c ON p.id_course = c.id 
-                     	where p.status = N'Hoàn tất'
+                        JOIN Course c ON p.id_course = c.id                      	
                         GROUP BY DATEPART(year, p.date), DATEPART(month, p.date)
                      """;
 

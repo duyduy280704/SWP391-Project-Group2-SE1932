@@ -47,9 +47,9 @@ public class StudentRegistration {
     }
 
     public void updateCount(String status, int count) {
-        if ("Đã duyệt".equals(status)) {
+        if ("Đã duyệt".equals(status) || "Đã active".equals(status)) {
             this.approvedCount += count;
-        } else if ("Đang chờ".equals(status)) {
+        } else if ("Đang chờ".equals(status) || "Chưa xếp được lớp".equals(status)) {
             this.pendingCount += count;
         }
     }

@@ -55,7 +55,8 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
+                overflow-y: auto;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -64,7 +65,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-220px);
+                transform: translateX(-250px);
             }
             .sidebar a {
                 color: #000;
@@ -77,7 +78,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 250px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -240,15 +241,15 @@
                 </div>
             </div>
             <a href="teacherHome" class="nav-link ">Trang Chủ</a>
-                <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
-                <a href="classStudent" class="nav-link">Danh sách lớp học</a>
-                <a href="salaryteacher" class="nav-item nav-link">Bảng Lương </a>
-                <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
-                <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
-                <a href="BlogTeacher" class="nav-link"> Tin Tức </a>
-                <a href="Event" class="nav-link active" > Sự Kiện</a>
-                <a href="feedbackByTeacher" class="nav-item nav-link">Đánh giá sinh viên </a>
-                <a href="logout" class="logout-btn">Đăng xuất</a>
+            <a href="scheduleTeacher" class="nav-link ">Lịch dạy</a>
+            <a href="classStudent" class="nav-link">Danh sách lớp học</a>
+            <a href="salaryteacher" class="nav-item nav-link ">Bảng Lương </a>
+            <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
+            <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
+            <a href="BlogTeacher" class="nav-link"> Tin Tức </a>
+            <a href="Event" class="nav-link active"> Sự Kiện</a>
+            <a href="feedbackByTeacher" class="nav-item nav-link">Đánh giá sinh viên </a>
+            <a href="logout" class="logout-btn">Đăng xuất</a>
         </div>
         <!-- Navbar End -->
         <!-- Main Content -->
@@ -271,7 +272,9 @@
                                      data-name="${fn:escapeXml(e.name)}"
                                      data-content="${fn:escapeXml(e.content)}"
                                      data-date="${e.date}"
-                                     data-img="${not empty e.img ? 'imageevent?id=' + e.id : ''}"
+                                     <c:if test="${not empty e.img}">
+                                         data-img="imageevent?id=${e.id}"
+                                     </c:if>
                                      data-courseid="${fn:escapeXml(e.courseid)}">
                                     <div class="event-card bg-light rounded p-3 shadow-sm">
                                         <div class="card-img-container">
@@ -400,6 +403,7 @@
                                     const id = card.dataset.id;
                                     const name = card.dataset.name;
                                     const content = card.dataset.content;
+                                    
                                     const date = card.dataset.date;
                                     const imgSrc = card.dataset.img;
                                     const courseId = card.dataset.courseid;
@@ -413,7 +417,7 @@
                                     const eventCourseId = document.getElementById('eventCourseId');
 
                                     eventTitle.textContent = name || 'Không có tiêu đề';
-                                    eventContent.textContent = content || 'Không có nội dung';
+                                    eventContent.innerHTML = content || '<i>Không có nội dung</i>';
                                     eventCourseId.textContent = courseId ? 'Mã khóa học: ' + courseId : 'Không có mã khóa học';
 
                                     const parsedDate = new Date(date);

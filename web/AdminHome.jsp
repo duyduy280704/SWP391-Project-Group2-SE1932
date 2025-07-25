@@ -327,7 +327,7 @@
                                     data: {
                                         labels: labels,
                                         datasets: [
-                                            {label: 'Đã duyệt', backgroundColor: 'rgba(54, 162, 235, 0.6)', borderColor: 'rgba(54, 162, 235, 1)', data: approved, barPercentage: 0.8, categoryPercentage: 0.9},
+                                            {label: 'Đã active', backgroundColor: 'rgba(54, 162, 235, 0.6)', borderColor: 'rgba(54, 162, 235, 1)', data: approved, barPercentage: 0.8, categoryPercentage: 0.9},
                                             {label: 'Đang chờ', backgroundColor: 'rgba(255, 99, 132, 0.6)', borderColor: 'rgba(255, 99, 132, 1)', data: pending, barPercentage: 0.8, categoryPercentage: 0.9}
                                         ]
                                     },

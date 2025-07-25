@@ -8,7 +8,7 @@ import java.io.IOException;
 import models.StudentDAO;
 import models.TeacherDAO;
 import models.AdminStaffDAO;
-
+//Huyền
 public class ResetPasswordServlet extends HttpServlet {
 
     @Override
@@ -22,7 +22,7 @@ public class ResetPasswordServlet extends HttpServlet {
             request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
             return;
         }
-        if (role == null || role.trim().isEmpty() || !role.matches("^(Student|Teacher|Admin_staff)$")) {
+        if (role == null || role.trim().isEmpty() || !role.matches("^(student|teacher|admin_staff)$")) {
             request.setAttribute("message", "Vai trò không hợp lệ trong liên kết.");
             request.getRequestDispatcher("forgot-password.jsp").forward(request, response);
             return;
@@ -50,7 +50,7 @@ public class ResetPasswordServlet extends HttpServlet {
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
             return;
         }
-        if (role == null || role.trim().isEmpty() || !role.matches("^(Student|Teacher|Admin_staff)$")) {
+        if (role == null || role.trim().isEmpty() || !role.matches("^(student|teacher|admin_staff)$")) {
             request.setAttribute("message", "Vai trò không hợp lệ.");
             request.setAttribute("phone", phone);
             request.setAttribute("role", role);
@@ -96,13 +96,13 @@ public class ResetPasswordServlet extends HttpServlet {
             boolean updated = false;
 
             switch (role) {
-                case "Student":
+                case "student":
                     updated = studentDAO.updatePassword(phone, newPassword);
                     break;
-                case "Teacher":
+                case "teacher":
                     updated = teacherDAO.updatePassword(phone, newPassword);
                     break;
-                case "Admin_staff":
+                case "admin_staff":
                     updated = adminDAO.updatePassword(phone, newPassword);
                     break;
                 default:

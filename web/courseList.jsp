@@ -239,28 +239,41 @@
                 </a>
             </div>
             <div class="profile-container">
-                <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
                 <c:choose>
-                    <c:when test="${not empty picturePath}">
+                    <c:when test="${not empty profile and not empty profile.pic}">
                         <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                            <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
                         </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                     </c:when>
                     <c:otherwise>
                         <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
                         </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                     </c:otherwise>
                 </c:choose>
+                <div class="profile-name">
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.name}">
+                            ${profile.name}
+                        </c:when>
+                        <c:otherwise>
+                            Tên không xác định
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
 
             <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link active">Khóa Học</a>
-            <a href="TeacherList" class="nav-item nav-link ">Giáo Viên</a>
-            <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+            <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
+            <a href="TeacherList" class="nav-item nav-link">Giáo Viên</a>
+            <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
+            <a href="studentapplication" class="nav-link">Gửi Đơn</a>
+            <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
+            <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
+            <a href="EventStudent" class="nav-item nav-link">Sự Kiện</a> 
+            <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
         </div>
         <!-- sidebar End -->
 
@@ -295,7 +308,7 @@
                         <div class="col-md-2">
                             <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
                         </div>
-                        
+
                         <div class="col-md-2 d-flex gap-2">
                             <button class="btn btn-primary w-100">Lọc</button>
                             <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
@@ -334,7 +347,16 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </a>
-
+                                    <p class="card-text text-body" style="min-height: 72px;">
+                                        <c:set var="words" value="${fn:split(c.description, ' ')}" />
+                                        <c:set var="shortDescription" value="" />
+                                        <c:forEach var="word" items="${words}" varStatus="status">
+                                            <c:if test="${status.index < 10}">
+                                                <c:set var="shortDescription" value="${shortDescription} ${word}" />
+                                            </c:if>
+                                        </c:forEach>
+                                        ${fn:trim(shortDescription)}...
+                                    </p>
 
                                     <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
                                         <div class="text-muted small mb-1">
@@ -343,9 +365,7 @@
                                         <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
                                             <h6 class="mb-0">${c.name}</h6>
                                         </a>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
-                                            ${c.description}
-                                        </p>
+
                                     </div>
 
 

@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8">
         <title>BIGDREAM</title>
-        <meta content="width=device-width, initial-scale=QN1.0" name="viewport">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free JSP Templates" name="keywords">
         <meta content="Free JSP Templates" name="description">
 
@@ -16,57 +16,46 @@
         <link href="img/favicon.ico" rel="icon">
 
         <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
 
         <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
         <!-- Libraries Stylesheet -->
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
+        <!-- Bootstrap 5 Stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
-        <!-- Custom CSS for Blog Modal -->
+        <!-- Custom CSS for Blog Section -->
         <style>
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0,0,0,0.5);
-            }
-            .modal-content {
-                background-color: #fff;
-                margin: 5% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%;
-                max-width: 700px;
-                border-radius: 10px;
-            }
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
+            .blog-item {
+                transition: transform 0.3s;
                 cursor: pointer;
             }
-            .blog-image {
-                max-width: 100%;
-                height: auto;
-                border-radius: 5px;
-                margin-bottom: 15px;
+            .blog-item:hover {
+                transform: translateY(-5px);
+            }
+            .blog-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            .blog-item:hover .blog-overlay {
+                opacity: 1;
             }
         </style>
     </head>
@@ -84,9 +73,7 @@
                         <i class="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Địa Chỉ</h6>
-                            <p>
-                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -95,9 +82,7 @@
                         <i class="fa fa-2x fa-envelope text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Email</h6>
-                            <p>
-                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.email}" default="Email chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -106,9 +91,7 @@
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
-                            <p>
-                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
-                            </p>
+                            <p><c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" /></p>
                         </div>
                     </div>
                 </div>
@@ -124,18 +107,19 @@
                         <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
                             <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                         </a>
-                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarCollapse">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link active">Trang Chủ</a>
+                                    <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
                                     <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
-                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
+                                    <a href="blog.jsp" class="nav-item nav-link active">Tin Tức</a>
                                 </div>
+                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
                         </div>
                     </nav>
@@ -169,15 +153,28 @@
                 <c:if test="${not empty applicationScope.bloglist}">
                     <c:forEach var="n" items="${applicationScope.bloglist}">
                         <div class="col-lg-4 mb-4">
-                            <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
-                                <a class="blog-overlay text-decoration-none" href="javascript:void(0)" onclick="showBlogDetails('${n.id}', '${fn:escapeXml(n.title)}', '${fn:escapeXml(n.content)}', '<fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />', 'BlogImage?id=${n.id}')">                                    <h5 class="text-white mb-3">${n.title}</h5>
-                                    <p class="text-primary m-0">
-                                        <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
-                                    </p>
-                                </a>
-                            </div>
+                            <a href="BlogDetail?id=${n.id}" class="text-decoration-none">
+                                <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                    <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
+                                    <div class="blog-overlay">
+                                        <h5 class="text-white mb-3">${n.title}</h5>
+                                        <p class="text-primary m-0">
+                                            <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                                        </p>
+                                        <p class="text-white mt-2">
+                                            <c:set var="words" value="${fn:split(n.content, ' ')}" />
+                                            <c:set var="shortContent" value="" />
+                                            <c:forEach var="word" items="${words}" varStatus="status">
+                                                <c:if test="${status.index < 5}">
+                                                    <c:set var="shortContent" value="${shortContent} ${word}" />
+                                                </c:if>
+                                            </c:forEach>
+                                            ${fn:trim(shortContent)}...
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </c:forEach>
                 </c:if>
@@ -189,18 +186,6 @@
             </div>
         </div>
         <!-- Blog End -->
-
-        <!-- Blog Details Modal -->
-        <div id="blogModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeBlogModal()">×</span>
-                <h2 id="blogTitle"></h2>
-                <p id="blogDate" class="text-muted"></p>
-                <img id="blogImage" class="blog-image" src="BlogImage?id=${n.id}" alt="Blog Image">
-                <p id="blogContent"></p>
-                <a href="javascript:void(0)" onclick="closeBlogModal()" class="btn btn-primary mt-3">Quay lại danh sách</a>
-            </div>
-        </div>
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
@@ -268,48 +253,12 @@
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
         <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
-
-        <!-- JavaScript for Blog Modal -->
-        <script>
-                    function showBlogDetails(id, title, content, date, imageSrc) {
-                        document.getElementById('blogTitle').innerText = title;
-                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + date;
-                        document.getElementById('blogContent').innerText = content;
-                        document.getElementById('blogImage').src = imageSrc;
-                        document.getElementById('blogModal').style.display = 'block';
-                    }
-
-                    function closeBlogModal() {
-                        document.getElementById('blogModal').style.display = 'none';
-                    }
-
-                    // Close modal when clicking outside of it
-                    window.onclick = function (event) {
-                        var modal = document.getElementById('blogModal');
-                        if (event.target == modal) {
-                            closeBlogModal();
-                        }
-                    }
-                    function showBlogDetails(id, title, content, date, imageSrc) {
-                        document.getElementById('blogTitle').innerText = title;
-                        // Định dạng ngày trong JavaScript
-                        const formattedDate = new Date(date).toLocaleDateString('vi-VN', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric'
-                        });
-                        document.getElementById('blogDate').innerHTML = '<i class="fa fa-calendar-alt mr-2"></i>' + formattedDate;
-                        document.getElementById('blogContent').innerText = content;
-                        document.getElementById('blogImage').src = imageSrc;
-                        document.getElementById('blogModal').style.display = 'block';
-                    }
-        </script>
     </body>
 </html>

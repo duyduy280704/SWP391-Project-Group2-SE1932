@@ -219,6 +219,16 @@ public class PaymentDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    public void markAsCancel(int paymentId) {
+        String sql = "UPDATE payment SET status = N'Đã hủy' WHERE id = ?";
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, paymentId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void updatePaymentMethod(String orderCode, String method) {
         String sql = "UPDATE payment SET method = ? WHERE order_code = ?";

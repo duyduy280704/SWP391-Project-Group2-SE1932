@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import models.Regisition;
 import models.RegisitionDAO;
+import models.StudentDAO;
 import models.Students;
 
 /**
@@ -41,7 +42,10 @@ public class CancelCourseController extends HttpServlet {
         }
 
         String studentId = student.getId();
-
+        StudentDAO studentDAO = new StudentDAO();
+        Students stu = studentDAO.getStudentById(studentId);
+        request.setAttribute("name", stu.getName());
+        request.setAttribute("profile", stu);
         List<Regisition> list = dao.getRegisteredCourses(studentId);
         request.setAttribute("list", list);
         request.getRequestDispatcher("CourseHistory.jsp").forward(request, response);

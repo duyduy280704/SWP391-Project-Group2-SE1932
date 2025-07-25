@@ -14,7 +14,7 @@ import models.Categories_class;
 import models.Courses;
 import models.Regisition;
 import models.RegisitionDAO;
-
+//Huyền
 public class AssignClassController extends HttpServlet {
 
     RegisitionDAO dao = new RegisitionDAO();
@@ -95,6 +95,35 @@ public class AssignClassController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 messages.add("❌ Lỗi khi huỷ phân lớp: " + e.getMessage());
+            }
+
+            request.getSession().setAttribute("messages", messages);
+            response.sendRedirect("AssignClass");
+            return;
+        }
+         if ("sendNotification".equals(action)) {
+            try {
+                int regisitionId = Integer.parseInt(request.getParameter("regisitionId"));
+                String studentName = dao.getStudentNameByRegisitionId(regisitionId);
+                String studentEmail = dao.getStudentEmailByRegisitionId(regisitionId);
+                String className = dao.getAssignedClassName(regisitionId);
+                String courseName = dao.getCourseNameByRegisitionId(regisitionId);
+
+                if (className == null) {
+                    messages.add("❌ Học viên <strong>" + studentName + "</strong> chưa được phân lớp, không thể gửi thông báo.");
+                } else {
+                    String subject = "Thông báo phân lớp học viên";
+                    String messageText = "Kính gửi " + studentName + ",\n\n" +
+                            "Bạn đã được phân vào lớp " + className + " thuộc khóa học " + courseName + ".\n" +
+                            "Vui lòng kiểm tra lịch học và chuẩn bị cho buổi học đầu tiên.\n\n" +
+                            "Trân trọng,\nBIG DREAM";
+
+                    SendMail.send(studentEmail, subject, messageText);
+                    messages.add("📧 Đã gửi thông báo thành công cho học viên <strong>" + studentName + "</strong>.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                messages.add("❌ Lỗi khi gửi thông báo: " + e.getMessage());
             }
 
             request.getSession().setAttribute("messages", messages);

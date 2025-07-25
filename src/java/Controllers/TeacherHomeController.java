@@ -11,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TeacherHomeController extends HttpServlet {
+    
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -113,8 +115,8 @@ public class TeacherHomeController extends HttpServlet {
         }
 
         // Truyền thông tin giáo viên và ảnh
-        request.setAttribute("profile", teacher); // Truyền thông tin giáo viên
-        request.setAttribute("picturePath", session.getAttribute("picturePath")); // Truyền đường dẫn ảnh
+        session.setAttribute("profile", teacher); // Truyền thông tin giáo viên
+        session.setAttribute("picturePath", session.getAttribute("picturePath")); // Truyền đường dẫn ảnh
 
         request.setAttribute("weekDays", Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"));
         request.setAttribute("scheduleTeacher", scheduleTeacher);

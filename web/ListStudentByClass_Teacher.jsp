@@ -394,21 +394,28 @@
                     </a>
                 </div>
                 <div class="profile-container">
-                    <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
                     <c:choose>
-                        <c:when test="${not empty picturePath}">
+                        <c:when test="${not empty profile and not empty profile.pic}">
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
                             </a>
-                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                         </c:when>
                         <c:otherwise>
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
                             </a>
-                            <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
                         </c:otherwise>
                     </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
 
 
@@ -418,8 +425,8 @@
                 <a href="salaryteacher" class="nav-item nav-link">Bảng Lương </a>
                 <a href="teacherapplication" class="nav-item nav-link">Gửi Đơn </a>
                 <a href="feedback?mode=viewAll" class="nav-link"> Xem phản hồi  </a>
-                <a href="Event" class="nav-link"> Tin Tức </a>
-                <a href="BlogTeacher" class="nav-link"> Sự Kiện</a>
+                <a href="BlogTeacher" class="nav-link"> Tin Tức </a>
+                <a href="Event" class="nav-link"> Sự Kiện</a>
                 <a href="feedbackByTeacher" class="nav-item nav-link">Đánh giá sinh viên </a>
                 <a href="logout" class="logout-btn">Đăng xuất</a>
             </div>

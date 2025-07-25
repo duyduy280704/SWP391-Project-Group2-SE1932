@@ -678,5 +678,23 @@ public class ScheduleDAO extends DBContext {
         }
         return 0;
     }
+    
+    public String getClassById(String id){
+        try {
+            String strSQL = " SELECT c.id, c.name, co.name AS course_name "
+                + " FROM Class c JOIN Course co ON c.course_id = co.id "
+                    +" Where c.id=? "
+                    ;
+            stm = connection.prepareStatement(strSQL);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString(2);
+            }
+        } catch (Exception e) {
+            System.out.println("getClassById: " + e.getMessage());
+        }
+        return null;
+    }
 
 }

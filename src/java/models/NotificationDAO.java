@@ -350,6 +350,26 @@ public class NotificationDAO extends DBContext {
         }
 
     }
+    
+    public void insertNotificationByIdTeacher(String id, String content) {
+
+        String sql = "INSERT INTO NoticeToTeacher (id_teacher, message, date) VALUES (?, ?, GETDATE())";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, id);
+
+            ps.setString(2, content);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+
+            System.out.println("insertNotificationByEmail: " + e.getMessage());
+
+        }
+
+    }
 
     public void updateStatus(int id, String newStatus) {
         String sql = "UPDATE PreRegistrations SET status = ? WHERE id = ?";

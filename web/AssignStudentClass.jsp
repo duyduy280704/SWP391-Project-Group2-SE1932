@@ -68,7 +68,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Quản lý khóa học
                             </a>
-
+                            <a class="nav-link" href="Sale">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý khuyến mãi
+                            </a>
                             <!-- Quản lý lớp học -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
                                 <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
@@ -258,13 +261,22 @@
                                                     <c:choose>
                                                         <c:when test="${not empty assignedClass}">
                                                             <!-- Form HUỶ riêng biệt -->
-                                                            <form method="post" action="AssignClass">
+                                                            <form method="post" action="AssignClass" style="display: inline;">
                                                                 <input type="hidden" name="action" value="unassign"/>
                                                                 <input type="hidden" name="regisitionId" value="${r.id}"/>
                                                                 <span class="badge bg-success">${assignedClass}</span><br/>
                                                                 <button type="submit" class="btn btn-danger btn-sm mt-2"
                                                                         onclick="return confirm('Xác nhận huỷ phân lớp học viên này?')">
                                                                     🗑 Huỷ phân lớp
+                                                                </button>
+                                                            </form>
+                                                            <!-- Form GỬI THÔNG BÁO riêng biệt -->
+                                                            <form method="post" action="AssignClass" style="display: inline;">
+                                                                <input type="hidden" name="action" value="sendNotification"/>
+                                                                <input type="hidden" name="regisitionId" value="${r.id}"/>
+                                                                <button type="submit" class="btn btn-info btn-sm mt-2"
+                                                                        onclick="return confirm('Xác nhận gửi thông báo cho học viên này?')">
+                                                                    📧 Gửi thông báo
                                                                 </button>
                                                             </form>
                                                         </c:when>

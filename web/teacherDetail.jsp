@@ -1,16 +1,16 @@
+<!-- Dương_homepage -->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>Danh sách giáo viên</title>
+        <meta charset="utf-8">
+        <title>BIGDREAM</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="Teacher List" name="keywords">
-        <meta content="List of teachers" name="description">
+        <meta content="Free JSP Templates" name="keywords">
+        <meta content="Free JSP Templates" name="description">
 
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
@@ -25,187 +25,78 @@
         <!-- Libraries Stylesheet -->
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-        <!-- Bootstrap Stylesheet -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
-        <!-- Custom CSS for Teacher List and Sidebar -->
         <style>
-            .blog-section {
-                background-color: #f9f9f9;
-                padding: 50px 0;
+            /* Animation */
+            .wow {
+                animation-duration: 1s;
+                animation-fill-mode: both;
             }
-            .card {
-                background-color: #fff;
-                border-radius: 10px;
-                overflow: hidden;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-                margin-bottom: 30px;
-                transition: transform 0.2s;
-                cursor: pointer;
+            .fadeInLeft {
+                animation-name: fadeInLeft;
             }
-            .card:hover {
-                transform: scale(1.05);
+            .fadeInRight {
+                animation-name: fadeInRight;
             }
-            .blog-image {
-                width: 100%;
-                height: 150px;
-                object-fit: cover;
-                border-radius: 10px 0 0 10px;
-            }
-            .blog-content {
-                padding: 20px;
-            }
-            .blog-title {
-                font-size: 1.8rem;
-                font-weight: 600;
-                color: #222;
-                margin-bottom: 10px;
-                line-height: 1.3;
-            }
-            .blog-date {
-                font-size: 0.85rem;
-                color: #6c757d;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-            }
-            .blog-date i {
-                margin-right: 8px;
-                color: #007bff;
-            }
-            .blog-content-text {
-                font-size: 0.95rem;
-                color: #444;
-                line-height: 1.7;
-                margin-bottom: 15px;
-            }
-            .no-blog {
-                font-size: 1.2rem;
-                color: #6c757d;
-                text-align: center;
-                padding: 50px 0;
-                font-style: italic;
-            }
-            .modal-body img {
-                max-width: 100%;
-                height: auto;
-                border-radius: 10px;
-                margin-bottom: 15px;
-            }
-            .modal-title {
-                font-size: 1.5rem;
-                font-weight: 600;
-            }
-            .modal-date {
-                font-size: 0.9rem;
-                color: #6c757d;
-                margin-bottom: 15px;
-            }
-            body {
-                margin: 0;
-                padding: 0;
-                overflow-x: hidden;
-            }
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                width: 220px;
-                background-color: #ffffff;
-                padding-top: 60px;
-                display: flex;
-                flex-direction: column;
-                transition: transform 0.3s ease-in-out;
-                z-index: 1000;
-            }
-            .sidebar.hidden {
-                transform: translateX(-220px);
-            }
-            .sidebar a {
-                color: #000;
-                padding: 15px 20px;
-                text-decoration: none;
-                transition: background 0.3s;
-            }
-            .sidebar a:hover,
-            .sidebar a.active {
-                background-color: #FF6600;
-            }
-            .main-content {
-                margin-left: 220px;
-                padding: 20px;
-                transition: margin-left 0.3s ease-in-out;
-            }
-            .main-content.full {
-                margin-left: 0;
-            }
-            .toggle-btn {
-                position: fixed;
-                top: 20px;
-                left: 230px;
-                z-index: 1001;
-                background-color: #343a40;
-                color: white;
-                border: none;
-                padding: 10px;
-                cursor: pointer;
-                transition: left 0.3s ease-in-out;
-            }
-            .toggle-btn.hidden {
-                left: 10px;
-            }
-            @media (max-width: 768px) {
-                .sidebar {
-                    transform: translateX(-220px);
+            @keyframes fadeInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px);
                 }
-                .sidebar.active {
+                to {
+                    opacity: 1;
                     transform: translateX(0);
                 }
-                .main-content {
-                    margin-left: 0;
+            }
+            @keyframes fadeInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(30px);
                 }
-                .main-content.full {
-                    margin-left: 0;
-                }
-                .toggle-btn {
-                    left: 10px;
-                }
-                .toggle-btn.hidden {
-                    left: 230px;
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
                 }
             }
-            .profile-avatar {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                overflow: hidden;
-                border: 2px solid #FF6600;
-                cursor: pointer;
-                margin-bottom: 5px;
-                display: block;
+
+            /* Button Hover */
+            .btn-light:hover {
+                background-color: #fff3cd;
+                color: #d63384;
+                transform: scale(1.05);
+                transition: all 0.3s ease;
             }
-            .profile-avatar img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
+            
+            
+            .profile-card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+
+        .profile-img {
+            max-height: 400px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .profile-info {
+            padding: 30px;
+        }
         </style>
+
+
     </head>
     <body>
-        <!-- Toggle Button -->
-        <button class="toggle-btn" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </button>
         <!-- Topbar Start -->
         <div class="container-fluid d-none d-lg-block">
             <div class="row align-items-center py-4 px-xl-5">
                 <div class="col-lg-3">
-                    <!-- Logo placeholder if needed -->
+                    <a href="" class="text-decoration-none">
+                        <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
+                    </a>
                 </div>
                 <div class="col-lg-3 text-right">
                     <div class="d-inline-flex align-items-center">
@@ -234,154 +125,108 @@
                         <i class="fa fa-2x fa-phone text-primary mr-3"></i>
                         <div class="text-left">
                             <h6 class="font-weight-semi-bold mb-1">Số Điện Thoại</h6>
+
                             <p>
                                 <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
                             </p>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Topbar End -->
-        <!-- Sidebar Start -->
-        <div class="sidebar" id="sidebar">
-            <div class="col-lg-3">
-                <a href="" class="text-decoration-none">
-                    <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
-                </a>
-            </div>
-            <div class="profile-container">
-                <c:choose>
-                    <c:when test="${not empty profile and not empty profile.pic}">
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+
+        <!-- Navbar Start -->
+        <div class="container-fluid">
+            <div class="row border-top px-xl-5">
+                <div class="col-lg-9 mx-auto">  <!-- Thêm mx-auto để căn giữa khối nav -->
+                    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 px-0">
+                        <!-- Logo cho mobile -->
+                        <a href="HomePage" class="navbar-brand d-block d-lg-none text-decoration-none">
+                            <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                         </a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
-                        </a>
-                    </c:otherwise>
-                </c:choose>
-                <div class="profile-name">
-                    <c:choose>
-                        <c:when test="${not empty profile and not empty profile.name}">
-                            ${profile.name}
-                        </c:when>
-                        <c:otherwise>
-                            Tên không xác định
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-            <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
-            <a href="Course" class="nav-item nav-link">Khóa Học</a>
-            <a href="scheduleStudent" class="nav-item nav-link">Lịch Học</a>
-            <a href="TeacherList" class="nav-item nav-link active">Giáo Viên</a>
-            <a href="StudentPayment" class="nav-item nav-link">Thanh Toán</a>
-            <a href="studentapplication" class="nav-link">Gửi Đơn</a>
-            <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
-            <a href="Notification" class="nav-item nav-link">Thông Báo</a>
-            <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
-            <a href="EventStudent" class="nav-item nav-link">Sự Kiện</a> 
-            <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
-        </div>
-        <!-- Sidebar End -->
-        <!-- Teacher List Start -->
-        <div class="main-content" id="main-content">
-            <div class="container blog-section">
-                <div class="text-center mb-5">
-                    <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Giáo Viên</h5>
-                    <h1>Danh sách Giáo viên</h1>
-                </div>
-                <div class="row">
-                    <c:choose>
-                        <c:when test="${not empty teacherList}">
-                            <c:forEach var="teacher" items="${teacherList}">
-                                <div class="col-lg-4 mb-4">
-                                    <div class="card h-100" data-bs-toggle="modal" data-bs-target="#teacherModal"
-                                         data-id="${teacher.id}"
-                                         data-name="${fn:escapeXml(teacher.name)}"
-                                         data-email="${fn:escapeXml(teacher.email)}"
-                                         data-gender="${teacher.gender}"
-                                         data-birthdate="${teacher.birthdate}"
-                                         data-exp="${fn:escapeXml(teacher.exp)}"
-                                         data-year="${teacher.year}"
-                                         data-course="${fn:escapeXml(teacher.course)}"
-                                         data-phone="${teacher.phone}"
-                                         data-pic="${not empty teacher.pic ? 'picteacher?id=' += teacher.id : ''}">
-                                        <c:choose>
-                                            <c:when test="${not empty teacher.pic}">
-                                                <img src="picteacher?id=${teacher.id}" class="blog-image" alt="Ảnh giáo viên">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="text-center p-5 bg-light text-muted">Không có ảnh</div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <div class="blog-content">
-                                            <h2 class="blog-title">${fn:escapeXml(teacher.name)}</h2>
-                                            <p class="blog-date">
-                                                <i class="fa fa-calendar-alt"></i>
-                                            <fmt:parseDate value="${teacher.birthdate}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
-                                            </p>
-                                            <div class="blog-content-text">
-                                                <p><strong>Email:</strong> ${fn:escapeXml(teacher.email)}</p>
-                                                <p><strong>Giới tính:</strong> ${teacher.gender}</p>
-                                                <p><strong>Kinh nghiệm:</strong> ${fn:escapeXml(teacher.exp)} - ${teacher.year} năm</p>
-                                                <p><strong>Môn dạy:</strong> ${fn:escapeXml(teacher.course)}</p>
-                                                <p><strong>Số điện thoại:</strong> ${teacher.phone}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                        <!-- Nút toggle cho mobile -->
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <!-- Menu + Nút hành động -->
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <!-- Menu căn giữa -->
+                                <div class="navbar-nav mx-auto">
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
+                                    <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
+                                    <a href="Course" class="nav-item nav-link">Khóa Học</a>
+                                    <a href="teacher.jsp" class="nav-item nav-link active">Giáo Viên</a>
+                                    <a href="blog.jsp" class="nav-item nav-link">Tin Tức</a>
                                 </div>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="col-12 no-blog">
-                                <p>Không có giáo viên nào.</p>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-        </div>
-        <!-- Teacher List End -->
-        <!-- Teacher Modal -->
-        <div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="teacherModalLabel">Chi tiết Giáo viên</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img id="modal-pic" src="" class="img-fluid rounded" alt="Ảnh giáo viên" style="height: 100%; object-fit: cover;">
-                                <div id="modal-no-pic" class="text-center p-5 bg-light text-muted d-none">Không có ảnh</div>
-                            </div>
-                            <div class="col-md-8">
-                                <h3 id="modal-name"></h3>
-                                <p><strong>Email:</strong> <span id="modal-email"></span></p>
-                                <p><strong>Giới tính:</strong> <span id="modal-gender"></span></p>
-                                <p class="modal-date" id="modal-birthdate"></p>
-                                <p><strong>Kinh nghiệm:</strong> <span id="modal-exp"></span> - <span id="modal-year"></span> năm</p>
-                                <p><strong>Môn dạy:</strong> <span id="modal-course"></span></p>
-                                <p><strong>Số điện thoại:</strong> <span id="modal-phone"></span></p>
+                                <!-- Nút hành động về phía phải -->
+                                <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar End -->
+
+        <!-- Header Start -->
+        <div class="container-fluid page-header" style="margin-bottom: 90px;">
+            <div class="container">
+                <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+                    <h3 class="display-4 text-white text-uppercase">Giáo Viên</h3>
+                    <div class="d-inline-flex text-white">
+                        <p class="m-0 text-uppercase"><a class="text-white" href="HomePage">Trang Chủ</a></p>
+                        <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                        <p class="m-0 text-uppercase">Giáo Viên</p>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Header End -->
+
+        <div class="container py-5">
+    <a href="teacher.jsp" class="btn btn-secondary mb-4">← Quay về danh sách giáo viên</a>
+    <div class="row justify-content-center">
+        <div class="col-md-10 profile-card bg-white d-flex">
+            <div class="col-md-5 p-0">
+                <img src="picteacher?id=${teacher.id}" alt="Ảnh giáo viên" class="img-fluid profile-img w-100">
+            </div>
+            <div class="col-md-7 profile-info">
+                <h2 class="text-primary mb-3">${teacher.name}</h2>
+                <h5 class="text-muted">Kinh nghiệm: ${teacher.year}</h5>
+                <hr>
+                <p><strong>Giới thiệu:</strong></p>
+                
+
+                <c:if test="${not empty teacher.exp}">
+                    <p><strong>Kỹ năng / Môn dạy:</strong></p>
+                    <ul>
+                        <c:forEach var="exp" items="${teacher.exp}">
+                            <li>${exp}</li>
+                        </c:forEach>
+                    </ul>
+                </c:if>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+        <!-- Team End -->
+
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
             <div class="container text-md-left">
                 <div class="row text-md-left">
+
+                    <!-- Liên hệ -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
                         <p><i class="fa fa-map-marker-alt mr-2"></i> 
@@ -405,8 +250,10 @@
                             </a>
                         </div>
                     </div>
+
+                    <!-- Khoá học -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khóa học</h5>
+                        <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Khoá học</h5>
                         <ul class="list-unstyled">
                             <c:forEach var="t" items="${applicationScope.typeList}">
                                 <li>
@@ -417,12 +264,17 @@
                             </c:forEach>
                         </ul>
                     </div>
+
+                    <!-- Thông tin thêm -->
                     <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                         <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Về Chúng Tôi</h5>
                         <p><c:out value="${setting.about}" default="Thông tin chưa cập nhật." /></p>
                     </div>
                 </div>
+
                 <hr class="mb-4">
+
+                <!-- Bản quyền -->
                 <div class="row align-items-center">
                     <div class="col-md-7 col-lg-8">
                         <p class="text-white">
@@ -439,63 +291,30 @@
             </div>
         </footer>
         <!-- Footer End -->
+
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+        <!-- Contact Javascript File -->
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
+
+        <!-- Template Javascript -->
         <script src="js/main.js"></script>
-        <!-- JavaScript to handle modal and sidebar -->
+
+        <!-- Form Submission Script -->
         <script>
-            $(document).ready(function () {
-                $('#teacherModal').on('show.bs.modal', function (event) {
-                    var card = event.relatedTarget;
-                    var modal = $(this);
-
-                    // Populate modal with teacher data
-                    modal.find('#modal-id').text(card.getAttribute('data-id'));
-                    modal.find('#modal-name').text(card.getAttribute('data-name'));
-                    modal.find('#modal-email').text(card.getAttribute('data-email'));
-                    modal.find('#modal-gender').text(card.getAttribute('data-gender'));
-                    var birthdate = card.getAttribute('data-birthdate');
-                    modal.find('#modal-birthdate').text(new Date(birthdate).toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}));
-                    modal.find('#modal-exp').text(card.getAttribute('data-exp'));
-                    modal.find('#modal-year').text(card.getAttribute('data-year'));
-                    modal.find('#modal-course').text(card.getAttribute('data-course'));
-                    modal.find('#modal-phone').text(card.getAttribute('data-phone'));
-
-                    // Handle image
-                    var picSrc = card.getAttribute('data-pic');
-                    var modalPic = modal.find('#modal-pic');
-                    var modalNoPic = modal.find('#modal-no-pic');
-                    if (picSrc) {
-                        modalPic.attr('src', picSrc).removeClass('d-none');
-                        modalNoPic.addClass('d-none');
-                    } else {
-                        modalPic.addClass('d-none');
-                        modalNoPic.removeClass('d-none');
-                    }
-                });
-            });
-
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const mainContent = document.getElementById('main-content');
-                const toggleBtn = document.querySelector('.toggle-btn');
-                sidebar.classList.toggle('hidden');
-                mainContent.classList.toggle('full');
-                toggleBtn.classList.toggle('hidden');
-                const icon = toggleBtn.querySelector('i');
-                if (sidebar.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
+            function submitNewsletter() {
+                var email = document.getElementById('newsletter-email').value;
+                // Add logic to handle newsletter submission
+                console.log('Newsletter subscribed:', {email: email});
+                // Example: window.location.href = 'newsletter?email=' + encodeURIComponent(email);
             }
         </script>
     </body>

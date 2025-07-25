@@ -8,7 +8,7 @@ import java.io.IOException;
 import models.StudentDAO;
 import models.TeacherDAO;
 import models.AdminStaffDAO;
-
+//Huyền
 public class ForgotPasswordServlet extends HttpServlet {
 
     @Override
@@ -103,7 +103,7 @@ public class ForgotPasswordServlet extends HttpServlet {
 
 // Tạo liên kết đặt lại mật khẩu
         String link = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + "/ProjectEdu_Swp/ResetPasswordServlet?phone=" + phone + "&role=" + role;
+                + "/BIGDREAM/ResetPasswordServlet?phone=" + phone + "&role=" + role;
         String emailMessage = "Liên kết đặt lại mật khẩu: " + link + "\nLiên kết có hiệu lực trong 24 giờ.";
 
         try {

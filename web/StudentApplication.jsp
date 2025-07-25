@@ -264,21 +264,29 @@
                         <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                     </a>
                 </div>
-                <div class="profile-container">
-                    <c:set var="picturePath" value="${sessionScope.picturePath}" />
+               <div class="profile-container">
                     <c:choose>
-                        <c:when test="${not empty picturePath}">
+                        <c:when test="${not empty profile and not empty profile.pic}">
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
                             </a>
                         </c:when>
                         <c:otherwise>
                             <a href="profile" class="profile-avatar">
-                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
                             </a>
                         </c:otherwise>
                     </c:choose>
-                    <div class="profile-name">${sessionScope.account.name}</div>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
 
             <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>

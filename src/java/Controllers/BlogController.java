@@ -81,8 +81,6 @@ public class BlogController extends HttpServlet {
             }
 
             String message = "";
-
-            // Validate input
             if (title == null || title.trim().isEmpty()) {
                 message += "Tiêu đề không được để trống.<br>";
             } else if (title.length() > 200) {
@@ -165,7 +163,7 @@ public class BlogController extends HttpServlet {
 
         ArrayList<Blog> data = blogDAO.getBlogs();
         request.setAttribute("data", data);
-        request.setAttribute("blog", blog); // Chỉ dùng cho form chỉnh sửa
+        request.setAttribute("blog", blog); 
         request.getRequestDispatcher("blogstaff.jsp").forward(request, response);
     }
 

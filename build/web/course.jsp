@@ -152,7 +152,7 @@
                     <div class="col-md-2">
                         <input name="maxPrice" type="number" step="0.01" class="form-control" placeholder="Giá đến" value="${param.maxPrice}">
                     </div>
-                    
+
                     <div class="col-md-2 d-flex gap-2">
                         <button class="btn btn-primary w-100">Lọc</button>
                         <a href="Course" class="btn btn-secondary w-100">Xem tất cả</a>
@@ -170,49 +170,56 @@
         <!-- Display Courses -->
         <div class="container-fluid py-4 bg-light">
             <div class="container py-4">                
-                    <div class="row justify-content-center">
-                        <c:forEach var="c" items="${courseList}">
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
-                                <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
+                <div class="row justify-content-center">
+                    <c:forEach var="c" items="${courseList}">
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-3 d-flex align-items-stretch">
+                            <div class="card shadow-sm border-0 w-100 d-flex flex-column" style="min-height: 360px;">
 
 
-                                    <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
-                                        <c:choose>
-                                            <c:when test="${not empty c.image}">
-                                                <img src="image?id=${c.id}" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="Course Picture"
-                                                     onerror="this.src='images/no-image.png'; this.alt='Image not available';">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img src="images/no-image.png" class="course-img"
-                                                     style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
-                                                     alt="No Image">
-                                            </c:otherwise>
-                                        </c:choose>
+                                <a href="RegistrationCourse?id=${c.id}" class="img-container" style="display: block;">
+                                    <c:choose>
+                                        <c:when test="${not empty c.image}">
+                                            <img src="image?id=${c.id}" class="course-img"
+                                                 style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                 alt="Course Picture"
+                                                 onerror="this.src='images/no-image.png'; this.alt='Image not available';">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="images/no-image.png" class="course-img"
+                                                 style="width: 100%; height: 160px; object-fit: cover; border-top-left-radius: .25rem; border-top-right-radius: .25rem;"
+                                                 alt="No Image">
+                                        </c:otherwise>
+                                    </c:choose>
+                                </a>
+
+
+                                <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
+                                    <div class="text-muted small mb-1">
+                                        <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
+                                    </div>
+                                    <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
+                                        <h6 class="mb-0">${c.name}</h6>
                                     </a>
+                                    <p class="card-text text-body" style="min-height: 72px;">
+                                        <c:set var="words" value="${fn:split(c.description, ' ')}" />
+                                        <c:set var="shortDescription" value="" />
+                                        <c:forEach var="word" items="${words}" varStatus="status">
+                                            <c:if test="${status.index < 10}">
+                                                <c:set var="shortDescription" value="${shortDescription} ${word}" />
+                                            </c:if>
+                                        </c:forEach>
+                                        ${fn:trim(shortDescription)}...
+                                    </p>
+                                </div>
 
 
-                                    <div class="card-body bg-white p-3 d-flex flex-column" style="flex: 1 1 auto;">
-                                        <div class="text-muted small mb-1">
-                                            <i class="fa fa-folder text-primary mr-1"></i> ${c.type}
-                                        </div>
-                                        <a href="RegistrationCourse?id=${c.id}" class="card-title text-dark font-weight-bold mb-1 text-truncate">
-                                            <h6 class="mb-0">${c.name}</h6>
-                                        </a>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.85rem; line-height: 1.2rem; height: 2.4rem; overflow: hidden;">
-                                            ${c.description}
-                                        </p>
-                                    </div>
-
-
-                                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
-                                        <span class="text-primary font-weight-bold">${c.fee} đ</span>
-                                    </div>
+                                <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center py-2 px-3">
+                                    <span class="text-primary font-weight-bold">${c.fee} đ</span>
                                 </div>
                             </div>
-                        </c:forEach>
-                    </div>     
+                        </div>
+                    </c:forEach>
+                </div>     
             </div>
         </div>
 

@@ -113,11 +113,12 @@
                         <div class="collapse navbar-collapse" id="navbarCollapse">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="navbar-nav mx-auto">
-                                    <a href="HomePage" class="nav-item nav-link">Trang Chủ</a>
+                                    <a href="HomePage" class="nav-item nav-link ">Trang Chủ</a>
                                     <a href="about.jsp" class="nav-item nav-link">Giới Thiệu</a>
                                     <a href="course.jsp" class="nav-item nav-link">Khóa Học</a>
                                     <a href="teacher.jsp" class="nav-item nav-link">Giáo Viên</a>
                                     <a href="blog.jsp" class="nav-item nav-link active">Tin Tức</a>
+                                    
                                 </div>
                                 <a class="btn btn-primary py-2 px-4 d-none d-lg-block ml-lg-3" href="login">Tham Gia Ngay</a>
                             </div>
@@ -147,45 +148,24 @@
         <div class="container pt-5 pb-3">
             <div class="text-center mb-5">
                 <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Tin Tức</h5>
-                <h1>Các tin gần đây</h1>
             </div>
-            <div class="row pb-3">
-                <c:if test="${not empty applicationScope.bloglist}">
-                    <c:forEach var="n" items="${applicationScope.bloglist}">
-                        <div class="col-lg-4 mb-4">
-                            <a href="BlogDetail?id=${n.id}" class="text-decoration-none">
-                                <div class="blog-item position-relative overflow-hidden rounded mb-2">
-                                    <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
-                                    <div class="blog-overlay">
-                                        <h5 class="text-white mb-3">${n.title}</h5>
-                                        <p class="text-primary m-0">
-                                            <fmt:parseDate value="${n.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
-                                        </p>
-                                        <p class="text-white mt-2">
-                                            <c:set var="words" value="${fn:split(n.content, ' ')}" />
-                                            <c:set var="shortContent" value="" />
-                                            <c:forEach var="word" items="${words}" varStatus="status">
-                                                <c:if test="${status.index < 5}">
-                                                    <c:set var="shortContent" value="${shortContent} ${word}" />
-                                                </c:if>
-                                            </c:forEach>
-                                            ${fn:trim(shortContent)}...
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${empty applicationScope.bloglist}">
-                    <div class="col-12 text-center">
-                        <p>Không có bài viết nào gần đây.</p>
-                    </div>
-                </c:if>
+          
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="mb-4">${blog.title}</h1>
+                    <img class="img-fluid mb-4" src="BlogImage?id=${blog.id}" alt="Ảnh blog">
+                    <p class="text-muted mb-3">
+                        <fmt:parseDate value="${blog.publishDate}" pattern="yyyy-MM-dd" var="parsedDate" />
+                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                    </p>
+                    <div>${blog.content}</div>
+                    <a href="blog.jsp" class="btn btn-primary mt-4">Quay lại Tin Tức</a>
+                </div>
             </div>
-        </div>
+    
+      
         <!-- Blog End -->
+
+        
 
         <!-- Footer Start -->
         <footer class="bg-dark text-white pt-5 pb-4">
@@ -260,5 +240,22 @@
         <script src="mail/jqBootstrapValidation.min.js"></script>
         <script src="mail/contact.js"></script>
         <script src="js/main.js"></script>
+
+        <!-- JavaScript for Blog Modal -->
+        <script>
+            function showBlogDetails(id, title, content, date, imageSrc) {
+                console.log('showBlogDetails called with ID:', id); // Debugging
+                try {
+                    document.getElementById('blogModalLabel').innerText = title;
+                    document.getElementById('blogModalContent').innerHTML = content;
+                    document.getElementById('blogModalDate').innerText = date;
+                    document.getElementById('blogModalImage').src = imageSrc || 'img/placeholder.jpg'; // Fallback image
+                    const blogModal = new bootstrap.Modal(document.getElementById('blogModal'), {});
+                    blogModal.show();
+                } catch (error) {
+                    console.error('Error in showBlogDetails:', error);
+                }
+            }
+        </script>
     </body>
 </html>

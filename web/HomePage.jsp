@@ -210,7 +210,16 @@
                                             <span><i class="far fa-clock text-primary mr-1"></i>1h 30m</span>
                                         </div>
                                         <h5 class="card-title">${c.name}</h5>
-                                        <p class="card-text text-body" style="min-height: 72px;">${c.description}</p>
+                                        <p class="card-text text-body" style="min-height: 72px;">
+                                            <c:set var="words" value="${fn:split(c.description, ' ')}" />
+                                            <c:set var="shortDescription" value="" />
+                                            <c:forEach var="word" items="${words}" varStatus="status">
+                                                <c:if test="${status.index < 10}">
+                                                    <c:set var="shortDescription" value="${shortDescription} ${word}" />
+                                                </c:if>
+                                            </c:forEach>
+                                            ${fn:trim(shortDescription)}...
+                                        </p>
                                         <div class="mt-auto">
                                             <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center px-0 pt-3">
                                                 <span class="text-warning"><i class="fa fa-star mr-1"></i>4.5 <small class="text-muted">(250)</small></span>

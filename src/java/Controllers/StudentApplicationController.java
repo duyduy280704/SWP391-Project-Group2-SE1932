@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import models.Application;
 import models.ApplicationDAO;
 import models.ResultMessage;
+import models.StudentDAO;
 import models.Students;
 import models.TeacherApplicationType;
 import models.listClass;
@@ -75,7 +76,8 @@ public class StudentApplicationController extends HttpServlet {
 
         ArrayList<TeacherApplicationType> data = ad.getStudentApplicationTypeList();
         ArrayList<listClass> data1 = ad.getClassOfStudent(studentId);
-
+        request.setAttribute("profile", student); // Truyền thông tin giáo viên
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
         request.setAttribute("picturePath", session.getAttribute("picturePath"));
@@ -99,7 +101,12 @@ public class StudentApplicationController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
-
+        
+        
+        if (student == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
         String studentId = student.getId();
         int studentNum = Integer.parseInt( studentId);
 
@@ -115,13 +122,17 @@ public class StudentApplicationController extends HttpServlet {
         ArrayList<TeacherApplicationType> data = ad.getStudentApplicationTypeList();
 
         ArrayList<listClass> data1 = ad.getClassOfStudent(studentNum);
-
+        
+        StudentDAO studentDAO = new StudentDAO();
+        Students stu = studentDAO.getStudentById(studentId);
+        request.setAttribute("name", stu.getName());
+        request.setAttribute("profile", stu); // Truyền thông tin giáo viên
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("data", data);
         request.setAttribute("data1", data1);
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());
-        request.setAttribute("picturePath", session.getAttribute("picturePath"));
-        request.setAttribute("profile", student);
+        
         request.getRequestDispatcher("StudentApplication.jsp").forward(request, response);
     }
 

@@ -55,7 +55,8 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
+                overflow-y: auto;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -64,7 +65,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-220px);
+                transform: translateX(-250px);
             }
             .sidebar a {
                 color: #000;
@@ -77,7 +78,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 250px;
                 padding: 20px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -248,7 +249,7 @@
             <a href="feedback" class="nav-link">Phản Hồi Khóa Học</a>
             <a href="Notification" class="nav-item nav-link">Thông Báo</a>
             <a href="BlogStudent" class="nav-item nav-link">Tin Tức</a>
-            <a href="EventStudent" class="nav-item nav-link active">Sự Kiện</a> 
+            <a href="#" class="nav-item nav-link active">Sự Kiện</a> 
             <a href="logout" class="nav-item nav-link">Đăng Xuất</a>
         </div>
         <!-- Navbar End -->
@@ -270,15 +271,19 @@
                                 <div class="col-md-4 event-list-item mb-4" 
                                      data-id="${e.id}"
                                      data-name="${fn:escapeXml(e.name)}"
-                                     data-content="${fn:escapeXml(e.content)}"
+                                     data-content="<c:out value='${e.content}' escapeXml='true'/>"
                                      data-date="${e.date}"
-                                     data-img="${not empty e.img ? 'imageevent?id=' + e.id : ''}"
+
+                                     <c:if test="${not empty e.img}">
+                                         data-img="imageevent?id=${e.id}"
+                                     </c:if>
+
                                      data-courseid="${fn:escapeXml(e.courseid)}">
                                     <div class="event-card bg-light rounded p-3 shadow-sm">
                                         <div class="card-img-container">
                                             <c:choose>
                                                 <c:when test="${not empty e.img}">
-                                                    <img src="imageevent?id=${e.id}" alt="Ảnh sự kiện" class="card-img-top event-image">
+                                                    <img src="imageevent?id=${e.id}" alt="Ảnh sự kiện" class="card-img-top event-image" loading="lazy">
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="text-muted">Không có ảnh</span>
@@ -288,10 +293,10 @@
                                         <h4 class="event-title text-primary mt-3">${e.name}</h4>
                                         <p class="event-date text-muted mb-2">
                                             <i class="fa fa-calendar-alt mr-2"></i>
-                                        <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var="parseDate"/>
-                                        <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
+                                            <fmt:parseDate value="${e.date}" pattern="yyyy-MM-dd" var="parseDate"/>
+                                            <fmt:formatDate value="${parseDate}" pattern="dd/MM/yyyy"/>
                                         </p>
-                                        <p class="event-content">${fn:substring(e.content, 0, 150)}...</p>
+                                        <p class="event-content">${fn:substring(e.content, 0, 30)}...</p>
                                     </div>
                                 </div>
                             </c:forEach>
@@ -322,13 +327,13 @@
                         <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
                             <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Liên Hệ</h5>
                             <p><i class="fa fa-map-marker-alt mr-2"></i> 
-                            <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
+                                <c:out value="${setting.address}" default="Địa chỉ chưa cập nhật" />
                             </p>
                             <p><i class="fa fa-phone-alt mr-2"></i> 
-                            <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
+                                <c:out value="${setting.phone}" default="Số điện thoại chưa cập nhật" />
                             </p>
                             <p><i class="fa fa-envelope mr-2"></i> 
-                            <c:out value="${setting.email}" default="Email chưa cập nhật" />
+                                <c:out value="${setting.email}" default="Email chưa cập nhật" />
                             </p>
                             <div class="mt-3">
                                 <a class="btn btn-outline-light btn-sm mr-2" href="${setting.facebookLink != null ? setting.facebookLink : '#'}">
@@ -366,7 +371,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-7 col-lg-8">
                             <p class="text-white">
-                            <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
+                                <c:out value="${setting.copyright}" default="© 2025 Trung Tâm Năng Khiếu. All rights reserved." />
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4">
@@ -383,8 +388,7 @@
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
         </div>
         <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <!-- Contact Javascript File -->
@@ -414,8 +418,8 @@
                                     const eventCourseId = document.getElementById('eventCourseId');
 
                                     eventTitle.textContent = name || 'Không có tiêu đề';
-                                    eventContent.textContent = content || 'Không có nội dung';
-                                    eventCourseId.textContent = courseId ? 'Mã khóa học: ' + courseId : 'Không có mã khóa học';
+                                    eventContent.innerHTML = content || '<i>Không có nội dung</i>';
+                                    eventCourseId.textContent = courseId ? 'Khóa học: ' + courseId : 'Không có khóa học';
 
                                     const parsedDate = new Date(date);
                                     eventDate.textContent = parsedDate.toLocaleDateString('vi-VN', {

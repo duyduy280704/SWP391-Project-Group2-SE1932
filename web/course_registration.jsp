@@ -251,7 +251,7 @@
                         </div>
 
                         <div class="form-check mb-4">
-                            <input type="checkbox" class="form-check-input" id="agree" >
+                            <input type="checkbox" class="form-check-input" id="agree" name="agree">
                             <label class="form-check-label" for="agree">
                                 Tôi đồng ý với
                                 <a href="#" data-toggle="modal" data-target="#termsModal">điều khoản</a>

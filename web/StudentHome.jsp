@@ -239,22 +239,29 @@
                 </a>
             </div>
             <div class="profile-container">
-                <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
-                <c:choose>
-                    <c:when test="${not empty picturePath}">
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.pic}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
             <a href="StudentHome" class="nav-item nav-link active">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
@@ -294,97 +301,98 @@
             <h5 class="section-title">🕒 Lịch học tuần này</h5>
 
             <div class="selector-container">
-                <form action="StudentHome" method="get">
-                    <label for="year">Chọn năm: </label>
-                    <select name="year" id="year" onchange="this.form.submit()">
-                        <c:forEach var="year" items="${years}">
-                            <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
-                        </c:forEach>
-                    </select>
-                    <label for="week">Chọn tuần: </label>
-                    <select name="week" id="week" onchange="this.form.submit()">
-                        <c:forEach var="week" items="${weeks}">
-                            <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
-                        </c:forEach>
-                    </select>
-                </form>
-            </div>
+            <form action="StudentHome" method="get">
+                <label for="year">Chọn năm: </label>
+                <select name="year" id="year" onchange="this.form.submit()">
+                    <c:forEach var="year" items="${years}">
+                        <option value="${year}" <c:if test="${year == selectedYear}">selected</c:if>>${year}</option>
+                    </c:forEach>
+                </select>
+                <label for="week">Chọn tuần: </label>
+                <select name="week" id="week" onchange="this.form.submit()">
+                    <c:forEach var="week" items="${weeks}">
+                        <option value="${week.startDate}" <c:if test="${week.startDate == selectedWeek}">selected</c:if>>${week.displayStartDate} - ${week.displayEndDate}</option>
+                    </c:forEach>
+                </select>
+            </form>
+        </div>
 
-            <c:if test="${empty scheduleStudent}">
-                <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
-            </c:if>
+        <c:if test="${empty scheduleStudent}">
+            <p class="error-message">Không có dữ liệu thời khóa biểu cho tuần này!</p>
+        </c:if>
 
-            <c:if test="${not empty scheduleStudent}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Thứ</th>
-                            <th>Ngày</th>
-                            <th>Lớp</th>
-                            <th>Bắt đầu</th>
-                            <th>Kết thúc</th>
-                            <th>Phòng học</th>
-                            <th>Điểm danh</th>
-                            <th>Lý do</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="count" value="0" />
+        <c:if test="${not empty scheduleStudent}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thứ</th>
+                        <th>Ngày</th>
+                        <th>Lớp</th>
+                        <th>Bắt đầu</th>
+                        <th>Kết thúc</th>
+                        <th>Phòng học</th>
+                        <th>Điểm danh</th>
+                        <th>Lý do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="day" items="${weekDays}">
+                        <c:set var="count" value="0" />
+                        <c:forEach var="s" items="${scheduleStudent}">
+                            <c:if test="${s.dayVN == day}">
+                                <c:set var="count" value="${count + 1}" />
+                            </c:if>
+                        </c:forEach>
+
+                        <c:if test="${count > 0}">
+                            <c:set var="printed" value="false" />
                             <c:forEach var="s" items="${scheduleStudent}">
                                 <c:if test="${s.dayVN == day}">
-                                    <c:set var="count" value="${count + 1}" />
+                                    <tr>
+                                        <c:if test="${not printed}">
+                                            <td rowspan="${count}">${day}</td>
+                                            <c:set var="printed" value="true" />
+                                        </c:if>
+                                        <td>
+                                            <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
+                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
+                                        </td>
+                                        <td>${s.nameClass}</td>
+                                        <td>${fn:substring(s.startTime, 0, 5)}</td>
+                                        <td>${fn:substring(s.endTime, 0, 5)}</td>
+                                        <td>${s.room}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${s.attendanceStatus == 'Có mặt'}">Có mặt</c:when>
+                                                <c:when test="${s.attendanceStatus == 'Vắng' || s.attendanceStatus == 'Vắng mặt'}">Vắng mặt</c:when>
+                                                <c:otherwise>Chưa điểm danh</c:otherwise>
+                                            </c:choose>
+                                        </td>
+
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty s.reason}">
+                                                    ${s.reason}
+                                                </c:when>
+                                                <c:otherwise>-</c:otherwise>
+                                            </c:choose>
+                                        </td>
+
+                                    </tr>
                                 </c:if>
                             </c:forEach>
+                        </c:if>
 
-                            <c:if test="${count > 0}">
-                                <c:set var="printed" value="false" />
-                                <c:forEach var="s" items="${scheduleStudent}">
-                                    <c:if test="${s.dayVN == day}">
-                                        <tr>
-                                            <c:if test="${not printed}">
-                                                <td rowspan="${count}">${day}</td>
-                                                <c:set var="printed" value="true" />
-                                            </c:if>
-                                            <td>
-                                                <fmt:parseDate value="${s.day}" pattern="yyyy-MM-dd" var="parsedDate" />
-                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM" />
-                                            </td>
-                                            <td>${s.nameClass}</td>
-                                            <td>${fn:substring(s.startTime, 0, 5)}</td>
-                                            <td>${fn:substring(s.endTime, 0, 5)}</td>
-                                            <td>${s.room}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${s.attendanceStatus == 'present'}">Có mặt</c:when>
-                                                    <c:when test="${s.attendanceStatus == 'absent'}">Vắng mặt</c:when>
-                                                    <c:otherwise>Chưa điểm danh</c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty s.reason}">
-                                                        ${s.reason}
-                                                    </c:when>
-                                                    <c:otherwise>-</c:otherwise>
-                                                </c:choose>
-                                            </td>
-
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-
-                            <c:if test="${count == 0}">
-                                <tr>
-                                    <td>${day}</td>
-                                    <td colspan="6"></td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
+                        <c:if test="${count == 0}">
+                            <tr>
+                                <td>${day}</td>
+                                <td colspan="6"></td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
 
 
             <!-- Courses Start -->
@@ -479,9 +487,10 @@
                         <c:forEach var="n" items="${blogList}">
                             <div class="col-lg-4 mb-4">
                                 <div class="blog-item position-relative overflow-hidden rounded mb-2">
+                                    
                                     <img class="img-fluid" src="BlogImage?id=${n.id}" alt="Ảnh blog">
 
-                                    <a class="blog-overlay text-decoration-none" href="#">
+                                    <a class="blog-overlay text-decoration-none" href="BlogStudent">
                                         <h5 class="text-white mb-3">${n.title}</h5>
                                         <p class="text-primary m-0">
                                             ${fn:substring(n.publishDate, 0, 10)}

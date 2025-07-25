@@ -91,6 +91,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Quản lý khóa học
                             </a>
+                            <a class="nav-link" href="Sale">
+                                <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
+                                Quản lý khuyến mãi
+                            </a>
 
                             <!-- Quản lý lớp học -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
@@ -98,6 +102,7 @@
                                 Quản lý lớp học
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            
                             <div class="collapse" id="collapseClasses" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="createClass">

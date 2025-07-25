@@ -258,22 +258,29 @@
                 </a>
             </div>
             <div class="profile-container">
-                <c:set var="picturePath" value="${not empty picturePath ? picturePath : sessionScope.picturePath}" />
-                <c:choose>
-                    <c:when test="${not empty picturePath}">
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/${picturePath}" alt="Profile Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="profile" class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar">
-                        </a>
-                        <div class="profile-name">${profile != null ? profile.name : 'Tên không xác định'}</div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.pic}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
             <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>

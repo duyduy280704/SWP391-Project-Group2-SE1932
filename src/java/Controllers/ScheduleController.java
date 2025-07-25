@@ -9,6 +9,7 @@ import java.util.*;
 
 import models.CategoriesTeacher;
 import models.Categories_class;
+import models.NotificationDAO;
 import models.ScheduleDAO;
 import models.Schedules;
 
@@ -86,7 +87,7 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        NotificationDAO daoo = new NotificationDAO();
         ScheduleDAO dao = new ScheduleDAO();
         String scheduleId = request.getParameter("scheduleId");
         String classID = request.getParameter("id_class");
@@ -122,6 +123,8 @@ public class ScheduleController extends HttpServlet {
                 request.setAttribute("err", "Ngày học không được là ngày trong quá khứ.");
             } else {
                 dao.update(s);
+                String className = dao.getClassById(teacherID);
+                daoo.insertNotificationByIdTeacher(teacherID, "Lịch dạy khóa học đã được thay đổi" + className + "vui lòng đăng nhập hệ thống để xem chi tiết lịch dạy");
                 request.setAttribute("msg", "Đã sửa lịch học thành công.");
                 scheduleList = dao.getScheduleByClassId(classID);
                 request.setAttribute("scheduleList", scheduleList);
@@ -174,6 +177,8 @@ public class ScheduleController extends HttpServlet {
                 } else {
                     int totalSessions = dao.getNumberOfSessionsByClassId(classID);
                     dao.add(sNew, totalSessions, selectedDays);
+                    String className = dao.getClassById(teacherID);
+                    daoo.insertNotificationByIdTeacher(teacherID, "Bạn đã được xếp dạy khóa học" + className + "vui lòng đăng nhập hệ thống để xem chi tiết lịch dạy");
                     HttpSession session = request.getSession();
                     session.setAttribute("msg", "Đã tạo " + totalSessions + " buổi học thành công.");
                     response.sendRedirect("listClassSchedule");

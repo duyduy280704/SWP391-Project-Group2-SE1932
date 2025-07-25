@@ -40,6 +40,10 @@ public class StudentPaymentController extends HttpServlet {
         paidList.addAll(payDao.getPaymentsByStatus(student.getId(), "Hoàn tất", keyword));
 
         // Truyền dữ liệu về JSP
+        
+        request.setAttribute("name", student.getName());
+        request.setAttribute("profile", student); // Truyền thông tin giáo viên
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("unpaidList", unpaidList);
         request.setAttribute("paidList", paidList);
         request.getRequestDispatcher("paymentHistory.jsp").forward(request, response);

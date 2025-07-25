@@ -256,6 +256,10 @@
         <servlet-name>EventStudentController</servlet-name>
         <servlet-class>Controllers.EventStudentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogDetailController</servlet-name>
+        <servlet-class>Controllers.BlogDetailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CourseStaffController</servlet-name>
         <url-pattern>/coursestaff</url-pattern>
@@ -507,5 +511,9 @@
     <servlet-mapping>
         <servlet-name>EventStudentController</servlet-name>
         <url-pattern>/EventStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogDetailController</servlet-name>
+        <url-pattern>/BlogDetail</url-pattern>
     </servlet-mapping>
 </web-app>

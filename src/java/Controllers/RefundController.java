@@ -40,10 +40,15 @@ public class RefundController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("paymentId");
-        if (idParam != null) {
+        String status = request.getParameter("status");
+        if (status == "refu") {
             int paymentId = Integer.parseInt(idParam);
             PaymentDAO dao = new PaymentDAO();
             dao.markAsRefunded(paymentId);
+        } else if (status == "huy"){
+            int paymentId = Integer.parseInt(idParam);
+            PaymentDAO dao = new PaymentDAO();
+            dao.markAsCancel(paymentId);
         }
         response.sendRedirect("Refund");
     }

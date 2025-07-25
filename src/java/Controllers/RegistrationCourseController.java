@@ -47,7 +47,8 @@ public class RegistrationCourseController extends HttpServlet {
                 usedSale = sale;
             }
         }
-
+        request.setAttribute("profile", student);
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("saleCode", saleCode);
         request.setAttribute("salePercent", salePercent);
         request.setAttribute("saleMessage", saleMessage);
@@ -69,6 +70,7 @@ public class RegistrationCourseController extends HttpServlet {
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
         String note = request.getParameter("note");
+        String agree = request.getParameter("agree");
 
         if (student == null) {
             String errorMessage = null;
@@ -86,6 +88,8 @@ public class RegistrationCourseController extends HttpServlet {
                 errorMessage = "Vui lòng chọn giới tính.";
             } else if (address == null || address.trim().isEmpty()) {
                 errorMessage = "Địa chỉ không được để trống.";
+            } else if (agree == null || agree.trim().isEmpty()) {
+                errorMessage = "Bạn phải đồng ý với điều khoản.";
             }
 
             if (errorMessage != null) {
@@ -113,6 +117,8 @@ public class RegistrationCourseController extends HttpServlet {
                 RegisitionDAO regDao = new RegisitionDAO();
                 if (regDao.isAlreadyRegistered(student.getId(), courseId)) {
                     request.setAttribute("error", "Bạn đã đăng ký khóa học này rồi.");
+                } else if (agree == null || agree.trim().isEmpty()) {
+                    request.setAttribute("error", "Bạn phải đồng ý với điều khoản.");
                 } else {
                     regDao.insert(new Regisition(student.getId(), courseId, note, "chưa phân lớp"));
 
@@ -125,7 +131,7 @@ public class RegistrationCourseController extends HttpServlet {
                             student.getId(),
                             courseId,
                             "Chưa thanh toán",
-                            today,             
+                            today,
                             usedSale != null ? usedSale.getId() : null,
                             orderCode
                     ));
@@ -142,8 +148,9 @@ public class RegistrationCourseController extends HttpServlet {
                             "Bạn đã đăng ký thành công khóa học: " + course.getName() + "\nHọc phí: " + finalFee + " VNĐ.");
 
                     request.setAttribute("message", "Bạn đã đăng ký thành công.");
-                    
-                    
+                    request.setAttribute("profile", student);
+                    request.setAttribute("picturePath", session.getAttribute("picturePath"));
+
                 }
             } else {
                 PreRegistrationDAO dao = new PreRegistrationDAO();
@@ -178,13 +185,17 @@ public class RegistrationCourseController extends HttpServlet {
             request.setAttribute("error", "ID khóa học không hợp lệ.");
         }
 
+        request.setAttribute("profile", student);
+        request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("course", course);
         request.setAttribute("salePercent", salePercent);
         request.setAttribute("saleCode", saleCode);
 
         if (student != null) {
+
             request.getRequestDispatcher("registerCourse.jsp").forward(request, response);
         } else {
+
             request.getRequestDispatcher("course_registration.jsp").forward(request, response);
         }
     }

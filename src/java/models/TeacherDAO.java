@@ -662,6 +662,43 @@ public class TeacherDAO extends DBContext {
         }
         return null;
     }
+    // Phương thức mới: Lấy danh sách giáo viên với tên môn học
+    public ArrayList<Teachers> getTeachersWithCourseName() {
+        ArrayList<Teachers> data = new ArrayList<>();
+        try {
+            String strSQL = """
+                SELECT s.id, s.password, s.full_name, s.email, s.birth_date, s.gender, s.Expertise, 
+                       s.picture, s.role_id, s.id_type_course, s.years_of_experience, s.phone, 
+                       r.name AS role_name, t.name AS course_name
+                FROM Teacher s
+                JOIN Role r ON s.role_id = r.id
+                JOIN type_course t ON s.id_type_course = t.id
+            """;
+            stm = connection.prepareStatement(strSQL);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("id"));
+                String name = rs.getString("full_name");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String birthdate = rs.getString("birth_date");
+                String gender = rs.getString("gender");
+                String exp = rs.getString("Expertise");
+                byte[] pic = rs.getBytes("picture");
+                String role = rs.getString("role_name");
+                String course = rs.getString("course_name"); // Lấy tên môn học từ type_course
+                String years = String.valueOf(rs.getInt("years_of_experience"));
+                String phone = rs.getString("phone");
+                String offerSalary = null; // Nếu không có cột offer_salary trong bảng
+
+                Teachers p = new Teachers(id, name, email, password, birthdate, gender, exp, pic, role, course, years, phone, offerSalary);
+                data.add(p);
+            }
+        } catch (SQLException e) {
+            System.err.println("getTeachersWithCourseName: " + e.getMessage());
+        }
+        return data;
+    }
 
 }
 

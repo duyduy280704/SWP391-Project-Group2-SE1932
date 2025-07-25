@@ -10,46 +10,30 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import models.Blog;
 import models.BlogDAO;
-import models.StudentDAO;
-import models.Students;
 
 /**
  *
- * @author HP
+ * @author Dwight
  */
-public class BlogStudentController extends HttpServlet {
+public class BlogDetailController extends HttpServlet {
 
-   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Students st = (Students) session.getAttribute("account");
-        if (st == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-        String studentId = st.getId();
-        BlogDAO blogDAO = new BlogDAO();
-        List<Blog> blogList = blogDAO.getBlogs();
-        StudentDAO studentDAO = new StudentDAO();
-        Students stu = studentDAO.getStudentById(studentId);
-        request.setAttribute("name", stu.getName());
-        request.setAttribute("profile", stu); // Truyền thông tin giáo viên
-        request.setAttribute("picturePath", session.getAttribute("picturePath"));
-        request.setAttribute("blogList", blogList);
-        request.getRequestDispatcher("blogstudent.jsp").forward(request, response);
+        String id = request.getParameter("id");
+        int idd = Integer.parseInt(id);
+        BlogDAO dao = new BlogDAO();
+        Blog blog = dao.getBlogById(idd);
+        request.setAttribute("blog", blog);
+        request.getRequestDispatcher("blogdetail.jsp").forward(request, response);
     }
 
-   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**

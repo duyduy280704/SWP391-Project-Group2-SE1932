@@ -38,7 +38,8 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
+                overflow-y: auto;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -47,7 +48,7 @@
                 z-index: 1000;
             }
             .sidebar.hidden {
-                transform: translateX(-220px);
+                transform: translateX(-250px);
             }
             .sidebar a {
                 color: #000;
@@ -60,7 +61,7 @@
                 background-color: #FF6600;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 250px;
                 padding: 0px;
                 transition: margin-left 0.3s ease-in-out;
             }
@@ -130,7 +131,8 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 220px;
+                width: 250px;
+                overflow-y: auto;
                 background-color: #ffffff;
                 padding-top: 60px;
                 display: flex;
@@ -211,7 +213,7 @@
                 padding: 0x 30px 30px;
             }
         </style>
-        </style>
+     
     </head>
     <body>
         <!-- Toggle Button -->
@@ -267,6 +269,30 @@
                     <h1 class="m-0"><span class="text-primary">BIG</span>DREAM</h1>
                 </a>
             </div>
+            <div class="profile-container">
+                    <c:choose>
+                        <c:when test="${not empty profile and not empty profile.pic}">
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/profile?mode=image&id=${profile.id}&role=${role}" alt="Profile Avatar" class="profile-image">
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="profile" class="profile-avatar">
+                                <img src="${pageContext.request.contextPath}/img/default-avatar.jpg" alt="Default Avatar" class="profile-image">
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <div class="profile-name">
+                        <c:choose>
+                            <c:when test="${not empty profile and not empty profile.name}">
+                                ${profile.name}
+                            </c:when>
+                            <c:otherwise>
+                                Tên không xác định
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             <a href="StudentHome" class="nav-item nav-link ">Trang Chủ</a>
             <a href="Course" class="nav-item nav-link">Khóa Học</a>
             <a href="scheduleStudent" class="nav-item nav-link active">Lịch Học</a>
