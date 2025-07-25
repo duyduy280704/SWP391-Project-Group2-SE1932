@@ -1,3 +1,4 @@
+<!-- Dương - trang này để học sinh xem các khóa học và đăng ký-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -291,14 +292,14 @@
             <hr>
             <div class="container px-4"> 
                 <form method="get" action="Course" class="mb-4">
-                    <!-- Dòng 1: Tìm kiếm -->
+                   
                     <div class="row mb-3">
                         <div class="col-md-6 offset-md-3">
                             <input name="search" type="text" class="form-control" placeholder="Tìm tên khóa học" value="${param.search}">
                         </div>
                     </div>
 
-                    <!-- Dòng 2: Bộ lọc -->
+                    
                     <div class="row g-2 justify-content-center">
                         <div class="col-md-2">
                             <select name="type" class="form-control">

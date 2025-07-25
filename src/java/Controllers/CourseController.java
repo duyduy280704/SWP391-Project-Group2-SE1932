@@ -20,7 +20,7 @@ import models.TypeCourse;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class CourseController extends HttpServlet {
 

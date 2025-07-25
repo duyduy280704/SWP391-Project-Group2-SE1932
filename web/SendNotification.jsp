@@ -1,6 +1,7 @@
 <%-- 
     
     Author     : Duong
+Trang này của admin để gửi thông báo đến người dùng và nhân viên
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

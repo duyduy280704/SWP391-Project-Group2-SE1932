@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.time.LocalDate;
 import models.*;
-
+//Dương
 public class RegistrationCourseController extends HttpServlet {
 
     @Override
@@ -29,7 +29,7 @@ public class RegistrationCourseController extends HttpServlet {
         CourseDAO courseDAO = new CourseDAO();
         Courses course = courseDAO.getCoursesById1(id);
 
-        // Xử lý mã giảm giá
+        
         String saleCode = request.getParameter("saleCode");
         double salePercent = 0;
         Sale usedSale = null;

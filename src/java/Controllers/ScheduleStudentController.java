@@ -18,7 +18,6 @@ public class ScheduleStudentController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
-        System.out.println(">> Đăng nhập với học sinh ID: " + (student != null ? student.getId() : "null"));
 
         // Kiểm tra đăng nhập
         if (student == null) {
@@ -64,26 +63,16 @@ public class ScheduleStudentController extends HttpServlet {
 
         // Kiểm tra chuyển lớp
         ClassTransferRequest transfer = transferDAO.getLastApprovedRequest(student.getId());
-        if (transfer != null) {
-            System.out.println(">> Học sinh đã chuyển lớp, từ lớp " + transfer.getFromClass().getName_class()
-                    + " đến lớp " + transfer.getToClass().getName_class()
-                    + " vào ngày " + transfer.getTransferDate());
-        } else {
-            System.out.println(">> Học sinh chưa từng chuyển lớp");
-        }
 
         if (transfer != null && transfer.getTransferDate() != null) {
             LocalDate transferDate = new java.sql.Date(transfer.getTransferDate().getTime()).toLocalDate();
             List<ScheduleStudent> oldList = dao.getScheduleBefore(transfer.getFromClass().getId_class(), transferDate, studentId);
-            System.out.println(">> oldList (lớp cũ) size = " + oldList.size());
 
             List<ScheduleStudent> newList = dao.getScheduleAfter(transfer.getToClass().getId_class(), transferDate, studentId);
-            System.out.println(">> newList (lớp mới) size = " + newList.size());
 
             List<ScheduleStudent> merged = new ArrayList<>();
             merged.addAll(oldList);
             merged.addAll(newList);
-            System.out.println(">> merged size = " + merged.size());
 
             LocalDate weekStart = baseDate;
             LocalDate weekEnd = baseDate.plusDays(6);
@@ -91,29 +80,22 @@ public class ScheduleStudentController extends HttpServlet {
             for (ScheduleStudent s : merged) {
                 try {
                     LocalDate day = LocalDate.parse(s.getDay(), dateFormatter);
-                    System.out.println(">> Checking day: " + day + " against " + weekStart + " to " + weekEnd);
                     if (!day.isBefore(weekStart) && !day.isAfter(weekEnd)) {
                         filtered.add(s);
                     }
                 } catch (Exception e) {
-                    System.out.println("Error parsing day for merged schedule: " + s.getDay() + " | Error: " + e.getMessage());
                 }
             }
             scheduleStudent = filtered;
-            System.out.println(">> filtered (merged) size = " + filtered.size());
         } else {
             Categories_class currentClass = transferDAO.getClassByStudentId(student.getId());
             if (currentClass != null) {
-                System.out.println(">> Học sinh đang thuộc lớp: " + currentClass.getName_class() + " (ID: " + currentClass.getId_class() + ")");
                 String classIdToUse = currentClass.getId_class();
-                System.out.println(">> Initial classId: " + classIdToUse);
                 if (classIdToUse == null || classIdToUse.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                    System.out.println(">> Invalid classId detected: " + classIdToUse + ", using default ID 2");
                     classIdToUse = "2";
                 }
                 try {
                     List<ScheduleStudent> allSchedules = dao.getScheduleStudentAll(studentId, classIdToUse);
-                    System.out.println(">> allSchedules size = " + allSchedules.size());
 
                     LocalDate weekStart = baseDate;
                     LocalDate weekEnd = baseDate.plusDays(6);
@@ -121,16 +103,13 @@ public class ScheduleStudentController extends HttpServlet {
                     for (ScheduleStudent s : allSchedules) {
                         try {
                             LocalDate day = LocalDate.parse(s.getDay(), dateFormatter);
-                            System.out.println(">> Checking day: " + day + " against " + weekStart + " to " + weekEnd);
                             if (!day.isBefore(weekStart) && !day.isAfter(weekEnd)) {
                                 filtered.add(s);
                             }
                         } catch (Exception e) {
-                            System.out.println("Error parsing day for allSchedules: " + s.getDay() + " | Error: " + e.getMessage());
                         }
                     }
                     scheduleStudent = filtered;
-                    System.out.println(">> filtered (allSchedules) size = " + filtered.size());
 
                     // Fallback: Nếu tuần hiện tại rỗng, hiển thị tuần gần nhất có dữ liệu
                     if (filtered.isEmpty()) {
@@ -152,7 +131,6 @@ public class ScheduleStudentController extends HttpServlet {
                                 }
                             }
                             scheduleStudent = filtered;
-                            System.out.println(">> Fallback to nearest week: " + weekStart + " to " + weekEnd + ", filtered size = " + filtered.size());
                         }
                     }
                 } catch (NumberFormatException e) {

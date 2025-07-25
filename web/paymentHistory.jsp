@@ -1,3 +1,4 @@
+<!-- Dương - Trang này để học sinh xem lại các khóa học cần thanh toán và đã thanh toán-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -308,7 +309,7 @@
             <div class="container my-5">
                 <h2 class="mb-4 text-orange">📋 Lịch sử thanh toán khóa học</h2>
 
-                <!-- 🔍 Tìm kiếm -->
+                
                 <form method="get" action="StudentPayment" class="row g-3 mb-5">
                     <div class="col-md-4">
                         <input type="text" name="keyword" class="form-control" placeholder="🔍 Tên khóa học" value="${param.keyword}">
@@ -318,7 +319,7 @@
                     </div>
                 </form>
 
-                <!-- 💸 Khóa học CHƯA thanh toán -->
+                
                 <h4 class="text-orange mb-3">🕗 Khóa học chưa thanh toán</h4>
                 <c:if test="${empty unpaidList}">
                     <div class="alert alert-info">Không có đơn nào cần thanh toán.</div>
@@ -345,12 +346,12 @@
                                             </li>
                                         </ul>
 
-                                        <!-- Nút mở modal hướng dẫn -->
+                                        
                                         <button type="button" class="btn btn-outline-orange btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#paymentGuideModal_${p.orderCode}">
                                             💰 Xem hướng dẫn chuyển khoản
                                         </button>
 
-                                        <!-- Nút "Tôi đã chuyển khoản" -->
+                                        
                                         <c:if test="${p.status == 'Chưa thanh toán'}">
                                             <form action="StudentPayment" method="post">
                                                 <input type="hidden" name="orderCode" value="${p.orderCode}">

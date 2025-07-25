@@ -150,17 +150,7 @@ public class StudentController extends HttpServlet {
         StudentDAO studentDAO = new StudentDAO();
         Students student = new Students(id, name, email, password, birthdate, gender, imageBytes, address, role, phone);
 
-        ArrayList<Students> data;
-        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
-            data = studentDAO.getStudentByName(nameSearch);
-            request.setAttribute("nameSearch", nameSearch);
-        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
-            data = studentDAO.getStudentsByGender(genderFilter);
-            request.setAttribute("genderFilter", genderFilter);
-        } else {
-            data = studentDAO.getStudents();
-        }
-        request.setAttribute("data", data);
+        
 
         try {
             if (request.getParameter("update") != null) {
@@ -175,6 +165,18 @@ public class StudentController extends HttpServlet {
         } catch (NumberFormatException e) {
             result = new ResultMessage(false, "Dữ liệu không hợp lệ: " + e.getMessage());
         }
+        
+        ArrayList<Students> data;
+        if (request.getParameter("search") != null && nameSearch != null && !nameSearch.trim().isEmpty()) {
+            data = studentDAO.getStudentByName(nameSearch);
+            request.setAttribute("nameSearch", nameSearch);
+        } else if (request.getParameter("filterGender") != null && genderFilter != null && !genderFilter.trim().isEmpty()) {
+            data = studentDAO.getStudentsByGender(genderFilter);
+            request.setAttribute("genderFilter", genderFilter);
+        } else {
+            data = studentDAO.getStudents();
+        }
+        request.setAttribute("data", data);
 
         request.setAttribute("message", result.getMessage());
         request.setAttribute("success", result.isSuccess());

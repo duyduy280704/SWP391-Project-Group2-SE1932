@@ -6,7 +6,7 @@ package models;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 import dal.DBContext;
 import java.sql.*;

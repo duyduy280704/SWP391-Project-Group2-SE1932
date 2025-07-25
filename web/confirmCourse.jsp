@@ -1,7 +1,6 @@
 <%-- 
-    Document   : courseStaff
-    Created on : Jun 1, 2025, 12:45:10 AM
-    Author     : Quang
+    Author     : Dương
+Trang này để quản lý các khách hàng mới đăng ký lớp học
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -324,7 +323,7 @@
                         </div>
                     </div>
 
-                    <!-- Modal xác nhận -->
+                   
                     <div id="confirmModal" class="modal">
                         <div class="modal-content">
                             <p>Bạn có chắc chắn muốn xác nhận đăng ký này?</p>
@@ -337,7 +336,7 @@
                         </div>
                     </div>
 
-                    <!-- Modal từ chối -->
+                    
                     <div id="rejectModal" class="modal">
                         <div class="modal-content">
                             <p>Bạn có chắc chắn chờ lớp</p>
@@ -350,7 +349,7 @@
                             </form>
                         </div>
                     </div>
-                    <!-- POPUP THÔNG BÁO AJAX -->
+                    
                     <div id="noticeContainer" style="position: absolute; top: 60px; right: 20px; width: 400px; z-index: 9999; background: white; border: 1px solid #ccc; display: none;">
                         <div class="p-3">
                             <div class="d-flex justify-content-between align-items-center">

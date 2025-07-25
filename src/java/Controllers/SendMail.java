@@ -11,14 +11,14 @@ import java.util.Properties;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class SendMail {
 
-    private static final String USERNAME = "hhduong2305@gmail.com";      // ✅ Gmail gửi đi
-    private static final String PASSWORD = "ahzx suyt ummv lprd";        // ✅ Mật khẩu ứng dụng
+    private static final String USERNAME = "hhduong2305@gmail.com";     
+    private static final String PASSWORD = "ahzx suyt ummv lprd";       
 
-    // Gửi mail cho 1 người
+   
     public static void send(String to, String subject, String Content) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

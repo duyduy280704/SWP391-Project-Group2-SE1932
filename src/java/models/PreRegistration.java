@@ -8,7 +8,7 @@ import java.sql.Date;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 //Dương_Homepage
 public class PreRegistration {

@@ -1,7 +1,6 @@
 <%-- 
-    Document   : courseStaff
-    Created on : Jun 1, 2025, 12:45:10 AM
-    Author     : Quang
+    Dương
+trang này của staff để quản lý các ứng viên làm giáo viên
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -143,13 +142,11 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <!-- Trang chủ -->
                             <a class="nav-link" href="staffhome">
                                 <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Trang Chủ
                             </a>
 
-                            <!-- Quản lý khóa học -->
                             <a class="nav-link" href="coursestaff">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Quản lý khóa học
@@ -158,7 +155,6 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-blog"></i></div>
                                 Quản lý khuyến mãi
                             </a>
-                            <!-- Quản lý lớp học -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClasses" aria-expanded="false" aria-controls="collapseClasses">
                                 <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
                                 Quản lý lớp học
@@ -174,7 +170,6 @@
                                         <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                         Danh sách lớp
                                     </a>
-                                    <!-- Quản lý phân lớp -->
                                     <a class="nav-link" href="AssignClass">
                                         <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
                                         Quản lý phân lớp
@@ -182,9 +177,6 @@
                                 </nav>
                             </div>
 
-
-
-                            <!-- Quản lý đăng ký -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
                                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-check"></i></div>
                                 Quản lý đăng ký
@@ -203,7 +195,6 @@
                                 </nav>
                             </div>
 
-                            <!-- Quản lý đơn -->
                             <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseApplications" aria-expanded="false" aria-controls="collapseApplications">
                                 <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
                                 Quản lý đơn
@@ -222,13 +213,11 @@
                                 </nav>
                             </div>
 
-                            <!-- Xử lý đơn chuyển lớp -->
                             <a class="nav-link" href="classTransfer">
                                 <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
                                 Xử lý đơn chuyển lớp
                             </a>
 
-                            <!-- Thời khóa biểu -->
                             <a class="nav-link" href="listClassSchedule">
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                                 Thời khóa biểu
@@ -340,13 +329,10 @@
 
 
                                                 <td>
-                                                    <!-- Nút Pass CV -->
                                                     <button class="btn btn-primary" onclick="openConfirmModal(${t.id})">Pass CV</button>
 
-                                                    <!-- Nút Reject CV -->
                                                     <button class="btn btn-warning" onclick="openRejectModal(${t.id})">Reject CV</button>
 
-                                                    <!-- Nút Done -->
 
                                                     <button class="btn btn-success"
                                                             onclick="const row = this.closest('tr');

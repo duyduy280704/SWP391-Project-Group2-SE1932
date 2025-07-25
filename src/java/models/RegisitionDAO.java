@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class RegisitionDAO extends DBContext {
 

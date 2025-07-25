@@ -45,7 +45,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class StudentHomeController extends HttpServlet {
     
@@ -106,13 +106,13 @@ public class StudentHomeController extends HttpServlet {
         
         
 
-        // Xử lý năm
+        
         DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter viewFormatter = DateTimeFormatter.ofPattern("dd/MM");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // Lấy năm và tuần
-        int year = LocalDate.now().getYear(); // 2025
+       
+        int year = LocalDate.now().getYear(); 
         String selectedYear = request.getParameter("year");
         if (selectedYear != null && !selectedYear.isEmpty()) {
             try {
@@ -121,13 +121,13 @@ public class StudentHomeController extends HttpServlet {
             }
         }
 
-        LocalDate baseDate = LocalDate.now().with(java.time.DayOfWeek.MONDAY); // Mặc định: đầu tuần hiện tại
+        LocalDate baseDate = LocalDate.now().with(java.time.DayOfWeek.MONDAY); 
         String selectedWeek = request.getParameter("week");
         if (selectedWeek != null && !selectedWeek.isEmpty()) {
             try {
                 baseDate = LocalDate.parse(selectedWeek, dbFormatter);
             } catch (Exception ignored) {
-                baseDate = LocalDate.now().with(java.time.DayOfWeek.MONDAY); // fallback đúng thứ 2
+                baseDate = LocalDate.now().with(java.time.DayOfWeek.MONDAY); 
             }
         }
 
@@ -135,7 +135,7 @@ public class StudentHomeController extends HttpServlet {
         ClassTransferRequestDAO transferDAO = new ClassTransferRequestDAO();
         List<ScheduleStudent> scheduleStudent = new ArrayList<>();
 
-        // Kiểm tra chuyển lớp
+        
         ClassTransferRequest transfer = transferDAO.getLastApprovedRequest(stu.getId());
         if (transfer != null) {
             System.out.println(">> Học sinh đã chuyển lớp, từ lớp " + transfer.getFromClass().getName_class()
@@ -205,7 +205,7 @@ public class StudentHomeController extends HttpServlet {
                     scheduleStudent = filtered;
                     System.out.println(">> filtered (allSchedules) size = " + filtered.size());
 
-                    // Fallback: Nếu tuần hiện tại rỗng, hiển thị tuần gần nhất có dữ liệu
+                    
                     if (filtered.isEmpty()) {
                         LocalDate nearestDate = null;
                         for (ScheduleStudent s : allSchedules) {
@@ -236,7 +236,7 @@ public class StudentHomeController extends HttpServlet {
             }
         }
 
-        // Xử lý năm, in tuần để chọn, hiện các thứ
+        
         List<Integer> years = new ArrayList<>();
         for (int i = year - 2; i <= year + 2; i++) {
             years.add(i);

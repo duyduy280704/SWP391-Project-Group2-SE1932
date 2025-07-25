@@ -22,7 +22,7 @@ import models.UserBasic;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class SendNotificationController extends HttpServlet {
 
@@ -45,7 +45,7 @@ public class SendNotificationController extends HttpServlet {
         request.setAttribute("unpaidList", dao.getStudentsWithUnpaidPayments());
         List<PreRegistration> preList = dao.getApprovedRegistrations();
         request.setAttribute("preList", preList);
-        // Forward sang trang gửi thông báo
+       
         request.getRequestDispatcher("SendNotification.jsp").forward(request, response);
 
     }
@@ -54,7 +54,7 @@ public class SendNotificationController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String sendType = request.getParameter("sendType");  // "individual", "role", "class"
+        String sendType = request.getParameter("sendType");  
         String message = request.getParameter("message");
         NotificationDAO dao = new NotificationDAO();
         String subject = "\uD83D\uDCE2 Thông báo từ trung tâm";
@@ -124,11 +124,11 @@ request.setAttribute("message", "📬 Đã gửi thông báo cá nhân tới ID:
 
                     String orderCode = "DKH_" + System.currentTimeMillis();
 
-                    // Insert dữ liệu
+                    
 dao.insertPayment(studentId, p.getCourse_id(), p.getId_sale(), orderCode);
                     dao.insertRegisition(studentId, p.getCourse_id(), p.getNote());
 
-                    // Gửi thông báo
+                   
                     dao.insertNotificationById(studentId,
                             "Chào mừng bạn đã được duyệt tham gia khóa học: " + p.getCourseName());
 

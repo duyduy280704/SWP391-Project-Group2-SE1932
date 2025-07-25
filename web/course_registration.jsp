@@ -1,3 +1,4 @@
+<!-- Dương- Trang này đẻ khách đăng ký khóa học-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -124,7 +125,7 @@
 
         <div class="container py-5">
             <div class="row">
-                <!-- Ảnh -->
+                
                 <div class="col-md-6 mb-4">
                     <c:choose>
                         <c:when test="${not empty course.image}">
@@ -149,7 +150,7 @@
                     <p class="text-muted mb-2"><strong>Số lượng buổi học:</strong> ${course.number}</p>
                     <hr>
 
-                    <!-- ✅ Học phí + áp dụng mã giảm giá -->
+                    
                     <div class="mb-3">
                         <c:choose>
                             <c:when test="${not empty salePercent && salePercent > 0}">
@@ -172,7 +173,7 @@
                     <c:if test="${not empty saleMessage}">
                         <div class="text-danger">${saleMessage}</div>
                     </c:if>
-                    <!-- ✅ Nhập mã khuyến mãi -->
+                    
                     <form action="RegistrationCourse" method="get" class="form-inline">
                         <input type="hidden" name="id" value="${course.id}" />
                         <div class="input-group mb-3">
@@ -184,7 +185,7 @@
                         </div>
                     </form>
 
-                    <!-- Mô tả -->
+                    
                     <div class="mb-4">
                         <h5 class="font-weight-bold mb-2">Mô tả khóa học</h5>
                         <div class="text-justify" style="white-space: pre-wrap;">
@@ -198,14 +199,14 @@
 
 
         <div id="register-form" style="margin-top:15px;">
-            <div class="card shadow-sm mx-auto" style="max-width:480px;">   <!-- căn giữa, giới hạn rộng -->
+            <div class="card shadow-sm mx-auto" style="max-width:480px;">   
                 <div class="card-body p-4">     
                     <c:if test="${not empty message}">
                         <div class="alert alert-success">${message}</div>
                     </c:if>
                     <c:if test="${not empty error}">
                         <div class="alert alert-danger">${error}</div>
-                    </c:if><!-- padding đều 1rem -->
+                    </c:if>
                     <form action="RegistrationCourse" method="get">
 
 

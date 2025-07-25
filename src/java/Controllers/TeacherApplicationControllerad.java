@@ -18,15 +18,15 @@ import models.TypeCourse;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class TeacherApplicationControllerad extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword"); // từ khóa tìm kiếm
-        String status = request.getParameter("status");   // lọc theo trạng thái
-        String typeId = request.getParameter("type");     // lọc theo id_type_course
+        String keyword = request.getParameter("keyword"); 
+        String status = request.getParameter("status");   
+        String typeId = request.getParameter("type");     
 
         TeacherApplicationDAO dao = new TeacherApplicationDAO();
         List<TeacherApplications> applications = dao.searchApplications(keyword, status, typeId);
@@ -54,7 +54,7 @@ public class TeacherApplicationControllerad extends HttpServlet {
             case "accept":
                 String reason1 = request.getParameter("reason1");
                 dao.updateStatus(id, "Đã qua vòng CV");
-                String email1 = dao.getEmailById(id); // bạn cần tạo hàm này trong DAO
+                String email1 = dao.getEmailById(id); 
                 SendMail.send(email1, "Kết quả xét duyệt hồ sơ", "Chúc mừng! Bạn đã vượt qua vòng xét duyệt hồ sơ." + reason1);
                 break;
 
@@ -68,7 +68,7 @@ public class TeacherApplicationControllerad extends HttpServlet {
             case "done":
                 dao.updateStatus(id, "Đã hoàn tất");
 
-                // Lấy thông tin từ form
+                
                 String fullName = request.getParameter("full_name");
                 String email3 = request.getParameter("email");
                 String birthDate = request.getParameter("birth_date");
@@ -77,7 +77,7 @@ public class TeacherApplicationControllerad extends HttpServlet {
                 String typeId = request.getParameter("id_type_course");
                 String yearsExp = request.getParameter("years_of_experience");
                 String phone = request.getParameter("phone");
-                String salaryStr = request.getParameter("salaryOffer"); // hoặc từ form, modal,...
+                String salaryStr = request.getParameter("salaryOffer"); 
                 double salary = Double.parseDouble(salaryStr.trim());
                 dao.insertTeacher(fullName, email3, birthDate, gender, expertise, typeId, yearsExp, phone, id, salary);
 
@@ -88,7 +88,7 @@ public class TeacherApplicationControllerad extends HttpServlet {
                 break;
         }
 
-        // Redirect lại trang danh sách
+        
         response.sendRedirect("TeacherApplication");
     }
 

@@ -22,7 +22,7 @@ import models.Teachers;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class NotificationController extends HttpServlet {
 
@@ -33,7 +33,7 @@ public class NotificationController extends HttpServlet {
         NotificationDAO dao = new NotificationDAO();
         List<Notification> notifications = null;
 
-        // Lấy role và user đang đăng nhập từ session
+        
         HttpSession session = request.getSession();
         Object acc = session.getAttribute("account");
 

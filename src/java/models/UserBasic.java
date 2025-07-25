@@ -6,7 +6,7 @@ package models;
 
 /**
  *
- * @author Dwight
+ * @Dương
  */
 
 public class UserBasic {

@@ -15,7 +15,7 @@ import models.BlogDAO;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class BlogDetailController extends HttpServlet {
 

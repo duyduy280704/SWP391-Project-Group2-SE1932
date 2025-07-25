@@ -1,3 +1,4 @@
+<!-- Dương - Trang này đẻ học sinh đăng ký khóa học-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -188,28 +189,28 @@
                     padding: 8px;
                 }
             }
-            /* Thêm vào phần <style> trong file JSP hoặc file CSS riêng */
+            
             .text-justify {
-                text-align: justify; /* Giữ nguyên thuộc tính hiện tại */
-                max-height: 200px; /* Giới hạn chiều cao tối đa, điều chỉnh theo nhu cầu */
-                overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung vượt quá */
-                padding: 10px; /* Thêm padding để nội dung dễ đọc hơn */
-                border: 1px solid #eee; /* Tùy chọn: thêm viền để phân biệt */
-                border-radius: 5px; /* Tùy chọn: bo góc */
+                text-align: justify; 
+                max-height: 200px;
+                overflow-y: auto; 
+                padding: 10px; 
+                border: 1px solid #eee; 
+                border-radius: 5px; 
             }
 
-            /* Responsive cho thiết bị nhỏ */
+           
             @media (max-width: 768px) {
                 .text-justify {
-                    max-height: 150px; /* Giảm chiều cao trên mobile */
-                    font-size: 14px; /* Giảm kích thước chữ nếu cần */
+                    max-height: 150px; 
+                    font-size: 14px; 
                 }
             }
 
-            /* Đảm bảo container không bị tràn */
+            
             .col-md-6 {
-                word-wrap: break-word; /* Ngắt từ dài */
-                overflow-wrap: break-word; /* Hỗ trợ ngắt từ trên các trình duyệt */
+                word-wrap: break-word; 
+                overflow-wrap: break-word; 
             }
         </style>
     </head>
@@ -336,7 +337,7 @@
                         <p class="text-muted mb-2"><strong>Số lượng buổi học:</strong> ${course.number}</p>
                         <hr>
 
-                        <!-- ✅ Học phí + áp dụng mã giảm giá -->
+                        <!-- Học phí + áp dụng mã giảm giá -->
                         <div class="mb-3">
                             <c:choose>
                                 <c:when test="${not empty salePercent && salePercent > 0}">
@@ -359,7 +360,7 @@
                         <c:if test="${not empty saleMessage}">
                             <div class="text-danger">${saleMessage}</div>
                         </c:if>
-                        <!-- ✅ Nhập mã khuyến mãi -->
+                        <!-- Nhập mã khuyến mãi -->
                         <form action="RegistrationCourse" method="get" class="form-inline">
                             <input type="hidden" name="id" value="${course.id}" />
                             <div class="input-group mb-3">
@@ -386,14 +387,14 @@
 
 
             <div id="register-form" style="margin-top:15px;">
-                <div class="card shadow-sm mx-auto" style="max-width:480px;">   <!-- căn giữa, giới hạn rộng -->
+                <div class="card shadow-sm mx-auto" style="max-width:480px;">  
                     <div class="card-body p-4">     
                         <c:if test="${not empty message}">
                             <div class="alert alert-success">${message}</div>
                         </c:if>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger">${error}</div>
-                        </c:if><!-- padding đều 1rem -->
+                        </c:if>
                         <form action="RegistrationCourse" method="get">
                             <input type="hidden" name="full_name" value="${account.name}">
                             <input type="hidden" name="id" value="${course.id}">

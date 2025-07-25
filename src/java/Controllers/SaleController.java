@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers;
-
+//Dương
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -29,23 +29,23 @@ public class SaleController extends HttpServlet {
             throws ServletException, IOException {
 
         String idRaw = request.getParameter("id");
-        String modeRaw = request.getParameter("mode"); // 1: edit, 2: delete
+        String modeRaw = request.getParameter("mode"); 
 
         if (idRaw != null && modeRaw != null) {
             int id = Integer.parseInt(idRaw);
             int mode = Integer.parseInt(modeRaw);
 
-            if (mode == 1) { // Edit
+            if (mode == 1) {
                 Sale s = dao.getSaleById(id);
                 request.setAttribute("sale", s);
-            } else if (mode == 2) { // Delete
+            } else if (mode == 2) {
                 dao.deleteSale(id);
                 request.setAttribute("message", "Xóa thành công!");
                 request.setAttribute("success", true);
             }
         }
 
-        // Hiển thị danh sách (có lọc tìm kiếm nếu có)
+    
         String keyword = request.getParameter("keyword");
         List<Sale> data;
         if (keyword != null && !keyword.trim().isEmpty()) {

@@ -9,14 +9,14 @@ import java.io.IOException;
 import java.util.List;
 import models.PaymentDAO;
 import models.Students;
-
+//Dương
 public class StudentPaymentController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Kiểm tra session và lấy thông tin học sinh
+        
         HttpSession session = request.getSession();
         Students student = (Students) session.getAttribute("account");
 
@@ -39,10 +39,10 @@ public class StudentPaymentController extends HttpServlet {
         List<PaymentView> paidList = payDao.getPaymentsByStatus(student.getId(), "Đã chuyển khoản", keyword);
         paidList.addAll(payDao.getPaymentsByStatus(student.getId(), "Hoàn tất", keyword));
 
-        // Truyền dữ liệu về JSP
+        
         
         request.setAttribute("name", student.getName());
-        request.setAttribute("profile", student); // Truyền thông tin giáo viên
+        request.setAttribute("profile", student); 
         request.setAttribute("picturePath", session.getAttribute("picturePath"));
         request.setAttribute("unpaidList", unpaidList);
         request.setAttribute("paidList", paidList);
@@ -59,7 +59,7 @@ public class StudentPaymentController extends HttpServlet {
             payDao.updateStatusByOrderCode(orderCode, "Đã chuyển khoản");
         }
 
-        // Sau khi cập nhật, chuyển hướng lại về trang danh sách
+       
         response.sendRedirect("StudentPayment");
     }
 }

@@ -18,7 +18,7 @@ import models.PaymentView;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class AdminPaymentController extends HttpServlet {
 
@@ -75,14 +75,14 @@ public class AdminPaymentController extends HttpServlet {
             paymentDAO.updatePaymentMethod(orderCode, method);
         }
 
-        // Gửi mail (bạn cần sửa để lấy email từ studentId nếu cần)
+       
         try {
             SendMail.send(email, "Thông báo thanh toán", message);
         } catch (Exception e) {
             System.out.println("Gửi mail lỗi: " + e.getMessage());
         }
 
-        // Insert thông báo
+   
         Notification noti = new Notification(idStudent, message, java.time.LocalDate.now().toString());
         notiDAO.insert(noti);
 

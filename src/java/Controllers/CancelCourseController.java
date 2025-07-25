@@ -22,7 +22,7 @@ import models.Students;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class CancelCourseController extends HttpServlet {
 
@@ -31,7 +31,7 @@ public class CancelCourseController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy studentId từ session
+        
         HttpSession session = request.getSession();
 
         Students student = (Students) session.getAttribute("account");
@@ -69,7 +69,7 @@ public class CancelCourseController extends HttpServlet {
                 String firstScheduleStr = dao.getFirstScheduleAsString(studentId, courseId);
 
                 if (firstScheduleStr != null) {
-                    // So sánh string thời gian (định dạng yyyy-MM-dd HH:mm)
+                    
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date firstSchedule = sdf.parse(firstScheduleStr);
                     Date now = new Date();
@@ -92,6 +92,6 @@ public class CancelCourseController extends HttpServlet {
             e.printStackTrace();
         }
 
-        doGet(request, response); // sau khi POST, gọi lại GET để load lại danh sách
+        doGet(request, response); 
     }
 }

@@ -314,7 +314,7 @@
                 <!-- Content --> 
                 <div class="card shadow application-card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Nộp Đơn Từ Giáo Viên</h5>
+                        <h5 class="mb-0">Nộp Đơn Từ học sinh</h5>
                     </div>
                     <div class="card-body">
                         <form method="post" action="studentapplication">

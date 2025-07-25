@@ -1,6 +1,7 @@
 <%-- 
     
     Author     : Duong
+    Trang này của admin quản lý các thanh toán của học sinh
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -78,7 +79,7 @@
                 border: 2px solid #ced4da;
                 border-radius: 6px;
                 font-size: 16px;
-                width: 250px; /* Kích thước cố định để đồng nhất */
+                width: 250px; 
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
 
@@ -95,7 +96,7 @@
                 font-size: 16px;
                 background-color: #fff;
                 cursor: pointer;
-                width: 150px; /* Kích thước cố định */
+                width: 150px;
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
 
@@ -120,7 +121,7 @@
             .search-filter-form button:hover,
             .search-filter-form input[type="submit"]:hover {
                 background-color: #0056b3;
-                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+                transform: translateY(-2px); 
             }
 
             @media (max-width: 768px) {
@@ -251,7 +252,6 @@
                         <div class="container my-5">
                             <h2 class="text-orange mb-4">📊 Quản lý thanh toán</h2>
 
-                            <!-- Bộ lọc -->
                             <form method="get" class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <input type="text" name="keyword" class="form-control" placeholder="🔍 Tên khóa học" value="${keyword}">
@@ -269,7 +269,6 @@
                                 </div>
                             </form>
 
-                            <!-- Bảng thanh toán -->
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <i class="fas fa-table me-1"></i>

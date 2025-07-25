@@ -1,4 +1,4 @@
-
+<!-- Dương - trang này của staff để quản lý các mã giảm giá-->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -56,7 +56,7 @@
                 margin: 20px 0;
                 align-items: center;
                 flex-wrap: wrap;
-                background-color: #f8f9fa; /* Nền nhẹ để nổi bật */
+                background-color: #f8f9fa; 
                 padding: 15px;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -73,7 +73,7 @@
                 border: 2px solid #ced4da;
                 border-radius: 6px;
                 font-size: 16px;
-                width: 250px; /* Kích thước cố định để đồng nhất */
+                width: 250px; 
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
 
@@ -90,7 +90,7 @@
                 font-size: 16px;
                 background-color: #fff;
                 cursor: pointer;
-                width: 150px; /* Kích thước cố định */
+                width: 150px; 
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
 
@@ -115,7 +115,7 @@
             .search-filter-form button:hover,
             .search-filter-form input[type="submit"]:hover {
                 background-color: #0056b3;
-                transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+                transform: translateY(-2px); 
             }
 
             @media (max-width: 768px) {
@@ -307,7 +307,7 @@
                             <li class="breadcrumb-item active">Quản lý khuyến mãi</li>
                         </ol>
 
-                        <!-- Search -->
+                 
                         <form action="Sale" method="get" class="search-filter-form">
                             <div>
                                 <input type="text" name="keyword" placeholder="Search sale code..." value="${keyword != null ? keyword : ''}" />
@@ -316,7 +316,7 @@
                             </div>
                         </form>
 
-                        <!-- Add / Edit Form -->
+                     
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form action="Sale" method="post">
@@ -345,7 +345,7 @@
                             </div>
                         </div>
 
-                        <!-- Sale List -->
+                  
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i> Sale List

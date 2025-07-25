@@ -1,3 +1,4 @@
+<!-- Dương - đây là trang chủ của học sinh-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -293,7 +294,6 @@
                 </h2>
                 <p>Chúc bạn một ngày học tập hiệu quả tại BigDream!</p>
             </div>
-            <!-- thông báo mới nhất -->  
             <h5 class="section-title"> 🔔Thông báo mới</h5>
             <ul>
                 <c:forEach var="n" items="${notifications}">
@@ -303,7 +303,6 @@
                     </li>
                 </c:forEach>
             </ul>
-            <!-- lịch học sắp tới -->        
             <h5 class="section-title">🕒 Lịch học tuần này</h5>
 
             <div class="selector-container">

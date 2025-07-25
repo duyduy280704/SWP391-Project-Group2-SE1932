@@ -33,9 +33,9 @@ import models.TypeCourse;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
-//Dương_homapage
+//Dương_homepage
 public class HomePageController extends HttpServlet {
 
     private CourseDAO courseDAO = new CourseDAO();

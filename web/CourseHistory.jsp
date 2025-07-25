@@ -1,3 +1,4 @@
+<!-- Dương _ Trang này của học sinh để xem lại các khóa học đã đăng ký-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -347,7 +348,7 @@
                     <span class="close" onclick="closeCancelModal()" style="float: right; cursor: pointer;">×</span>
                     <h5 class="mb-3">Lý do hủy đăng ký</h5>
 
-                    <!-- ⚠️ Cảnh báo hoàn tiền -->
+                    <!--️ Cảnh báo hoàn tiền -->
                     <div class="alert alert-warning" role="alert">
                         ⚠️ Khi hủy đăng ký, bạn chỉ được hoàn lại <strong>80% học phí</strong>.
                     </div>

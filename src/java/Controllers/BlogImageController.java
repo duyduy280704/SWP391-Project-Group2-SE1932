@@ -16,7 +16,7 @@ import models.BlogDAO;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class BlogImageController extends HttpServlet {
 
@@ -30,7 +30,7 @@ public class BlogImageController extends HttpServlet {
             byte[] imageData = dao.getBlogImageById(Integer.parseInt(id));
             
             if (imageData != null) {
-                response.setContentType("image/jpeg"); // hoặc image/png tùy kiểu ảnh
+                response.setContentType("image/jpeg"); 
                 OutputStream os = response.getOutputStream();
                 os.write(imageData);
                 os.flush();

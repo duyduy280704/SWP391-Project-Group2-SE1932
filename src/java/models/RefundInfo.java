@@ -6,7 +6,7 @@ package models;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class RefundInfo {
 

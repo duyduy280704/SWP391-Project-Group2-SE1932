@@ -20,7 +20,7 @@ import models.TypeCourse;
 
 /**
  *
- * @author Dwight
+ * @author Dương
  */
 public class ApproveController extends HttpServlet {
 
@@ -36,7 +36,7 @@ public class ApproveController extends HttpServlet {
 
         List<PreRegistration> list;
 
-        // Nếu có filter thì lọc theo điều kiện, không thì lấy toàn bộ
+        
         if ((keyword != null && !keyword.trim().isEmpty())
                 || (courseName != null && !courseName.trim().isEmpty())
                 || (status != null && !status.trim().isEmpty())) {
@@ -66,13 +66,13 @@ public class ApproveController extends HttpServlet {
         PreRegistrationDAO dao = new PreRegistrationDAO();
 
         if ("accept".equals(action)) {
-    // Cập nhật trạng thái thành "Đã duyệt"
+    
     dao.updateStatus(id, "Đã duyệt");
 
-    // Lấy dữ liệu từ PreRegistrations
+   
     PreRegistration pre = dao.getPreRegistrationById(id);
 
-    // Tạo Student mới
+    
     Students student = new Students();
     student.setName(pre.getFull_name());
     student.setEmail(pre.getEmail());
@@ -81,9 +81,9 @@ public class ApproveController extends HttpServlet {
     student.setGender(pre.getGender());
     student.setAddress(pre.getAddress());
     student.setPassword(pre.getPhone());
-    student.setRole("1"); // 1 = học sinh
+    student.setRole("1"); 
 
-    // Insert vào bảng Student nếu email chưa tồn tại
+    
     StudentDAO studentDAO = new StudentDAO();
     if (!studentDAO.existsByEmail(pre.getEmail())) {
         boolean inserted = studentDAO.insert(student);
